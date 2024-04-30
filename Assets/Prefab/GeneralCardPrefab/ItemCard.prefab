@@ -147,6 +147,7 @@ GameObject:
   - component: {fileID: 2189158130635427450}
   - component: {fileID: 2189158130635427449}
   - component: {fileID: 3769563751741841722}
+  - component: {fileID: 6663427291900290344}
   m_Layer: 5
   m_Name: ItemCard
   m_TagString: Untagged
@@ -232,6 +233,19 @@ MonoBehaviour:
   nameText: {fileID: 2189158131581201374}
   effectText: {fileID: 2189158131972332929}
   cost: {fileID: 2189158130409602709}
+--- !u!114 &6663427291900290344
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2189158130635427455}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b791145dee0e440508a5b1fa47c933ba, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  targetCard: 0
 --- !u!1 &2189158131581201372
 GameObject:
   m_ObjectHideFlags: 0

@@ -26,6 +26,7 @@ public class CardDisplayView : MonoBehaviour
     // 可视化单个卡牌，将卡牌的可视化后加入到parent下面
     public void DisPlaySingleCard(Card _card, Transform _parent)
     {
+
         if(_card is MonsterCard)
         {
             if (_card.cardLocation == "")

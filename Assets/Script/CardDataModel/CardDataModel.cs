@@ -156,6 +156,7 @@ public class CardDataModel : MonoBehaviour
     public void LoadPlayerData()
     {
         playerCardData = new int[cardList.Count];
+        playerDNAData = new int[cardList.Count];
         string[] dataArray = textPlayerData.text.Split('\n');
         foreach (var row in dataArray)
         {
