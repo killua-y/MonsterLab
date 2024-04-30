@@ -19,6 +19,8 @@ public class MonsterCardDisplay : MonoBehaviour
     //攻击力 生命值 攻击距离 数值 技能描述
     //卡片位置 模型位置
 
+    private MonsterCard cardModel;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -34,7 +36,8 @@ public class MonsterCardDisplay : MonoBehaviour
     // 将怪兽卡数据导入模型
     public void InitializeCard(MonsterCard _card)
     {
-        if(_card.imageLocation != "")
+        cardModel = _card;
+        if (_card.imageLocation != "")
         {
             CardPicture = Resources.Load<Image>(_card.imageLocation);
         }
@@ -43,5 +46,10 @@ public class MonsterCardDisplay : MonoBehaviour
         attack.text = Convert.ToString(_card.attack);
         health.text = Convert.ToString(_card.healthPoint);
         typeText.text = _card.type.ToString();
+    }
+
+    public string GetCardName()
+    {
+        return cardModel.cardName;
     }
 }

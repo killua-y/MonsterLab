@@ -65,7 +65,7 @@ public class CardWrapper : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
         }
         else {
             var delta = ((Vector2)Input.mousePosition + dragStartPos);
-            rectTransform.position = new Vector2(delta.x, delta.y);
+            //rectTransform.position = new Vector2(delta.x, delta.y);
         }
     }
 
@@ -140,6 +140,7 @@ public class CardWrapper : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
 
     public void OnPointerUp(PointerEventData eventData) {
         isDragged = false;
+        isHovered = false;
         container.OnCardDragEnd();
     }
 }
