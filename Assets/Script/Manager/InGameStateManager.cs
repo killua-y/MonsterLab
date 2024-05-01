@@ -18,7 +18,7 @@ public class InGameStateManager : MonoBehaviour
         CardModel = GetComponent<InGameCardModel>();
         cardDisplayView = GetComponent<CardDisplayView>();
 
-        Invoke("GameStart", 1);
+        Invoke("GameStart", 0);
     }
 
     // Update is called once per frame

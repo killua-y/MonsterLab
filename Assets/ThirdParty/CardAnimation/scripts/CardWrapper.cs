@@ -228,6 +228,14 @@ public class CardWrapper : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     public void OnPointerUp(PointerEventData eventData) {
         isDragged = false;
         isHovered = false;
+
         container.OnCardDragEnd();
+
+        // Destroy all arrow nodes
+        foreach (RectTransform arrowNode in arrowNodes)
+        {
+            Destroy(arrowNode.gameObject);
+        }
+        arrowNodes.Clear();  // Clear the list after destroying the objects
     }
 }
