@@ -81,6 +81,7 @@ public class InGameStateManager : Manager<InGameStateManager>
     // 弃一张牌
     public void DiscardOneCard(Card _card)
     {
+        CardModel.DiscardCard(_card);
 
     }
 

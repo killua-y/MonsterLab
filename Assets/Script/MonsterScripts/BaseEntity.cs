@@ -9,8 +9,8 @@ public class BaseEntity : MonoBehaviour
 
     public int baseDamage = 1;
     public int baseHealth = 3;
-    [Range(1, 5)]
-    public float range = 1;
+    [Range(1.5f, 10)]
+    public float range = 1.5f;
     public float attackSpeed = 1f; //Attacks per second
     public float movementSpeed = 1f; //Attacks per second
 
@@ -141,11 +141,12 @@ public class BaseEntity : MonoBehaviour
 
     protected virtual void Attack()
     {
-        if (!canAttack)
-            return;
+        Debug.Log("Attack!!");
+        //if (!canAttack)
+        //    return;
 
-        waitBetweenAttack = 1 / attackSpeed;
-        StartCoroutine(WaitCoroutine());
+        //waitBetweenAttack = 1 / attackSpeed;
+        //StartCoroutine(WaitCoroutine());
     }
 
     IEnumerator WaitCoroutine()

@@ -133,7 +133,7 @@ public class InGameCardModel : MonoBehaviour
         }
         else
         {
-            Debug.Log("Cannot find the card named: " + _card.cardName);
+            Debug.Log("Cannot find the card to Discard named: " + _card.cardName);
         }
     }
 
@@ -144,6 +144,21 @@ public class InGameCardModel : MonoBehaviour
         {
             DiscardCard(handList[0]);
             
+        }
+    }
+
+    // 消耗一张牌，传入需要弃掉的卡牌信息
+    public void ExhaustOneCard(Card _card)
+    {
+        if (handList.Contains(_card))
+        {
+            handList.RemoveAt(handList.IndexOf(_card));
+
+            // 不加入弃牌堆的最后面，直接消耗
+        }
+        else
+        {
+            Debug.Log("Cannot find the card to Exhaust named: " + _card.cardName);
         }
     }
 }
