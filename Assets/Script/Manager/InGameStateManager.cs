@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-public class InGameStateManager : MonoBehaviour
+public class InGameStateManager : Manager<InGameStateManager>
 {
     public static bool PreparePhase = false;
     public static bool BattelPhase = false;
@@ -13,12 +13,17 @@ public class InGameStateManager : MonoBehaviour
     private InGameCardModel CardModel;
     private CardDisplayView cardDisplayView;
     // Start is called before the first frame update
-    void Start()
+
+    new void Awake()
     {
+        base.Awake();
         CardModel = GetComponent<InGameCardModel>();
         cardDisplayView = GetComponent<CardDisplayView>();
+    }
 
-        Invoke("GameStart", 0);
+    void Start()
+    {
+        GameStart();
     }
 
     // Update is called once per frame
@@ -73,6 +78,17 @@ public class InGameStateManager : MonoBehaviour
         }
     }
 
+    // 弃一张牌
+    public void DiscardOneCard(Card _card)
+    {
+
+    }
+
+    // 消耗一张牌
+    public void ExhaustOneCard()
+    {
+
+    }
 }
 
 public enum GamePhase

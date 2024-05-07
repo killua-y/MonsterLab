@@ -38,7 +38,7 @@ public class InGameCardModel : MonoBehaviour
         Shuffle(drawPiledList);
     }
 
-    // 三个helper，用于穿出三个卡list信息
+    // 三个helper，用于传出三个卡list信息
     public List<Card> GetHandCard()
     {
         foreach(Card _card in handList)

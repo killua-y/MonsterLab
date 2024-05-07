@@ -494,7 +494,7 @@ GameObject:
   - component: {fileID: 22785334956498091}
   - component: {fileID: 624337860202892523}
   - component: {fileID: 1174752157037196441}
-  - component: {fileID: 2675835997218462446}
+  - component: {fileID: -5171271618830725855}
   m_Layer: 5
   m_Name: MonsterCard
   m_TagString: Untagged
@@ -597,7 +597,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   targetCard: 0
---- !u!114 &2675835997218462446
+--- !u!114 &-5171271618830725855
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -629,7 +629,7 @@ MonoBehaviour:
   container: {fileID: 0}
   ArrowHeadPrefab: {fileID: 7919925912221075874, guid: 9fdf6c49a9f7945aa8bfd7e19b8bea0e, type: 3}
   ArrowNodePrefab: {fileID: 5899555340072359070, guid: 7f4c47763fa1d4d709a0d18dcfe50c08, type: 3}
-  arrowNodeNum: 10
+  arrowNodeNum: 12
   scaleFactor: 2
   eventsConfig:
     OnCardPlayed:

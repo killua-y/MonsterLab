@@ -46,13 +46,5 @@ public class MonsterCardDisplay : MonoBehaviour
         attack.text = Convert.ToString(_card.attack);
         health.text = Convert.ToString(_card.healthPoint);
         typeText.text = _card.type.ToString();
-
-        // 保存卡牌数据，到卡片模型
-        gameObject.GetComponent<CardBehavior>().TakeInCard(_card);
-    }
-
-    public string GetCardName()
-    {
-        return cardModel.cardName;
     }
 }

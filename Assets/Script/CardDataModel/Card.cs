@@ -69,7 +69,6 @@ public class Card
             this.cardLocation = _cardLocation;
             this.modelLocation = _modelLocation;
         }
-
     }
 
     // 法术卡类 继承自卡牌类

@@ -26,14 +26,14 @@ public class CardDisplayView : MonoBehaviour
     // 可视化单个卡牌，将卡牌的可视化后加入到parent下面
     public void DisPlaySingleCard(Card _card, Transform _parent)
     {
-
-        if(_card is MonsterCard)
+        if (_card is MonsterCard)
         {
             if (_card.cardLocation == "")
             {
                 GameObject newCard = GameObject.Instantiate(MonsterCardModel, _parent); ;
                 newCard.GetComponent<MonsterCardDisplay>().InitializeCard((MonsterCard)_card);
                 //Debug.Log("Creating new monster card object for " + _card.cardName);
+                newCard.GetComponent<CardBehavior>().InitializeCard(_card);
             }
             else
             {
@@ -47,6 +47,7 @@ public class CardDisplayView : MonoBehaviour
                 GameObject newCard = GameObject.Instantiate(SpellCardModel, _parent); ;
                 newCard.GetComponent<SpellCardDisplay>().InitializeCard((SpellCard)_card);
                 //Debug.Log("Creating new spell card object for " + _card.cardName);
+                newCard.GetComponent<CardBehavior>().InitializeCard(_card);
             }
             else
             {
@@ -60,6 +61,7 @@ public class CardDisplayView : MonoBehaviour
                 GameObject newCard = GameObject.Instantiate(ItemCardModel, _parent); ;
                 newCard.GetComponent<ItemCardDisplay>().InitializeCard((ItemCard)_card);
                 //Debug.Log("Creating new item card object for " + _card.cardName);
+                newCard.GetComponent<CardBehavior>().InitializeCard(_card);
             }
             else
             {
@@ -70,5 +72,6 @@ public class CardDisplayView : MonoBehaviour
         {
             Debug.Log("Card : " + _card.cardName + " is not any exist type");
         }
+
     }
 }

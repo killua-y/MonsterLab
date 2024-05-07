@@ -1,12 +1,9 @@
 fileFormatVersion: 2
-guid: 0cc43b7a396048fc874cdb5ed866f055
+guid: 03ac46d217a204967b4decc4e6202cd6
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences:
-  - container: {instanceID: 0}
-  - ArrowHeadPrefab: {instanceID: 0}
-  - ArrowNodePrefab: {instanceID: 0}
+  defaultReferences: []
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

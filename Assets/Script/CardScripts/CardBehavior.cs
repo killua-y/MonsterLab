@@ -20,7 +20,7 @@ public class CardBehavior : MonoBehaviour
         
     }
 
-    public void TakeInCard(Card _card)
+    public void InitializeCard(Card _card)
     {
         card = _card;
 

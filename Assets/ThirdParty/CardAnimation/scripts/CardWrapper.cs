@@ -23,15 +23,13 @@ public class CardWrapper : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     // Arrow variable:
     public GameObject ArrowHeadPrefab;
     public GameObject ArrowNodePrefab;
-    public int arrowNodeNum;
-    public float scaleFactor = 1f;
+    public int arrowNodeNum = 12;
+    public float scaleFactor = 2f;
 
     private RectTransform origin;
     private List<RectTransform> arrowNodes = new List<RectTransform>();
     private List<Vector2> controlPoints = new List<Vector2>();
     private readonly List<Vector2> controlPointFactors = new List<Vector2> { new Vector2(-0.3f, 0.8f), new Vector2(0.1f, 1.4f) };
-
-
 
     // other private variable
     private bool isHovered;

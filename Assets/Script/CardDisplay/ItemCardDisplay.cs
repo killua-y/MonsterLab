@@ -35,8 +35,5 @@ public class ItemCardDisplay : MonoBehaviour
         cost.text = Convert.ToString(_card.cost);
         nameText.text = _card.cardName;
         effectText.text = _card.effectText;
-
-        // 保存卡牌数据，到卡片模型
-        gameObject.GetComponent<CardBehavior>().TakeInCard(_card);
     }
 }

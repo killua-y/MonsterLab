@@ -5,11 +5,12 @@ namespace demo {
     public class CardDestroyer : MonoBehaviour {
         public CardContainer container;
         public void OnCardDestroyed(CardPlayed evt) {
-            string cardName = evt.card.GetComponent<MonsterCardDisplay>().GetCardName();
-            if(cardName != null)
-            {
-                Debug.Log("Destory Card: " + cardName);
-            }
+            Debug.Log("Destory Card: ");
+            //string cardName = evt.card.GetComponent<MonsterCardDisplay>().GetCardName();
+            //if (cardName != null)
+            //{
+            //    Debug.Log("Destory Card: " + cardName);
+            //}
             //container.DestroyCard(evt.card);
         }
     }
