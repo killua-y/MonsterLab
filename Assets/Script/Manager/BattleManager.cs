@@ -64,6 +64,11 @@ public class BattleManager : Manager<BattleManager>
         else
             return team1Entities;
     }
+
+    public void StartFight()
+    {
+
+    }
 }
 
 public enum Team

@@ -3,6 +3,7 @@ using config;
 using events;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 public class CardWrapper : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler,
     IPointerUpHandler {
@@ -23,7 +24,7 @@ public class CardWrapper : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     // Arrow variable:
     public GameObject ArrowHeadPrefab;
     public GameObject ArrowNodePrefab;
-    public int arrowNodeNum = 12;
+    public int arrowNodeNum = 11;
     public float scaleFactor = 2f;
 
     private RectTransform origin;
@@ -102,7 +103,13 @@ public class CardWrapper : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
             for (int i = 0; i < this.arrowNodes.Count; ++i)
             {
                 // Calculates t.
-                var t = Mathf.Log(1f * i / (this.arrowNodes.Count - 1) + 1f, 2f);
+                // 适应箭头位置修改node的t
+                var t = Mathf.Log(1f * i / (this.arrowNodes.Count - 0.5f) + 1f, 2f);
+
+                if (i == (this.arrowNodes.Count - 1))
+                {
+                    t = Mathf.Log(1f * i / (this.arrowNodes.Count - 1) + 1f, 2f);
+                }
 
                 // Cubic Bezier curve
                 // B(t) = (1-t)^3 * P0 + 3 * (1-t)^2 * t * P1 + 3 * (1-t) * t^2 * P2 + t^3 * P3
