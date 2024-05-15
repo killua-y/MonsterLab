@@ -10,7 +10,6 @@ public class BattleManager : Manager<BattleManager>
 
     public Transform playerParent;
     public Transform enemyParent;
-    public Action<BaseEntity> OnUnitDied;
 
     List<BaseEntity> playerEntities = new List<BaseEntity>();
     List<BaseEntity> enemyEntities = new List<BaseEntity>();
@@ -23,15 +22,12 @@ public class BattleManager : Manager<BattleManager>
         //GridManager.Instance.GetNodeForIndex(ConvertRowColumnToIndex(0, 3)).SetOccupied(true);
         //GridManager.Instance.GetNodeForIndex(ConvertRowColumnToIndex(1, 3)).SetOccupied(true);
         //GridManager.Instance.GetNodeForIndex(ConvertRowColumnToIndex(2, 3)).SetOccupied(true);
+        //GridManager.Instance.GetNodeForIndex(ConvertRowColumnToIndex(3, 3)).SetOccupied(true);
+        //GridManager.Instance.GetNodeForIndex(ConvertRowColumnToIndex(4, 3)).SetOccupied(true);
         InstaniateMontser(0, 0, Team.Player);
         InstaniateMontser(0, 1, Team.Player);
-        InstaniateMontser(0, 2, Team.Player);
         InstaniateMontser(1, 0, Team.Player);
         InstaniateMontser(1, 1, Team.Player);
-        InstaniateMontser(1, 2, Team.Player);
-        InstaniateMontser(2, 0, Team.Player);
-        InstaniateMontser(2, 1, Team.Player);
-        InstaniateMontser(2, 2, Team.Player);
         InstaniateMontser(1, 6, Team.Enemy, EnemyMonsterPrefab);
         InstaniateMontser(0, 7, Team.Enemy, EnemyMonsterPrefab);
         InstaniateMontser(2, 7, Team.Enemy, EnemyMonsterPrefab);
@@ -95,8 +91,6 @@ public class BattleManager : Manager<BattleManager>
     {
         playerEntities.Remove(entity);
         enemyEntities.Remove(entity);
-
-        OnUnitDied?.Invoke(entity);
 
         Destroy(entity.gameObject);
     }

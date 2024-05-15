@@ -2057,10 +2057,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2ca02366aab9c4e47aaa25499051747a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  monsterPrefab: {fileID: 4941896209285863890, guid: 3c003428575f646af883da9aa195a3e1, type: 3}
-  EnemyMonsterPrefab: {fileID: 8272536069631778718, guid: 4f0a4a3ef738e4e7582e9297550588c8, type: 3}
-  team1Parent: {fileID: 1470525098}
-  team2Parent: {fileID: 1669820551}
+  monsterPrefab: {fileID: 2491269998807701752, guid: 3c003428575f646af883da9aa195a3e1, type: 3}
+  EnemyMonsterPrefab: {fileID: 5238986170691178712, guid: 4f0a4a3ef738e4e7582e9297550588c8, type: 3}
+  playerParent: {fileID: 1470525098}
+  enemyParent: {fileID: 1669820551}
 --- !u!1001 &961651292
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2673,7 +2673,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1470525098}
   m_Layer: 0
-  m_Name: Team1
+  m_Name: PlayerParent
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3222,7 +3222,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1669820551}
   m_Layer: 0
-  m_Name: Team2
+  m_Name: EnemyParent
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

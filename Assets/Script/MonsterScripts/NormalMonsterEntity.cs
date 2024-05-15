@@ -29,9 +29,4 @@ public class NormalMonsterEntity : BaseEntity
             }
         }
     }
-
-    public new void Attack()
-    {
-        //Debug.Log("Normal Monster Attack!!");
-    }
 }

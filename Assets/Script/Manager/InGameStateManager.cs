@@ -59,7 +59,6 @@ public class InGameStateManager : Manager<InGameStateManager>
         gamePhase = GamePhase.BattlePhase;
         PreparePhase = false;
         BattelPhase = true;
-        Debug.Log("get to battle phase");
 
         CardModel.DisCardAllCard();
 

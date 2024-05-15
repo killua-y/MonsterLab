@@ -34,7 +34,12 @@ public class Graph
         foreach (Edge e in edges)
         {
             if (e.from == from)
-                result.Add(e.to);
+            {
+                if (e.GetWeight() != Mathf.Infinity)
+                {
+                    result.Add(e.to);
+                }
+            }
         }
         return result;
     }
@@ -106,6 +111,10 @@ public class Graph
         Dictionary<Node, float> cost_so_far = new Dictionary<Node, float>();
         cost_so_far[start] = 0;
 
+        // 离终点最近的点
+        Node closestNode = start;
+        float closestDistance = Vector2.Distance(start.worldPosition, end.worldPosition);
+
         while (frontier.Count != 0)
         {
             Node current = FindAndRemoveSmallest(frontier);
@@ -121,20 +130,28 @@ public class Graph
             {
                 float new_cost = cost_so_far[current] + Distance(current, next);
 
-                // 查看next是否在cost_so_far里，或者new cost更低
+                // 查看next是否在cost_so_far里，或者new_cost更低
                 if (!cost_so_far.TryGetValue(next, out float currentCost) || new_cost < currentCost)
                 {
                     cost_so_far[next] = new_cost;
                     float priority = new_cost + Vector2.Distance(next.worldPosition, end.worldPosition);
                     frontier[next] = priority;
                     came_from[next] = current;
+
+                    // 更新距离终点最近的点
+                    float distanceToEnd = Vector2.Distance(next.worldPosition, end.worldPosition);
+                    if (distanceToEnd < closestDistance)
+                    {
+                        closestDistance = distanceToEnd;
+                        closestNode = next;
+                    }
                 }
             }
         }
 
         // 根据结果构建找到的最短路径
         List<Node> path = new List<Node>();
-        Node node = end;
+        Node node = closestNode;
         while (node != null)
         {
             path.Add(node);
@@ -226,6 +243,7 @@ public class Node
 {
     public int index;
     public Vector3 worldPosition;
+    public BaseEntity currentEntity;
 
     private bool occupied = false;
 
@@ -234,6 +252,7 @@ public class Node
         this.index = index;
         this.worldPosition = worldPosition;
         occupied = false;
+        this.currentEntity = null;
     }
 
     public void SetOccupied(bool val)

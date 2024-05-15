@@ -1,20 +1,29 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class BaseEntity : MonoBehaviour
 {
+    // 怪兽UI部分
     public SpriteRenderer spriteRender;
-
     public Slider healthBar;
-    public int baseDamage = 1;
-    public int baseHealth = 3;
+    public TextMeshProUGUI healthText;
+    public TextMeshProUGUI attackText;
+    private Image fillImage;
+
+    // 怪兽属性部分
+    public GameObject bullet;
+    public int attackPower = 5;
+    public int healthPoint = 40;
     [Range(1.5f, 10)]
     public float range = 1.5f;
-    public float attackSpeed = 1f; //Attacks per second
-    public float movementSpeed = 1f; //Attacks per second
+    public float attackSpeed = 1f; //攻击间隔
+    public float attackPreparation = 0.5f; //攻击前摇
+    public float attackRecover = 0.5f; //攻击后摇
+    public float movementSpeed = 1f; //移动速度
 
     protected Team myTeam;
     protected BaseEntity currentTarget = null;
@@ -31,24 +40,36 @@ public class BaseEntity : MonoBehaviour
     protected bool canAttack = true;
     protected float waitBetweenAttack;
 
+    // private
+    private int currentHealth;
+
     public void Setup(Team team, Node currentNode)
     {
         myTeam = team;
         if (myTeam == Team.Enemy)
         {
             spriteRender.flipX = true;
+            fillImage = healthBar.fillRect.GetComponent<Image>();
+            fillImage.color = Color.red;
         }
 
         this.currentNode = currentNode;
         transform.position = currentNode.worldPosition;
         currentNode.SetOccupied(true);
+        currentNode.currentEntity = this;
+
+        // 属性UI设置
+        currentHealth = healthPoint;
+        healthBar.maxValue = currentHealth;
+        healthBar.value = currentHealth;
+        attackText.text = attackPower + "";
+        healthText.text = currentHealth + "";
     }
 
-    protected void Start()
+    protected void Awake()
     {
 
     }
-
 
     // 寻找距离最近的敌人
     protected void FindTarget()
@@ -103,7 +124,7 @@ public class BaseEntity : MonoBehaviour
                 return;
 
             var path = GridManager.Instance.GetPath(currentNode, destination);
-            if (path == null && path.Count >= 1)
+            if (path == null || path.Count == 1)
                 return;
 
             if (path[1].IsOccupied)
@@ -111,14 +132,17 @@ public class BaseEntity : MonoBehaviour
 
             // 将目标节点设为占领
             path[1].SetOccupied(true);
+            path[1].currentEntity = this;
             destination = path[1];
 
             // 将之前节点设为不再占领
             currentNode.SetOccupied(false);
+            currentNode.currentEntity = null;
             SetCurrentNode(destination);
         }
 
         moving = !MoveTowards(destination);
+        FindTarget();
     }
 
     public void SetCurrentNode(Node node)
@@ -137,33 +161,43 @@ public class BaseEntity : MonoBehaviour
 
     public void TakeDamage(int amount, BaseEntity from = null)
     {
-        Debug.Log("take damage: " + amount);
-        //baseHealth -= amount;
-        //healthbar.UpdateBar(baseHealth);
+        currentHealth -= amount;
+        healthBar.value = currentHealth;
+        healthText.text = currentHealth + "";
 
-        if (baseHealth <= 0 && !dead)
+        if (currentHealth <= 0 && !dead)
         {
             dead = true;
             currentNode.SetOccupied(false);
+            currentNode.currentEntity = null;
             BattleManager.Instance.UnitDead(this);
         }
     }
 
     protected virtual void Attack()
     {
-        Debug.Log("Attack!!");
-        //if (!canAttack)
-        //    return;
+        if (!canAttack)
+            return;
 
-        //waitBetweenAttack = 1 / attackSpeed;
-        //StartCoroutine(WaitCoroutine());
+        StartCoroutine(StartAttack());
     }
 
-    IEnumerator WaitCoroutine()
+    IEnumerator StartAttack()
     {
         canAttack = false;
-        yield return null;
-        yield return new WaitForSeconds(waitBetweenAttack);
+        // 开始播放攻击动画
+        yield return new WaitForSeconds(attackPreparation);
+        // 攻击击中敌方
+        if(bullet == null)
+        {
+            currentTarget.TakeDamage(attackPower, this);
+        }
+        else
+        {
+            // 远程单位，构建攻击子弹
+        }
+        // 播放攻击后摇
+        yield return new WaitForSeconds(attackRecover);
         canAttack = true;
     }
 }
