@@ -43,6 +43,8 @@ public class InGameStateManager : Manager<InGameStateManager>
     public void TurnStart()
     {
         gamePhase = GamePhase.PreparePhase;
+        PreparePhase = true;
+        BattelPhase = false;
 
         //5张抽牌, 将它们可视化
         for (int i = 0; i < 5; i++)
@@ -55,6 +57,9 @@ public class InGameStateManager : Manager<InGameStateManager>
     public void PreparePhaseEnd()
     {
         gamePhase = GamePhase.BattlePhase;
+        PreparePhase = false;
+        BattelPhase = true;
+        Debug.Log("get to battle phase");
 
         CardModel.DisCardAllCard();
 
@@ -86,9 +91,9 @@ public class InGameStateManager : Manager<InGameStateManager>
     }
 
     // 消耗一张牌
-    public void ExhaustOneCard()
+    public void ExhaustOneCard(Card _card)
     {
-
+        CardModel.ExhaustOneCard(_card);
     }
 }
 

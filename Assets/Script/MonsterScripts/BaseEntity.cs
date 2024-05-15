@@ -2,11 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class BaseEntity : MonoBehaviour
 {
     public SpriteRenderer spriteRender;
 
+    public Slider healthBar;
     public int baseDamage = 1;
     public int baseHealth = 3;
     [Range(1.5f, 10)]
@@ -32,7 +34,7 @@ public class BaseEntity : MonoBehaviour
     public void Setup(Team team, Node currentNode)
     {
         myTeam = team;
-        if (myTeam == Team.Team2)
+        if (myTeam == Team.Enemy)
         {
             spriteRender.flipX = true;
         }
@@ -107,17 +109,16 @@ public class BaseEntity : MonoBehaviour
             if (path[1].IsOccupied)
                 return;
 
+            // 将目标节点设为占领
             path[1].SetOccupied(true);
             destination = path[1];
-        }
 
-        moving = !MoveTowards(destination);
-        if (!moving)
-        {
-            //Free previous node
+            // 将之前节点设为不再占领
             currentNode.SetOccupied(false);
             SetCurrentNode(destination);
         }
+
+        moving = !MoveTowards(destination);
     }
 
     public void SetCurrentNode(Node node)
@@ -125,18 +126,27 @@ public class BaseEntity : MonoBehaviour
         currentNode = node;
     }
 
-    public void TakeDamage(int amount)
+    // 将自己瞬间移动到指定的node
+    public void MoveToNode(Node node)
+    {
+        CurrentNode.SetOccupied(false);
+        SetCurrentNode(node);
+        node.SetOccupied(true);
+        transform.position = node.worldPosition;
+    }
+
+    public void TakeDamage(int amount, BaseEntity from = null)
     {
         Debug.Log("take damage: " + amount);
         //baseHealth -= amount;
         //healthbar.UpdateBar(baseHealth);
 
-        //if (baseHealth <= 0 && !dead)
-        //{
-        //    dead = true;
-        //    currentNode.SetOccupied(false);
-        //    GameManager.Instance.UnitDead(this);
-        //}
+        if (baseHealth <= 0 && !dead)
+        {
+            dead = true;
+            currentNode.SetOccupied(false);
+            BattleManager.Instance.UnitDead(this);
+        }
     }
 
     protected virtual void Attack()

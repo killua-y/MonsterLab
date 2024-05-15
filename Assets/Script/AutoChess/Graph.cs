@@ -60,6 +60,92 @@ public class Graph
         return Mathf.Infinity;
     }
 
+    public virtual List<Node> GetPathToNode(Node start, Node end)
+    {
+        List<Node> path = new List<Node>();
+        return path;
+    }
+
+    private Node FindAndRemoveSmallest(Dictionary<Node, float> dictionary)
+    {
+        if (dictionary == null || dictionary.Count == 0)
+        {
+            Debug.Log("The dictionary is null or empty.");
+        }
+
+        // Initialize variables to track the smallest key and value
+        Node smallestKey = null;
+        float smallestValue = float.MaxValue;
+
+        // Iterate through the dictionary to find the smallest value
+        foreach (var kvp in dictionary)
+        {
+            if (kvp.Value < smallestValue)
+            {
+                smallestValue = kvp.Value;
+                smallestKey = kvp.Key;
+            }
+        }
+
+        // Remove the smallest key-value pair from the dictionary
+        if (smallestKey != null)
+        {
+            dictionary.Remove(smallestKey);
+        }
+
+        // Return the key with the smallest value
+        return smallestKey;
+    }
+
+    public virtual List<Node> PathSearch(Node start, Node end)
+    {
+        Dictionary<Node, float> frontier = new Dictionary<Node, float>();
+        frontier[start] = 0;
+        Dictionary<Node, Node> came_from = new Dictionary<Node, Node>();
+        came_from[start] = null;
+        Dictionary<Node, float> cost_so_far = new Dictionary<Node, float>();
+        cost_so_far[start] = 0;
+
+        while (frontier.Count != 0)
+        {
+            Node current = FindAndRemoveSmallest(frontier);
+
+            if (current == end)
+            {
+                break;
+            }
+
+            //遍历current的邻居node
+            List<Node> neighbours = Neighbors(current);
+            foreach (Node next in neighbours)
+            {
+                float new_cost = cost_so_far[current] + Distance(current, next);
+
+                // 查看next是否在cost_so_far里，或者new cost更低
+                if (!cost_so_far.TryGetValue(next, out float currentCost) || new_cost < currentCost)
+                {
+                    cost_so_far[next] = new_cost;
+                    float priority = new_cost + Vector2.Distance(next.worldPosition, end.worldPosition);
+                    frontier[next] = priority;
+                    came_from[next] = current;
+                }
+            }
+        }
+
+        // 根据结果构建找到的最短路径
+        List<Node> path = new List<Node>();
+        Node node = end;
+        while (node != null)
+        {
+            path.Add(node);
+            node = came_from[node];
+        }
+
+        // 翻转path让start处于index0
+        path.Reverse();
+        return path;
+    }
+
     public virtual List<Node> GetShortestPath(Node start, Node end)
     {
         List<Node> path = new List<Node>();

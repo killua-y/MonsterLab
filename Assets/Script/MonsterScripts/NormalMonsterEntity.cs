@@ -7,23 +7,26 @@ public class NormalMonsterEntity : BaseEntity
 
     public void Update()
     {
-        if (!HasEnemy)
+        if(InGameStateManager.BattelPhase)
         {
-            FindTarget();
-        }
-
-        if (IsInRange && !moving)
-        {
-            //In range for attack!
-            if (canAttack)
+            if (!HasEnemy)
             {
-                Attack();
-                //currentTarget.TakeDamage(baseDamage);
+                FindTarget();
             }
-        }
-        else
-        {
-            GetInRange();
+
+            if (IsInRange && !moving)
+            {
+                //In range for attack!
+                if (canAttack)
+                {
+                    Attack();
+                    //currentTarget.TakeDamage(baseDamage);
+                }
+            }
+            else
+            {
+                GetInRange();
+            }
         }
     }
 

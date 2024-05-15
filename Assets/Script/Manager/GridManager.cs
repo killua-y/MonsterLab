@@ -68,7 +68,7 @@ public class GridManager : Manager<GridManager>
 
     public List<Node> GetPath(Node from, Node to)
     {
-        return graph.GetShortestPath(from, to);
+        return graph.PathSearch(from, to);
     }
 
     public List<Node> GetNodesCloseTo(Node to)
@@ -137,7 +137,7 @@ public class GridManager : Manager<GridManager>
         if (fromIndex >= allNodes.Count || toIndex >= allNodes.Count)
             return;
 
-        List<Node> path = graph.GetShortestPath(allNodes[fromIndex], allNodes[toIndex]);
+        List<Node> path = graph.PathSearch(allNodes[fromIndex], allNodes[toIndex]);
         if (path.Count > 1)
         {
             for (int i = 1; i < path.Count; i++)

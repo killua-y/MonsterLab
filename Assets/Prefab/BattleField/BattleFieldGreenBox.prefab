@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 7621347303202980719}
   - component: {fileID: 7621347303202980716}
   - component: {fileID: 7621347303202980717}
-  - component: {fileID: -3572298129706500767}
+  - component: {fileID: -8829218460656231587}
   m_Layer: 0
   m_Name: BattleFieldGreenBox
   m_TagString: Untagged
@@ -102,8 +102,8 @@ MonoBehaviour:
   highlightSprite: {fileID: 7621347303292306251}
   validColor: {r: 1, g: 1, b: 1, a: 0}
   wrongColor: {r: 0, g: 0, b: 0, a: 0}
---- !u!60 &-3572298129706500767
-PolygonCollider2D:
+--- !u!61 &-8829218460656231587
+BoxCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -125,12 +125,9 @@ PolygonCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Points:
-    m_Paths:
-    - - {x: -0.5, y: 0.5}
-      - {x: -0.5, y: -0.5}
-      - {x: 0.5, y: -0.5}
-      - {x: 0.5, y: 0.5}
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1}
+  m_EdgeRadius: 0
 --- !u!1 &7621347303292306248
 GameObject:
   m_ObjectHideFlags: 0

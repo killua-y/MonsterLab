@@ -38,4 +38,28 @@ public class CardBehavior : MonoBehaviour
             targetCard = false;
         }
     }
+
+    public void CastCard(Tile _tile)
+    {
+
+        if (card is MonsterCard)
+        {
+            Debug.Log("Find tile: " + _tile);
+            string path = "Assets/Resources/MonsterPrefab/Slime.prefab";
+            BattleManager.Instance.InstaniateMontser(_tile.transform.GetSiblingIndex(), Team.Enemy, Resources.Load<GameObject>(path));
+
+            InGameStateManager.Instance.ExhaustOneCard(card);
+            Destroy(this.gameObject);
+
+            if (((MonsterCard)card).modelLocation != "\\r")
+            {
+                Debug.Log("Do not missing monster card: " + card.cardName + "'s model location");
+                GameObject newMonster = Resources.Load<GameObject>(((MonsterCard)card).modelLocation);
+            }
+            else
+            {
+                Debug.Log("Missing monster card: " + card.cardName + "'s model location");
+            }
+        }
+    }
 }
