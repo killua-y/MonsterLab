@@ -16,14 +16,15 @@ public class CardOnPlay : MonoBehaviour
 
     public void OnCardPlayed(CardPlayed evt)
     {
+        // 释放卡牌
         CardBehavior cardBehavior = evt.card.GetComponent<CardBehavior>();
-        string cardName = cardBehavior.card.cardName;
         Tile tile = GetTileUnder();
         if(tile != null)
         {
-            cardBehavior.CastCard(tile);
+            cardBehavior.CheckLegality(tile);
         }
 
+        string cardName = cardBehavior.card.cardName;
         if (cardName != null)
         {
             Debug.Log("Cast Card: " + cardName);

@@ -7,7 +7,7 @@ public class NormalMonsterEntity : BaseEntity
 
     public void Update()
     {
-        if(InGameStateManager.BattelPhase)
+        if(CanBattle)
         {
             if (!HasEnemy)
             {

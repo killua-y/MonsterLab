@@ -49,7 +49,7 @@ public class CardContainer : MonoBehaviour {
         InitCards();
     }
 
-    private void InitCards() {
+    public void InitCards() {
         SetUpCards();
         SetCardsAnchor();
     }

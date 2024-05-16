@@ -20,46 +20,41 @@ public class CardBehavior : MonoBehaviour
         
     }
 
-    public void InitializeCard(Card _card)
+    public virtual void InitializeCard(Card _card)
     {
         card = _card;
 
+        GetComponent<CardDisplay>().UpdateCardView(card);
+
         // 设置卡牌释放类型
-        if (card is MonsterCard)
-        {
-            targetCard = true;
-        }
-        else if (card is ItemCard)
-        {
-            targetCard = true;
-        }
-        else if (card is SpellCard)
+        if (card.castType == CastType.None)
         {
             targetCard = false;
         }
+        else
+        {
+            targetCard = true;
+        }
     }
 
-    public void CastCard(Tile _tile)
+    public virtual void CheckLegality(Tile _tile, Card _card = null)
+    {
+        // 合法，释放卡牌效果
+        CastCard(_tile, _card);
+    }
+
+    public virtual void OnPointDown()
+    {
+        
+    }
+
+    public virtual void OnPointUp()
     {
 
-        if (card is MonsterCard)
-        {
-            Debug.Log("Find tile: " + _tile);
-            string path = "Assets/Resources/MonsterPrefab/Slime.prefab";
-            BattleManager.Instance.InstaniateMontser(_tile.transform.GetSiblingIndex(), Team.Enemy, Resources.Load<GameObject>(path));
+    }
 
-            InGameStateManager.Instance.ExhaustOneCard(card);
-            Destroy(this.gameObject);
-
-            if (((MonsterCard)card).modelLocation != "\\r")
-            {
-                Debug.Log("Do not missing monster card: " + card.cardName + "'s model location");
-                GameObject newMonster = Resources.Load<GameObject>(((MonsterCard)card).modelLocation);
-            }
-            else
-            {
-                Debug.Log("Missing monster card: " + card.cardName + "'s model location");
-            }
-        }
+    public virtual void CastCard(Tile _tile, Card _card = null)
+    {
+        Debug.Log("Please attach correspond card behavior srcipt to this card: " + card.cardName);
     }
 }

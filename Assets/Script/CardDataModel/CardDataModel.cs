@@ -43,64 +43,69 @@ public class CardDataModel : MonoBehaviour
             }
             else if (rowArray[0] == "m")
             {
-                //卡名 稀有度 种族 星级 召唤条件
-                //攻击力 生命值 攻击距离 数值 技能描述
-                //卡片位置 模型位置
                 int id = currentIndex;
                 currentIndex += 1;
-
-                string name = rowArray[1];
-                CardRarity rarity = EnumConverter.ConvertToEnum<CardRarity>(rowArray[2]);
-                MonsterType type = EnumConverter.ConvertToEnum<MonsterType>(rowArray[3]);
                 int uniqueID = 0;
-                int rank = int.Parse(rowArray[4]);
-                int sacrifice = int.Parse(rowArray[5]);
-                int attack = int.Parse(rowArray[6]);
-                int healthPoint = int.Parse(rowArray[7]);
-                int attackRange = int.Parse(rowArray[8]);
-                int effectData = int.Parse(rowArray[9]);
-                string effectText = rowArray[10];
-                string cardLoaction = rowArray[11];
-                string imageLoaction = rowArray[12];
-                string modelLocation = rowArray[13];
-                cardList.Add(new MonsterCard(id, name, rarity, uniqueID, type, rank, sacrifice, attack,
-                    healthPoint, attackRange, effectData, effectText, cardLoaction, imageLoaction, modelLocation));
+                string cardName = rowArray[1];
+                CardColor color = EnumConverter.ConvertToEnum<CardColor>(rowArray[2]);
+                CardRarity cardRarity = EnumConverter.ConvertToEnum<CardRarity>(rowArray[3]);
+                int cost = int.Parse(rowArray[4]);
+                CastType castType = EnumConverter.ConvertToEnum<CastType>(rowArray[5]);
+                int effectData = int.Parse(rowArray[6]);
+                string effectText = rowArray[7];
+                string cardLocation = rowArray[8];
+                string imageLocation = rowArray[9];
+
+                MonsterType type = EnumConverter.ConvertToEnum<MonsterType>(rowArray[10]);
+                int attackPower = int.Parse(rowArray[11]);
+                int healthPoint = int.Parse(rowArray[12]);
+                float attackRange = float.Parse(rowArray[13]);
+                int mana = int.Parse(rowArray[14]);
+                string modelLocation = rowArray[15];
+
+                cardList.Add(new MonsterCard(id, uniqueID, cardName, color, cardRarity,
+                    cost, castType, effectData, effectText, cardLocation, imageLocation,
+                    type, attackPower, healthPoint, attackRange, mana, modelLocation));
 
                 //Debug.Log("Load monster card: " + name);
             }
             else if (rowArray[0] == "s")
             {
-                //卡名 稀有度 费用 数值 技能描述 卡片位置
                 int id = currentIndex;
                 currentIndex += 1;
-                string name = rowArray[1];
-                CardRarity rarity = EnumConverter.ConvertToEnum<CardRarity>(rowArray[2]);
                 int uniqueID = 0;
+                string cardName = rowArray[1];
+                CardColor color = EnumConverter.ConvertToEnum<CardColor>(rowArray[2]);
+                CardRarity cardRarity = EnumConverter.ConvertToEnum<CardRarity>(rowArray[3]);
+                int cost = int.Parse(rowArray[4]);
+                CastType castType = EnumConverter.ConvertToEnum<CastType>(rowArray[5]);
+                int effectData = int.Parse(rowArray[6]);
+                string effectText = rowArray[7];
+                string cardLocation = rowArray[8];
+                string imageLocation = rowArray[9];
 
-                int cost = int.Parse(rowArray[3]);
-                int effectData = int.Parse(rowArray[4]);
-                string effectText = rowArray[5];
-                string cardLoaction = rowArray[6];
-                string imageLoaction = rowArray[7];
-                cardList.Add(new SpellCard(id, name, rarity, uniqueID, cost, effectData, effectText, cardLoaction, imageLoaction));
+                cardList.Add(new SpellCard(id, uniqueID, cardName, color, cardRarity,
+                    cost, castType, effectData, effectText, cardLocation, imageLocation));
 
                 //Debug.Log("Load magic card: " + name);
             }
             else if (rowArray[0] == "i")
             {
-                //卡名 稀有度 费用 数值 技能描述 卡片位置
                 int id = currentIndex;
                 currentIndex += 1;
-                string name = rowArray[1];
-                CardRarity rarity = EnumConverter.ConvertToEnum<CardRarity>(rowArray[2]);
                 int uniqueID = 0;
+                string cardName = rowArray[1];
+                CardColor color = EnumConverter.ConvertToEnum<CardColor>(rowArray[2]);
+                CardRarity cardRarity = EnumConverter.ConvertToEnum<CardRarity>(rowArray[3]);
+                int cost = int.Parse(rowArray[4]);
+                CastType castType = EnumConverter.ConvertToEnum<CastType>(rowArray[5]);
+                int effectData = int.Parse(rowArray[6]);
+                string effectText = rowArray[7];
+                string cardLocation = rowArray[8];
+                string imageLocation = rowArray[9];
 
-                int cost = int.Parse(rowArray[3]);
-                int effectData = int.Parse(rowArray[4]);
-                string effectText = rowArray[5];
-                string cardLoaction = rowArray[6];
-                string imageLoaction = rowArray[7];
-                cardList.Add(new ItemCard(id, name, rarity, uniqueID, cost, effectData, effectText, cardLoaction, imageLoaction));
+                cardList.Add(new ItemCard(id, uniqueID, cardName, color, cardRarity,
+                    cost, castType, effectData, effectText, cardLocation, imageLocation));
 
                 //Debug.Log("Load item card: " + name);
             }

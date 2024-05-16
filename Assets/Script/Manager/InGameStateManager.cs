@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,6 +10,9 @@ public class InGameStateManager : Manager<InGameStateManager>
     public static bool BattelPhase = false;
     public static GamePhase gamePhase;
     public Transform hand;
+
+    public Action OnTurnStart;
+    public Action OnTurnEnd;
 
     private InGameCardModel CardModel;
     private CardDisplayView cardDisplayView;
@@ -42,6 +46,7 @@ public class InGameStateManager : Manager<InGameStateManager>
     // 回合开始
     public void TurnStart()
     {
+        OnTurnStart();
         gamePhase = GamePhase.PreparePhase;
         PreparePhase = true;
         BattelPhase = false;
@@ -56,10 +61,22 @@ public class InGameStateManager : Manager<InGameStateManager>
     // 回合结束，丢弃所有手牌，进入战斗回合
     public void PreparePhaseEnd()
     {
+        OnTurnEnd();
         gamePhase = GamePhase.BattlePhase;
         PreparePhase = false;
         BattelPhase = true;
 
+        CardModel.DisCardAllCard();
+
+        //将手牌中的卡片删除
+        foreach (Transform child in hand)
+        {
+            GameObject.Destroy(child.gameObject);
+        }
+    }
+
+    public void DisCardAllCard()
+    {
         CardModel.DisCardAllCard();
 
         //将手牌中的卡片删除

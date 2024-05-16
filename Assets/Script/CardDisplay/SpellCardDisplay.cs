@@ -6,7 +6,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using static Card;
 
-public class SpellCardDisplay : MonoBehaviour
+public class SpellCardDisplay : CardDisplay
 {
     public Image CardPicture;
     public TextMeshProUGUI nameText;
@@ -26,14 +26,22 @@ public class SpellCardDisplay : MonoBehaviour
     }
 
     // 将怪兽卡数据导入模型
-    public void InitializeCard(SpellCard _card)
+    public override void UpdateCardView(Card _card)
     {
-        if (_card.imageLocation != "")
+        if (_card is not SpellCard)
         {
-            CardPicture = Resources.Load<Image>(_card.imageLocation);
+            Debug.Log("Card type wrong, should be item card: " + _card.cardName);
+            return;
         }
-        cost.text = Convert.ToString(_card.cost);
-        nameText.text = _card.cardName;
-        effectText.text = _card.effectText;
+
+        SpellCard cardModel = (SpellCard)_card;
+
+        if (cardModel.imageLocation != "")
+        {
+            CardPicture = Resources.Load<Image>(cardModel.imageLocation);
+        }
+        cost.text = Convert.ToString(cardModel.cost);
+        nameText.text = cardModel.cardName;
+        effectText.text = cardModel.effectText;
     }
 }

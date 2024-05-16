@@ -3,6 +3,7 @@
 // 怪物种族
 public enum MonsterType
 {
-    Slime,
+    None,
+    Wolf,
     Dragon
 }

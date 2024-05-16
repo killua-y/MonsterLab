@@ -4,6 +4,7 @@ using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using static Card;
 
 public class BaseEntity : MonoBehaviour
 {
@@ -18,16 +19,20 @@ public class BaseEntity : MonoBehaviour
     public GameObject bullet;
     public int attackPower = 5;
     public int healthPoint = 40;
+    public int mana = 0;
     [Range(1.5f, 10)]
     public float range = 1.5f;
     public float attackSpeed = 1f; //攻击间隔
     public float attackPreparation = 0.5f; //攻击前摇
     public float attackRecover = 0.5f; //攻击后摇
-    public float movementSpeed = 1f; //移动速度
+    protected float movementSpeed = 1.3f; //移动速度
 
-    protected Team myTeam;
+    public MonsterCard cardModel;
+
+    public Team myTeam;
     protected BaseEntity currentTarget = null;
     protected Node currentNode;
+    protected Node BattleStartNode;
 
     public Node CurrentNode => currentNode;
 
@@ -38,12 +43,13 @@ public class BaseEntity : MonoBehaviour
 
     protected bool dead = false;
     protected bool canAttack = true;
+    protected bool CanBattle = false;
     protected float waitBetweenAttack;
 
     // private
     private int currentHealth;
 
-    public void Setup(Team team, Node currentNode)
+    public void Setup(Team team, Node currentNode, MonsterCard monsterCard = null)
     {
         myTeam = team;
         if (myTeam == Team.Enemy)
@@ -53,22 +59,26 @@ public class BaseEntity : MonoBehaviour
             fillImage.color = Color.red;
         }
 
+        if (monsterCard != null)
+        {
+            cardModel = monsterCard;
+            UpdateMonster();
+        }
+
         this.currentNode = currentNode;
+        BattleStartNode = currentNode;
         transform.position = currentNode.worldPosition;
         currentNode.SetOccupied(true);
         currentNode.currentEntity = this;
 
         // 属性UI设置
-        currentHealth = healthPoint;
-        healthBar.maxValue = currentHealth;
-        healthBar.value = currentHealth;
-        attackText.text = attackPower + "";
-        healthText.text = currentHealth + "";
+        UpdateUI();
     }
 
-    protected void Awake()
+    protected void Start()
     {
-
+        InGameStateManager.Instance.OnTurnStart += OnTurnStart;
+        InGameStateManager.Instance.OnTurnEnd += OnTurnEnd;
     }
 
     // 寻找距离最近的敌人
@@ -153,10 +163,47 @@ public class BaseEntity : MonoBehaviour
     // 将自己瞬间移动到指定的node
     public void MoveToNode(Node node)
     {
-        CurrentNode.SetOccupied(false);
+        currentNode.SetOccupied(false);
+        currentNode.currentEntity = null;
         SetCurrentNode(node);
         node.SetOccupied(true);
+        node.currentEntity = this;
         transform.position = node.worldPosition;
+    }
+
+    // 更新怪兽的UI属性，不要在战斗中call
+    public void UpdateUI()
+    {
+        currentHealth = healthPoint;
+        healthBar.maxValue = currentHealth;
+        healthBar.value = currentHealth;
+        attackText.text = attackPower + "";
+        healthText.text = currentHealth + "";
+    }
+
+    // 更新怪兽的属性，不要在战斗中call
+    public void UpdateMonster()
+    {
+        attackPower = cardModel.attackPower;
+        healthPoint = cardModel.healthPoint;
+        range = cardModel.attackRange;
+
+        UpdateUI();
+    }
+
+    // 战斗结束，开始新的回合
+    public void OnTurnStart()
+    {
+        this.gameObject.SetActive(true);
+        CanBattle = false;
+        MoveToNode(BattleStartNode);
+    }
+
+    // 战斗开始，记录开始战斗时的node
+    public void OnTurnEnd()
+    {
+        CanBattle = true;
+        BattleStartNode = currentNode;
     }
 
     public void TakeDamage(int amount, BaseEntity from = null)
@@ -170,6 +217,10 @@ public class BaseEntity : MonoBehaviour
             dead = true;
             currentNode.SetOccupied(false);
             currentNode.currentEntity = null;
+
+            InGameStateManager.Instance.OnTurnStart -= OnTurnStart;
+            InGameStateManager.Instance.OnTurnEnd -= OnTurnEnd;
+
             BattleManager.Instance.UnitDead(this);
         }
     }
@@ -185,11 +236,16 @@ public class BaseEntity : MonoBehaviour
     IEnumerator StartAttack()
     {
         canAttack = false;
+
         // 开始播放攻击动画
         yield return new WaitForSeconds(attackPreparation);
         // 攻击击中敌方
         if(bullet == null)
         {
+            if(currentTarget == null)
+            {
+                yield break;
+            }
             currentTarget.TakeDamage(attackPower, this);
         }
         else

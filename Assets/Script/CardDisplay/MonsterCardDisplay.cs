@@ -6,9 +6,10 @@ using UnityEngine;
 using UnityEngine.UI;
 using static Card;
 
-public class MonsterCardDisplay : MonoBehaviour
+public class MonsterCardDisplay : CardDisplay
 {
     public Image CardPicture;
+    public TextMeshProUGUI rankText;
     public TextMeshProUGUI nameText;
     public TextMeshProUGUI effectText;
     public TextMeshProUGUI attack;
@@ -18,8 +19,6 @@ public class MonsterCardDisplay : MonoBehaviour
     //卡名 稀有度 种族 星级 召唤条件
     //攻击力 生命值 攻击距离 数值 技能描述
     //卡片位置 模型位置
-
-    private MonsterCard cardModel;
 
     // Start is called before the first frame update
     void Start()
@@ -33,18 +32,24 @@ public class MonsterCardDisplay : MonoBehaviour
         
     }
 
-    // 将怪兽卡数据导入模型
-    public void InitializeCard(MonsterCard _card)
+    public override void UpdateCardView(Card _card)
     {
-        cardModel = _card;
-        if (_card.imageLocation != "")
+        if (_card is not MonsterCard)
         {
-            CardPicture = Resources.Load<Image>(_card.imageLocation);
+            Debug.Log("Card type wrong, should be monster card: " + _card.cardName);
+            return;
         }
-        nameText.text = _card.cardName;
-        effectText.text = _card.effectText;
-        attack.text = Convert.ToString(_card.attack);
-        health.text = Convert.ToString(_card.healthPoint);
-        typeText.text = _card.type.ToString();
+
+        MonsterCard cardModel = (MonsterCard)_card;
+        if (cardModel.imageLocation != "")
+        {
+            CardPicture = Resources.Load<Image>(cardModel.imageLocation);
+        }
+        rankText.text = Convert.ToString(cardModel.cost);
+        nameText.text = cardModel.cardName;
+        effectText.text = cardModel.effectText;
+        attack.text = Convert.ToString(cardModel.attackPower);
+        health.text = Convert.ToString(cardModel.healthPoint);
+        typeText.text = cardModel.type.ToString();
     }
 }

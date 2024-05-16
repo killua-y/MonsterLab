@@ -554,11 +554,13 @@ MonoBehaviour:
   bullet: {fileID: 0}
   attackPower: 5
   healthPoint: 40
+  mana: 0
   range: 1.5
   attackSpeed: 1
   attackPreparation: 0.5
   attackRecover: 0.5
-  movementSpeed: 1
+  movementSpeed: 1.5
+  myTeam: 0
 --- !u!1 &7775597959495195128
 GameObject:
   m_ObjectHideFlags: 0

@@ -39,6 +39,7 @@ public class CardWrapper : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     public EventsConfig eventsConfig;
 
     // 决定卡牌类型为target释放/nontarget释放
+    private CardBehavior cardBehavior;
     private bool targetCard;
 
     public float width {
@@ -51,7 +52,8 @@ public class CardWrapper : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
 
     private void Start() {
         canvas = GetComponent<Canvas>();
-        targetCard = GetComponent<CardBehavior>().targetCard;
+        cardBehavior = GetComponent<CardBehavior>();
+        targetCard = cardBehavior.targetCard;
     }
 
     private void Update() {
@@ -201,6 +203,8 @@ public class CardWrapper : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     public void OnPointerDown(PointerEventData eventData) {
         isDragged = true;
 
+        cardBehavior.OnPointDown();
+
         if (targetCard)
         {
             // Gets position of the arrows emitter point.
@@ -233,6 +237,8 @@ public class CardWrapper : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     public void OnPointerUp(PointerEventData eventData) {
         isDragged = false;
         isHovered = false;
+
+        cardBehavior.OnPointUp();
 
         container.OnCardDragEnd();
 
