@@ -32,7 +32,7 @@ public class BaseEntity : MonoBehaviour
     public Team myTeam;
     protected BaseEntity currentTarget = null;
     protected Node currentNode;
-    protected Node BattleStartNode;
+    public Node BattleStartNode;
 
     public Node CurrentNode => currentNode;
 
@@ -49,7 +49,7 @@ public class BaseEntity : MonoBehaviour
     // private
     private int currentHealth;
 
-    public void Setup(Team team, Node currentNode, MonsterCard monsterCard = null)
+    public void Setup(Team team, Node currentNode = null, MonsterCard monsterCard = null)
     {
         myTeam = team;
         if (myTeam == Team.Enemy)
@@ -59,17 +59,21 @@ public class BaseEntity : MonoBehaviour
             fillImage.color = Color.red;
         }
 
+        if (currentNode != null)
+        {
+            BattleStartNode = currentNode;
+        }
+
         if (monsterCard != null)
         {
             cardModel = monsterCard;
             UpdateMonster();
         }
 
-        this.currentNode = currentNode;
-        BattleStartNode = currentNode;
-        transform.position = currentNode.worldPosition;
-        currentNode.SetOccupied(true);
-        currentNode.currentEntity = this;
+        this.currentNode = BattleStartNode;
+        transform.position = BattleStartNode.worldPosition;
+        BattleStartNode.SetOccupied(true);
+        BattleStartNode.currentEntity = this;
 
         // 属性UI设置
         UpdateUI();

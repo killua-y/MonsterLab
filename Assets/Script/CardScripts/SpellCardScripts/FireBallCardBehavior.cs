@@ -19,5 +19,8 @@ public class FireBallCardBehavior : CardBehavior
     public override void CastCard(Tile _tile, Card _card = null)
     {
         GridManager.Instance.GetNodeForTile(_tile).currentEntity.TakeDamage(card.effectData);
+
+        InGameStateManager.Instance.ExhaustOneCard(card);
+        Destroy(this.gameObject);
     }
 }

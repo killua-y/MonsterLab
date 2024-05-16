@@ -17,6 +17,12 @@ public class MonsterCardBehavior : CardBehavior
         
     }
 
+    public override void CheckLegality(Tile _tile, Card _card = null)
+    {
+        // 合法，释放卡牌效果
+        CastCard(_tile, _card);
+    }
+
     public override void CastCard(Tile _tile, Card _card = null)
     {
         if (card is not MonsterCard)

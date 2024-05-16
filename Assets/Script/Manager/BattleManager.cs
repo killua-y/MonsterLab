@@ -15,6 +15,7 @@ public class BattleManager : Manager<BattleManager>
 
     List<BaseEntity> playerEntities = new List<BaseEntity>();
     List<BaseEntity> enemyEntities = new List<BaseEntity>();
+    List<GameObject> respondEntities = new List<GameObject>();
 
     public TextMeshProUGUI monsterSpaceText;
     // Start is called before the first frame update
@@ -94,6 +95,12 @@ public class BattleManager : Manager<BattleManager>
         playerEntities.Remove(entity);
         enemyEntities.Remove(entity);
 
+        if (entity.myTeam == Team.Player)
+        {
+            GameObject newEntity = entity.gameObject;
+            respondEntities.Add(newEntity);
+        }
+
         Destroy(entity.gameObject);
 
         if (playerEntities.Count == 0)
@@ -109,6 +116,14 @@ public class BattleManager : Manager<BattleManager>
     // helper，用于延迟call一下新回合
     public void NewTurn()
     {
+        //foreach (GameObject entity in respondEntities)
+        //{
+        //    GameObject newMonster = Instantiate(entity, playerParent);
+        //    BaseEntity newEntity = newMonster.GetComponent<BaseEntity>();
+        //    playerEntities.Add(newEntity);
+        //    newEntity.Setup(Team.Player);
+        //}
+
         InGameStateManager.Instance.TurnStart();
     }
 

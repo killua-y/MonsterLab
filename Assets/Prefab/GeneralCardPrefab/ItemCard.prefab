@@ -147,7 +147,6 @@ GameObject:
   - component: {fileID: 2189158130635427450}
   - component: {fileID: 2189158130635427449}
   - component: {fileID: 3769563751741841722}
-  - component: {fileID: 6663427291900290344}
   - component: {fileID: 8175161028864640675}
   m_Layer: 5
   m_Name: ItemCard
@@ -166,7 +165,7 @@ RectTransform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 2189158130409602708}
   - {fileID: 2189158131636433011}
@@ -234,19 +233,6 @@ MonoBehaviour:
   nameText: {fileID: 2189158131581201374}
   effectText: {fileID: 2189158131972332929}
   cost: {fileID: 2189158130409602709}
---- !u!114 &6663427291900290344
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2189158130635427455}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b791145dee0e440508a5b1fa47c933ba, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  targetCard: 0
 --- !u!114 &8175161028864640675
 MonoBehaviour:
   m_ObjectHideFlags: 0

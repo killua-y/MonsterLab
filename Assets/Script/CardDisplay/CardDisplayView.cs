@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -37,8 +38,9 @@ public class CardDisplayView : MonoBehaviour
                     cardContainer.InitCards();
                 }
 
+                // attach script
+                newCard.AddComponent(Type.GetType("MonsterCardBehavior"));
                 newCard.GetComponent<CardBehavior>().InitializeCard(_card);
-                //Debug.Log("Creating new monster card object for " + _card.cardName);
             }
             else
             {
@@ -47,39 +49,44 @@ public class CardDisplayView : MonoBehaviour
         }
         else if(_card is SpellCard)
         {
-            if (_card.cardLocation == "")
+
+            GameObject newCard = GameObject.Instantiate(SpellCardModel, _parent);
+            CardContainer cardContainer = _parent.GetComponent<CardContainer>();
+            if (cardContainer != null)
             {
-                GameObject newCard = GameObject.Instantiate(SpellCardModel, _parent);
-                CardContainer cardContainer = _parent.GetComponent<CardContainer>();
-                if (cardContainer != null)
-                {
-                    cardContainer.InitCards();
-                }
-                //Debug.Log("Creating new spell card object for " + _card.cardName);
-                newCard.GetComponent<CardBehavior>().InitializeCard(_card);
+                cardContainer.InitCards();
             }
-            else
+
+            // attach script
+            string cardScriptName = "CardBehavior";
+
+            if (_card.cardLocation != "")
             {
-                Debug.Log("Card location is: " + _card.cardLocation);
+                cardScriptName = _card.cardLocation;
             }
+
+            newCard.AddComponent(Type.GetType(cardScriptName));
+            newCard.GetComponent<CardBehavior>().InitializeCard(_card);
         }
         else if (_card is ItemCard)
         {
-            if (_card.cardLocation == "")
+            GameObject newCard = GameObject.Instantiate(ItemCardModel, _parent);
+            CardContainer cardContainer = _parent.GetComponent<CardContainer>();
+            if (cardContainer != null)
             {
-                GameObject newCard = GameObject.Instantiate(ItemCardModel, _parent);
-                CardContainer cardContainer = _parent.GetComponent<CardContainer>();
-                if (cardContainer != null)
-                {
-                    cardContainer.InitCards();
-                }
-                //Debug.Log("Creating new item card object for " + _card.cardName);
-                newCard.GetComponent<CardBehavior>().InitializeCard(_card);
+                cardContainer.InitCards();
             }
-            else
+
+            // attach script
+            string cardScriptName = "CardBehavior";
+
+            if(_card.cardLocation != "")
             {
-                Debug.Log("Card location is: " + _card.cardLocation);
+                cardScriptName = _card.cardLocation;
             }
+
+            newCard.AddComponent(Type.GetType(cardScriptName));
+            newCard.GetComponent<CardBehavior>().InitializeCard(_card);
         }
         else
         {

@@ -39,8 +39,11 @@ public class CardBehavior : MonoBehaviour
 
     public virtual void CheckLegality(Tile _tile, Card _card = null)
     {
-        // 合法，释放卡牌效果
-        CastCard(_tile, _card);
+        if (PlayerStatesManager.Instance.GetRemainingCost() >= card.cost)
+        {
+            // 合法，释放卡牌效果
+            CastCard(_tile, _card);
+        }
     }
 
     public virtual void OnPointDown()

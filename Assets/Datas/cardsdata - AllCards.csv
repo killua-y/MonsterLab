@@ -13,7 +13,7 @@ m,Silvermane,red,rare,1,PlayerEmptyTile,200,Next attack deal 200% attack damage.
 m,Howler,red,normal,0,PlayerEmptyTile,0,Normal Monster,,,Wolf,5,40,1.5,0,,10
 m,Frostfang,red,rare,3,PlayerEmptyTile,300,Deal 300% attack damage to all enemy monster,,,Wolf,20,400,3,50,,11
 #,卡名,职业颜色,稀有度,费用,释放类型,数值,技能描述,卡片位置,图片位置,,,,,,,
-s,Fire ball,red,normal,1,EnemyMonster,10,Deal 10 damage,,,,,,,,,12
+s,Fire ball,red,normal,1,EnemyMonster,10,Deal 10 damage,FireBallCardBehavior,,,,,,,,12
 s,Growth,red,normal,1,PlayerMonster,30,Increase 40 health,,,,,,,,,13
 s,High Speed,red,normal,1,None,2,Draw 2 card,,,,,,,,,14
 i,Sword,red,rare,2,PlayerMonster,10,Apply 10 attack power,,,,,,,,,15

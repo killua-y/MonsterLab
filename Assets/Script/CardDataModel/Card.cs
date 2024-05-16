@@ -38,6 +38,7 @@ public class Card
         this.cardRarity = _cardRarity;
         this.cost = _cost;
         this.castType = _castType;
+        this.effectData = _effectData;
         this.effectText = _effectText;
         this.cardLocation = _cardLocation;
         this.imageLocation = _imageLocation;
