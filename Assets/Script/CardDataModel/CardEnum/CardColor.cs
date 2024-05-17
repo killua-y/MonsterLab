@@ -5,5 +5,6 @@ using UnityEngine;
 public enum CardColor
 {
     Red,
-    Blue
+    Blue,
+    Black
 }

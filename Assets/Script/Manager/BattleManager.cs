@@ -7,9 +7,6 @@ using static Card;
 
 public class BattleManager : Manager<BattleManager>
 {
-    public GameObject monsterPrefab;
-    public GameObject EnemyMonsterPrefab;
-
     public Transform playerParent;
     public Transform enemyParent;
 
@@ -21,21 +18,6 @@ public class BattleManager : Manager<BattleManager>
     void Start()
     {
         base.Awake();
-
-        //InGameStateManager.Instance.OnPreparePhaseStart += OnPreparePhaseStart;
-        //InGameStateManager.Instance.OnPreparePhaseEnd += OnPreparePhaseEnd;
-
-        //GridManager.Instance.GetNodeForIndex(ConvertRowColumnToIndex(0, 3)).SetOccupied(true);
-        //GridManager.Instance.GetNodeForIndex(ConvertRowColumnToIndex(1, 3)).SetOccupied(true);
-        //GridManager.Instance.GetNodeForIndex(ConvertRowColumnToIndex(2, 3)).SetOccupied(true);
-        //GridManager.Instance.GetNodeForIndex(ConvertRowColumnToIndex(3, 3)).SetOccupied(true);
-        //GridManager.Instance.GetNodeForIndex(ConvertRowColumnToIndex(4, 3)).SetOccupied(true);
-        InstaniateMontser(0, 0, Team.Player);
-        InstaniateMontser(4, 1, Team.Player);
-        InstaniateMontser(1, 6, Team.Enemy, EnemyMonsterPrefab);
-        InstaniateMontser(0, 7, Team.Enemy, EnemyMonsterPrefab);
-        InstaniateMontser(2, 7, Team.Enemy, EnemyMonsterPrefab);
-        InstaniateMontser(3, 7, Team.Enemy, EnemyMonsterPrefab);
     }
 
     // Update is called once per frame
@@ -50,38 +32,59 @@ public class BattleManager : Manager<BattleManager>
         return index;
     }
 
-    public void InstaniateMontser(int index, Team team, GameObject _monsterPrefab = null, MonsterCard monsterCard = null)
+    public void InstaniateMontser(int index, Team team, MonsterCard monsterCard)
     {
-        // 如果没有传入montser prefab就默认assign一个
-        if (_monsterPrefab is null)
+        // 必须传入monsterCard
+        if (monsterCard is null)
         {
-            _monsterPrefab = monsterPrefab;
+            return;
         }
+
+        // 如果没有模型地址就默认安排一个
+        string path = "";
+        if (monsterCard.modelLocation != "")
+        {
+            path = monsterCard.modelLocation;
+        }
+        else
+        {
+            // 根据Team安排不同的默认模型
+            if (team == Team.Player)
+            {
+                path = "MonsterPrefab/Slime";
+            }
+            else
+            {
+                path = "Enemy/Slime/EnemySlime";
+            }
+        }
+
+        GameObject monsterPrefab = Resources.Load<GameObject>(path);
 
         GameObject newMonster;
 
         // 根据team生成怪物
         if (team == Team.Player)
         {
-            newMonster = Instantiate(_monsterPrefab, playerParent);
+            newMonster = Instantiate(monsterPrefab, playerParent);
             BaseEntity newEntity = newMonster.GetComponent<BaseEntity>();
             playerEntities.Add(newEntity);
             newEntity.Setup(team, GridManager.Instance.GetNodeForIndex(index), monsterCard);
         }
         else
         {
-            newMonster = Instantiate(_monsterPrefab, enemyParent);
+            newMonster = Instantiate(monsterPrefab, enemyParent);
             BaseEntity newEntity = newMonster.GetComponent<BaseEntity>();
             enemyEntities.Add(newEntity);
             newEntity.Setup(team, GridManager.Instance.GetNodeForIndex(index), monsterCard);
         }
     }
 
-    public void InstaniateMontser(int row, int column, Team team, GameObject _monsterPrefab = null, MonsterCard monsterCard = null)
+    public void InstaniateMontser(int row, int column, Team team, MonsterCard monsterCard)
     {
         int index = ConvertRowColumnToIndex(row, column);
 
-        InstaniateMontser(index, team, _monsterPrefab, monsterCard);
+        InstaniateMontser(index, team, monsterCard);
     }
 
     public List<BaseEntity> GetEntitiesAgainst(Team against)
@@ -119,19 +122,10 @@ public class BattleManager : Manager<BattleManager>
     // helper，用于延迟call一下新回合
     public void NewTurn()
     {
-        InGameStateManager.Instance.TurnStart();
-    }
-
-    // 准备阶段开始，战斗结束
-    public void OnPreparePhaseStart()
-    {
-
-    }
-
-    // 准备阶段结束，战斗开始
-    public void OnPreparePhaseEnd()
-    {
-
+        if (InGameStateManager.BattelPhase)
+        {
+            InGameStateManager.Instance.TurnStart();
+        }
     }
 
     public void AddToTeam(BaseEntity entity)

@@ -44,17 +44,7 @@ public class MonsterCardBehavior : CardBehavior
 
         MonsterCard cardModel = (MonsterCard)card;
 
-        string path = "";
-        if (cardModel.modelLocation == "")
-        {
-            path = cardModel.modelLocation;
-        }
-        else
-        {
-            path = "Assets/Resources/MonsterPrefab/Slime.prefab";
-        }
-
-        BattleManager.Instance.InstaniateMontser(_tile.transform.GetSiblingIndex(), Team.Player, Resources.Load<GameObject>(path), cardModel);
+        BattleManager.Instance.InstaniateMontser(_tile.transform.GetSiblingIndex(), Team.Player, cardModel);
 
         // 如果是怪兽卡，会消耗卡牌
         CastComplete();

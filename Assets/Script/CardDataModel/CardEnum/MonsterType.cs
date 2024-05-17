@@ -5,5 +5,6 @@ public enum MonsterType
 {
     None,
     Wolf,
-    Dragon
+    Dragon,
+    Slime
 }

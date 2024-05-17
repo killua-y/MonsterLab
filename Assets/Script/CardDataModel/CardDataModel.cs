@@ -14,6 +14,10 @@ public class CardDataModel : MonoBehaviour
     private int[] playerDNAData; // 储存玩家DNA数据的array
     private int totalCoins;
 
+    // 怪兽链表
+    public TextAsset enemyTextCardData; // 地方怪兽卡牌数据txt文件
+    private List<MonsterCard> enemyCardList = new List<MonsterCard>(); // 存储地方怪兽卡牌数据的链表
+
     // Start is called before the first frame update
     void Awake()
     {
@@ -110,6 +114,59 @@ public class CardDataModel : MonoBehaviour
                 //Debug.Log("Load item card: " + name);
             }
         }
+
+        LordEnemyCardList();
+    }
+
+    public void LordEnemyCardList()
+    {
+        int currentIndex = 0;
+
+        // 加载敌方怪兽数据
+        // Load 怪兽卡
+        string[] enemyMonsterDataArray = enemyTextCardData.text.Split('\n');
+        foreach (var row in enemyMonsterDataArray)
+        {
+            string[] rowArray = row.Split(',');
+            if (rowArray[0] == "#")
+            {
+                continue;
+            }
+            else if (rowArray[0] == "m")
+            {
+                int id = currentIndex;
+                currentIndex += 1;
+                int uniqueID = 0;
+                string cardName = rowArray[1];
+                CardColor color = EnumConverter.ConvertToEnum<CardColor>(rowArray[2]);
+                CardRarity cardRarity = EnumConverter.ConvertToEnum<CardRarity>(rowArray[3]);
+                int cost = int.Parse(rowArray[4]);
+                CastType castType = EnumConverter.ConvertToEnum<CastType>(rowArray[5]);
+                int effectData = int.Parse(rowArray[6]);
+                string effectText = rowArray[7];
+                string cardLocation = rowArray[8];
+                string imageLocation = rowArray[9];
+
+                MonsterType type = EnumConverter.ConvertToEnum<MonsterType>(rowArray[10]);
+                int attackPower = int.Parse(rowArray[11]);
+                int healthPoint = int.Parse(rowArray[12]);
+                float attackRange = float.Parse(rowArray[13]);
+                int mana = int.Parse(rowArray[14]);
+                string modelLocation = rowArray[15];
+
+                enemyCardList.Add(new MonsterCard(id, uniqueID, cardName, color, cardRarity,
+                    cost, castType, effectData, effectText, cardLocation, imageLocation,
+                    type, attackPower, healthPoint, attackRange, mana, modelLocation));
+
+                //Debug.Log("Load enemy monster card: " + name);
+            }
+        }
+    }
+
+    // Helper，其他function会call来获取卡组数据
+    public MonsterCard GetEnemyMonster(int index)
+    {
+        return enemyCardList[index];
     }
 
     // 获得卡牌
