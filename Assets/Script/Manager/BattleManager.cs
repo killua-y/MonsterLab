@@ -106,7 +106,7 @@ public class BattleManager : Manager<BattleManager>
         }
         else
         {
-            Destroy(entity.gameObject);
+            entity.gameObject.SetActive(false);
         }
 
         if (playerEntities.Count == 0)
@@ -124,7 +124,7 @@ public class BattleManager : Manager<BattleManager>
     {
         if (InGameStateManager.BattelPhase)
         {
-            InGameStateManager.Instance.TurnStart();
+            InGameStateManager.Instance.BattlePhaseEnd();
         }
     }
 

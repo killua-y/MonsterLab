@@ -5478,7 +5478,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1513740601}
         m_TargetAssemblyTypeName: InGameStateManager, Assembly-CSharp
-        m_MethodName: TurnStart
+        m_MethodName: PreparePhaseStart
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

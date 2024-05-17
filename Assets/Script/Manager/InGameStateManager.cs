@@ -15,6 +15,8 @@ public class InGameStateManager : Manager<InGameStateManager>
 
     public Action OnPreparePhaseStart;
     public Action OnPreparePhaseEnd;
+    public Action OnBattlePhaseStart;
+    public Action OnBattlePhaseEnd;
 
     private InGameCardModel CardModel;
     private CardDisplayView cardDisplayView;
@@ -47,13 +49,11 @@ public class InGameStateManager : Manager<InGameStateManager>
     {
         CardModel.InitialzeDeck();
         Debug.Log("Game Initialzed");
-
     }
 
     // 回合开始
-    public void TurnStart()
+    public void PreparePhaseStart()
     {
-        OnPreparePhaseStart();
         gamePhase = GamePhase.PreparePhase;
         PreparePhase = true;
         BattelPhase = false;
@@ -63,12 +63,13 @@ public class InGameStateManager : Manager<InGameStateManager>
         {
             DrawOneCard();
         }
+
+        OnPreparePhaseStart();
     }
 
     // 回合结束，丢弃所有手牌，进入战斗回合
     public void PreparePhaseEnd()
     {
-        OnPreparePhaseEnd();
         gamePhase = GamePhase.BattlePhase;
         PreparePhase = false;
         BattelPhase = true;
@@ -80,6 +81,22 @@ public class InGameStateManager : Manager<InGameStateManager>
         {
             GameObject.Destroy(child.gameObject);
         }
+
+        OnPreparePhaseEnd();
+
+        BattlePhaseStart();
+    }
+
+    public void BattlePhaseStart()
+    {
+        OnBattlePhaseStart();
+    }
+
+    public void BattlePhaseEnd()
+    {
+        OnBattlePhaseEnd();
+
+        PreparePhaseStart();
     }
 
     public void DisCardAllCard()

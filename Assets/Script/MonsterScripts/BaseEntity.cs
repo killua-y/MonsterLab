@@ -48,7 +48,6 @@ public class BaseEntity : MonoBehaviour
 
     // private
     private int currentHealth;
-    private Coroutine attackCoroutine;
 
     public void Setup(Team team, Node currentNode = null, MonsterCard monsterCard = null)
     {
@@ -84,6 +83,8 @@ public class BaseEntity : MonoBehaviour
     {
         InGameStateManager.Instance.OnPreparePhaseStart += OnPreparePhaseStart;
         InGameStateManager.Instance.OnPreparePhaseEnd += OnPreparePhaseEnd;
+        InGameStateManager.Instance.OnBattlePhaseStart += OnBattlePhaseStart;
+        InGameStateManager.Instance.OnBattlePhaseEnd += OnBattlePhaseEnd;
     }
 
     // 寻找距离最近的敌人
@@ -100,6 +101,7 @@ public class BaseEntity : MonoBehaviour
                 entity = e;
             }
         }
+
         currentTarget = entity;
     }
 
@@ -144,6 +146,7 @@ public class BaseEntity : MonoBehaviour
             if (path[1].IsOccupied)
                 return;
 
+            Debug.Log("1");
             // 将目标节点设为占领
             path[1].SetOccupied(true);
             path[1].currentEntity = this;
@@ -153,29 +156,15 @@ public class BaseEntity : MonoBehaviour
             currentNode.SetOccupied(false);
             currentNode.currentEntity = null;
             SetCurrentNode(destination);
+            Debug.Log("2");
         }
 
         moving = !MoveTowards(destination);
-        FindTarget();
     }
 
     public void SetCurrentNode(Node node)
     {
         currentNode = node;
-    }
-
-    // 将自己瞬间移动到指定的node
-    public void MoveToNode(Node node)
-    {
-        if(currentNode != null)
-        {
-            currentNode.SetOccupied(false);
-            currentNode.currentEntity = null;
-        }
-        SetCurrentNode(node);
-        node.SetOccupied(true);
-        node.currentEntity = this;
-        transform.position = node.worldPosition;
     }
 
     // 更新怪兽的UI属性，不要在战斗中call
@@ -203,30 +192,62 @@ public class BaseEntity : MonoBehaviour
         UpdateUI();
     }
 
-    // 战斗结束，开始新的回合
+    // 准备阶段开始
     public void OnPreparePhaseStart()
     {
-        CanBattle = false;
-        MoveToNode(BattleStartNode);
+        this.gameObject.SetActive(true);
 
-        // 玩家怪兽会回复全部生命值
-        if(myTeam == Team.Player)
+        CanBattle = false;
+
+        SetCurrentNode(BattleStartNode);
+        BattleStartNode.SetOccupied(true);
+        BattleStartNode.currentEntity = this;
+        transform.position = BattleStartNode.worldPosition;
+
+        // 玩家的怪兽会回复全部生命值
+        if (myTeam == Team.Player)
         {
             UpdateUI();
+
+            // 重新把自己添加回索敌list
+            if (dead)
+            {
+                dead = false;
+                BattleManager.Instance.AddToTeam(this);
+            }
         }
     }
 
-    // 战斗开始，记录开始战斗时的node
+    // 准备阶段结束
     public void OnPreparePhaseEnd()
+    {
+
+    }
+
+    // 战斗阶段开始
+    public void OnBattlePhaseStart()
     {
         CanBattle = true;
         BattleStartNode = currentNode;
+    }
+
+    // 战斗阶段结束
+    public void OnBattlePhaseEnd()
+    {
+        currentTarget = null;
+
+        if (currentNode != null)
+        {
+            currentNode.SetOccupied(false);
+            currentNode.currentEntity = null;
+        }
     }
 
     public void TakeDamage(int amount, BaseEntity from = null)
     {
         if(dead)
         {
+            Debug.Log("Should not take damage");
             return;
         }
 
@@ -241,14 +262,13 @@ public class BaseEntity : MonoBehaviour
             currentNode.SetOccupied(false);
             currentNode.currentEntity = null;
 
-            if (attackCoroutine != null)
+            if (myTeam == Team.Enemy)
             {
-                StopCoroutine(attackCoroutine);
-                attackCoroutine = null;
+                InGameStateManager.Instance.OnPreparePhaseStart -= OnPreparePhaseStart;
+                InGameStateManager.Instance.OnPreparePhaseEnd -= OnPreparePhaseEnd;
+                InGameStateManager.Instance.OnBattlePhaseStart -= OnBattlePhaseStart;
+                InGameStateManager.Instance.OnBattlePhaseEnd -= OnBattlePhaseEnd;
             }
-
-            InGameStateManager.Instance.OnPreparePhaseStart -= OnPreparePhaseStart;
-            InGameStateManager.Instance.OnPreparePhaseEnd -= OnPreparePhaseEnd;
 
             BattleManager.Instance.UnitDead(this);
         }
@@ -259,11 +279,17 @@ public class BaseEntity : MonoBehaviour
         if (!canAttack)
             return;
 
-        attackCoroutine = StartCoroutine(StartAttack());
+        StartCoroutine(StartAttack());
     }
 
     IEnumerator StartAttack()
     {
+        if (currentTarget.dead)
+        {
+            FindTarget();
+            yield break;
+        }
+
         canAttack = false;
 
         // 开始播放攻击动画

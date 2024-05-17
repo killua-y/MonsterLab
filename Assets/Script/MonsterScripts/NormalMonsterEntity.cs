@@ -20,7 +20,6 @@ public class NormalMonsterEntity : BaseEntity
                 if (canAttack)
                 {
                     Attack();
-                    //currentTarget.TakeDamage(baseDamage);
                 }
             }
             else
