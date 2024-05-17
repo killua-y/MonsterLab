@@ -19,8 +19,8 @@ public class PlayerStatesManager : Manager<PlayerStatesManager>
     void Start()
     {
         currentCost = maxCost;
-        InGameStateManager.Instance.OnTurnStart += OnTurnStart;
-        InGameStateManager.Instance.OnTurnEnd += OnTurnEnd;
+        InGameStateManager.Instance.OnPreparePhaseStart += OnTurnStart;
+        InGameStateManager.Instance.OnPreparePhaseEnd += OnTurnEnd;
     }
 
     // Update is called once per frame

@@ -19,6 +19,17 @@ public class MonsterCardBehavior : CardBehavior
 
     public override void CheckLegality(Tile _tile, Card _card = null)
     {
+        Node node = GridManager.Instance.GetNodeForTile(_tile);
+
+        if (card.castType == CastType.PlayerEmptyTile)
+        {
+            if (node.currentEntity != null)
+            {
+                return;
+            }
+        }
+
+        // 查看是否需要祭品
         // 合法，释放卡牌效果
         CastCard(_tile, _card);
     }
@@ -45,8 +56,8 @@ public class MonsterCardBehavior : CardBehavior
 
         BattleManager.Instance.InstaniateMontser(_tile.transform.GetSiblingIndex(), Team.Player, Resources.Load<GameObject>(path), cardModel);
 
-        InGameStateManager.Instance.ExhaustOneCard(card);
-        Destroy(this.gameObject);
+        // 如果是怪兽卡，会消耗卡牌
+        CastComplete();
     }
 
     public override void OnPointDown()

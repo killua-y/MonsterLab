@@ -15,7 +15,6 @@ public class BattleManager : Manager<BattleManager>
 
     List<BaseEntity> playerEntities = new List<BaseEntity>();
     List<BaseEntity> enemyEntities = new List<BaseEntity>();
-    List<GameObject> respondEntities = new List<GameObject>();
 
     public TextMeshProUGUI monsterSpaceText;
     // Start is called before the first frame update
@@ -23,13 +22,16 @@ public class BattleManager : Manager<BattleManager>
     {
         base.Awake();
 
+        //InGameStateManager.Instance.OnPreparePhaseStart += OnPreparePhaseStart;
+        //InGameStateManager.Instance.OnPreparePhaseEnd += OnPreparePhaseEnd;
+
         //GridManager.Instance.GetNodeForIndex(ConvertRowColumnToIndex(0, 3)).SetOccupied(true);
         //GridManager.Instance.GetNodeForIndex(ConvertRowColumnToIndex(1, 3)).SetOccupied(true);
         //GridManager.Instance.GetNodeForIndex(ConvertRowColumnToIndex(2, 3)).SetOccupied(true);
         //GridManager.Instance.GetNodeForIndex(ConvertRowColumnToIndex(3, 3)).SetOccupied(true);
         //GridManager.Instance.GetNodeForIndex(ConvertRowColumnToIndex(4, 3)).SetOccupied(true);
         InstaniateMontser(0, 0, Team.Player);
-        InstaniateMontser(0, 1, Team.Player);
+        InstaniateMontser(4, 1, Team.Player);
         InstaniateMontser(1, 6, Team.Enemy, EnemyMonsterPrefab);
         InstaniateMontser(0, 7, Team.Enemy, EnemyMonsterPrefab);
         InstaniateMontser(2, 7, Team.Enemy, EnemyMonsterPrefab);
@@ -95,13 +97,14 @@ public class BattleManager : Manager<BattleManager>
         playerEntities.Remove(entity);
         enemyEntities.Remove(entity);
 
-        if (entity.myTeam == Team.Player)
+        if (entity.myTeam == Team.Enemy)
         {
-            GameObject newEntity = entity.gameObject;
-            respondEntities.Add(newEntity);
+            Destroy(entity.gameObject);
         }
-
-        Destroy(entity.gameObject);
+        else
+        {
+            Destroy(entity.gameObject);
+        }
 
         if (playerEntities.Count == 0)
         {
@@ -116,15 +119,19 @@ public class BattleManager : Manager<BattleManager>
     // helper，用于延迟call一下新回合
     public void NewTurn()
     {
-        //foreach (GameObject entity in respondEntities)
-        //{
-        //    GameObject newMonster = Instantiate(entity, playerParent);
-        //    BaseEntity newEntity = newMonster.GetComponent<BaseEntity>();
-        //    playerEntities.Add(newEntity);
-        //    newEntity.Setup(Team.Player);
-        //}
-
         InGameStateManager.Instance.TurnStart();
+    }
+
+    // 准备阶段开始，战斗结束
+    public void OnPreparePhaseStart()
+    {
+
+    }
+
+    // 准备阶段结束，战斗开始
+    public void OnPreparePhaseEnd()
+    {
+
     }
 
     public void AddToTeam(BaseEntity entity)

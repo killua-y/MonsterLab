@@ -13,8 +13,8 @@ public class InGameStateManager : Manager<InGameStateManager>
     public static GamePhase gamePhase;
     public Transform hand;
 
-    public Action OnTurnStart;
-    public Action OnTurnEnd;
+    public Action OnPreparePhaseStart;
+    public Action OnPreparePhaseEnd;
 
     private InGameCardModel CardModel;
     private CardDisplayView cardDisplayView;
@@ -53,7 +53,7 @@ public class InGameStateManager : Manager<InGameStateManager>
     // 回合开始
     public void TurnStart()
     {
-        OnTurnStart();
+        OnPreparePhaseStart();
         gamePhase = GamePhase.PreparePhase;
         PreparePhase = true;
         BattelPhase = false;
@@ -68,7 +68,7 @@ public class InGameStateManager : Manager<InGameStateManager>
     // 回合结束，丢弃所有手牌，进入战斗回合
     public void PreparePhaseEnd()
     {
-        OnTurnEnd();
+        OnPreparePhaseEnd();
         gamePhase = GamePhase.BattlePhase;
         PreparePhase = false;
         BattelPhase = true;

@@ -48,6 +48,7 @@ public class BaseEntity : MonoBehaviour
 
     // private
     private int currentHealth;
+    private Coroutine attackCoroutine;
 
     public void Setup(Team team, Node currentNode = null, MonsterCard monsterCard = null)
     {
@@ -67,7 +68,7 @@ public class BaseEntity : MonoBehaviour
         if (monsterCard != null)
         {
             cardModel = monsterCard;
-            UpdateMonster();
+            UpdateMonster(cardModel);
         }
 
         this.currentNode = BattleStartNode;
@@ -81,8 +82,8 @@ public class BaseEntity : MonoBehaviour
 
     protected void Start()
     {
-        InGameStateManager.Instance.OnTurnStart += OnTurnStart;
-        InGameStateManager.Instance.OnTurnEnd += OnTurnEnd;
+        InGameStateManager.Instance.OnPreparePhaseStart += OnPreparePhaseStart;
+        InGameStateManager.Instance.OnPreparePhaseEnd += OnPreparePhaseEnd;
     }
 
     // 寻找距离最近的敌人
@@ -100,7 +101,6 @@ public class BaseEntity : MonoBehaviour
             }
         }
         currentTarget = entity;
-        //Debug.Log("Find enemy with position: " + entity.transform.position);
     }
 
     protected bool MoveTowards(Node nextNode)
@@ -167,8 +167,11 @@ public class BaseEntity : MonoBehaviour
     // 将自己瞬间移动到指定的node
     public void MoveToNode(Node node)
     {
-        currentNode.SetOccupied(false);
-        currentNode.currentEntity = null;
+        if(currentNode != null)
+        {
+            currentNode.SetOccupied(false);
+            currentNode.currentEntity = null;
+        }
         SetCurrentNode(node);
         node.SetOccupied(true);
         node.currentEntity = this;
@@ -186,8 +189,13 @@ public class BaseEntity : MonoBehaviour
     }
 
     // 更新怪兽的属性，不要在战斗中call
-    public void UpdateMonster()
+    public void UpdateMonster(MonsterCard card = null)
     {
+        if (card != null)
+        {
+            cardModel = card;
+        }
+
         attackPower = cardModel.attackPower;
         healthPoint = cardModel.healthPoint;
         range = cardModel.attackRange;
@@ -196,15 +204,20 @@ public class BaseEntity : MonoBehaviour
     }
 
     // 战斗结束，开始新的回合
-    public void OnTurnStart()
+    public void OnPreparePhaseStart()
     {
-        this.gameObject.SetActive(true);
         CanBattle = false;
         MoveToNode(BattleStartNode);
+
+        // 玩家怪兽会回复全部生命值
+        if(myTeam == Team.Player)
+        {
+            UpdateUI();
+        }
     }
 
     // 战斗开始，记录开始战斗时的node
-    public void OnTurnEnd()
+    public void OnPreparePhaseEnd()
     {
         CanBattle = true;
         BattleStartNode = currentNode;
@@ -212,18 +225,30 @@ public class BaseEntity : MonoBehaviour
 
     public void TakeDamage(int amount, BaseEntity from = null)
     {
+        if(dead)
+        {
+            return;
+        }
+
         currentHealth -= amount;
         healthBar.value = currentHealth;
         healthText.text = currentHealth + "";
 
+        // 死亡
         if (currentHealth <= 0 && !dead)
         {
             dead = true;
             currentNode.SetOccupied(false);
             currentNode.currentEntity = null;
 
-            InGameStateManager.Instance.OnTurnStart -= OnTurnStart;
-            InGameStateManager.Instance.OnTurnEnd -= OnTurnEnd;
+            if (attackCoroutine != null)
+            {
+                StopCoroutine(attackCoroutine);
+                attackCoroutine = null;
+            }
+
+            InGameStateManager.Instance.OnPreparePhaseStart -= OnPreparePhaseStart;
+            InGameStateManager.Instance.OnPreparePhaseEnd -= OnPreparePhaseEnd;
 
             BattleManager.Instance.UnitDead(this);
         }
@@ -234,7 +259,7 @@ public class BaseEntity : MonoBehaviour
         if (!canAttack)
             return;
 
-        StartCoroutine(StartAttack());
+        attackCoroutine = StartCoroutine(StartAttack());
     }
 
     IEnumerator StartAttack()
@@ -243,6 +268,7 @@ public class BaseEntity : MonoBehaviour
 
         // 开始播放攻击动画
         yield return new WaitForSeconds(attackPreparation);
+
         // 攻击击中敌方
         if(bullet == null)
         {
