@@ -17,16 +17,15 @@ public class BaseEntity : MonoBehaviour
 
     // 怪兽属性部分
     public GameObject bullet;
-    public int attackPower = 5;
-    public int healthPoint = 40;
-    public int mana = 0;
+    protected int currentHealth;
     [Range(1.5f, 10)]
-    public float range = 1.5f;
+    protected float range = 1.5f;
     public float attackSpeed = 1f; //攻击间隔
     public float attackPreparation = 0.5f; //攻击前摇
     public float attackRecover = 0.5f; //攻击后摇
     protected float movementSpeed = 1.3f; //移动速度
 
+    // 储存了怪兽所有数据的卡牌信息
     public MonsterCard cardModel;
 
     public Team myTeam;
@@ -46,10 +45,7 @@ public class BaseEntity : MonoBehaviour
     protected bool CanBattle = false;
     protected float waitBetweenAttack;
 
-    // private
-    private int currentHealth;
-
-    public void Setup(Team team, Node currentNode = null, MonsterCard monsterCard = null)
+    public virtual void Setup(Team team, Node node, MonsterCard monsterCard, List<BaseEntity> sacrifice = null)
     {
         myTeam = team;
         if (myTeam == Team.Enemy)
@@ -59,26 +55,24 @@ public class BaseEntity : MonoBehaviour
             fillImage.color = Color.red;
         }
 
-        if (currentNode != null)
-        {
-            BattleStartNode = currentNode;
-        }
+        // 导入MonsterCard
+        UpdateMonster(monsterCard);
 
-        if (monsterCard != null)
-        {
-            cardModel = monsterCard;
-            UpdateMonster(cardModel);
-        }
+        this.currentNode = node;
+        transform.position = node.worldPosition;
+        node.SetOccupied(true);
+        node.currentEntity = this;
 
-        this.currentNode = BattleStartNode;
-        transform.position = BattleStartNode.worldPosition;
-        BattleStartNode.SetOccupied(true);
-        BattleStartNode.currentEntity = this;
+        // 战吼
+        UponSummon();
 
-        // 属性UI设置
+        // 属性UI设置，最后call
         UpdateUI();
-    }
 
+        // 以后记得改
+        range = monsterCard.attackRange;
+    }
+    
     protected void Start()
     {
         InGameStateManager.Instance.OnPreparePhaseStart += OnPreparePhaseStart;
@@ -146,7 +140,6 @@ public class BaseEntity : MonoBehaviour
             if (path[1].IsOccupied)
                 return;
 
-            Debug.Log("1");
             // 将目标节点设为占领
             path[1].SetOccupied(true);
             path[1].currentEntity = this;
@@ -155,8 +148,8 @@ public class BaseEntity : MonoBehaviour
             // 将之前节点设为不再占领
             currentNode.SetOccupied(false);
             currentNode.currentEntity = null;
+
             SetCurrentNode(destination);
-            Debug.Log("2");
         }
 
         moving = !MoveTowards(destination);
@@ -170,10 +163,10 @@ public class BaseEntity : MonoBehaviour
     // 更新怪兽的UI属性，不要在战斗中call
     public void UpdateUI()
     {
-        currentHealth = healthPoint;
+        currentHealth = cardModel.healthPoint;
         healthBar.maxValue = currentHealth;
         healthBar.value = currentHealth;
-        attackText.text = attackPower + "";
+        attackText.text = cardModel.attackPower + "";
         healthText.text = currentHealth + "";
     }
 
@@ -185,15 +178,11 @@ public class BaseEntity : MonoBehaviour
             cardModel = card;
         }
 
-        attackPower = cardModel.attackPower;
-        healthPoint = cardModel.healthPoint;
-        range = cardModel.attackRange;
-
         UpdateUI();
     }
 
     // 准备阶段开始
-    public void OnPreparePhaseStart()
+    public virtual void OnPreparePhaseStart()
     {
         this.gameObject.SetActive(true);
 
@@ -209,9 +198,11 @@ public class BaseEntity : MonoBehaviour
         {
             UpdateUI();
 
-            // 重新把自己添加回索敌list
+            // 复活，重新把自己添加回索敌list
             if (dead)
             {
+                // 这一行是因为如果在攻击过程中死亡不会重制canAttack计数器
+                canAttack = true;
                 dead = false;
                 BattleManager.Instance.AddToTeam(this);
             }
@@ -219,20 +210,20 @@ public class BaseEntity : MonoBehaviour
     }
 
     // 准备阶段结束
-    public void OnPreparePhaseEnd()
+    public virtual void OnPreparePhaseEnd()
     {
 
     }
 
     // 战斗阶段开始
-    public void OnBattlePhaseStart()
+    public virtual void OnBattlePhaseStart()
     {
         CanBattle = true;
         BattleStartNode = currentNode;
     }
 
     // 战斗阶段结束
-    public void OnBattlePhaseEnd()
+    public virtual void OnBattlePhaseEnd()
     {
         currentTarget = null;
 
@@ -258,20 +249,31 @@ public class BaseEntity : MonoBehaviour
         // 死亡
         if (currentHealth <= 0 && !dead)
         {
-            dead = true;
-            currentNode.SetOccupied(false);
-            currentNode.currentEntity = null;
-
-            if (myTeam == Team.Enemy)
-            {
-                InGameStateManager.Instance.OnPreparePhaseStart -= OnPreparePhaseStart;
-                InGameStateManager.Instance.OnPreparePhaseEnd -= OnPreparePhaseEnd;
-                InGameStateManager.Instance.OnBattlePhaseStart -= OnBattlePhaseStart;
-                InGameStateManager.Instance.OnBattlePhaseEnd -= OnBattlePhaseEnd;
-            }
-
-            BattleManager.Instance.UnitDead(this);
+            UnitDie(from);
         }
+    }
+
+    public void UnitDie(BaseEntity from = null, bool activeUponDeath = true)
+    {
+        dead = true;
+        currentNode.SetOccupied(false);
+        currentNode.currentEntity = null;
+
+        if (myTeam == Team.Enemy)
+        {
+            InGameStateManager.Instance.OnPreparePhaseStart -= OnPreparePhaseStart;
+            InGameStateManager.Instance.OnPreparePhaseEnd -= OnPreparePhaseEnd;
+            InGameStateManager.Instance.OnBattlePhaseStart -= OnBattlePhaseStart;
+            InGameStateManager.Instance.OnBattlePhaseEnd -= OnBattlePhaseEnd;
+        }
+
+        // 亡语效果
+        if (activeUponDeath)
+        {
+            UponDeath();
+        }
+
+        BattleManager.Instance.UnitDead(this);
     }
 
     protected virtual void Attack()
@@ -302,7 +304,7 @@ public class BaseEntity : MonoBehaviour
             {
                 yield break;
             }
-            currentTarget.TakeDamage(attackPower, this);
+            currentTarget.TakeDamage(cardModel.attackPower, this);
         }
         else
         {
@@ -311,5 +313,15 @@ public class BaseEntity : MonoBehaviour
         // 播放攻击后摇
         yield return new WaitForSeconds(attackRecover);
         canAttack = true;
+    }
+
+    public virtual void UponSummon()
+    {
+
+    }
+
+    public virtual void UponDeath()
+    {
+
     }
 }

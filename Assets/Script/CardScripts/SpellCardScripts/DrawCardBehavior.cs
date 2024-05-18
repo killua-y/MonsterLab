@@ -23,7 +23,5 @@ public class DrawCardBehavior : CardBehavior
         {
             InGameStateManager.Instance.DrawOneCard();
         }
-
-        CastComplete();
     }
 }

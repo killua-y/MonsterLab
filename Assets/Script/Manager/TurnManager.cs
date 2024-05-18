@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -12,7 +13,9 @@ public class TurnManager : Manager<TurnManager>
     private int currentTurn = 1;
     //private int maxTurn = 5;
 
-    private List<MonsterCard> monsterList = new List<MonsterCard>();
+    public List<MonsterCard> monsterList = new List<MonsterCard>();
+
+    private EnemyBehavior enemy;
     // Start is called before the first frame update
     void Start()
     {
@@ -20,6 +23,10 @@ public class TurnManager : Manager<TurnManager>
         InGameStateManager.Instance.OnPreparePhaseStart += OnPreparePhaseStart;
         InGameStateManager.Instance.OnPreparePhaseEnd += OnPreparePhaseEnd;
 
+        // 加载所有怪兽数据
+        monsterList = cardDataModel.GetEnemyMonster();
+
+        // 加载当前战斗敌人
         LoadEnemy();
     }
 
@@ -31,34 +38,23 @@ public class TurnManager : Manager<TurnManager>
 
     private void LoadEnemy()
     {
-        monsterList.Add(cardDataModel.GetEnemyMonster(0));
-        monsterList.Add(cardDataModel.GetEnemyMonster(1));
-        monsterList.Add(cardDataModel.GetEnemyMonster(2));
-        monsterList.Add(cardDataModel.GetEnemyMonster(3));
+        this.gameObject.AddComponent(Type.GetType("EnemyBehavior"));
+        enemy = this.GetComponent<EnemyBehavior>();
+
+        // 让敌人加载自己拥有的怪兽
+        enemy.LoadEnemy();
     }
 
+    // 每个准备阶段开始都call一下enmy看看要不要召唤怪兽
     public void OnPreparePhaseStart()
     {
-        SummonEnemyThisTurn(currentTurn);
+        enemy.SummonEnemyThisTurn(currentTurn);
     }
 
     public void OnPreparePhaseEnd()
     {
         // 回合数+1
         currentTurn += 1;
-    }
-
-    // 根据当前回合召唤怪兽
-    private void SummonEnemyThisTurn(int currentTurn)
-    {
-        if (currentTurn == 1)
-        {
-            BattleManager.Instance.InstaniateMontser(2, 4, Team.Enemy, monsterList[2]);
-            BattleManager.Instance.InstaniateMontser(0, 5, Team.Enemy, monsterList[0]);
-            BattleManager.Instance.InstaniateMontser(1, 5, Team.Enemy, monsterList[0]);
-            BattleManager.Instance.InstaniateMontser(3, 7, Team.Enemy, monsterList[1]);
-            BattleManager.Instance.InstaniateMontser(4, 4, Team.Enemy, monsterList[3]);
-        }
     }
 
 }

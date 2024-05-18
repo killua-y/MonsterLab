@@ -22,6 +22,7 @@ public class CardDataModel : MonoBehaviour
     void Awake()
     {
         LordCardList();
+        LordEnemyCardList();
         LoadPlayerData();
     }
 
@@ -57,7 +58,7 @@ public class CardDataModel : MonoBehaviour
                 CastType castType = EnumConverter.ConvertToEnum<CastType>(rowArray[5]);
                 int effectData = int.Parse(rowArray[6]);
                 string effectText = rowArray[7];
-                string cardLocation = rowArray[8];
+                string scriptLocation = rowArray[8];
                 string imageLocation = rowArray[9];
 
                 MonsterType type = EnumConverter.ConvertToEnum<MonsterType>(rowArray[10]);
@@ -68,7 +69,7 @@ public class CardDataModel : MonoBehaviour
                 string modelLocation = rowArray[15];
 
                 cardList.Add(new MonsterCard(id, uniqueID, cardName, color, cardRarity,
-                    cost, castType, effectData, effectText, cardLocation, imageLocation,
+                    cost, castType, effectData, effectText, scriptLocation, imageLocation,
                     type, attackPower, healthPoint, attackRange, mana, modelLocation));
 
                 //Debug.Log("Load monster card: " + name);
@@ -85,11 +86,11 @@ public class CardDataModel : MonoBehaviour
                 CastType castType = EnumConverter.ConvertToEnum<CastType>(rowArray[5]);
                 int effectData = int.Parse(rowArray[6]);
                 string effectText = rowArray[7];
-                string cardLocation = rowArray[8];
+                string scriptLocation = rowArray[8];
                 string imageLocation = rowArray[9];
 
                 cardList.Add(new SpellCard(id, uniqueID, cardName, color, cardRarity,
-                    cost, castType, effectData, effectText, cardLocation, imageLocation));
+                    cost, castType, effectData, effectText, scriptLocation, imageLocation));
 
                 //Debug.Log("Load magic card: " + name);
             }
@@ -105,17 +106,15 @@ public class CardDataModel : MonoBehaviour
                 CastType castType = EnumConverter.ConvertToEnum<CastType>(rowArray[5]);
                 int effectData = int.Parse(rowArray[6]);
                 string effectText = rowArray[7];
-                string cardLocation = rowArray[8];
+                string scriptLocation = rowArray[8];
                 string imageLocation = rowArray[9];
 
                 cardList.Add(new ItemCard(id, uniqueID, cardName, color, cardRarity,
-                    cost, castType, effectData, effectText, cardLocation, imageLocation));
+                    cost, castType, effectData, effectText, scriptLocation, imageLocation));
 
                 //Debug.Log("Load item card: " + name);
             }
         }
-
-        LordEnemyCardList();
     }
 
     public void LordEnemyCardList()
@@ -164,9 +163,9 @@ public class CardDataModel : MonoBehaviour
     }
 
     // Helper，其他function会call来获取卡组数据
-    public MonsterCard GetEnemyMonster(int index)
+    public List<MonsterCard> GetEnemyMonster()
     {
-        return enemyCardList[index];
+        return enemyCardList;
     }
 
     // 获得卡牌

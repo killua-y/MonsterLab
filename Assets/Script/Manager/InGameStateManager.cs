@@ -49,6 +49,8 @@ public class InGameStateManager : Manager<InGameStateManager>
     {
         CardModel.InitialzeDeck();
         Debug.Log("Game Initialzed");
+
+        Invoke("PreparePhaseStart", 0);
     }
 
     // 回合开始

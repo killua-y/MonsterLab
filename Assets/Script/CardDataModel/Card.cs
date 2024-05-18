@@ -23,13 +23,13 @@ public class Card
     public int effectData;
     // 卡片效果文本
     public string effectText;
-    // 卡片位置
-    public string cardLocation;
+    // script位置 (怪兽卡为怪兽script，魔法装备卡为卡牌释放script)
+    public string scriptLocation;
     // 图片位置
     public string imageLocation;
 
     public Card(int _id, int _uniqueID, string _cardName, CardColor _color, CardRarity _cardRarity,
-        int _cost, CastType _castType, int _effectData, string _effectText, string _cardLocation, string _imageLocation)
+        int _cost, CastType _castType, int _effectData, string _effectText, string _scriptLocation, string _imageLocation)
     {
         this.id = _id;
         this.uniqueID = _uniqueID;
@@ -40,7 +40,7 @@ public class Card
         this.castType = _castType;
         this.effectData = _effectData;
         this.effectText = _effectText;
-        this.cardLocation = _cardLocation;
+        this.scriptLocation = _scriptLocation;
         this.imageLocation = _imageLocation;
     }
 

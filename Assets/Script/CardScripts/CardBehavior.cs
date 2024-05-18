@@ -8,6 +8,9 @@ public class CardBehavior : MonoBehaviour
     public bool targetCard;
 
     public Card card;
+
+    protected Node targetNode;
+    protected BaseEntity targetMonster;
     // Start is called before the first frame update
     void Start()
     {
@@ -58,7 +61,12 @@ public class CardBehavior : MonoBehaviour
         }
 
         // 合法，释放卡牌效果
+        targetMonster = GridManager.Instance.GetNodeForTile(_tile).currentEntity;
+        Debug.Log("Cast Card: " + card.cardName);
         CastCard(_tile, _card);
+
+        // 释放结束
+        CastComplete();
     }
 
     public virtual void OnPointDown()
@@ -76,14 +84,21 @@ public class CardBehavior : MonoBehaviour
         Debug.Log("Please attach correspond card behavior srcipt to this card: " + card.cardName);
     }
 
+    public virtual void CastCard(BaseEntity entity, Card _card = null)
+    {
+        Debug.Log("Please create own castCard method: " + card.cardName);
+    }
+
     public virtual void CastComplete()
     {
+
         // 消耗费用
         if (card is not MonsterCard)
         {
             PlayerStatesManager.Instance.DecreaseCost(card.cost);
         }
 
+        // 判断卡牌是丢弃还是消耗
         if (card is SpellCard)
         {
             // 丢弃
@@ -95,6 +110,11 @@ public class CardBehavior : MonoBehaviour
             // 消耗
             InGameStateManager.Instance.ExhaustOneCard(card);
             Destroy(this.gameObject);
+        }
+
+        if (card is ItemCard)
+        {
+            // 告诉被装备怪兽你被装备了一张装备卡
         }
     }
 }

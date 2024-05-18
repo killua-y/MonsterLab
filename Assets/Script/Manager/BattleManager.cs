@@ -32,7 +32,7 @@ public class BattleManager : Manager<BattleManager>
         return index;
     }
 
-    public void InstaniateMontser(int index, Team team, MonsterCard monsterCard)
+    public void InstaniateMontser(int index, Team team, MonsterCard monsterCard, List<BaseEntity> sacrifice = null)
     {
         // 必须传入monsterCard
         if (monsterCard is null)
@@ -40,6 +40,7 @@ public class BattleManager : Manager<BattleManager>
             return;
         }
 
+        // 生成怪兽模型
         // 如果没有模型地址就默认安排一个
         string path = "";
         if (monsterCard.modelLocation != "")
@@ -63,24 +64,28 @@ public class BattleManager : Manager<BattleManager>
 
         GameObject newMonster;
 
+        // 生成怪兽script
+        // 不搞了，全部跟着模型走
+
         // 根据team生成怪物
         if (team == Team.Player)
         {
             newMonster = Instantiate(monsterPrefab, playerParent);
             BaseEntity newEntity = newMonster.GetComponent<BaseEntity>();
             playerEntities.Add(newEntity);
-            newEntity.Setup(team, GridManager.Instance.GetNodeForIndex(index), monsterCard);
+            newEntity.Setup(team, GridManager.Instance.GetNodeForIndex(index), monsterCard, sacrifice);
         }
         else
         {
             newMonster = Instantiate(monsterPrefab, enemyParent);
             BaseEntity newEntity = newMonster.GetComponent<BaseEntity>();
             enemyEntities.Add(newEntity);
-            newEntity.Setup(team, GridManager.Instance.GetNodeForIndex(index), monsterCard);
+            newEntity.Setup(team, GridManager.Instance.GetNodeForIndex(index), monsterCard, sacrifice);
         }
+
     }
 
-    public void InstaniateMontser(int row, int column, Team team, MonsterCard monsterCard)
+    public void InstaniateMontser(int row, int column, Team team, MonsterCard monsterCard, List<BaseEntity> sacrifice = null)
     {
         int index = ConvertRowColumnToIndex(row, column);
 

@@ -24,12 +24,12 @@ public class CardDisplayView : MonoBehaviour
         
     }
 
-    // 可视化单个卡牌，将卡牌的可视化后加入到parent下面
+    // 可视化单个卡牌，将卡牌的可视化后加入到parent下面，只被InGameStateManeger call
     public void DisPlaySingleCard(Card _card, Transform _parent)
     {
         if (_card is MonsterCard)
         {
-            if (_card.cardLocation == "")
+            if (_card.scriptLocation == "")
             {
                 GameObject newCard = GameObject.Instantiate(MonsterCardModel, _parent);
                 CardContainer cardContainer = _parent.GetComponent<CardContainer>();
@@ -44,7 +44,7 @@ public class CardDisplayView : MonoBehaviour
             }
             else
             {
-                Debug.Log("Card location is: " + _card.cardLocation);
+                Debug.Log("Card location is: " + _card.scriptLocation);
             }
         }
         else if(_card is SpellCard)
@@ -60,9 +60,9 @@ public class CardDisplayView : MonoBehaviour
             // attach script
             string cardScriptName = "CardBehavior";
 
-            if (_card.cardLocation != "")
+            if (_card.scriptLocation != "")
             {
-                cardScriptName = _card.cardLocation;
+                cardScriptName = _card.scriptLocation;
             }
 
             newCard.AddComponent(Type.GetType(cardScriptName));
@@ -80,9 +80,9 @@ public class CardDisplayView : MonoBehaviour
             // attach script
             string cardScriptName = "CardBehavior";
 
-            if(_card.cardLocation != "")
+            if(_card.scriptLocation != "")
             {
-                cardScriptName = _card.cardLocation;
+                cardScriptName = _card.scriptLocation;
             }
 
             newCard.AddComponent(Type.GetType(cardScriptName));

@@ -30,8 +30,13 @@ public class MonsterCardBehavior : CardBehavior
         }
 
         // 查看是否需要祭品
+
+
         // 合法，释放卡牌效果
         CastCard(_tile, _card);
+
+        // 
+        CastComplete();
     }
 
     public override void CastCard(Tile _tile, Card _card = null)
@@ -45,9 +50,6 @@ public class MonsterCardBehavior : CardBehavior
         MonsterCard cardModel = (MonsterCard)card;
 
         BattleManager.Instance.InstaniateMontser(_tile.transform.GetSiblingIndex(), Team.Player, cardModel);
-
-        // 如果是怪兽卡，会消耗卡牌
-        CastComplete();
     }
 
     public override void OnPointDown()

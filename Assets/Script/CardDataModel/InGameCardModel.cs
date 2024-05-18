@@ -68,17 +68,17 @@ public class InGameCardModel : MonoBehaviour
     // 抽牌
     public Card DrawCard()
     {
+        Card cardDrawed = null;
+
         // 查看抽牌堆是否有牌
         if (drawPiledList.Count > 0)
         {
             // 移除抽牌堆第一张牌
-            Card card = drawPiledList[0];
+            cardDrawed = drawPiledList[0];
             drawPiledList.RemoveAt(0);
 
             // 加入手牌堆的最后面
-            handList.Add(card);
-
-            return card;
+            handList.Add(cardDrawed);
         }
         // 否则，查看弃牌堆是否有牌，有的话重新洗牌
         else if (discardPileList.Count > 0)
@@ -86,11 +86,10 @@ public class InGameCardModel : MonoBehaviour
             ShuffleDeck();
 
             // 然后再抽一张牌
-            DrawCard();
+            cardDrawed = DrawCard();
         }
 
-        // 如果没牌抽了，return null
-        return null;
+        return cardDrawed;
     }
 
     // 重新洗牌

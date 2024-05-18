@@ -18,12 +18,8 @@ public class IncreaseHealthCardBehavior : CardBehavior
 
     public override void CastCard(Tile _tile, Card _card = null)
     {
-        BaseEntity targetMonster = GridManager.Instance.GetNodeForTile(_tile).currentEntity;
-
         targetMonster.cardModel.healthPoint += card.effectData;
 
         targetMonster.UpdateMonster();
-
-        CastComplete();
     }
 }

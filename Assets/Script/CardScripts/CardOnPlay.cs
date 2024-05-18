@@ -23,12 +23,6 @@ public class CardOnPlay : MonoBehaviour
         {
             cardBehavior.CheckLegality(tile);
         }
-
-        string cardName = cardBehavior.card.cardName;
-        if (cardName != null)
-        {
-            Debug.Log("Cast Card: " + cardName);
-        }
     }
 
     public Tile GetTileUnder()
