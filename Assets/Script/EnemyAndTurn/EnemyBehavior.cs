@@ -44,5 +44,9 @@ public class EnemyBehavior : MonoBehaviour
             BattleManager.Instance.InstaniateMontser(2, 4, Team.Enemy, tank);
             BattleManager.Instance.InstaniateMontser(4, 4, Team.Enemy, highAttack);
         }
+        else if (currentTurn == 2)
+        {
+            BattleManager.Instance.InstaniateMontser(2, 7, Team.Enemy, ranged);
+        }
     }
 }

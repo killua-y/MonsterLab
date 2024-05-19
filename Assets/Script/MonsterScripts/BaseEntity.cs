@@ -184,7 +184,7 @@ public class BaseEntity : MonoBehaviour
     {
         if (card != null)
         {
-            cardModel = card;
+            cardModel = (MonsterCard)Card.CloneCard(card);
         }
 
         UpdateUI();
@@ -246,7 +246,6 @@ public class BaseEntity : MonoBehaviour
     {
         if(dead)
         {
-            Debug.Log("Should not take damage");
             return;
         }
 
@@ -307,9 +306,9 @@ public class BaseEntity : MonoBehaviour
         yield return new WaitForSeconds(attackPreparation);
 
         // 攻击击中敌方
-        if(bullet == null)
+        if (bullet == null)
         {
-            if(currentTarget == null)
+            if (currentTarget == null)
             {
                 yield break;
             }

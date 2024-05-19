@@ -30,7 +30,7 @@ public class InGameCardModel : MonoBehaviour
     public void InitialzeDeck()
     {
         // 将玩家拥有的卡牌导入局内卡牌
-        drawPiledList = cardDataManager.GetComponent<CardDataModel>().InitializeDeck(currentAssignedID);
+        drawPiledList = FindObjectOfType<CardDataModel>().InitializeDeck(currentAssignedID);
 
         // 更新currentAssignedID, 英文count从1开始所以需要 -1
         currentAssignedID += drawPiledList.Count - 1;

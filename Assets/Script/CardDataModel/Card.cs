@@ -97,7 +97,69 @@ public class Card
         }
     }
 
-
+    // Static method to clone a card
+    public static Card CloneCard(Card originalCard)
+    {
+        if (originalCard is MonsterCard monsterCard)
+        {
+            return new MonsterCard(
+                monsterCard.id,
+                monsterCard.uniqueID,
+                monsterCard.cardName,
+                monsterCard.color,
+                monsterCard.cardRarity,
+                monsterCard.cost,
+                monsterCard.castType,
+                monsterCard.effectData,
+                monsterCard.effectText,
+                monsterCard.scriptLocation,
+                monsterCard.imageLocation,
+                monsterCard.type,
+                monsterCard.attackPower,
+                monsterCard.healthPoint,
+                monsterCard.attackRange,
+                monsterCard.Mana,
+                monsterCard.modelLocation
+            );
+        }
+        else if (originalCard is SpellCard spellCard)
+        {
+            return new SpellCard(
+                spellCard.id,
+                spellCard.uniqueID,
+                spellCard.cardName,
+                spellCard.color,
+                spellCard.cardRarity,
+                spellCard.cost,
+                spellCard.castType,
+                spellCard.effectData,
+                spellCard.effectText,
+                spellCard.scriptLocation,
+                spellCard.imageLocation
+            );
+        }
+        else if (originalCard is ItemCard itemCard)
+        {
+            return new ItemCard(
+                itemCard.id,
+                itemCard.uniqueID,
+                itemCard.cardName,
+                itemCard.color,
+                itemCard.cardRarity,
+                itemCard.cost,
+                itemCard.castType,
+                itemCard.effectData,
+                itemCard.effectText,
+                itemCard.scriptLocation,
+                itemCard.imageLocation
+            );
+        }
+        else
+        {
+            // Handle other card types or throw an exception
+            throw new System.InvalidOperationException("Unknown card type");
+        }
+    }
 }
 
 

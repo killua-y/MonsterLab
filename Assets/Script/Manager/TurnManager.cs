@@ -8,7 +8,6 @@ using static Card;
 public class TurnManager : Manager<TurnManager>
 {
     // 卡牌管理区
-    public GameObject cardDataManager;
     public TextMeshProUGUI turnText;
     private CardDataModel cardDataModel;
 
@@ -21,7 +20,7 @@ public class TurnManager : Manager<TurnManager>
     // Start is called before the first frame update
     void Start()
     {
-        cardDataModel = cardDataManager.GetComponent<CardDataModel>();
+        cardDataModel = FindObjectOfType<CardDataModel>();
         InGameStateManager.Instance.OnPreparePhaseStart += OnPreparePhaseStart;
         InGameStateManager.Instance.OnBattlePhaseEnd += OnBattlePhaseEnd;
 

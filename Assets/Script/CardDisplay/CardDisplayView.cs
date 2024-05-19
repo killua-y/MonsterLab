@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using static Card;
 
-public class CardDisplayView : MonoBehaviour
+public class CardDisplayView : Manager<CardDisplayView>
 {
     public GameObject MonsterCardModel;
 

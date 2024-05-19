@@ -162,12 +162,6 @@ public class CardDataModel : MonoBehaviour
         }
     }
 
-    // Helper，其他function会call来获取卡组数据
-    public List<MonsterCard> GetEnemyMonster()
-    {
-        return enemyCardList;
-    }
-
     // 获得卡牌
     public void ObtainCard(int _id)
     {
@@ -183,34 +177,6 @@ public class CardDataModel : MonoBehaviour
         {
             playerCardData[_id] -= 1;
         }
-    }
-
-    // 加载局内卡组，赋予uniqueID
-    public List<Card> InitializeDeck(int currentAssignedID)
-    {
-        List<Card> deckCardList = new List<Card>();
-
-        for (int cardIndex = 0; cardIndex < playerCardData.Length; cardIndex++)
-        {
-            int quantity = playerCardData[cardIndex];
-
-            if (quantity >= 1)
-            {
-                for (int i = 0; i < quantity; i++)
-                {
-                    if (cardIndex < cardList.Count)  // Ensure the index is within the range of available cards
-                    {
-                        Card newCard = cardList[cardIndex];  // Assuming constructor cloning or similar method
-                        newCard.uniqueID = currentAssignedID;
-                        currentAssignedID += 1;
-                        deckCardList.Add(newCard);
-
-                    }
-                }
-            }
-        }
-
-        return deckCardList;
     }
 
     // 加载玩家卡组数据
@@ -269,5 +235,51 @@ public class CardDataModel : MonoBehaviour
         }
 
         File.WriteAllLines(path, datas);
+    }
+
+    // 加载局内卡组，赋予uniqueID
+    public List<Card> InitializeDeck(int currentAssignedID)
+    {
+        List<Card> deckCardList = new List<Card>();
+
+        for (int cardIndex = 0; cardIndex < playerCardData.Length; cardIndex++)
+        {
+            int quantity = playerCardData[cardIndex];
+
+            if (quantity >= 1)
+            {
+                for (int i = 0; i < quantity; i++)
+                {
+                    if (cardIndex < cardList.Count)  // Ensure the index is within the range of available cards
+                    {
+                        Card newCard = Card.CloneCard(cardList[cardIndex]);  // Assuming constructor cloning or similar method
+                        newCard.uniqueID = currentAssignedID;
+                        currentAssignedID += 1;
+                        deckCardList.Add(newCard);
+                    }
+                }
+            }
+        }
+
+        return deckCardList;
+    }
+
+    // Helper，其他function会call来获取卡组数据
+    public List<MonsterCard> GetEnemyMonster()
+    {
+        // 因为monster在生成时会自动创建新的clone，所以这里不需要输出clone
+        return enemyCardList;
+    }
+
+    // 输出所有卡牌信息
+    public List<Card> GetAllCard()
+    {
+        //List<Card> result = new List<Card>();
+        //foreach (Card card in cardList)
+        //{
+        //    result.Add(Card.CloneCard(card));
+        //}
+        //return result;
+        return cardList;
     }
 }
