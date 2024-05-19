@@ -30,6 +30,31 @@ public class GridManager : Manager<GridManager>
         }
 
         var allNodes = graph.Nodes;
+
+        for (int i = 0; i < allNodes.Count; i++)
+        {
+            if((i >= 0) && (i <= 3))
+            {
+                allNodes[i].SetPlayerArea(true);
+            }
+            else if ((i >= 8) && (i <= 11))
+            {
+                allNodes[i].SetPlayerArea(true);
+            }
+            else if ((i >= 16) && (i <= 19))
+            {
+                allNodes[i].SetPlayerArea(true);
+            }
+            else if ((i >= 24) && (i <= 27))
+            {
+                allNodes[i].SetPlayerArea(true);
+            }
+            else if ((i >= 32) && (i <= 35))
+            {
+                allNodes[i].SetPlayerArea(true);
+            }
+        }
+
         foreach (Node from in allNodes)
         {
             foreach (Node to in allNodes)

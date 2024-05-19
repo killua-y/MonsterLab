@@ -460,6 +460,8 @@ GameObject:
   - component: {fileID: 5728269505750374516}
   - component: {fileID: 5728269505750374523}
   - component: {fileID: 6255550662347069759}
+  - component: {fileID: 6793334726072564073}
+  - component: {fileID: 7902326192712525005}
   m_Layer: 0
   m_Name: Slime
   m_TagString: Untagged
@@ -552,14 +554,85 @@ MonoBehaviour:
   healthText: {fileID: 1539812904542379736}
   attackText: {fileID: 8755298174684299044}
   bullet: {fileID: 0}
-  attackPower: 5
-  healthPoint: 40
-  mana: 0
-  range: 1.5
   attackSpeed: 1
   attackPreparation: 0.5
   attackRecover: 0.5
   myTeam: 0
+--- !u!114 &6793334726072564073
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5728269505750374522}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates:
+  - eventID: 13
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 7902326192712525005}
+          m_TargetAssemblyTypeName: DragMonster, Assembly-CSharp
+          m_MethodName: OnStartDrag
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  - eventID: 14
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 7902326192712525005}
+          m_TargetAssemblyTypeName: DragMonster, Assembly-CSharp
+          m_MethodName: OnEndDrag
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  - eventID: 5
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 7902326192712525005}
+          m_TargetAssemblyTypeName: DragMonster, Assembly-CSharp
+          m_MethodName: OnDragging
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+--- !u!114 &7902326192712525005
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5728269505750374522}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 76bc4ef719cd94ed0bd3b38abf4d1d30, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dragOffset: {x: 0, y: 0, z: 0}
+  IsDragging: 0
 --- !u!1 &7609555011427363739
 GameObject:
   m_ObjectHideFlags: 0

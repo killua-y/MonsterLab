@@ -246,6 +246,7 @@ public class Node
     public BaseEntity currentEntity;
 
     private bool occupied = false;
+    private bool playerArea = false;
 
     public Node(int index, Vector3 worldPosition)
     {
@@ -258,9 +259,19 @@ public class Node
     public void SetOccupied(bool val)
     {
         occupied = val;
+        if (!val)
+        {
+            currentEntity = null;
+        }
+    }
+
+    public void SetPlayerArea(bool val)
+    {
+        playerArea = val;
     }
 
     public bool IsOccupied => occupied;
+    public bool IsPlayerArea => playerArea;
 }
 
 public class Edge

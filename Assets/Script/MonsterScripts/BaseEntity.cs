@@ -117,8 +117,12 @@ public class BaseEntity : MonoBehaviour
         if (currentTarget == null)
             return;
 
+        // 说明已经到达新的节点，需要寻找下一个路径
         if (!moving)
         {
+            //重制target
+            FindTarget();
+
             destination = null;
             List<Node> candidates = GridManager.Instance.GetNodesCloseTo(currentTarget.CurrentNode);
             candidates = candidates.OrderBy(x => Vector2.Distance(x.worldPosition, this.transform.position)).ToList();
@@ -140,24 +144,25 @@ public class BaseEntity : MonoBehaviour
             if (path[1].IsOccupied)
                 return;
 
-            // 将目标节点设为占领
-            path[1].SetOccupied(true);
-            path[1].currentEntity = this;
-            destination = path[1];
-
-            // 将之前节点设为不再占领
-            currentNode.SetOccupied(false);
-            currentNode.currentEntity = null;
-
-            SetCurrentNode(destination);
+            StandUp();
+            SitDown(path[1]);
         }
 
-        moving = !MoveTowards(destination);
+        moving = !MoveTowards(currentNode);
     }
 
-    public void SetCurrentNode(Node node)
+    public void StandUp()
+    {
+        // 当前格子设置不占用，同时SetOccupied会把自己格子内的怪兽设为null
+        currentNode.SetOccupied(false);
+    }
+
+    // 把currentnode设置为传入的node
+    public void SitDown(Node node)
     {
         currentNode = node;
+        currentNode.SetOccupied(true);
+        currentNode.currentEntity = this;
     }
 
     // 更新怪兽的UI属性，不要在战斗中call
@@ -188,9 +193,9 @@ public class BaseEntity : MonoBehaviour
 
         CanBattle = false;
 
-        SetCurrentNode(BattleStartNode);
-        BattleStartNode.SetOccupied(true);
-        BattleStartNode.currentEntity = this;
+        canAttack = true;
+
+        SitDown(BattleStartNode);
         transform.position = BattleStartNode.worldPosition;
 
         // 玩家的怪兽会回复全部生命值
@@ -229,8 +234,7 @@ public class BaseEntity : MonoBehaviour
 
         if (currentNode != null)
         {
-            currentNode.SetOccupied(false);
-            currentNode.currentEntity = null;
+            StandUp();
         }
     }
 
@@ -256,8 +260,7 @@ public class BaseEntity : MonoBehaviour
     public void UnitDie(BaseEntity from = null, bool activeUponDeath = true)
     {
         dead = true;
-        currentNode.SetOccupied(false);
-        currentNode.currentEntity = null;
+        StandUp();
 
         if (myTeam == Team.Enemy)
         {
@@ -273,6 +276,8 @@ public class BaseEntity : MonoBehaviour
             UponDeath();
         }
 
+        // 把自己从索敌list里移除
+        // 敌方怪兽会被destory，我放怪兽会被设置为disactive
         BattleManager.Instance.UnitDead(this);
     }
 

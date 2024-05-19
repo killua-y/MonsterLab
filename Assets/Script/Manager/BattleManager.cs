@@ -116,11 +116,11 @@ public class BattleManager : Manager<BattleManager>
 
         if (playerEntities.Count == 0)
         {
-            Invoke("NewTurn", 1f);
+            Invoke("NewTurn", 2f);
         }
         else if (enemyEntities.Count == 0)
         {
-            Invoke("NewTurn", 1f);
+            Invoke("NewTurn", 2f);
         }
     }
 
