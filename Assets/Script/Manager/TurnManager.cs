@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using static Card;
 
@@ -8,6 +9,7 @@ public class TurnManager : Manager<TurnManager>
 {
     // 卡牌管理区
     public GameObject cardDataManager;
+    public TextMeshProUGUI turnText;
     private CardDataModel cardDataModel;
 
     private int currentTurn = 1;
@@ -21,7 +23,7 @@ public class TurnManager : Manager<TurnManager>
     {
         cardDataModel = cardDataManager.GetComponent<CardDataModel>();
         InGameStateManager.Instance.OnPreparePhaseStart += OnPreparePhaseStart;
-        InGameStateManager.Instance.OnPreparePhaseEnd += OnPreparePhaseEnd;
+        InGameStateManager.Instance.OnBattlePhaseEnd += OnBattlePhaseEnd;
 
         // 加载所有怪兽数据
         monsterList = cardDataModel.GetEnemyMonster();
@@ -38,7 +40,9 @@ public class TurnManager : Manager<TurnManager>
 
     private void LoadEnemy()
     {
+        // 这一行会load当前战斗的敌人
         this.gameObject.AddComponent(Type.GetType("EnemyBehavior"));
+
         enemy = this.GetComponent<EnemyBehavior>();
 
         // 让敌人加载自己拥有的怪兽
@@ -46,15 +50,20 @@ public class TurnManager : Manager<TurnManager>
     }
 
     // 每个准备阶段开始都call一下enmy看看要不要召唤怪兽
-    public void OnPreparePhaseStart()
+    private void OnPreparePhaseStart()
     {
         enemy.SummonEnemyThisTurn(currentTurn);
     }
 
-    public void OnPreparePhaseEnd()
+    private void OnBattlePhaseEnd()
     {
         // 回合数+1
         currentTurn += 1;
+        UpdateTurnView();
     }
 
+    private void UpdateTurnView()
+    {
+        turnText.text = "Turn: " + currentTurn;
+    }
 }

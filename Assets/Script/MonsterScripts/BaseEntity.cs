@@ -122,6 +122,10 @@ public class BaseEntity : MonoBehaviour
         {
             //重制target
             FindTarget();
+            if(currentTarget == null)
+            {
+                return;
+            }
 
             destination = null;
             List<Node> candidates = GridManager.Instance.GetNodesCloseTo(currentTarget.CurrentNode);

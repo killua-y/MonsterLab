@@ -11,7 +11,6 @@ public class Tile : MonoBehaviour
     public void SetHighlight(bool active, bool valid)
     {
         highlightSprite.gameObject.SetActive(active);
-
         if (valid)
         {
             highlightSprite.color = validColor;

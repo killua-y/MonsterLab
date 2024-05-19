@@ -12,6 +12,8 @@ public class InGameStateManager : Manager<InGameStateManager>
     public static bool BattelPhase = false;
     public static GamePhase gamePhase;
     public Transform hand;
+    public Transform drawPileParent;
+    public Transform discardPileParent;
 
     public Action OnPreparePhaseStart;
     public Action OnPreparePhaseEnd;
@@ -147,6 +149,11 @@ public class InGameStateManager : Manager<InGameStateManager>
     {
         DrawPileText.text = CardModel.GetDrawPiledCard().Count + "";
         DiscardPileText.text = CardModel.GetDiscardPiledCard().Count + "";
+    }
+
+    public void ShowDrawPileCard()
+    {
+        Debug.Log("Not yet implement");
     }
 }
 
