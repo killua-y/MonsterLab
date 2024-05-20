@@ -104,7 +104,7 @@ public class InGameCardModel : MonoBehaviour
     }
 
     // 洗牌helper method
-    private void Shuffle<T>(List<T> list)
+    public static void Shuffle<T>(List<T> list)
     {
         System.Random rng = new System.Random();
         int n = list.Count;

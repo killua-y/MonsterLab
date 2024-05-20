@@ -22,10 +22,10 @@ public class CardWrapper : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     public CardContainer container;
 
     // Arrow variable:
-    public GameObject ArrowHeadPrefab;
-    public GameObject ArrowNodePrefab;
-    public int arrowNodeNum = 11;
-    public float scaleFactor = 2f;
+    private GameObject ArrowHeadPrefab;
+    private GameObject ArrowNodePrefab;
+    private int arrowNodeNum = 11;
+    private float scaleFactor = 2f;
 
     private RectTransform origin;
     private List<RectTransform> arrowNodes = new List<RectTransform>();
@@ -54,6 +54,10 @@ public class CardWrapper : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
         canvas = GetComponent<Canvas>();
         cardBehavior = GetComponent<CardBehavior>();
         targetCard = cardBehavior.targetCard;
+
+        // 加载箭头prefab
+        ArrowHeadPrefab = Resources.Load<GameObject>("Arrow/ArrowHead");
+        ArrowNodePrefab = Resources.Load<GameObject>("Arrow/ArrowNode");
     }
 
     private void Update() {

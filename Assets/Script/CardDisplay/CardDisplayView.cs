@@ -24,23 +24,25 @@ public class CardDisplayView : Manager<CardDisplayView>
         
     }
 
-    // 可视化单个卡牌，将卡牌的可视化后加入到parent下面，只被InGameStateManeger call
-    public void DisPlaySingleCard(Card _card, Transform _parent)
+    // 可视化单个卡牌，将卡牌的可视化后加入到parent下面
+    public GameObject DisPlaySingleCard(Card _card, Transform _parent)
     {
+        GameObject newCard = null;
+
         if (_card is MonsterCard)
         {
             if (_card.scriptLocation == "")
             {
-                GameObject newCard = GameObject.Instantiate(MonsterCardModel, _parent);
+                newCard = GameObject.Instantiate(MonsterCardModel, _parent);
                 CardContainer cardContainer = _parent.GetComponent<CardContainer>();
-                if(cardContainer != null)
+                if (cardContainer != null)
                 {
                     cardContainer.InitCards();
-                }
 
-                // attach script
-                newCard.AddComponent(Type.GetType("MonsterCardBehavior"));
-                newCard.GetComponent<CardBehavior>().InitializeCard(_card);
+                    // attach script
+                    newCard.AddComponent(Type.GetType("MonsterCardBehavior"));
+                    newCard.GetComponent<CardBehavior>().InitializeCard(_card);
+                }
             }
             else
             {
@@ -50,48 +52,53 @@ public class CardDisplayView : Manager<CardDisplayView>
         else if(_card is SpellCard)
         {
 
-            GameObject newCard = GameObject.Instantiate(SpellCardModel, _parent);
+            newCard = GameObject.Instantiate(SpellCardModel, _parent);
+
             CardContainer cardContainer = _parent.GetComponent<CardContainer>();
+            // 如果不为null说明是加入到手牌，则添加卡牌script
             if (cardContainer != null)
             {
                 cardContainer.InitCards();
+
+                // attach script
+                string cardScriptName = "CardBehavior";
+
+                if (_card.scriptLocation != "")
+                {
+                    cardScriptName = _card.scriptLocation;
+                }
+
+                newCard.AddComponent(Type.GetType(cardScriptName));
+                newCard.GetComponent<CardBehavior>().InitializeCard(_card);
             }
-
-            // attach script
-            string cardScriptName = "CardBehavior";
-
-            if (_card.scriptLocation != "")
-            {
-                cardScriptName = _card.scriptLocation;
-            }
-
-            newCard.AddComponent(Type.GetType(cardScriptName));
-            newCard.GetComponent<CardBehavior>().InitializeCard(_card);
         }
         else if (_card is ItemCard)
         {
-            GameObject newCard = GameObject.Instantiate(ItemCardModel, _parent);
+            newCard = GameObject.Instantiate(ItemCardModel, _parent);
+
             CardContainer cardContainer = _parent.GetComponent<CardContainer>();
+            // 如果不为null说明是加入到手牌，则添加卡牌script
             if (cardContainer != null)
             {
                 cardContainer.InitCards();
+
+                // attach script
+                string cardScriptName = "CardBehavior";
+
+                if (_card.scriptLocation != "")
+                {
+                    cardScriptName = _card.scriptLocation;
+                }
+
+                newCard.AddComponent(Type.GetType(cardScriptName));
+                newCard.GetComponent<CardBehavior>().InitializeCard(_card);
             }
-
-            // attach script
-            string cardScriptName = "CardBehavior";
-
-            if(_card.scriptLocation != "")
-            {
-                cardScriptName = _card.scriptLocation;
-            }
-
-            newCard.AddComponent(Type.GetType(cardScriptName));
-            newCard.GetComponent<CardBehavior>().InitializeCard(_card);
         }
         else
         {
             Debug.Log("Card : " + _card.cardName + " is not any exist type");
         }
 
+        return newCard;
     }
 }
