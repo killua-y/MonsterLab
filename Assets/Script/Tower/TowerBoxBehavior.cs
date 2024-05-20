@@ -1,12 +1,16 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class TowerBoxBehavior : MonoBehaviour
 {
+    public TextMeshProUGUI boxTypeText;
     public BoxType boxType;
-    private GameObject player;
+    public int row;
+    public int column;
+    private PlayerClimbing player;
 
     private void Awake()
     {
@@ -25,27 +29,39 @@ public class TowerBoxBehavior : MonoBehaviour
         
     }
 
+    public void SetupBox(BoxType boxType)
+    {
+        boxTypeText.text = boxType.ToString();
+    }
+
+
     public void OnPointDown()
     {
         if (player == null)
         {
-            player = GameObject.FindWithTag("Player");
+            player = GameObject.FindWithTag("Player").GetComponent<PlayerClimbing>();
         }
 
         // 查看是否可以移动到这
         if (CheckLegality())
         {
             player.transform.position = this.transform.position;
-
-            Invoke("ActivateAct", 1);
+            player.row = row;
+            player.column = column;
+            //Invoke("ActivateAct", 1);
         }
     }
 
     private bool CheckLegality()
     {
-        // 查看是否在玩家的下方或者右边
+        // 查看是否在玩家的上方或者右边一位index
+        if(((player.row - 1 == row) && (player.column == column)) ||
+            ((player.column + 1 == column) && (player.row == row)))
+        {
+            return true;
+        }
 
-        return true;
+        return false;
     }
 
     private void ActivateAct()

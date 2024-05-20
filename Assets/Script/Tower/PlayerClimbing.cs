@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class PlayerClimbing : MonoBehaviour
 {
+    public int row = 3;
+    public int column = 0;
     // Start is called before the first frame update
     void Start()
     {
