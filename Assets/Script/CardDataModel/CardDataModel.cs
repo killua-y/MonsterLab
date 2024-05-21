@@ -10,7 +10,7 @@ public class CardDataModel : MonoBehaviour
     public TextAsset textPlayerData; // 玩家卡牌数据txt文件
     public TextAsset warriorCard; // 战士的默认卡组
 
-    private static bool NewGame = true;
+    public static bool NewGame;
 
     private List<Card> cardList = new List<Card>(); // 存储卡牌数据的链表
     private int[] playerCardData; // 储存玩家卡牌数据的array
@@ -24,6 +24,8 @@ public class CardDataModel : MonoBehaviour
     // Start is called before the first frame update
     void Awake()
     {
+        NewGame = true;
+        Debug.Log("Reset new game");
         LordCardList();
         LordEnemyCardList();
         LoadPlayerData();
@@ -194,6 +196,7 @@ public class CardDataModel : MonoBehaviour
         if (NewGame)
         {
             File.WriteAllLines(Application.dataPath + "/Datas/playerdata.csv", warriorCard.text.Split('\n'));
+            Debug.Log("reset player deck");
             NewGame = false;
         }
 
@@ -266,6 +269,7 @@ public class CardDataModel : MonoBehaviour
                 {
                     if (cardIndex < cardList.Count)  // Ensure the index is within the range of available cards
                     {
+                        Debug.Log("Genereate card with ID: " + cardIndex);
                         Card newCard = Card.CloneCard(cardList[cardIndex]);  // Assuming constructor cloning or similar method
                         newCard.uniqueID = currentAssignedID;
                         currentAssignedID += 1;
