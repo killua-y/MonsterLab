@@ -8,6 +8,9 @@ public class CardDataModel : MonoBehaviour
 {
     public TextAsset textCardData; // 卡牌数据txt文件
     public TextAsset textPlayerData; // 玩家卡牌数据txt文件
+    public TextAsset warriorCard; // 战士的默认卡组
+
+    private static bool NewGame = true;
 
     private List<Card> cardList = new List<Card>(); // 存储卡牌数据的链表
     private int[] playerCardData; // 储存玩家卡牌数据的array
@@ -187,7 +190,15 @@ public class CardDataModel : MonoBehaviour
     {
         playerCardData = new int[cardList.Count];
         playerDNAData = new int[cardList.Count];
+
+        if (NewGame)
+        {
+            File.WriteAllLines(Application.dataPath + "/Datas/playerdata.csv", warriorCard.text.Split('\n'));
+            NewGame = false;
+        }
+
         string[] dataArray = textPlayerData.text.Split('\n');
+
         foreach (var row in dataArray)
         {
             string[] rowArray = row.Split(',');

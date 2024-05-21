@@ -31,8 +31,8 @@ public class InGameStateManager : Manager<InGameStateManager>
     new void Awake()
     {
         base.Awake();
-        CardModel = GetComponent<InGameCardModel>();
-        cardDisplayView = GetComponent<CardDisplayView>();
+        CardModel = FindObjectOfType<InGameCardModel>();
+        cardDisplayView = FindObjectOfType<CardDisplayView>();
     }
 
     void Start()

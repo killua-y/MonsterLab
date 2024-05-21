@@ -1,0 +1,66 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &5065150150119910396
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5065150150119910386}
+  - component: {fileID: 5065150150119910397}
+  - component: {fileID: 5065150150119910387}
+  m_Layer: 0
+  m_Name: CardDataManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5065150150119910386
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5065150150119910396}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 394.84503, y: 233.6982, z: 3.5912259}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5065150150119910397
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5065150150119910396}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c931d54ccdd784d3ab81876d3d396d0b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  textCardData: {fileID: 4900000, guid: 9731cd73ab9fc478fa12794f16f24daf, type: 3}
+  textPlayerData: {fileID: 4900000, guid: 3918a8897dd1a4857bff586677175b87, type: 3}
+  warriorCard: {fileID: 4900000, guid: 258a5b7852b094ccf846b7376ff3da21, type: 3}
+  enemyTextCardData: {fileID: 4900000, guid: e6f610c702ff44ae0999b65ac2eacf0e, type: 3}
+--- !u!114 &5065150150119910387
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5065150150119910396}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d1a29ccb44f943a6be53a38e2cea5ef, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  MonsterCardModel: {fileID: 22785334956498133, guid: 0fba6b0fec3284087b892325ffdb64b9, type: 3}
+  SpellCardModel: {fileID: 1821335004880501059, guid: 640f2969063b84ff3ae9ca96b30b7183, type: 3}
+  ItemCardModel: {fileID: 2189158130635427455, guid: d10e5ddb8187f4fdb8eb50489cf5676a, type: 3}

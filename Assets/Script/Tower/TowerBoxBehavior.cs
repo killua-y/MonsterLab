@@ -29,8 +29,9 @@ public class TowerBoxBehavior : MonoBehaviour
         
     }
 
-    public void SetupBox(BoxType boxType)
+    public void SetupBox(BoxType _boxType)
     {
+        boxType = _boxType;
         boxTypeText.text = boxType.ToString();
     }
 
@@ -48,7 +49,7 @@ public class TowerBoxBehavior : MonoBehaviour
             player.transform.position = this.transform.position;
             player.row = row;
             player.column = column;
-            //Invoke("ActivateAct", 1);
+            ActivateAct(boxType);
         }
     }
 
@@ -69,9 +70,9 @@ public class TowerBoxBehavior : MonoBehaviour
         }
     }
 
-    private void ActivateAct()
+    private void ActivateAct(BoxType _boxType)
     {
-        switch (boxType)
+        switch (_boxType)
         {
             case BoxType.NormalFight:
                 SceneManager.LoadScene("BattleScene");
