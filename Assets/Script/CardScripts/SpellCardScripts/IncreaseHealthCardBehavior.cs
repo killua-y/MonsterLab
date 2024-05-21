@@ -16,7 +16,7 @@ public class IncreaseHealthCardBehavior : CardBehavior
 
     }
 
-    public override void CastCard(Tile _tile, Card _card = null)
+    public override void CastCard(Tile _tile)
     {
         targetMonster.cardModel.healthPoint += card.effectData;
 

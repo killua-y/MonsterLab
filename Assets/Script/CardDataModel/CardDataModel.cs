@@ -24,11 +24,26 @@ public class CardDataModel : MonoBehaviour
     // Start is called before the first frame update
     void Awake()
     {
-        NewGame = true;
-        Debug.Log("Reset new game");
         LordCardList();
         LordEnemyCardList();
+
+        if (!NewGame)
+        {
+            File.WriteAllLines(Application.dataPath + "/Datas/playerdata.csv", warriorCard.text.Split('\n'));
+            Debug.Log("reset player deck");
+            NewGame = true;
+        }
+        else
+        {
+            Debug.Log("avoid reset deck");
+        }
+
         LoadPlayerData();
+    }
+
+    private void Start()
+    {
+
     }
 
     // Update is called once per frame
@@ -172,6 +187,7 @@ public class CardDataModel : MonoBehaviour
     {
         // 玩家数据中增加该卡牌
         playerCardData[_id] += 1;
+
         SavePlayerData();
     }
 
@@ -193,13 +209,6 @@ public class CardDataModel : MonoBehaviour
         playerCardData = new int[cardList.Count];
         playerDNAData = new int[cardList.Count];
 
-        if (NewGame)
-        {
-            File.WriteAllLines(Application.dataPath + "/Datas/playerdata.csv", warriorCard.text.Split('\n'));
-            Debug.Log("reset player deck");
-            NewGame = false;
-        }
-
         string[] dataArray = textPlayerData.text.Split('\n');
 
         foreach (var row in dataArray)
@@ -218,7 +227,7 @@ public class CardDataModel : MonoBehaviour
                 int id = int.Parse(rowArray[1]);
                 int num = int.Parse(rowArray[2]);
                 playerCardData[id] = num;
-                //Debug.Log("CardID: " + id + "Add");
+                Debug.Log("CardID: " + id + "Add");
             }
             else if (rowArray[0] == "DNA")
             {
@@ -269,7 +278,6 @@ public class CardDataModel : MonoBehaviour
                 {
                     if (cardIndex < cardList.Count)  // Ensure the index is within the range of available cards
                     {
-                        Debug.Log("Genereate card with ID: " + cardIndex);
                         Card newCard = Card.CloneCard(cardList[cardIndex]);  // Assuming constructor cloning or similar method
                         newCard.uniqueID = currentAssignedID;
                         currentAssignedID += 1;

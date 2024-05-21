@@ -18,7 +18,7 @@ public class MonsterCardBehavior : CardBehavior
         
     }
 
-    public override void CheckLegality(Tile _tile, Card _card = null)
+    public override void CheckLegality(Tile _tile)
     {
         Node node = GridManager.Instance.GetNodeForTile(_tile);
 
@@ -39,7 +39,7 @@ public class MonsterCardBehavior : CardBehavior
         else
         {
             // 合法，释放卡牌效果
-            CastCard(_tile, _card);
+            CastCard(_tile);
 
             CastComplete();
         }
@@ -53,12 +53,12 @@ public class MonsterCardBehavior : CardBehavior
         }
 
         // 合法，释放卡牌效果
-        CastCard(tToSummon, null);
+        CastCard(tToSummon);
 
         CastComplete();
     }
 
-    public override void CastCard(Tile _tile, Card _card = null)
+    public override void CastCard(Tile _tile)
     {
         if (card is not MonsterCard)
         {

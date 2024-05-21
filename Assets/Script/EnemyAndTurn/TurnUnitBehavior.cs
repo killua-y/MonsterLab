@@ -40,7 +40,7 @@ public class TurnUnitBehavior : MonoBehaviour
                 futureTurn.SetActive(true);
             }
         }
-        else if (turnIndex < index)
+        else if (index < turnIndex)
         {
             if (passedTurn != null)
             {

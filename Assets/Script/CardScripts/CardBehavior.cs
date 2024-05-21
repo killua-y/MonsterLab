@@ -40,7 +40,7 @@ public class CardBehavior : MonoBehaviour
         }
     }
 
-    public virtual void CheckLegality(Tile _tile, Card _card = null)
+    public virtual void CheckLegality(Tile _tile)
     {
         // 查看费用是否合理
         if (PlayerStatesManager.Instance.GetRemainingCost() < card.cost)
@@ -63,7 +63,7 @@ public class CardBehavior : MonoBehaviour
         // 合法，释放卡牌效果
         targetMonster = GridManager.Instance.GetNodeForTile(_tile).currentEntity;
         Debug.Log("Cast Card: " + card.cardName);
-        CastCard(_tile, _card);
+        CastCard(_tile);
 
         // 释放结束
         CastComplete();
@@ -79,14 +79,9 @@ public class CardBehavior : MonoBehaviour
 
     }
 
-    public virtual void CastCard(Tile _tile, Card _card = null)
+    public virtual void CastCard(Tile _tile)
     {
         Debug.Log("Please attach correspond card behavior srcipt to this card: " + card.cardName);
-    }
-
-    public virtual void CastCard(BaseEntity entity, Card _card = null)
-    {
-        Debug.Log("Please create own castCard method: " + card.cardName);
     }
 
     public virtual void CastComplete()

@@ -16,7 +16,7 @@ public class DrawCardBehavior : CardBehavior
 
     }
 
-    public override void CastCard(Tile _tile, Card _card = null)
+    public override void CastCard(Tile _tile)
     {
         //n张抽牌
         for (int i = 0; i < card.effectData; i++)
