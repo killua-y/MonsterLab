@@ -105,15 +105,6 @@ public class BattleManager : Manager<BattleManager>
         playerEntities.Remove(entity);
         enemyEntities.Remove(entity);
 
-        if (entity.myTeam == Team.Enemy)
-        {
-            Destroy(entity.gameObject);
-        }
-        else
-        {
-            entity.gameObject.SetActive(false);
-        }
-
         if (playerEntities.Count == 0)
         {
             Invoke("NewTurn", 2f);

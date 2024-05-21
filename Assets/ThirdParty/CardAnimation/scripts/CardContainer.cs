@@ -77,7 +77,10 @@ public class CardContainer : MonoBehaviour {
     }
 
     void Update() {
-        UpdateCards();
+        if (!InGameStateManager.gamePased)
+        {
+            UpdateCards();
+        }
     }
 
     void SetUpCards() {

@@ -13,7 +13,6 @@ GameObject:
   - component: {fileID: 7901269292429942802}
   - component: {fileID: 7901269292429942803}
   - component: {fileID: 7901269292429942828}
-  - component: {fileID: -6505661433067665373}
   m_Layer: 5
   m_Name: CardReward
   m_TagString: Untagged
@@ -122,18 +121,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CardHolder: {fileID: 7901269292451000512}
---- !u!114 &-6505661433067665373
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7901269292429942830}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b03fb4643aed842cfb971ff21ffa79e2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &7901269292451000513
 GameObject:
   m_ObjectHideFlags: 0

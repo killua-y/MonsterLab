@@ -260,7 +260,7 @@ public class BaseEntity : MonoBehaviour
         }
     }
 
-    public void UnitDie(BaseEntity from = null, bool activeUponDeath = true)
+    public void UnitDie(BaseEntity from = null, bool isSacrifice = false)
     {
         dead = true;
         StandUp();
@@ -274,14 +274,36 @@ public class BaseEntity : MonoBehaviour
         }
 
         // 亡语效果
-        if (activeUponDeath)
+        if (!isSacrifice)
         {
             UponDeath();
         }
 
         // 把自己从索敌list里移除
-        // 敌方怪兽会被destory，我放怪兽会被设置为disactive
         BattleManager.Instance.UnitDead(this);
+
+        // 敌方怪兽会被destory，我放怪兽会被设置为disactive
+        if (myTeam == Team.Enemy)
+        {
+            Destroy(this.gameObject);
+        }
+        else
+        {
+            // 如果是献祭就直接删除gameobject
+            // 反之说明是战斗中死亡
+            if (!isSacrifice)
+            {
+                this.gameObject.SetActive(false);
+            }
+            else
+            {
+                InGameStateManager.Instance.OnPreparePhaseStart -= OnPreparePhaseStart;
+                InGameStateManager.Instance.OnPreparePhaseEnd -= OnPreparePhaseEnd;
+                InGameStateManager.Instance.OnBattlePhaseStart -= OnBattlePhaseStart;
+                InGameStateManager.Instance.OnBattlePhaseEnd -= OnBattlePhaseEnd;
+                Destroy(this.gameObject);
+            }
+        }
     }
 
     protected virtual void Attack()

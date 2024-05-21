@@ -61,10 +61,13 @@ public class CardWrapper : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     }
 
     private void Update() {
-        UpdateRotation();
-        UpdatePosition();
-        UpdateScale();
-        UpdateUILayer();
+        if (!InGameStateManager.gamePased)
+        {
+            UpdateRotation();
+            UpdatePosition();
+            UpdateScale();
+            UpdateUILayer();
+        }
     }
 
     private void UpdateUILayer() {

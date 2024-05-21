@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using static Card;
 
-public class RewardManager : MonoBehaviour
+public class RewardManager : Manager<RewardManager>
 {
     public GameObject rewardCanvas;
     public GameObject rewardPanel;
@@ -60,8 +60,6 @@ public class RewardManager : MonoBehaviour
     public void GenerateReward()
     {
         rewardCanvas.SetActive(true);
-
-        GenerateCardReward();
 
         GenerateCardReward();
     }

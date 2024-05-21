@@ -55,24 +55,51 @@ public class TowerBoxBehavior : MonoBehaviour
     private bool CheckLegality()
     {
         // 查看是否在玩家的上方或者右边一位index
-        if(((player.row - 1 == row) && (player.column == column)) ||
-            ((player.column + 1 == column) && (player.row == row)))
+        if (((player.row - 1) == row) && (player.column == column))
         {
             return true;
         }
-
-        return false;
+        else if ((player.row == row) && ((player.column + 1) == column))
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 
     private void ActivateAct()
     {
-        int randomNumber = Random.Range(1, 11);
-
-        SceneManager.LoadScene("BattleScene");
-        // 20%战斗
-        if ((randomNumber == 1) || (randomNumber == 2))
+        switch (boxType)
         {
-            //
+            case BoxType.NormalFight:
+                SceneManager.LoadScene("BattleScene");
+                break;
+
+            case BoxType.EliteFight:
+                SceneManager.LoadScene("BattleScene");
+                break;
+
+            case BoxType.BossFight:
+                SceneManager.LoadScene("BattleScene");
+                break;
+
+            case BoxType.Events:
+                RewardManager.Instance.GenerateReward();
+                break;
+
+            case BoxType.Merchant:
+                RewardManager.Instance.GenerateReward();
+                break;
+
+            case BoxType.Treasure:
+                RewardManager.Instance.GenerateReward();
+                break;
+
+            default:
+                break;
         }
+            
     }
 }

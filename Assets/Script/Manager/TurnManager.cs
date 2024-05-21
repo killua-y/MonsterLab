@@ -8,13 +8,16 @@ using static Card;
 public class TurnManager : Manager<TurnManager>
 {
     // 卡牌管理区
+    public Transform turnParent;
+    public GameObject singleTurnPrefab;
     public TextMeshProUGUI turnText;
     private CardDataModel cardDataModel;
 
-    private int currentTurn = 1;
-    //private int maxTurn = 5;
-
+    private int currentTurn = 0;
+    private int maxTurn = 0;
+    private List<int> MonsterSummonTurn = new List<int>();
     public List<MonsterCard> monsterList = new List<MonsterCard>();
+    private List<TurnUnitBehavior> allTurns = new List<TurnUnitBehavior>();
 
     private EnemyBehavior enemy;
     // Start is called before the first frame update
@@ -46,9 +49,30 @@ public class TurnManager : Manager<TurnManager>
 
         // 让敌人加载自己拥有的怪兽
         enemy.LoadEnemy();
+
+        maxTurn = enemy.GetMaxTurn();
+        MonsterSummonTurn = enemy.GetTurnList();
+        SetUpTurnUI();
+        UpdateTurnView();
     }
 
-    // 每个准备阶段开始都call一下enmy看看要不要召唤怪兽
+    private void SetUpTurnUI()
+    {
+        for (int i = 0; i <= maxTurn; i++)
+        {
+            GameObject newTurn = Instantiate(singleTurnPrefab, turnParent);
+            TurnUnitBehavior turnBehavior = newTurn.GetComponent<TurnUnitBehavior>();
+            allTurns.Add(turnBehavior);
+            turnBehavior.index = i;
+
+            if(MonsterSummonTurn.Contains(i))
+            {
+                turnBehavior.SetToSummonMonster();
+            }
+        }
+    }
+
+    // 每个准备阶段开始都call一下enemy看看要不要召唤怪兽
     private void OnPreparePhaseStart()
     {
         enemy.SummonEnemyThisTurn(currentTurn);
@@ -56,13 +80,24 @@ public class TurnManager : Manager<TurnManager>
 
     private void OnBattlePhaseEnd()
     {
+        NextTurn();
+    }
+
+    private void NextTurn()
+    {
         // 回合数+1
         currentTurn += 1;
+
         UpdateTurnView();
     }
 
     private void UpdateTurnView()
     {
-        turnText.text = "Turn: " + currentTurn;
+        turnText.text = "Turn: " + (currentTurn + 1);
+
+        foreach (TurnUnitBehavior turnUnitBehavior in allTurns)
+        {
+            turnUnitBehavior.UpdateTurn(currentTurn);
+        }
     }
 }

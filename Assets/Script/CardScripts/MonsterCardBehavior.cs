@@ -5,6 +5,7 @@ using static Card;
 
 public class MonsterCardBehavior : CardBehavior
 {
+    private Tile tToSummon;
     // Start is called before the first frame update
     void Start()
     {
@@ -30,12 +31,30 @@ public class MonsterCardBehavior : CardBehavior
         }
 
         // 查看是否需要祭品
+        if (card.cost != 0)
+        {
+            StartCoroutine(CardOnPlay.Instance.GetTiles(card.cost, OnTilesCollected));
+            tToSummon = _tile;
+        }
+        else
+        {
+            // 合法，释放卡牌效果
+            CastCard(_tile, _card);
 
+            CastComplete();
+        }
+    }
+
+    void OnTilesCollected(List<Tile> tiles)
+    {
+        foreach (Tile tile in tiles)
+        {
+            GridManager.Instance.GetNodeForTile(tile).currentEntity.GetComponent<BaseEntity>().UnitDie(null, true);
+        }
 
         // 合法，释放卡牌效果
-        CastCard(_tile, _card);
+        CastCard(tToSummon, null);
 
-        // 
         CastComplete();
     }
 

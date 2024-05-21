@@ -25,6 +25,8 @@ public class CardRewardBehavior : MonoBehaviour
             GameObject newCard = CardDisplayView.Instance.DisPlaySingleCard(card, CardHolder);
             newCard.GetComponent<CardDisplay>().UpdateCardView(card);
             newCard.AddComponent<Scaling>();
+            newCard.AddComponent<SingleCardOnClick>();
+            newCard.GetComponent<SingleCardOnClick>().SetUp(card.id, this.gameObject);
         }
     }
 }

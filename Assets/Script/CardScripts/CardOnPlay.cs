@@ -4,12 +4,12 @@ using events;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class CardOnPlay : MonoBehaviour
+public class CardOnPlay : Manager<CardOnPlay>
 {
     public CardContainer container;
     public Camera cam;
 
-    private void Awake()
+    private void Start()
     {
         cam = Camera.main;
     }
@@ -38,5 +38,28 @@ public class CardOnPlay : MonoBehaviour
         }
 
         return null;
+    }
+
+    // The function to get multiple tiles based on user clicks
+    public IEnumerator GetTiles(int n, System.Action<List<Tile>> callback)
+    {
+        List<Tile> clickedTiles = new List<Tile>();
+        InGameStateManager.gamePased = true;
+
+        while (clickedTiles.Count < n)
+        {
+            if (Input.GetMouseButtonDown(0)) // Check for mouse click
+            {
+                Tile clickedTile = GetTileUnder();
+                if (clickedTile != null && !clickedTiles.Contains(clickedTile))
+                {
+                    clickedTiles.Add(clickedTile);
+                }
+            }
+            yield return null; // Wait for the next frame
+        }
+
+        InGameStateManager.gamePased = false;
+        callback(clickedTiles); // Return the list of clicked tiles
     }
 }

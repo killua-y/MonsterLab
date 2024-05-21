@@ -8,6 +8,7 @@ using UnityEngine;
 
 public class InGameStateManager : Manager<InGameStateManager>
 {
+    public static bool gamePased = false;
     public static bool PreparePhase = false;
     public static bool BattelPhase = false;
     public static GamePhase gamePhase;

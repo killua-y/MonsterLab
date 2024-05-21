@@ -167,6 +167,7 @@ public class CardDataModel : MonoBehaviour
     {
         // 玩家数据中增加该卡牌
         playerCardData[_id] += 1;
+        SavePlayerData();
     }
 
     // 删除卡牌
@@ -177,6 +178,8 @@ public class CardDataModel : MonoBehaviour
         {
             playerCardData[_id] -= 1;
         }
+
+        SavePlayerData();
     }
 
     // 加载玩家卡组数据
