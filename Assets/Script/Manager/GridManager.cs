@@ -33,7 +33,14 @@ public class GridManager : Manager<GridManager>
 
         for (int i = 0; i < allNodes.Count; i++)
         {
-            if((i >= 0) && (i <= 3))
+            int rowIndex = i / 8; // There are 8 columns
+            int columnIndex = i % 8; // Calculate the column index
+
+            // Assign the rowIndex and columnIndex to the node
+            allNodes[i].rowIndex = rowIndex;
+            allNodes[i].columnIndex = columnIndex;
+
+            if ((i >= 0) && (i <= 3))
             {
                 allNodes[i].SetPlayerArea(true);
             }
@@ -123,6 +130,21 @@ public class GridManager : Manager<GridManager>
         for (int i = 0; i < allNodes.Count; i++)
         {
             if (_index == allNodes[i].index)
+            {
+                return allNodes[i];
+            }
+        }
+
+        return null;
+    }
+
+    public Node GetNodeForRowAndColumn(int row, int column)
+    {
+        var allNodes = graph.Nodes;
+
+        for (int i = 0; i < allNodes.Count; i++)
+        {
+            if ((row == allNodes[i].rowIndex) && (column == allNodes[i].columnIndex))
             {
                 return allNodes[i];
             }

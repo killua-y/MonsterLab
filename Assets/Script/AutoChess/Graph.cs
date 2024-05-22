@@ -163,6 +163,7 @@ public class Graph
         return path;
     }
 
+    // 无视occupied寻找最短路径，已经淘汰
     public virtual List<Node> GetShortestPath(Node start, Node end)
     {
         List<Node> path = new List<Node>();
@@ -242,6 +243,8 @@ public class Graph
 public class Node
 {
     public int index;
+    public int rowIndex;
+    public int columnIndex;
     public Vector3 worldPosition;
     public BaseEntity currentEntity;
 

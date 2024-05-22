@@ -9,14 +9,10 @@ using static Card;
 public class BaseEntity : MonoBehaviour
 {
     // 怪兽UI部分
-    public SpriteRenderer spriteRender;
-    public Slider healthBar;
-    public TextMeshProUGUI healthText;
-    public TextMeshProUGUI attackText;
-    private Image fillImage;
+    private MonsterUI monsterUI;
 
     // 怪兽属性部分
-    public GameObject bullet;
+    private GameObject bullet;
     protected int currentHealth;
     [Range(1.5f, 10)]
     protected float range = 1.5f;
@@ -47,12 +43,14 @@ public class BaseEntity : MonoBehaviour
 
     public virtual void Setup(Team team, Node node, MonsterCard monsterCard, List<BaseEntity> sacrifices = null)
     {
+        // 加载怪兽UI script
+        monsterUI = this.gameObject.GetComponent<MonsterUI>();
+
         myTeam = team;
+
         if (myTeam == Team.Enemy)
         {
-            spriteRender.flipX = true;
-            fillImage = healthBar.fillRect.GetComponent<Image>();
-            fillImage.color = Color.red;
+            monsterUI.EnemyMonster();
         }
 
         this.currentNode = node;
@@ -60,20 +58,23 @@ public class BaseEntity : MonoBehaviour
         node.SetOccupied(true);
         node.currentEntity = this;
 
+        // 加载弹道prefab
+        bullet = this.gameObject.GetComponent<MonsterUI>().bullet;
+
         // 消耗祭品
         if (sacrifices != null)
         {
             Consume(sacrifices);
         }
 
-        // 导入MonsterCard
+        // 导入MonsterCard, 并更新UI
         UpdateMonster(monsterCard);
+
+        // 把当前生命值设置为最大
+        currentHealth = cardModel.healthPoint;
 
         // 战吼
         UponSummon();
-
-        // 属性UI设置，最后call
-        UpdateUI();
 
         // 以后记得改
         range = monsterCard.attackRange;
@@ -175,16 +176,6 @@ public class BaseEntity : MonoBehaviour
         currentNode.currentEntity = this;
     }
 
-    // 更新怪兽的UI属性，不要在战斗中call
-    public void UpdateUI()
-    {
-        currentHealth = cardModel.healthPoint;
-        healthBar.maxValue = currentHealth;
-        healthBar.value = currentHealth;
-        attackText.text = cardModel.attackPower + "";
-        healthText.text = currentHealth + "";
-    }
-
     // 更新怪兽的属性，不要在战斗中call
     public void UpdateMonster(MonsterCard card = null)
     {
@@ -193,11 +184,11 @@ public class BaseEntity : MonoBehaviour
             cardModel = (MonsterCard)Card.CloneCard(card);
         }
 
-        UpdateUI();
+        monsterUI.UpdateUI(cardModel);
     }
 
     // 准备阶段开始
-    public virtual void OnPreparePhaseStart()
+    protected virtual void OnPreparePhaseStart()
     {
         this.gameObject.SetActive(true);
 
@@ -211,7 +202,8 @@ public class BaseEntity : MonoBehaviour
         // 玩家的怪兽会回复全部生命值
         if (myTeam == Team.Player)
         {
-            UpdateUI();
+            currentHealth = cardModel.healthPoint;
+            monsterUI.UpdateHealth(currentHealth);
 
             // 复活，重新把自己添加回索敌list
             if (dead)
@@ -225,20 +217,20 @@ public class BaseEntity : MonoBehaviour
     }
 
     // 准备阶段结束
-    public virtual void OnPreparePhaseEnd()
+    protected virtual void OnPreparePhaseEnd()
     {
 
     }
 
     // 战斗阶段开始
-    public virtual void OnBattlePhaseStart()
+    protected virtual void OnBattlePhaseStart()
     {
         CanBattle = true;
         BattleStartNode = currentNode;
     }
 
     // 战斗阶段结束
-    public virtual void OnBattlePhaseEnd()
+    protected virtual void OnBattlePhaseEnd()
     {
         currentTarget = null;
 
@@ -256,8 +248,7 @@ public class BaseEntity : MonoBehaviour
         }
 
         currentHealth -= amount;
-        healthBar.value = currentHealth;
-        healthText.text = currentHealth + "";
+        monsterUI.UpdateHealth(currentHealth);
 
         // 死亡
         if (currentHealth <= 0 && !dead)
@@ -371,6 +362,6 @@ public class BaseEntity : MonoBehaviour
 
     public virtual void ReceiveWeapon(CardBehavior cardBehavior)
     {
-        cardBehavior.CastCard(this.currentNode);
+        //cardBehavior.CastCard(this.currentNode);
     }
 }

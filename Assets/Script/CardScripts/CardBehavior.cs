@@ -90,6 +90,12 @@ public class CardBehavior : MonoBehaviour
             PlayerStatesManager.Instance.DecreaseCost(card.cost);
         }
 
+        // 告诉被装备怪兽你被装备了一张装备卡
+        if (card is ItemCard)
+        {
+            targetMonster.ReceiveWeapon(this);
+        }
+
         // 判断卡牌是丢弃还是消耗
         if (card is SpellCard)
         {
@@ -102,11 +108,6 @@ public class CardBehavior : MonoBehaviour
             // 消耗
             InGameStateManager.Instance.ExhaustOneCard(card);
             Destroy(this.gameObject);
-        }
-
-        if (card is ItemCard)
-        {
-            // 告诉被装备怪兽你被装备了一张装备卡
         }
     }
 }

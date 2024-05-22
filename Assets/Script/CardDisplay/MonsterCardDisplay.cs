@@ -15,6 +15,7 @@ public class MonsterCardDisplay : CardDisplay
     public TextMeshProUGUI attack;
     public TextMeshProUGUI health;
     public TextMeshProUGUI typeText;
+    public TextMeshProUGUI rangeText;
 
     //卡名 稀有度 种族 星级 召唤条件
     //攻击力 生命值 攻击距离 数值 技能描述
@@ -51,5 +52,6 @@ public class MonsterCardDisplay : CardDisplay
         attack.text = Convert.ToString(cardModel.attackPower);
         health.text = Convert.ToString(cardModel.healthPoint);
         typeText.text = cardModel.type.ToString();
+        rangeText.text = "range: " + (int)cardModel.attackRange;
     }
 }

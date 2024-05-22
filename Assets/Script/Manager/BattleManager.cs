@@ -49,7 +49,7 @@ public class BattleManager : Manager<BattleManager>
         }
         else
         {
-            // 根据Team安排不同的默认模型
+            // 根据Team安排不同的默认模型, 以后可以删除
             if (team == Team.Player)
             {
                 path = "MonsterPrefab/Slime";
@@ -62,6 +62,18 @@ public class BattleManager : Manager<BattleManager>
 
         GameObject monsterPrefab = Resources.Load<GameObject>(path);
 
+        // 加载怪兽script
+        // 如果没有script地址就默认安排
+        string scriptPath = "";
+        if (monsterCard.scriptLocation != "")
+        {
+            scriptPath = monsterCard.scriptLocation;
+        }
+        else
+        {
+            scriptPath = "NormalMonsterEntity";
+        }
+
         GameObject newMonster;
 
         // 生成怪兽script
@@ -71,6 +83,7 @@ public class BattleManager : Manager<BattleManager>
         if (team == Team.Player)
         {
             newMonster = Instantiate(monsterPrefab, playerParent);
+            newMonster.AddComponent(Type.GetType(scriptPath));
             BaseEntity newEntity = newMonster.GetComponent<BaseEntity>();
             playerEntities.Add(newEntity);
             newEntity.Setup(team, node, monsterCard, sacrifices);
@@ -78,6 +91,7 @@ public class BattleManager : Manager<BattleManager>
         else
         {
             newMonster = Instantiate(monsterPrefab, enemyParent);
+            newMonster.AddComponent(Type.GetType(scriptPath));
             BaseEntity newEntity = newMonster.GetComponent<BaseEntity>();
             enemyEntities.Add(newEntity);
             newEntity.Setup(team, node, monsterCard, sacrifices);
@@ -91,9 +105,7 @@ public class BattleManager : Manager<BattleManager>
 
     public void InstaniateMontser(int row, int column, Team team, MonsterCard monsterCard, List<BaseEntity> sacrifices = null)
     {
-        int index = ConvertRowColumnToIndex(row, column);
-
-        InstaniateMontser(index, team, monsterCard, sacrifices);
+        InstaniateMontser(GridManager.Instance.GetNodeForRowAndColumn(row, column), team, monsterCard, sacrifices);
     }
 
     public List<BaseEntity> GetEntitiesAgainst(Team against)
@@ -156,8 +168,6 @@ public class BattleManager : Manager<BattleManager>
     {
         monsterSpaceText.text = playerEntities.Count + "/5";
     }
-
-
 }
 
 public enum Team
