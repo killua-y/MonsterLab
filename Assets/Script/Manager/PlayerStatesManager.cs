@@ -10,11 +10,6 @@ public class PlayerStatesManager : Manager<PlayerStatesManager>
     private int maxCost = 3;
     private int currentCost;
 
-    //new void Awake()
-    //{
-    //    base.Awake();
-    //}
-
     // Start is called before the first frame update
     void Start()
     {
@@ -37,6 +32,12 @@ public class PlayerStatesManager : Manager<PlayerStatesManager>
     public int GetRemainingCost()
     {
         return currentCost;
+    }
+
+    public void IncreaseCost(int _cost)
+    {
+        currentCost += _cost;
+        UpdateCostText();
     }
 
     public void DecreaseCost(int _cost)

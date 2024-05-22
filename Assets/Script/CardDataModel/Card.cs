@@ -59,11 +59,13 @@ public class Card
         public int Mana;
         // 怪兽模型位置
         public string modelLocation;
+        // 怪兽技能脚本位置
+        public string skillScriptLocation;
 
 
         public MonsterCard(int _id, int _uniqueID, string _cardName, CardColor _color, CardRarity _cardRarity,
         int _cost, CastType _castType, int _effectData, string _effectText, string _cardLocation, string _imageLocation,
-        MonsterType _type, int _attackPower, int _healthPoint, float _attackRange, int _Mana, string _modelLocation) :
+        MonsterType _type, int _attackPower, int _healthPoint, float _attackRange, int _Mana, string _modelLocation, string _skillScriptLocation) :
             base(_id, _uniqueID, _cardName, _color, _cardRarity, _cost, _castType, _effectData, _effectText, _cardLocation, _imageLocation)
         {
             this.type = _type;
@@ -72,6 +74,7 @@ public class Card
             this.attackRange = _attackRange;
             this.Mana = _Mana;
             this.modelLocation = _modelLocation;
+            this.skillScriptLocation = _skillScriptLocation;
         }
     }
 
@@ -119,7 +122,8 @@ public class Card
                 monsterCard.healthPoint,
                 monsterCard.attackRange,
                 monsterCard.Mana,
-                monsterCard.modelLocation
+                monsterCard.modelLocation,
+                monsterCard.skillScriptLocation
             );
         }
         else if (originalCard is SpellCard spellCard)

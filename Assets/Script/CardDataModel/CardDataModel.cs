@@ -13,6 +13,7 @@ public class CardDataModel : MonoBehaviour
     public static bool NewGame;
 
     private List<Card> cardList = new List<Card>(); // 存储卡牌数据的链表
+    private int[] playerExtraDeckData; // 储存玩家额外卡组数据的array
     private int[] playerCardData; // 储存玩家卡牌数据的array
     private int[] playerDNAData; // 储存玩家DNA数据的array
     private int totalCoins;
@@ -27,16 +28,16 @@ public class CardDataModel : MonoBehaviour
         LordCardList();
         LordEnemyCardList();
 
-        if (!NewGame)
-        {
-            File.WriteAllLines(Application.dataPath + "/Datas/playerdata.csv", warriorCard.text.Split('\n'));
-            Debug.Log("reset player deck");
-            NewGame = true;
-        }
-        else
-        {
-            Debug.Log("avoid reset deck");
-        }
+        //if (!NewGame)
+        //{
+        //    File.WriteAllLines(Application.dataPath + "/Datas/playerdata.csv", warriorCard.text.Split('\n'));
+        //    Debug.Log("reset player deck");
+        //    NewGame = true;
+        //}
+        //else
+        //{
+        //    Debug.Log("avoid reset deck");
+        //}
 
         LoadPlayerData();
     }
@@ -87,10 +88,11 @@ public class CardDataModel : MonoBehaviour
                 float attackRange = float.Parse(rowArray[13]);
                 int mana = int.Parse(rowArray[14]);
                 string modelLocation = rowArray[15];
+                string skillScriptLocation = rowArray[16];
 
                 cardList.Add(new MonsterCard(id, uniqueID, cardName, color, cardRarity,
                     cost, castType, effectData, effectText, scriptLocation, imageLocation,
-                    type, attackPower, healthPoint, attackRange, mana, modelLocation));
+                    type, attackPower, healthPoint, attackRange, mana, modelLocation, skillScriptLocation));
 
                 //Debug.Log("Load monster card: " + name);
             }
@@ -172,10 +174,11 @@ public class CardDataModel : MonoBehaviour
                 float attackRange = float.Parse(rowArray[13]);
                 int mana = int.Parse(rowArray[14]);
                 string modelLocation = rowArray[15];
+                string skillScriptLocation = rowArray[16];
 
                 enemyCardList.Add(new MonsterCard(id, uniqueID, cardName, color, cardRarity,
                     cost, castType, effectData, effectText, cardLocation, imageLocation,
-                    type, attackPower, healthPoint, attackRange, mana, modelLocation));
+                    type, attackPower, healthPoint, attackRange, mana, modelLocation, skillScriptLocation));
 
                 //Debug.Log("Load enemy monster card: " + name);
             }
@@ -208,6 +211,7 @@ public class CardDataModel : MonoBehaviour
     {
         playerCardData = new int[cardList.Count];
         playerDNAData = new int[cardList.Count];
+        playerExtraDeckData = new int[cardList.Count];
 
         string[] dataArray = textPlayerData.text.Split('\n');
 
@@ -233,6 +237,16 @@ public class CardDataModel : MonoBehaviour
                 int id = int.Parse(rowArray[1]);
                 int num = int.Parse(rowArray[2]);
                 playerDNAData[id] = num;
+            }
+            else if (rowArray[0] == "extraDeck")
+            {
+                int id = int.Parse(rowArray[1]);
+                int num = int.Parse(rowArray[2]);
+                playerExtraDeckData[id] = num;
+            }
+            else
+            {
+                Debug.Log("player cvs data error");
             }
         }
         //updateText();
@@ -287,6 +301,33 @@ public class CardDataModel : MonoBehaviour
         }
 
         return deckCardList;
+    }
+
+    // 加载局内额外卡组，赋予uniqueID
+    public List<Card> InitializeExtraDeck(int currentAssignedID)
+    {
+        List<Card> extraDeckCardList = new List<Card>();
+
+        for (int cardIndex = 0; cardIndex < playerExtraDeckData.Length; cardIndex++)
+        {
+            int quantity = playerExtraDeckData[cardIndex];
+
+            if (quantity >= 1)
+            {
+                for (int i = 0; i < quantity; i++)
+                {
+                    if (cardIndex < cardList.Count)  // Ensure the index is within the range of available cards
+                    {
+                        Card newCard = Card.CloneCard(cardList[cardIndex]);  // Assuming constructor cloning or similar method
+                        newCard.uniqueID = currentAssignedID;
+                        currentAssignedID += 1;
+                        extraDeckCardList.Add(newCard);
+                    }
+                }
+            }
+        }
+
+        return extraDeckCardList;
     }
 
     // Helper，其他function会call来获取卡组数据

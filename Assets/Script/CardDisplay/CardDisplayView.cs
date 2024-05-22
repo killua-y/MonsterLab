@@ -31,22 +31,16 @@ public class CardDisplayView : Manager<CardDisplayView>
 
         if (_card is MonsterCard)
         {
-            if (_card.scriptLocation == "")
-            {
-                newCard = GameObject.Instantiate(MonsterCardModel, _parent);
-                CardContainer cardContainer = _parent.GetComponent<CardContainer>();
-                if (cardContainer != null)
-                {
-                    cardContainer.InitCards();
+            newCard = GameObject.Instantiate(MonsterCardModel, _parent);
+            CardContainer cardContainer = _parent.GetComponent<CardContainer>();
 
-                    // attach script
-                    newCard.AddComponent(Type.GetType("MonsterCardBehavior"));
-                    newCard.GetComponent<CardBehavior>().InitializeCard(_card);
-                }
-            }
-            else
+            if (cardContainer != null)
             {
-                Debug.Log("Card location is: " + _card.scriptLocation);
+                cardContainer.InitCards();
+
+                // attach script
+                newCard.AddComponent(Type.GetType("MonsterCardBehavior"));
+                newCard.GetComponent<CardBehavior>().InitializeCard(_card);
             }
         }
         else if(_card is SpellCard)

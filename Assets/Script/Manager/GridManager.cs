@@ -74,29 +74,45 @@ public class GridManager : Manager<GridManager>
         }
     }
 
-    public Node GetFreeNode(Team forTeam)
+    // 用BFS寻找距离给定的node最近的free node，同时需要满足对应team
+    public Node GetFreeNode(int rowIndex, int columnIndex, bool forPlayerArea)
     {
-        int startIndex = 0;
-        int currentIndex = startIndex;
-
-        while (graph.Nodes[currentIndex].IsOccupied)
+        Node startNode = GetNodeForRowAndColumn(rowIndex, columnIndex);
+        if (startNode == null)
         {
-            if (startIndex == 0)
+            return null;
+        }
+
+        // BFS setup
+        Queue<Node> queue = new Queue<Node>();
+        HashSet<Node> visited = new HashSet<Node>();
+
+        queue.Enqueue(startNode);
+        visited.Add(startNode);
+
+        while (queue.Count > 0)
+        {
+            Node current = queue.Dequeue();
+
+            if (!current.IsOccupied && current.IsPlayerArea == forPlayerArea)
             {
-                currentIndex++;
-                if (currentIndex == graph.Nodes.Count)
-                    return null;
-            }
-            else
-            {
-                currentIndex--;
-                if (currentIndex == -1)
-                    return null;
+                return current;
             }
 
+            // Add neighbors to the queue
+            foreach (Node neighbor in graph.Neighbors(current))
+            {
+                if (!visited.Contains(neighbor))
+                {
+                    queue.Enqueue(neighbor);
+                    visited.Add(neighbor);
+                }
+            }
         }
-        return graph.Nodes[currentIndex];
+
+        return null; // No free node found that matches the criteria
     }
+
 
     public List<Node> GetPath(Node from, Node to)
     {

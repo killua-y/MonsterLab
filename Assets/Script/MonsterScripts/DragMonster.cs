@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class DragMonster : MonoBehaviour
 {
-    public Vector3 dragOffset = new Vector3(0, 0, 0);
+    private Vector3 dragOffset = new Vector3(0, 0, 0);
 
     private Camera cam;
     private SpriteRenderer spriteRenderer;
@@ -14,7 +14,7 @@ public class DragMonster : MonoBehaviour
     private int oldSortingOrder;
     private Tile previousTile = null;
 
-    public bool IsDragging = false;
+    private bool IsDragging = false;
 
     private void Start()
     {
@@ -24,8 +24,6 @@ public class DragMonster : MonoBehaviour
 
     public void OnStartDrag()
     {
-        //Debug.Log(this.name + " start drag");
-
         oldPosition = this.transform.position;
         oldSortingOrder = spriteRenderer.sortingOrder;
 

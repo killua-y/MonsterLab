@@ -61,14 +61,14 @@ public class BaseEntity : MonoBehaviour
         // 加载弹道prefab
         bullet = this.gameObject.GetComponent<MonsterUI>().bullet;
 
+        // 导入MonsterCard, 并更新UI
+        UpdateMonster(monsterCard);
+
         // 消耗祭品
         if (sacrifices != null)
         {
             Consume(sacrifices);
         }
-
-        // 导入MonsterCard, 并更新UI
-        UpdateMonster(monsterCard);
 
         // 把当前生命值设置为最大
         currentHealth = cardModel.healthPoint;
@@ -78,6 +78,9 @@ public class BaseEntity : MonoBehaviour
 
         // 以后记得改
         range = monsterCard.attackRange;
+
+        // 最后再update一次UI
+        UpdateMonster();
     }
     
     protected void Start()

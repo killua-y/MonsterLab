@@ -9,8 +9,9 @@ public class InGameCardModel : MonoBehaviour
 
     // 局内游戏手牌和卡组
     private List<Card> handList = new List<Card>(); // 局内存储手牌数据的链表
-    private List<Card> drawPiledList = new List<Card>(); // 局内抽堆数据的链表
+    private List<Card> drawPileList = new List<Card>(); // 局内抽堆数据的链表
     private List<Card> discardPileList = new List<Card>(); // 局内弃牌堆数据的链表
+    private List<Card> extraDeckPileList = new List<Card>(); // 局内弃牌堆数据的链表
 
     private int currentAssignedID;
 
@@ -30,12 +31,17 @@ public class InGameCardModel : MonoBehaviour
     public void InitialzeDeck()
     {
         // 将玩家拥有的卡牌导入局内卡牌
-        drawPiledList = FindObjectOfType<CardDataModel>().InitializeDeck(currentAssignedID);
+        drawPileList = FindObjectOfType<CardDataModel>().InitializeDeck(currentAssignedID);
 
-        // 更新currentAssignedID, 英文count从1开始所以需要 -1
-        currentAssignedID += drawPiledList.Count - 1;
+        // 更新currentAssignedID
+        currentAssignedID += drawPileList.Count;
+        Shuffle(drawPileList);
 
-        Shuffle(drawPiledList);
+        // 将玩家拥有的卡牌导入局内卡牌
+        extraDeckPileList = FindObjectOfType<CardDataModel>().InitializeExtraDeck(currentAssignedID);
+
+        // 更新currentAssignedID
+        currentAssignedID += extraDeckPileList.Count;
     }
 
     // 三个helper，用于传出三个卡list信息
@@ -51,7 +57,7 @@ public class InGameCardModel : MonoBehaviour
 
     public List<Card> GetDrawPiledCard()
     {
-        return drawPiledList;
+        return drawPileList;
     }
 
     public List<Card> GetDiscardPiledCard()
@@ -71,11 +77,11 @@ public class InGameCardModel : MonoBehaviour
         Card cardDrawed = null;
 
         // 查看抽牌堆是否有牌
-        if (drawPiledList.Count > 0)
+        if (drawPileList.Count > 0)
         {
             // 移除抽牌堆第一张牌
-            cardDrawed = drawPiledList[0];
-            drawPiledList.RemoveAt(0);
+            cardDrawed = drawPileList[0];
+            drawPileList.RemoveAt(0);
 
             // 加入手牌堆的最后面
             handList.Add(cardDrawed);
@@ -99,7 +105,7 @@ public class InGameCardModel : MonoBehaviour
         Shuffle(discardPileList);
 
         // 将卡牌加入抽牌堆，并清空弃牌堆
-        drawPiledList.AddRange(discardPileList);
+        drawPileList.AddRange(discardPileList);
         discardPileList.Clear();
     }
 

@@ -42,25 +42,25 @@ public class BattleManager : Manager<BattleManager>
 
         // 生成怪兽模型
         // 如果没有模型地址就默认安排一个
-        string path = "";
+        string modelPath = "";
         if (monsterCard.modelLocation != "")
         {
-            path = monsterCard.modelLocation;
+            modelPath = monsterCard.modelLocation;
         }
         else
         {
             // 根据Team安排不同的默认模型, 以后可以删除
             if (team == Team.Player)
             {
-                path = "MonsterPrefab/Slime";
+                modelPath = "MonsterPrefab/Slime";
             }
             else
             {
-                path = "Enemy/Slime/EnemySlime";
+                modelPath = "Enemy/Slime/EnemySlime";
             }
         }
 
-        GameObject monsterPrefab = Resources.Load<GameObject>(path);
+        GameObject monsterPrefab = Resources.Load<GameObject>(modelPath);
 
         // 加载怪兽script
         // 如果没有script地址就默认安排
