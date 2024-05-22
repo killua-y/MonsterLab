@@ -7,6 +7,7 @@ public class PlayerStatesManager : Manager<PlayerStatesManager>
 {
     public TextMeshProUGUI costText;
 
+    public static int playerHealthPoint = 5;
     private int maxCost = 3;
     private int currentCost;
 

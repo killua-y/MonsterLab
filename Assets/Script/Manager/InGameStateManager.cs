@@ -13,6 +13,7 @@ public class InGameStateManager : Manager<InGameStateManager>
     public static bool BattelPhase = false;
     public static GamePhase gamePhase;
     public Transform hand;
+    public Transform extraDeck;
     public Transform drawPileParent;
     public Transform discardPileParent;
 
@@ -51,6 +52,7 @@ public class InGameStateManager : Manager<InGameStateManager>
     public void GameStart()
     {
         CardModel.InitialzeDeck();
+        InitizeExtraDeck();
         Debug.Log("Game Initialzed");
 
         Invoke("PreparePhaseStart", 0);
@@ -148,13 +150,47 @@ public class InGameStateManager : Manager<InGameStateManager>
 
     public void UpdatePileText()
     {
-        DrawPileText.text = CardModel.GetDrawPiledCard().Count + "";
-        DiscardPileText.text = CardModel.GetDiscardPiledCard().Count + "";
+        DrawPileText.text = CardModel.GetDrawPileCard().Count + "";
+        DiscardPileText.text = CardModel.GetDiscardPileCard().Count + "";
     }
 
-    public void ShowDrawPileCard()
+    public void ShowPileCard()
     {
         Debug.Log("Not yet implement");
+    }
+
+    public void InitizeExtraDeck()
+    {
+        List<Card> extraDeckPile = CardModel.GetExtraDeckPileCard();
+        foreach (Card card in extraDeckPile)
+        {
+            GameObject cardObject = cardDisplayView.DisPlaySingleCard(card, extraDeck);
+            cardObject.GetComponent<CardDisplay>().UpdateCardView(card);
+            cardObject.AddComponent<Scaling>();
+            cardObject.AddComponent<ExtraDeckCardOnClick>().SetUp(card);
+        }
+    }
+
+    public void ShowExtraDeck()
+    {
+        if (extraDeck.gameObject.activeSelf)
+        {
+            extraDeck.gameObject.SetActive(false);
+        }
+        else
+        {
+            extraDeck.gameObject.SetActive(true);
+        }
+    }
+
+    // 将一张卡添加到手牌
+    public void AddToHand(Card card)
+    {
+        if (card != null)
+        {
+            CardModel.AddToHand(card);
+            cardDisplayView.DisPlaySingleCard(card, hand);
+        }
     }
 }
 

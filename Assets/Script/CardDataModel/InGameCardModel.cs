@@ -55,14 +55,19 @@ public class InGameCardModel : MonoBehaviour
         return handList;
     }
 
-    public List<Card> GetDrawPiledCard()
+    public List<Card> GetDrawPileCard()
     {
         return drawPileList;
     }
 
-    public List<Card> GetDiscardPiledCard()
+    public List<Card> GetDiscardPileCard()
     {
         return discardPileList;
+    }
+
+    public List<Card> GetExtraDeckPileCard()
+    {
+        return extraDeckPileList;
     }
 
     public void DebugCall()
@@ -165,5 +170,11 @@ public class InGameCardModel : MonoBehaviour
         {
             Debug.Log("Cannot find the card to Exhaust named: " + _card.cardName);
         }
+    }
+
+    // 将一张卡加入手牌
+    public void AddToHand(Card card)
+    {
+        handList.Add(card);
     }
 }
