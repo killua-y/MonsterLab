@@ -71,13 +71,10 @@ public class BattleManager : Manager<BattleManager>
         }
         else
         {
-            scriptPath = "NormalMonsterEntity";
+            scriptPath = "BaseEntity";
         }
 
         GameObject newMonster;
-
-        // 生成怪兽script
-        // 不搞了，全部跟着模型走
 
         // 根据team生成怪物
         if (team == Team.Player)

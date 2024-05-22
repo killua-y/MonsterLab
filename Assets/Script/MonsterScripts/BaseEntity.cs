@@ -88,6 +88,30 @@ public class BaseEntity : MonoBehaviour
         InGameStateManager.Instance.OnBattlePhaseEnd += OnBattlePhaseEnd;
     }
 
+    public virtual void Update()
+    {
+        if (CanBattle)
+        {
+            if (!HasEnemy)
+            {
+                FindTarget();
+            }
+
+            if (IsInRange && !moving)
+            {
+                //In range for attack!
+                if (canAttack)
+                {
+                    Attack();
+                }
+            }
+            else
+            {
+                GetInRange();
+            }
+        }
+    }
+
     // 寻找距离最近的敌人
     protected void FindTarget()
     {
