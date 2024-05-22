@@ -40,15 +40,13 @@ public class CardBehavior : MonoBehaviour
         }
     }
 
-    public virtual void CheckLegality(Tile _tile)
+    public virtual void CheckLegality(Node node)
     {
         // 查看费用是否合理
         if (PlayerStatesManager.Instance.GetRemainingCost() < card.cost)
         {
             return;
         }
-
-        Node node = GridManager.Instance.GetNodeForTile(_tile);
 
         // 查看释放单位是否合理
         if ((card.castType == CastType.AllMonster) || (card.castType == CastType.EnemyMonster) || (card.castType == CastType.PlayerMonster))
@@ -61,9 +59,9 @@ public class CardBehavior : MonoBehaviour
         }
 
         // 合法，释放卡牌效果
-        targetMonster = GridManager.Instance.GetNodeForTile(_tile).currentEntity;
+        targetMonster = node.currentEntity;
         Debug.Log("Cast Card: " + card.cardName);
-        CastCard(_tile);
+        CastCard(node);
 
         // 释放结束
         CastComplete();
@@ -79,14 +77,13 @@ public class CardBehavior : MonoBehaviour
 
     }
 
-    public virtual void CastCard(Tile _tile)
+    public virtual void CastCard(Node node)
     {
         Debug.Log("Please attach correspond card behavior srcipt to this card: " + card.cardName);
     }
 
     public virtual void CastComplete()
     {
-
         // 消耗费用
         if (card is not MonsterCard)
         {

@@ -16,7 +16,7 @@ public class FireBallCardBehavior : CardBehavior
         
     }
 
-    public override void CastCard(Tile _tile)
+    public override void CastCard(Node node)
     {
         targetMonster.TakeDamage(card.effectData);
     }

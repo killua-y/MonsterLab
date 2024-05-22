@@ -21,7 +21,7 @@ public class CardOnPlay : Manager<CardOnPlay>
         Tile tile = GetTileUnder();
         if(tile != null)
         {
-            cardBehavior.CheckLegality(tile);
+            cardBehavior.CheckLegality(GridManager.Instance.GetNodeForTile(tile));
         }
     }
 

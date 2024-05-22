@@ -32,7 +32,7 @@ public class BattleManager : Manager<BattleManager>
         return index;
     }
 
-    public void InstaniateMontser(int index, Team team, MonsterCard monsterCard, List<BaseEntity> sacrifice = null)
+    public void InstaniateMontser(Node node, Team team, MonsterCard monsterCard, List<BaseEntity> sacrifices = null)
     {
         // 必须传入monsterCard
         if (monsterCard is null)
@@ -73,23 +73,27 @@ public class BattleManager : Manager<BattleManager>
             newMonster = Instantiate(monsterPrefab, playerParent);
             BaseEntity newEntity = newMonster.GetComponent<BaseEntity>();
             playerEntities.Add(newEntity);
-            newEntity.Setup(team, GridManager.Instance.GetNodeForIndex(index), monsterCard, sacrifice);
+            newEntity.Setup(team, node, monsterCard, sacrifices);
         }
         else
         {
             newMonster = Instantiate(monsterPrefab, enemyParent);
             BaseEntity newEntity = newMonster.GetComponent<BaseEntity>();
             enemyEntities.Add(newEntity);
-            newEntity.Setup(team, GridManager.Instance.GetNodeForIndex(index), monsterCard, sacrifice);
+            newEntity.Setup(team, node, monsterCard, sacrifices);
         }
-
     }
 
-    public void InstaniateMontser(int row, int column, Team team, MonsterCard monsterCard, List<BaseEntity> sacrifice = null)
+    public void InstaniateMontser(int index, Team team, MonsterCard monsterCard, List<BaseEntity> sacrifices = null)
+    {
+        InstaniateMontser(GridManager.Instance.GetNodeForIndex(index), team, monsterCard, sacrifices);
+    }
+
+    public void InstaniateMontser(int row, int column, Team team, MonsterCard monsterCard, List<BaseEntity> sacrifices = null)
     {
         int index = ConvertRowColumnToIndex(row, column);
 
-        InstaniateMontser(index, team, monsterCard);
+        InstaniateMontser(index, team, monsterCard, sacrifices);
     }
 
     public List<BaseEntity> GetEntitiesAgainst(Team against)

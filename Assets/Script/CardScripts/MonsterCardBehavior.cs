@@ -5,7 +5,8 @@ using static Card;
 
 public class MonsterCardBehavior : CardBehavior
 {
-    private Tile tToSummon;
+    private Node tToSummon;
+    private List<BaseEntity> sacrfices = null;
     // Start is called before the first frame update
     void Start()
     {
@@ -18,10 +19,8 @@ public class MonsterCardBehavior : CardBehavior
         
     }
 
-    public override void CheckLegality(Tile _tile)
+    public override void CheckLegality(Node node)
     {
-        Node node = GridManager.Instance.GetNodeForTile(_tile);
-
         if (card.castType == CastType.PlayerEmptyTile)
         {
             if (node.currentEntity != null)
@@ -34,12 +33,12 @@ public class MonsterCardBehavior : CardBehavior
         if (card.cost != 0)
         {
             StartCoroutine(CardOnPlay.Instance.GetTiles(card.cost, OnTilesCollected));
-            tToSummon = _tile;
+            tToSummon = node;
         }
         else
         {
             // 合法，释放卡牌效果
-            CastCard(_tile);
+            CastCard(node);
 
             CastComplete();
         }
@@ -47,9 +46,10 @@ public class MonsterCardBehavior : CardBehavior
 
     void OnTilesCollected(List<Tile> tiles)
     {
+        sacrfices = new List<BaseEntity>();
         foreach (Tile tile in tiles)
         {
-            GridManager.Instance.GetNodeForTile(tile).currentEntity.GetComponent<BaseEntity>().UnitDie(null, true);
+            sacrfices.Add(GridManager.Instance.GetNodeForTile(tile).currentEntity.GetComponent<BaseEntity>());
         }
 
         // 合法，释放卡牌效果
@@ -58,7 +58,7 @@ public class MonsterCardBehavior : CardBehavior
         CastComplete();
     }
 
-    public override void CastCard(Tile _tile)
+    public override void CastCard(Node node)
     {
         if (card is not MonsterCard)
         {
@@ -68,7 +68,7 @@ public class MonsterCardBehavior : CardBehavior
 
         MonsterCard cardModel = (MonsterCard)card;
 
-        BattleManager.Instance.InstaniateMontser(_tile.transform.GetSiblingIndex(), Team.Player, cardModel);
+        BattleManager.Instance.InstaniateMontser(node, Team.Player, cardModel, sacrfices);
     }
 
     public override void OnPointDown()

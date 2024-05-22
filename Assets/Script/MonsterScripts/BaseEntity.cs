@@ -45,7 +45,7 @@ public class BaseEntity : MonoBehaviour
     protected bool CanBattle = false;
     protected float waitBetweenAttack;
 
-    public virtual void Setup(Team team, Node node, MonsterCard monsterCard, List<BaseEntity> sacrifice = null)
+    public virtual void Setup(Team team, Node node, MonsterCard monsterCard, List<BaseEntity> sacrifices = null)
     {
         myTeam = team;
         if (myTeam == Team.Enemy)
@@ -55,13 +55,19 @@ public class BaseEntity : MonoBehaviour
             fillImage.color = Color.red;
         }
 
-        // 导入MonsterCard
-        UpdateMonster(monsterCard);
-
         this.currentNode = node;
         transform.position = node.worldPosition;
         node.SetOccupied(true);
         node.currentEntity = this;
+
+        // 消耗祭品
+        if (sacrifices != null)
+        {
+            Consume(sacrifices);
+        }
+
+        // 导入MonsterCard
+        UpdateMonster(monsterCard);
 
         // 战吼
         UponSummon();
@@ -345,6 +351,14 @@ public class BaseEntity : MonoBehaviour
         canAttack = true;
     }
 
+    protected virtual void Consume(List<BaseEntity> sacrfices)
+    {
+        foreach(BaseEntity sacrfice in sacrfices)
+        {
+            sacrfice.UnitDie(null, true);
+        }
+    }
+
     public virtual void UponSummon()
     {
 
@@ -353,5 +367,10 @@ public class BaseEntity : MonoBehaviour
     public virtual void UponDeath()
     {
 
+    }
+
+    public virtual void ReceiveWeapon(CardBehavior cardBehavior)
+    {
+        cardBehavior.CastCard(this.currentNode);
     }
 }

@@ -227,7 +227,6 @@ public class CardDataModel : MonoBehaviour
                 int id = int.Parse(rowArray[1]);
                 int num = int.Parse(rowArray[2]);
                 playerCardData[id] = num;
-                Debug.Log("CardID: " + id + "Add");
             }
             else if (rowArray[0] == "DNA")
             {
