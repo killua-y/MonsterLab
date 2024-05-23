@@ -15,7 +15,9 @@ public class InGameStateManager : Manager<InGameStateManager>
     public Transform hand;
     public Transform extraDeck;
     public Transform drawPileParent;
+    public Transform drawPileParentContent;
     public Transform discardPileParent;
+    public Transform discardPileParentContent;
 
     public Action OnGameStart;
     public Action OnPreparePhaseStart;
@@ -199,17 +201,24 @@ public class InGameStateManager : Manager<InGameStateManager>
     {
         if (drawPileParent.gameObject.activeSelf)
         {
+            foreach (Transform child in drawPileParentContent)
+            {
+                Destroy(child.gameObject);
+            }
+
+
             drawPileParent.gameObject.SetActive(false);
         }
         else
         {
             List<Card> drawPileCard = CardModel.GetDrawPileCard();
+            drawPileCard.Sort((card1, card2) => card1.id.CompareTo(card2.id));
+
             foreach (Card card in drawPileCard)
             {
-                GameObject cardObject = cardDisplayView.DisPlaySingleCard(card, drawPileParent);
+                GameObject cardObject = cardDisplayView.DisPlaySingleCard(card, drawPileParentContent);
                 cardObject.GetComponent<CardDisplay>().UpdateCardView(card);
                 cardObject.AddComponent<Scaling>();
-                cardObject.AddComponent<ExtraDeckCardOnClick>().SetUp(card);
             }
             drawPileParent.gameObject.SetActive(true);
         }
@@ -219,17 +228,23 @@ public class InGameStateManager : Manager<InGameStateManager>
     {
         if (discardPileParent.gameObject.activeSelf)
         {
+            foreach (Transform child in discardPileParentContent)
+            {
+                Destroy(child.gameObject);
+            }
+
             discardPileParent.gameObject.SetActive(false);
         }
         else
         {
             List<Card> discardPileCard = CardModel.GetDiscardPileCard();
+            discardPileCard.Sort((card1, card2) => card1.id.CompareTo(card2.id));
+
             foreach (Card card in discardPileCard)
             {
-                GameObject cardObject = cardDisplayView.DisPlaySingleCard(card, discardPileParent);
+                GameObject cardObject = cardDisplayView.DisPlaySingleCard(card, discardPileParentContent);
                 cardObject.GetComponent<CardDisplay>().UpdateCardView(card);
                 cardObject.AddComponent<Scaling>();
-                cardObject.AddComponent<ExtraDeckCardOnClick>().SetUp(card);
             }
             discardPileParent.gameObject.SetActive(true);
         }

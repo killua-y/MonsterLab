@@ -57,24 +57,28 @@ public class InGameCardModel : MonoBehaviour
 
     public List<Card> GetDrawPileCard()
     {
-        return drawPileList;
+        List<Card> result = new List<Card>();
+        foreach (Card card in drawPileList)
+        {
+            result.Add(card);
+        }
+        return result;
     }
 
     public List<Card> GetDiscardPileCard()
     {
-        return discardPileList;
+        List<Card> result = new List<Card>();
+        foreach (Card card in discardPileList)
+        {
+            result.Add(card);
+        }
+        return result;
     }
 
     public List<Card> GetExtraDeckPileCard()
     {
         return extraDeckPileList;
     }
-
-    public void DebugCall()
-    {
-
-    }
-
 
     // 抽牌
     public Card DrawCard()
