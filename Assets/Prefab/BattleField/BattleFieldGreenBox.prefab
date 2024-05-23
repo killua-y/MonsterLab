@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 7621347303202980716}
   - component: {fileID: 7621347303202980717}
   - component: {fileID: -8829218460656231587}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: BattleFieldGreenBox
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -138,7 +138,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7621347303292306250}
   - component: {fileID: 7621347303292306251}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: HightLight
   m_TagString: Untagged
   m_Icon: {fileID: 0}

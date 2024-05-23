@@ -6,11 +6,14 @@ using static Card;
 
 public class CardDataModel : MonoBehaviour
 {
+    public static CardDataModel Instance;
+
     public TextAsset textCardData; // 卡牌数据txt文件
-    public TextAsset textPlayerData; // 玩家卡牌数据txt文件
+    // 玩家的卡牌数据存储文件
+    private string textPlayerDataPath = "/Datas/playerdata.csv";
     public TextAsset warriorCard; // 战士的默认卡组
 
-    public static bool NewGame;
+    public static bool NewGame = true;
 
     private List<Card> cardList = new List<Card>(); // 存储卡牌数据的链表
     private int[] playerExtraDeckData; // 储存玩家额外卡组数据的array
@@ -28,16 +31,16 @@ public class CardDataModel : MonoBehaviour
         LordCardList();
         LordEnemyCardList();
 
-        //if (!NewGame)
-        //{
-        //    File.WriteAllLines(Application.dataPath + "/Datas/playerdata.csv", warriorCard.text.Split('\n'));
-        //    Debug.Log("reset player deck");
-        //    NewGame = true;
-        //}
-        //else
-        //{
-        //    Debug.Log("avoid reset deck");
-        //}
+        if (NewGame)
+        {
+            File.WriteAllLines(Application.dataPath + textPlayerDataPath, warriorCard.text.Split('\n'));
+            Debug.Log("reset player deck");
+            NewGame = false;
+        }
+        else
+        {
+            Debug.Log("avoid reset deck");
+        }
 
         LoadPlayerData();
     }
@@ -73,16 +76,16 @@ public class CardDataModel : MonoBehaviour
                 currentIndex += 1;
                 int uniqueID = 0;
                 string cardName = rowArray[1];
-                CardColor color = EnumConverter.ConvertToEnum<CardColor>(rowArray[2]);
-                CardRarity cardRarity = EnumConverter.ConvertToEnum<CardRarity>(rowArray[3]);
+                CardColor color = HelperFunction.ConvertToEnum<CardColor>(rowArray[2]);
+                CardRarity cardRarity = HelperFunction.ConvertToEnum<CardRarity>(rowArray[3]);
                 int cost = int.Parse(rowArray[4]);
-                CastType castType = EnumConverter.ConvertToEnum<CastType>(rowArray[5]);
+                CastType castType = HelperFunction.ConvertToEnum<CastType>(rowArray[5]);
                 int effectData = int.Parse(rowArray[6]);
                 string effectText = rowArray[7];
                 string scriptLocation = rowArray[8];
                 string imageLocation = rowArray[9];
 
-                MonsterType type = EnumConverter.ConvertToEnum<MonsterType>(rowArray[10]);
+                MonsterType type = HelperFunction.ConvertToEnum<MonsterType>(rowArray[10]);
                 int attackPower = int.Parse(rowArray[11]);
                 int healthPoint = int.Parse(rowArray[12]);
                 float attackRange = float.Parse(rowArray[13]);
@@ -102,10 +105,10 @@ public class CardDataModel : MonoBehaviour
                 currentIndex += 1;
                 int uniqueID = 0;
                 string cardName = rowArray[1];
-                CardColor color = EnumConverter.ConvertToEnum<CardColor>(rowArray[2]);
-                CardRarity cardRarity = EnumConverter.ConvertToEnum<CardRarity>(rowArray[3]);
+                CardColor color = HelperFunction.ConvertToEnum<CardColor>(rowArray[2]);
+                CardRarity cardRarity = HelperFunction.ConvertToEnum<CardRarity>(rowArray[3]);
                 int cost = int.Parse(rowArray[4]);
-                CastType castType = EnumConverter.ConvertToEnum<CastType>(rowArray[5]);
+                CastType castType = HelperFunction.ConvertToEnum<CastType>(rowArray[5]);
                 int effectData = int.Parse(rowArray[6]);
                 string effectText = rowArray[7];
                 string scriptLocation = rowArray[8];
@@ -122,10 +125,10 @@ public class CardDataModel : MonoBehaviour
                 currentIndex += 1;
                 int uniqueID = 0;
                 string cardName = rowArray[1];
-                CardColor color = EnumConverter.ConvertToEnum<CardColor>(rowArray[2]);
-                CardRarity cardRarity = EnumConverter.ConvertToEnum<CardRarity>(rowArray[3]);
+                CardColor color = HelperFunction.ConvertToEnum<CardColor>(rowArray[2]);
+                CardRarity cardRarity = HelperFunction.ConvertToEnum<CardRarity>(rowArray[3]);
                 int cost = int.Parse(rowArray[4]);
-                CastType castType = EnumConverter.ConvertToEnum<CastType>(rowArray[5]);
+                CastType castType = HelperFunction.ConvertToEnum<CastType>(rowArray[5]);
                 int effectData = int.Parse(rowArray[6]);
                 string effectText = rowArray[7];
                 string scriptLocation = rowArray[8];
@@ -159,16 +162,16 @@ public class CardDataModel : MonoBehaviour
                 currentIndex += 1;
                 int uniqueID = 0;
                 string cardName = rowArray[1];
-                CardColor color = EnumConverter.ConvertToEnum<CardColor>(rowArray[2]);
-                CardRarity cardRarity = EnumConverter.ConvertToEnum<CardRarity>(rowArray[3]);
+                CardColor color = HelperFunction.ConvertToEnum<CardColor>(rowArray[2]);
+                CardRarity cardRarity = HelperFunction.ConvertToEnum<CardRarity>(rowArray[3]);
                 int cost = int.Parse(rowArray[4]);
-                CastType castType = EnumConverter.ConvertToEnum<CastType>(rowArray[5]);
+                CastType castType = HelperFunction.ConvertToEnum<CastType>(rowArray[5]);
                 int effectData = int.Parse(rowArray[6]);
                 string effectText = rowArray[7];
                 string cardLocation = rowArray[8];
                 string imageLocation = rowArray[9];
 
-                MonsterType type = EnumConverter.ConvertToEnum<MonsterType>(rowArray[10]);
+                MonsterType type = HelperFunction.ConvertToEnum<MonsterType>(rowArray[10]);
                 int attackPower = int.Parse(rowArray[11]);
                 int healthPoint = int.Parse(rowArray[12]);
                 float attackRange = float.Parse(rowArray[13]);
@@ -209,11 +212,13 @@ public class CardDataModel : MonoBehaviour
     // 加载玩家卡组数据
     public void LoadPlayerData()
     {
+        string path = Application.dataPath + textPlayerDataPath;
+
         playerCardData = new int[cardList.Count];
         playerDNAData = new int[cardList.Count];
         playerExtraDeckData = new int[cardList.Count];
 
-        string[] dataArray = textPlayerData.text.Split('\n');
+        string[] dataArray = File.ReadAllLines(path);
 
         foreach (var row in dataArray)
         {
@@ -231,6 +236,7 @@ public class CardDataModel : MonoBehaviour
                 int id = int.Parse(rowArray[1]);
                 int num = int.Parse(rowArray[2]);
                 playerCardData[id] = num;
+                //Debug.Log("Load card with id : " + id);
             }
             else if (rowArray[0] == "DNA")
             {
@@ -246,7 +252,7 @@ public class CardDataModel : MonoBehaviour
             }
             else
             {
-                Debug.Log("player cvs data error");
+                Debug.Log("player cvs data error, the first string is : " + rowArray[0]);
             }
         }
         //updateText();
@@ -256,7 +262,7 @@ public class CardDataModel : MonoBehaviour
     public void SavePlayerData()
     {
         List<string> datas = new List<string>();
-        string path = Application.dataPath + "/Datas/playerdata.csv";
+        string path = Application.dataPath + textPlayerDataPath;
         datas.Add("coins," + totalCoins.ToString());
         for (int i = 0; i < playerCardData.Length; i++)
         {
@@ -270,6 +276,13 @@ public class CardDataModel : MonoBehaviour
             if (playerDNAData[i] != 0)
             {
                 datas.Add("NDA," + i.ToString() + "," + playerCardData[i].ToString());
+            }
+        }
+        for (int i = 0; i < playerExtraDeckData.Length; i++)
+        {
+            if (playerExtraDeckData[i] != 0)
+            {
+                datas.Add("extraDeck," + i.ToString() + "," + playerCardData[i].ToString());
             }
         }
 
@@ -347,5 +360,23 @@ public class CardDataModel : MonoBehaviour
         //}
         //return result;
         return cardList;
+    }
+
+    public void ChangeExtraDeck(Card card, bool toExtraDeck)
+    {
+        int cardIndex = card.id;
+
+        // 如果bool为true说明是从卡组向extra deck添加卡片
+        if (toExtraDeck)
+        {
+            playerCardData[cardIndex] -= 1;
+            playerExtraDeckData[cardIndex] += 1;
+        }
+        // 反之为从extra deck向卡组添加卡片
+        else
+        {
+            playerCardData[cardIndex] += 1;
+            playerExtraDeckData[cardIndex] -= 1;
+        }
     }
 }

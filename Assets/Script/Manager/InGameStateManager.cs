@@ -17,6 +17,7 @@ public class InGameStateManager : Manager<InGameStateManager>
     public Transform drawPileParent;
     public Transform discardPileParent;
 
+    public Action OnGameStart;
     public Action OnPreparePhaseStart;
     public Action OnPreparePhaseEnd;
     public Action OnBattlePhaseStart;
@@ -55,6 +56,7 @@ public class InGameStateManager : Manager<InGameStateManager>
         InitizeExtraDeck();
         Debug.Log("Game Initialzed");
 
+        OnGameStart?.Invoke(); // Safe way to invoke the delegate
         Invoke("PreparePhaseStart", 0);
     }
 
@@ -190,6 +192,46 @@ public class InGameStateManager : Manager<InGameStateManager>
         {
             CardModel.AddToHand(card);
             cardDisplayView.DisPlaySingleCard(card, hand);
+        }
+    }
+
+    public void ShowDarwPile()
+    {
+        if (drawPileParent.gameObject.activeSelf)
+        {
+            drawPileParent.gameObject.SetActive(false);
+        }
+        else
+        {
+            List<Card> drawPileCard = CardModel.GetDrawPileCard();
+            foreach (Card card in drawPileCard)
+            {
+                GameObject cardObject = cardDisplayView.DisPlaySingleCard(card, drawPileParent);
+                cardObject.GetComponent<CardDisplay>().UpdateCardView(card);
+                cardObject.AddComponent<Scaling>();
+                cardObject.AddComponent<ExtraDeckCardOnClick>().SetUp(card);
+            }
+            drawPileParent.gameObject.SetActive(true);
+        }
+    }
+
+    public void ShowDiscardPile()
+    {
+        if (discardPileParent.gameObject.activeSelf)
+        {
+            discardPileParent.gameObject.SetActive(false);
+        }
+        else
+        {
+            List<Card> discardPileCard = CardModel.GetDiscardPileCard();
+            foreach (Card card in discardPileCard)
+            {
+                GameObject cardObject = cardDisplayView.DisPlaySingleCard(card, discardPileParent);
+                cardObject.GetComponent<CardDisplay>().UpdateCardView(card);
+                cardObject.AddComponent<Scaling>();
+                cardObject.AddComponent<ExtraDeckCardOnClick>().SetUp(card);
+            }
+            discardPileParent.gameObject.SetActive(true);
         }
     }
 }

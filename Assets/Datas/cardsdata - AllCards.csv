@@ -1,14 +1,14 @@
 #,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17
 #,卡名,职业颜色,稀有度,费用,释放类型,数值,技能描述,script位置,图片位置,种族,攻击力,生命值,攻击距离,蓝量,模型位置,skill script位置,index
 m,Arms Master,red,legend,2,PlayerEmptyTile,0,Item card equiped to this monster will be cast again.,ArmsMasterEntity,,None,3,80,1.5,0,,,0
-m,Rank Devourer,red,legend,3,PlayerEmptyTile,0,Upon Summon: its attack power is doubled for each 2-star or higher monster used as a sacrifice.,RankDevourerEntity,,None,50,400,1.5,0,,,1
-m,Husky,red,legend,0,PlayerEmptyTile,0,When summoned. Repeat all Summon effects triggered so far this battle.,,,Wolf,5,40,3,0,,,2
+m,Rank Devourer,red,legend,3,PlayerEmptyTile,0,Its attack power is doubled for each 2-star or higher monster used as a sacrifice.,RankDevourerEntity,,None,50,400,1.5,0,,,1
+m,Husky,red,legend,0,PlayerEmptyTile,0,When summoned. Repeat all Summon effects triggered so far this battle.,HuskyEntity,,Wolf,5,40,3,0,,,2
 m,Shadow Wolf,red,rare,0,PlayerEmptyTile,0,Upon Summon: Create a copy of itself,ShadowWolfEntity,,Wolf,5,100,3,0,,,3
-m,Fire Wolf,red,normal,0,PlayerEmptyTile,10,Upon Summon: deal 10 damage to all enemy monster,,,Wolf,4,160,1.5,0,,,4
-m,Baby Wolf,red,normal,0,PlayerEmptyTile,0,Upon Summon: Draw 3 card,,,Wolf,3,50,5,0,,,5
-m,Feral Wolf,red,normal,0,PlayerEmptyTile,0,Upon Summon: Gain 2 enegy,,,Wolf,15,200,1.5,0,,,6
-m,Gray Wolf,red,normal,0,PlayerEmptyTile,10,Upon Summon: Increase the attack power of the monster right of it by 10,,,Wolf,3,50,1.5,0,,,7
-m,Black Wolf,red,normal,0,PlayerEmptyTile,80,Upon Summon: Increase the health point of the monster right of it by 80,,,Wolf,4,60,1.5,0,,,8
+m,Fire Wolf,red,normal,0,PlayerEmptyTile,10,Upon Summon: deal 10 damage to all enemy monster,FireWolfEntity,,Wolf,4,160,1.5,0,,,4
+m,Baby Wolf,red,normal,0,PlayerEmptyTile,3,Upon Summon: Draw 3 card,BabyWolfEntity,,Wolf,3,50,5,0,,,5
+m,Feral Wolf,red,normal,0,PlayerEmptyTile,2,Upon Summon: Gain 2 enegy,,,Wolf,15,200,1.5,0,,,6
+m,Gray Wolf,red,normal,0,PlayerEmptyTile,10,Upon Summon: Increase the attack power of the monster to its right by 10.,,,Wolf,3,50,1.5,0,,,7
+m,Black Wolf,red,normal,0,PlayerEmptyTile,80,Upon Summon: Increase the health point of the monster to its right of by 80,,,Wolf,4,60,1.5,0,,,8
 m,Silvermane,red,rare,1,PlayerEmptyTile,200,Mana 30: Next attack deal 200% attack damage.,,,Wolf,15,100,3,30,,,9
 m,Howler,red,normal,0,PlayerEmptyTile,0,Normal Monster,,,Wolf,5,40,1.5,0,,,10
 m,Frostfang,red,rare,3,PlayerEmptyTile,300,Mana 60: Deal 300% attack damage to all enemy monster,,,Wolf,20,400,1.5,50,,,11

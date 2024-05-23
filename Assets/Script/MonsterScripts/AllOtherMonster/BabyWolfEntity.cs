@@ -7,9 +7,10 @@ public class BabyWolfEntity : BaseEntity
     // Upon Summon: Draw n card
     public override void UponSummon()
     {
-        for (int i = 0; i < cardModel.effectData; i++)
-        {
-            InGameStateManager.Instance.DrawOneCard();
-        }
+        //for (int i = 0; i < cardModel.effectData; i++)
+        //{
+        //    InGameStateManager.Instance.DrawOneCard();
+        //}
+        UponSummonFunction.BabyWolfUponSummon(this);
     }
 }

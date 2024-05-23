@@ -42,7 +42,7 @@ public class DragMonster : MonoBehaviour
         newPosition.z = 0;
         this.transform.position = newPosition;
 
-        Tile tileUnder = GetTileUnder();
+        Tile tileUnder = HelperFunction.GetTileUnder();
         if (tileUnder != null)
         {
             tileUnder.SetHighlight(true, !GridManager.Instance.GetNodeForTile(tileUnder).IsOccupied);
@@ -84,7 +84,7 @@ public class DragMonster : MonoBehaviour
     private bool TryRelease()
     {
         //Released over something!
-        Tile t = GetTileUnder();
+        Tile t = HelperFunction.GetTileUnder();
         if (t != null)
         {
             //It's a tile!
@@ -106,20 +106,5 @@ public class DragMonster : MonoBehaviour
 
 
         return false;
-    }
-
-    public Tile GetTileUnder()
-    {
-        RaycastHit2D hit =
-            Physics2D.Raycast(cam.ScreenToWorldPoint(Input.mousePosition), Vector2.zero, 100);
-
-        if (hit.collider != null)
-        {
-            //Released over something!
-            Tile t = hit.collider.GetComponent<Tile>();
-            return t;
-        }
-
-        return null;
     }
 }
