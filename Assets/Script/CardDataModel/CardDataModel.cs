@@ -7,7 +7,6 @@ using static Card;
 public class CardDataModel : MonoBehaviour
 {
     public static CardDataModel Instance;
-
     public TextAsset textCardData; // 卡牌数据txt文件
     // 玩家的卡牌数据存储文件
     private string textPlayerDataPath = "/Datas/playerdata.csv";
@@ -28,6 +27,8 @@ public class CardDataModel : MonoBehaviour
     // Start is called before the first frame update
     void Awake()
     {
+        Instance = this;
+
         LordCardList();
         LordEnemyCardList();
 
@@ -249,6 +250,7 @@ public class CardDataModel : MonoBehaviour
                 int id = int.Parse(rowArray[1]);
                 int num = int.Parse(rowArray[2]);
                 playerExtraDeckData[id] = num;
+                //Debug.Log("Load extra deck card with id : " + id);
             }
             else
             {
@@ -335,6 +337,7 @@ public class CardDataModel : MonoBehaviour
                         newCard.uniqueID = currentAssignedID;
                         currentAssignedID += 1;
                         extraDeckCardList.Add(newCard);
+                        //Debug.Log("generate extra deck card : " + newCard.id);
                     }
                 }
             }
@@ -378,5 +381,29 @@ public class CardDataModel : MonoBehaviour
             playerCardData[cardIndex] += 1;
             playerExtraDeckData[cardIndex] -= 1;
         }
+    }
+
+    public void ChangeDeckFromMainToExtra(int cardIndex, bool fromMainToExtra)
+    {
+        if (fromMainToExtra)
+        {
+            playerCardData[cardIndex] -= 1;
+            playerExtraDeckData[cardIndex] += 1;
+            if (playerCardData[cardIndex] < 0)
+            {
+                Debug.Log("Bad bug");
+            }
+        }
+        else
+        {
+            playerCardData[cardIndex] += 1;
+            playerExtraDeckData[cardIndex] -= 1;
+            if (playerExtraDeckData[cardIndex] < 0)
+            {
+                Debug.Log("Bad bug");
+            }
+        }
+
+        SavePlayerData();
     }
 }

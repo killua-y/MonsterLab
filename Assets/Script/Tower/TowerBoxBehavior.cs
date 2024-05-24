@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class TowerBoxBehavior : MonoBehaviour
 {
@@ -49,7 +48,7 @@ public class TowerBoxBehavior : MonoBehaviour
             player.transform.position = this.transform.position;
             player.row = row;
             player.column = column;
-            ActivateAct(boxType);
+            ActivateAct();
         }
     }
 
@@ -70,37 +69,8 @@ public class TowerBoxBehavior : MonoBehaviour
         }
     }
 
-    private void ActivateAct(BoxType _boxType)
+    private void ActivateAct()
     {
-        switch (_boxType)
-        {
-            case BoxType.NormalFight:
-                SceneManager.LoadScene("BattleScene");
-                break;
-
-            case BoxType.EliteFight:
-                SceneManager.LoadScene("BattleScene");
-                break;
-
-            case BoxType.BossFight:
-                SceneManager.LoadScene("BattleScene");
-                break;
-
-            case BoxType.Events:
-                RewardManager.Instance.GenerateReward();
-                break;
-
-            case BoxType.Merchant:
-                RewardManager.Instance.GenerateReward();
-                break;
-
-            case BoxType.Treasure:
-                RewardManager.Instance.GenerateReward();
-                break;
-
-            default:
-                break;
-        }
-            
+        ActsManager.Instance.ActivateAct(boxType);
     }
 }
