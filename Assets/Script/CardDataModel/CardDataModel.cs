@@ -29,8 +29,8 @@ public class CardDataModel : MonoBehaviour
     {
         Instance = this;
 
-        LordCardList();
-        LordEnemyCardList();
+        LoadCardList();
+        LoadEnemyCardList();
 
         if (NewGame)
         {
@@ -40,7 +40,7 @@ public class CardDataModel : MonoBehaviour
         }
         else
         {
-            Debug.Log("avoid reset deck");
+            //Debug.Log("avoid reset deck");
         }
 
         LoadPlayerData();
@@ -58,7 +58,7 @@ public class CardDataModel : MonoBehaviour
     }
 
     // 加载所有卡牌数据
-    public void LordCardList()
+    public void LoadCardList()
     {
         int currentIndex = 0;
 
@@ -143,7 +143,7 @@ public class CardDataModel : MonoBehaviour
         }
     }
 
-    public void LordEnemyCardList()
+    public void LoadEnemyCardList()
     {
         int currentIndex = 0;
 
@@ -250,14 +250,15 @@ public class CardDataModel : MonoBehaviour
                 int id = int.Parse(rowArray[1]);
                 int num = int.Parse(rowArray[2]);
                 playerExtraDeckData[id] = num;
-                //Debug.Log("Load extra deck card with id : " + id);
+                //Debug.Log("Load extra deck card with id : " + id + " num: " + num);
             }
             else
             {
                 Debug.Log("player cvs data error, the first string is : " + rowArray[0]);
             }
         }
-        //updateText();
+        //Debug.Log("Player data loaded. Path: " + path);
+        //Debug.Log("load data: " + string.Join("\n", dataArray));
     }
 
     // 保存玩家钱/卡牌/DNA数据
@@ -266,6 +267,7 @@ public class CardDataModel : MonoBehaviour
         List<string> datas = new List<string>();
         string path = Application.dataPath + textPlayerDataPath;
         datas.Add("coins," + totalCoins.ToString());
+
         for (int i = 0; i < playerCardData.Length; i++)
         {
             if (playerCardData[i] != 0)
@@ -273,22 +275,26 @@ public class CardDataModel : MonoBehaviour
                 datas.Add("card," + i.ToString() + "," + playerCardData[i].ToString());
             }
         }
+
         for (int i = 0; i < playerDNAData.Length; i++)
         {
             if (playerDNAData[i] != 0)
             {
-                datas.Add("NDA," + i.ToString() + "," + playerCardData[i].ToString());
+                datas.Add("NDA," + i.ToString() + "," + playerDNAData[i].ToString());
             }
         }
+
         for (int i = 0; i < playerExtraDeckData.Length; i++)
         {
             if (playerExtraDeckData[i] != 0)
             {
-                datas.Add("extraDeck," + i.ToString() + "," + playerCardData[i].ToString());
+                datas.Add("extraDeck," + i.ToString() + "," + playerExtraDeckData[i].ToString());
             }
         }
 
         File.WriteAllLines(path, datas);
+        //Debug.Log("Player data saved. Path: " + path);
+        //Debug.Log("Saved data: " + string.Join("\n", datas));
     }
 
     // 加载局内卡组，赋予uniqueID
@@ -396,8 +402,8 @@ public class CardDataModel : MonoBehaviour
         }
         else
         {
-            playerCardData[cardIndex] += 1;
             playerExtraDeckData[cardIndex] -= 1;
+            playerCardData[cardIndex] += 1;
             if (playerExtraDeckData[cardIndex] < 0)
             {
                 Debug.Log("Bad bug");

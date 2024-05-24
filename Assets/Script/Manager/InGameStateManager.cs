@@ -158,11 +158,6 @@ public class InGameStateManager : Manager<InGameStateManager>
         DiscardPileText.text = CardModel.GetDiscardPileCard().Count + "";
     }
 
-    public void ShowPileCard()
-    {
-        Debug.Log("Not yet implement");
-    }
-
     public void InitizeExtraDeck()
     {
         List<Card> extraDeckPile = CardModel.GetExtraDeckPileCard();
