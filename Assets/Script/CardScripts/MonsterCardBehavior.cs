@@ -23,7 +23,7 @@ public class MonsterCardBehavior : CardBehavior
     {
         if (card.castType == CastType.PlayerEmptyTile)
         {
-            if (node.currentEntity != null)
+            if ((node.IsOccupied) || (!node.IsPlayerArea))
             {
                 return;
             }

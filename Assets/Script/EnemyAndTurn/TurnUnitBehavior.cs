@@ -11,6 +11,7 @@ public class TurnUnitBehavior : MonoBehaviour
     public GameObject futureTurn;
     public GameObject SummonTurn;
 
+    public TurnType turnType;
     public int index;
     // Start is called before the first frame update
     void Start()
@@ -55,6 +56,13 @@ public class TurnUnitBehavior : MonoBehaviour
 
     public void SetToSummonMonster()
     {
+        turnType = TurnType.EnemySummon;
         SummonTurn.SetActive(true);
     }
+}
+
+public enum TurnType
+{
+    EnemySummon,
+    Rest
 }

@@ -405,8 +405,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 0, y: 7.3200684}
-  m_SizeDelta: {x: 1980, y: 100}
+  m_AnchoredPosition: {x: 0, y: -35}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &80433194
 MonoBehaviour:
@@ -417,23 +417,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 80433192}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 30649d3a9faa99c48a7b1166b86bf2a0, type: 3}
+  m_Script: {fileID: 11500000, guid: a7cd60a404aa3489d845a37e6ae57d79, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Padding:
-    m_Left: 0
-    m_Right: 0
-    m_Top: 0
-    m_Bottom: 0
-  m_ChildAlignment: 4
-  m_Spacing: 70
-  m_ChildForceExpandWidth: 0
-  m_ChildForceExpandHeight: 0
-  m_ChildControlWidth: 0
-  m_ChildControlHeight: 0
-  m_ChildScaleWidth: 0
-  m_ChildScaleHeight: 0
-  m_ReverseArrangement: 0
+  spacing: 70
 --- !u!4 &145571902 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7621347303202980719, guid: f4d7c127d6da944389899bc42df4ac4d, type: 3}
@@ -5052,9 +5039,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3fef57e195c9b44f5b914597244ea1d8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  turnParent: {fileID: 80433193}
+  turnParent: {fileID: 80433192}
   singleTurnPrefab: {fileID: 337650433433174160, guid: 0cec3ca1b761140c4a4bb6060bb62780, type: 3}
   turnText: {fileID: 1197962006}
+  isFinalWaive: 0
 --- !u!1001 &1570283896
 PrefabInstance:
   m_ObjectHideFlags: 0

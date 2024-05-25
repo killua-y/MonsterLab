@@ -44,6 +44,20 @@ public class Graph
         return result;
     }
 
+    public List<Node> NodeNear(Node from)
+    {
+        List<Node> result = new List<Node>();
+
+        foreach (Edge e in edges)
+        {
+            if (e.from == from)
+            {
+                result.Add(e.to);
+            }
+        }
+        return result;
+    }
+
     public void AddNode(Vector3 worldPosition)
     {
         nodes.Add(new Node(nodes.Count, worldPosition));

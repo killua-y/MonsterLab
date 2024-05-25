@@ -100,7 +100,7 @@ public class GridManager : Manager<GridManager>
             }
 
             // Add neighbors to the queue
-            foreach (Node neighbor in graph.Neighbors(current))
+            foreach (Node neighbor in graph.NodeNear(current))
             {
                 if (!visited.Contains(neighbor))
                 {

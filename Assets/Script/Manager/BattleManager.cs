@@ -18,6 +18,7 @@ public class BattleManager : Manager<BattleManager>
     void Start()
     {
         base.Awake();
+        InGameStateManager.Instance.OnBattlePhaseStart += OnBattleTurnStart;
     }
 
     // Update is called once per frame
@@ -164,6 +165,18 @@ public class BattleManager : Manager<BattleManager>
     public void UpdateMonsterSpaceText()
     {
         monsterSpaceText.text = playerEntities.Count + "/5";
+    }
+
+    public void OnBattleTurnStart()
+    {
+        if (playerEntities.Count == 0)
+        {
+            Invoke("NewTurn", 2f);
+        }
+        else if (enemyEntities.Count == 0)
+        {
+            Invoke("NewTurn", 2f);
+        }
     }
 }
 

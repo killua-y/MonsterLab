@@ -7,9 +7,13 @@ public class EnemyBehavior : MonoBehaviour
 {
     private List<MonsterCard> monsterList = new List<MonsterCard>();
 
-    // 该敌人拥有的怪兽
     private int MaxTurn = 4;
+
+    // 怪兽波次记录
+    private int index = 0;
     private List<int> MonsterSummonTurn = new List<int>();
+
+    // 该敌人拥有的怪兽
     private MonsterCard normal;
     private MonsterCard ranged;
     private MonsterCard tank;
@@ -33,8 +37,8 @@ public class EnemyBehavior : MonoBehaviour
         tank = TurnManager.Instance.monsterList[2];
         highAttack = TurnManager.Instance.monsterList[3];
 
+        // 该在哪几个回合召唤怪兽
         MonsterSummonTurn.Add(0);
-        MonsterSummonTurn.Add(1);
         MonsterSummonTurn.Add(3);
     }
 
@@ -49,9 +53,9 @@ public class EnemyBehavior : MonoBehaviour
     }
 
     // 根据当前回合召唤怪兽
-    public virtual void SummonEnemyThisTurn(int currentTurn)
+    public virtual void SummonEnemy()
     {
-        if (currentTurn == 0)
+        if (index == 0)
         {
             BattleManager.Instance.InstaniateMontser(0, 5, Team.Enemy, normal);
             BattleManager.Instance.InstaniateMontser(1, 5, Team.Enemy, normal);
@@ -60,13 +64,14 @@ public class EnemyBehavior : MonoBehaviour
             BattleManager.Instance.InstaniateMontser(2, 4, Team.Enemy, tank);
             BattleManager.Instance.InstaniateMontser(4, 4, Team.Enemy, highAttack);
         }
-        else if (currentTurn == 1)
-        {
-            BattleManager.Instance.InstaniateMontser(2, 7, Team.Enemy, ranged);
-        }
-        else if (currentTurn == 3)
+        else if (index == 1)
         {
             BattleManager.Instance.InstaniateMontser(0, 7, Team.Enemy, ranged);
+
+            // 最后一波
+            TurnManager.Instance.isFinalWaive = true;
         }
+
+        index += 1;
     }
 }
