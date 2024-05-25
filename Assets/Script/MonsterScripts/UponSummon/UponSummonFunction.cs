@@ -112,4 +112,10 @@ public class UponSummonFunction : MonoBehaviour
             AllEffectData.Add(entity.cardModel.effectData);
         }
     }
+
+    // 获得能量
+    public static void GainEnergyUponSummon(BaseEntity entity)
+    {
+
+    }
 }
