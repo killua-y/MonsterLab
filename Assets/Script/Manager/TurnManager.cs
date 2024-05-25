@@ -133,10 +133,32 @@ public class TurnManager : Manager<TurnManager>
                             break;
                         }
                     }
-
                     preventInfiniteIndex += 1;
                 }
             }
+        }
+        // 查看是否是最后一个回合
+        else if (currentTurn == finalTurn)
+        {
+            // 玩家生命值扣除
+            if (PlayerBehavior.playerHealth > 0)
+            {
+                PlayerBehavior.playerHealth -= 1;
+            }
+            else
+            {
+                Debug.Log("GameOver");
+            }
+
+            // 添加一个以玩家生命值为代价的额外回合
+            GameObject newTurn = Instantiate(singleTurnPrefab, turnParent.transform);
+            TurnUnitBehavior turnBehavior = newTurn.GetComponent<TurnUnitBehavior>();
+            allTurns.Add(turnBehavior);
+            turnBehavior.index = finalTurn + 1;
+            finalTurn += 1;
+            turnBehavior.turnType = TurnType.Rest;
+
+            turnParent.GetComponent<TurnUnitHorizontalLayout>().SortAndPositionChildren();
         }
 
         // 回合数+1

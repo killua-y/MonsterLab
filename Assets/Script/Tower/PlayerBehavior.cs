@@ -2,8 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerClimbing : MonoBehaviour
+public class PlayerBehavior : MonoBehaviour
 {
+    public static int playerHealth = 3;
     public int row = 3;
     public int column = 0;
     // Start is called before the first frame update

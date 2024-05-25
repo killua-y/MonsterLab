@@ -9,7 +9,7 @@ public class TowerBoxBehavior : MonoBehaviour
     public BoxType boxType;
     public int row;
     public int column;
-    private PlayerClimbing player;
+    private PlayerBehavior player;
 
     private void Awake()
     {
@@ -39,7 +39,7 @@ public class TowerBoxBehavior : MonoBehaviour
     {
         if (player == null)
         {
-            player = GameObject.FindWithTag("Player").GetComponent<PlayerClimbing>();
+            player = GameObject.FindWithTag("Player").GetComponent<PlayerBehavior>();
         }
 
         // 查看是否可以移动到这
