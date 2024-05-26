@@ -260,6 +260,11 @@ public class CardWrapper : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
             container.OnCardDragStart(this);
             eventsConfig?.OnCardUnhover?.Invoke(new CardUnhover(this));
         }
+
+        if (eventData.button == PointerEventData.InputButton.Right)
+        {
+            PointUp(true);
+        }
     }
 
     public void OnPointerUp(PointerEventData eventData) {
@@ -267,11 +272,6 @@ public class CardWrapper : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
         if (eventData.button == PointerEventData.InputButton.Left)
         {
             PointUp(false);
-        }
-
-        if (eventData.button == PointerEventData.InputButton.Right)
-        {
-            PointUp(true);
         }
     }
 

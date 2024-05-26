@@ -6,17 +6,6 @@ using static Card;
 public class MonsterCardBehavior : CardBehavior
 {
     private List<BaseEntity> sacrfices = null;
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 
     public override void CheckLegality(Node node)
     {
@@ -125,11 +114,17 @@ public class MonsterCardBehavior : CardBehavior
 
     public override void OnPointDown()
     {
+        IsDragging = true;
         BattleManager.Instance.DisplayMonsterSpaceText();
     }
 
     public override void OnPointUp()
     {
+        IsDragging = false;
         BattleManager.Instance.StopDisplayMonsterSpaceText();
+        if (previousTile != null)
+        {
+            previousTile.SetHighlight(false, false);
+        }
     }
 }

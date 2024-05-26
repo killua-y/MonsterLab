@@ -6,11 +6,16 @@ using static Card;
 public class CardBehavior : MonoBehaviour
 {
     public bool targetCard;
+    public CastType castType;
+    public bool isValid = false;
 
     public Card card;
 
     protected Node targetNode;
     protected BaseEntity targetMonster;
+
+    protected bool IsDragging = false;
+    protected Tile previousTile = null;
     // Start is called before the first frame update
     void Start()
     {
@@ -20,12 +25,63 @@ public class CardBehavior : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        if (IsDragging)
+        {
+            Tile tileUnder = HelperFunction.GetTileUnder();
+            if (tileUnder != null)
+            {
+                // 根据自己卡片的释放类型决定下方格子是否合法
+                switch (castType)
+                {
+                    case CastType.None:
+                        return;
+
+                    case CastType.AllMonster:
+                        isValid = GridManager.Instance.GetNodeForTile(tileUnder).IsOccupied;
+                        break;
+
+                    case CastType.EnemyMonster:
+                        isValid = ((GridManager.Instance.GetNodeForTile(tileUnder).IsOccupied)
+                            && (!GridManager.Instance.GetNodeForTile(tileUnder).IsPlayerArea));
+                        break;
+
+                    case CastType.PlayerMonster:
+                        isValid = ((GridManager.Instance.GetNodeForTile(tileUnder).IsOccupied)
+                            && (GridManager.Instance.GetNodeForTile(tileUnder).IsPlayerArea));
+                        break;
+
+                    case CastType.PlayerEmptyTile:
+                        isValid = ((!GridManager.Instance.GetNodeForTile(tileUnder).IsOccupied)
+                            && (GridManager.Instance.GetNodeForTile(tileUnder).IsPlayerArea));
+                        break;
+
+                    case CastType.AllEmptyTile:
+                        isValid = (!GridManager.Instance.GetNodeForTile(tileUnder).IsOccupied);
+                        break;
+
+                    default:
+                        isValid = false;
+                        Debug.LogWarning("Unknown CastType");
+                        break;
+                }
+
+                tileUnder.SetHighlight(true, isValid);
+
+                if (previousTile != null && tileUnder != previousTile)
+                {
+                    //We are over a different tile.
+                    previousTile.SetHighlight(false, false);
+                }
+
+                previousTile = tileUnder;
+            }
+        }
     }
 
     public virtual void InitializeCard(Card _card)
     {
         card = _card;
+        castType = card.castType;
 
         // 设置卡牌释放类型
         if (card.castType == CastType.None)
@@ -67,12 +123,16 @@ public class CardBehavior : MonoBehaviour
 
     public virtual void OnPointDown()
     {
-        
+        IsDragging = true;
     }
 
     public virtual void OnPointUp()
     {
-
+        IsDragging = false;
+        if (previousTile != null)
+        {
+            previousTile.SetHighlight(false, false);
+        }
     }
 
     public virtual void CastCard(Node node)
