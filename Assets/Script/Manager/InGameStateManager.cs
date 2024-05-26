@@ -12,6 +12,9 @@ public class InGameStateManager : Manager<InGameStateManager>
     public static bool PreparePhase = false;
     public static bool BattelPhase = false;
     public static GamePhase gamePhase;
+
+    [Header("CardHolder")]
+    [SerializeField]
     public Transform hand;
     public Transform extraDeck;
     public Transform drawPileParent;

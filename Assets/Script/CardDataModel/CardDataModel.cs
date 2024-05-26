@@ -8,6 +8,7 @@ public class CardDataModel : MonoBehaviour
 {
     public static CardDataModel Instance;
     public TextAsset textCardData; // 卡牌数据txt文件
+    public TextAsset textDNAData; // DNA数据text文件
     // 玩家的卡牌数据存储文件
     private string textPlayerDataPath = "/Datas/playerdata.csv";
     public TextAsset warriorCard; // 战士的默认卡组
@@ -15,6 +16,7 @@ public class CardDataModel : MonoBehaviour
     public static bool NewGame = true;
 
     private List<Card> cardList = new List<Card>(); // 存储卡牌数据的链表
+    private List<DNA> DNAList = new List<DNA>(); // 存储DNA数据的链表
     private int[] playerExtraDeckData; // 储存玩家额外卡组数据的array
     private int[] playerCardData; // 储存玩家卡牌数据的array
     private int[] playerDNAData; // 储存玩家DNA数据的array
@@ -43,6 +45,7 @@ public class CardDataModel : MonoBehaviour
             //Debug.Log("avoid reset deck");
         }
 
+        // 需要在LoadCardList()之后call
         LoadPlayerData();
     }
 
@@ -244,6 +247,12 @@ public class CardDataModel : MonoBehaviour
                 int id = int.Parse(rowArray[1]);
                 int num = int.Parse(rowArray[2]);
                 playerDNAData[id] = num;
+
+                // 将玩家已经拥有的DNA从卡池中移除
+                if (num != 0)
+                {
+                    DNAList.RemoveAll(dna => dna.id == id);
+                }
             }
             else if (rowArray[0] == "extraDeck")
             {
@@ -352,6 +361,24 @@ public class CardDataModel : MonoBehaviour
         return extraDeckCardList;
     }
 
+    // 加载玩家DNA
+    public List<DNA> GetPlayerDNA()
+    {
+        List<DNA> playerDNAList = new List<DNA>();
+
+        for (int index = 0; index < playerDNAData.Length; index++)
+        {
+            int quantity = playerDNAData[index];
+
+            if (quantity >= 1)
+            {
+                playerDNAList.Add(DNAList[index]);
+            }
+        }
+
+        return playerDNAList;
+    }
+
     // Helper，其他function会call来获取卡组数据
     public List<MonsterCard> GetEnemyMonster()
     {
@@ -362,12 +389,6 @@ public class CardDataModel : MonoBehaviour
     // 输出所有卡牌信息
     public List<Card> GetAllCard()
     {
-        //List<Card> result = new List<Card>();
-        //foreach (Card card in cardList)
-        //{
-        //    result.Add(Card.CloneCard(card));
-        //}
-        //return result;
         return cardList;
     }
 

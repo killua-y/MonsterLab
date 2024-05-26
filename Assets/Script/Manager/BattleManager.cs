@@ -13,6 +13,9 @@ public class BattleManager : Manager<BattleManager>
     List<BaseEntity> playerEntities = new List<BaseEntity>();
     List<BaseEntity> enemyEntities = new List<BaseEntity>();
 
+    public Action<BaseEntity> OnUnitDied;
+    public Action<BaseEntity> OnUnitSummon;
+
     public TextMeshProUGUI monsterSpaceText;
     // Start is called before the first frame update
     void Start()
@@ -89,6 +92,7 @@ public class BattleManager : Manager<BattleManager>
             BaseEntity newEntity = newMonster.GetComponent<BaseEntity>();
             playerEntities.Add(newEntity);
             newEntity.Setup(team, node, monsterCard, sacrifices);
+            OnUnitSummon?.Invoke(newEntity);
         }
         else
         {
@@ -97,6 +101,7 @@ public class BattleManager : Manager<BattleManager>
             BaseEntity newEntity = newMonster.GetComponent<BaseEntity>();
             enemyEntities.Add(newEntity);
             newEntity.Setup(team, node, monsterCard, sacrifices);
+            OnUnitSummon?.Invoke(newEntity);
         }
     }
 
@@ -122,6 +127,8 @@ public class BattleManager : Manager<BattleManager>
     {
         playerEntities.Remove(entity);
         enemyEntities.Remove(entity);
+
+        OnUnitDied?.Invoke(entity);
 
         if (playerEntities.Count == 0)
         {

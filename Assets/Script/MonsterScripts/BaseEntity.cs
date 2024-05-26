@@ -58,9 +58,6 @@ public class BaseEntity : MonoBehaviour
         node.SetOccupied(true);
         node.currentEntity = this;
 
-        // 加载弹道prefab
-        bullet = this.gameObject.GetComponent<MonsterUI>().bullet;
-
         // 导入MonsterCard, 并更新UI
         UpdateMonster(monsterCard);
 
@@ -79,6 +76,15 @@ public class BaseEntity : MonoBehaviour
         // 以后记得改
         range = monsterCard.attackRange;
 
+        // 加载弹道prefab
+        bullet = this.gameObject.GetComponent<MonsterUI>().bullet;
+
+        // 如果是远程单位但并没有子弹，则会添加默认子弹
+        if ((range > 1.5) && (bullet == null))
+        {
+            bullet = Resources.Load<GameObject>("MonsterPrefab/bullet");
+        }
+
         // 最后再update一次UI
         UpdateMonster();
     }
@@ -89,6 +95,13 @@ public class BaseEntity : MonoBehaviour
         InGameStateManager.Instance.OnPreparePhaseEnd += OnPreparePhaseEnd;
         InGameStateManager.Instance.OnBattlePhaseStart += OnBattlePhaseStart;
         InGameStateManager.Instance.OnBattlePhaseEnd += OnBattlePhaseEnd;
+
+        IndividualStart();
+    }
+
+    protected virtual void IndividualStart()
+    {
+
     }
 
     public virtual void Update()
@@ -363,6 +376,17 @@ public class BaseEntity : MonoBehaviour
         else
         {
             // 远程单位，构建攻击子弹
+            // Instantiate and initialize the bullet
+            GameObject bulletInstance = Instantiate(bullet, transform.position, Quaternion.identity);
+            if (bulletInstance.GetComponent<Bullet>() == null)
+            {
+                bulletInstance.AddComponent<Bullet>().Initialize(currentTarget, cardModel.attackPower, this);
+            }
+            else
+            {
+                bulletInstance.GetComponent<Bullet>().Initialize(currentTarget, cardModel.attackPower, this);
+            }
+
         }
         // 播放攻击后摇
         yield return new WaitForSeconds(attackRecover);

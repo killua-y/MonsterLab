@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class PlayerStatesManager : Manager<PlayerStatesManager>
 {
+    public TextMeshProUGUI playerHealthText;
     public TextMeshProUGUI costText;
 
     public static int playerHealthPoint = 3;
@@ -12,12 +13,15 @@ public class PlayerStatesManager : Manager<PlayerStatesManager>
     private int currentCost;
     public static int maxUnit = 5;
 
+    private List<DNA> playerDNAList = new List<DNA>();
+
     // Start is called before the first frame update
     void Start()
     {
-        currentCost = maxCost;
-        InGameStateManager.Instance.OnPreparePhaseStart += OnTurnStart;
-        InGameStateManager.Instance.OnPreparePhaseEnd += OnTurnEnd;
+        InGameStateManager.Instance.OnPreparePhaseStart += OnPreparePhaseStart;
+        InGameStateManager.Instance.OnPreparePhaseEnd += OnPreparePhaseEnd;
+
+        playerDNAList = CardDataModel.Instance.GetPlayerDNA();
     }
 
     // Update is called once per frame
@@ -48,13 +52,13 @@ public class PlayerStatesManager : Manager<PlayerStatesManager>
         UpdateCostText();
     }
 
-    public void OnTurnStart()
+    public void OnPreparePhaseStart()
     {
         currentCost = maxCost;
         UpdateCostText();
     }
 
-    public void OnTurnEnd()
+    public void OnPreparePhaseEnd()
     {
 
     }
