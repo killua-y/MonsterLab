@@ -218,8 +218,8 @@ public class CardWrapper : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
         eventsConfig?.OnCardUnhover?.Invoke(new CardUnhover(this));
     }
 
-    public void OnPointerDown(PointerEventData eventData) {
-
+    public void OnPointerDown(PointerEventData eventData)
+    {
         if (eventData.button == PointerEventData.InputButton.Left)
         {
             if (isDragged)
@@ -263,21 +263,23 @@ public class CardWrapper : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
 
         if (eventData.button == PointerEventData.InputButton.Right)
         {
+            // 但处于拖动时点击，则取消
             PointUp(true);
         }
     }
 
-    public void OnPointerUp(PointerEventData eventData) {
-
+    public void OnPointerUp(PointerEventData eventData)
+    {
         if (eventData.button == PointerEventData.InputButton.Left)
         {
             PointUp(false);
+            OnPointerDown(eventData);
         }
     }
 
     private void PointUp(bool canceled = false)
     {
-        // 防止取消释放后依然通过松开右键释放ka p
+        // 防止取消释放后依然通过松开右键释放卡牌
         if (isDragged == false)
         {
             return;
@@ -288,14 +290,14 @@ public class CardWrapper : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
 
         cardBehavior.OnPointUp();
 
-        container.OnCardDragEnd(canceled);
-
         // Destroy all arrow nodes
         foreach (RectTransform arrowNode in arrowNodes)
         {
             Destroy(arrowNode.gameObject);
         }
         arrowNodes.Clear();  // Clear the list after destroying the objects
+
+        container.OnCardDragEnd(canceled);
     }
 
     public void OnPointerClick(PointerEventData eventData)

@@ -17,6 +17,7 @@ public class CardDataModel : MonoBehaviour
 
     private List<Card> cardList = new List<Card>(); // 存储卡牌数据的链表
     private List<DNA> DNAList = new List<DNA>(); // 存储DNA数据的链表
+
     private int[] playerExtraDeckData; // 储存玩家额外卡组数据的array
     private int[] playerCardData; // 储存玩家卡牌数据的array
     private int[] playerDNAData; // 储存玩家DNA数据的array

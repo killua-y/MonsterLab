@@ -5195,6 +5195,7 @@ GameObject:
   - component: {fileID: 1513740601}
   - component: {fileID: 1513740603}
   - component: {fileID: 1513740605}
+  - component: {fileID: 1513740606}
   m_Layer: 0
   m_Name: InGameManager
   m_TagString: Untagged
@@ -5281,6 +5282,19 @@ MonoBehaviour:
   singleTurnPrefab: {fileID: 337650433433174160, guid: 0cec3ca1b761140c4a4bb6060bb62780, type: 3}
   turnText: {fileID: 1197962006}
   isFinalWaive: 0
+--- !u!114 &1513740606
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1513740597}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 82e705eb87a8e4a19a3cc5ade2c54a08, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  costText: {fileID: 557259694}
 --- !u!1001 &1570283896
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5574,7 +5588,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerHealthText: {fileID: 0}
-  costText: {fileID: 557259694}
 --- !u!1001 &1668919263
 PrefabInstance:
   m_ObjectHideFlags: 0

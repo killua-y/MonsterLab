@@ -93,8 +93,9 @@ public class CardBehavior : MonoBehaviour
     public virtual void CheckLegality(Node node)
     {
         // 查看费用是否合理
-        if (PlayerStatesManager.Instance.GetRemainingCost() < card.cost)
+        if (PlayerCostManager.Instance.GetRemainingCost() < card.cost)
         {
+            Debug.Log("Not enough energy");
             return;
         }
 
@@ -131,7 +132,7 @@ public class CardBehavior : MonoBehaviour
         // 消耗费用
         if (card is not MonsterCard)
         {
-            PlayerStatesManager.Instance.DecreaseCost(card.cost);
+            PlayerCostManager.Instance.DecreaseCost(card.cost);
         }
 
         // 告诉被装备怪兽你被装备了一张装备卡
