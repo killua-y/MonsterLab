@@ -7,7 +7,7 @@ public class CardBehavior : MonoBehaviour
 {
     public bool targetCard;
     public CastType castType;
-    public bool isValid = false;
+    public bool isValid = true;
 
     public Card card;
 
@@ -29,6 +29,7 @@ public class CardBehavior : MonoBehaviour
                 switch (castType)
                 {
                     case CastType.None:
+                        isValid = true;
                         return;
 
                     case CastType.AllMonster:
