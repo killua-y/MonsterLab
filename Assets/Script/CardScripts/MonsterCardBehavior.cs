@@ -5,7 +5,6 @@ using static Card;
 
 public class MonsterCardBehavior : CardBehavior
 {
-    private Node tToSummon;
     private List<BaseEntity> sacrfices = null;
     // Start is called before the first frame update
     void Start()
@@ -21,6 +20,8 @@ public class MonsterCardBehavior : CardBehavior
 
     public override void CheckLegality(Node node)
     {
+        targetNode = node;
+
         if (card.castType == CastType.PlayerEmptyTile)
         {
             if ((node.IsOccupied) || (!node.IsPlayerArea))
@@ -32,8 +33,7 @@ public class MonsterCardBehavior : CardBehavior
         // 查看是否需要祭品
         if (card.cost != 0)
         {
-            StartCoroutine(CardOnPlay.Instance.GetTiles(card.cost, OnTilesCollected));
-            tToSummon = node;
+            StartCoroutine(GetTiles(card.cost));
         }
         else
         {
@@ -44,16 +44,68 @@ public class MonsterCardBehavior : CardBehavior
         }
     }
 
-    void OnTilesCollected(List<Tile> tiles)
+    // The function to get multiple tiles based on user clicks
+    public IEnumerator GetTiles(int n)
     {
+        List<Tile> clickedTiles = new List<Tile>();
+        InGameStateManager.gamePased = true;
+
+        while (clickedTiles.Count < n)
+        {
+            if (Input.GetMouseButtonDown(0)) // Check for mouse click
+            {
+                Tile clickedTile = HelperFunction.GetTileUnder();
+                if (clickedTile != null)
+                {
+                    // 如果重复点击则取消选中
+                    if (clickedTiles.Contains(clickedTile))
+                    {
+                        clickedTile.SetHighlight(false, true);
+                        clickedTiles.Remove(clickedTile);
+                    }
+                    else
+                    {
+                        Node clickedNode = GridManager.Instance.GetNodeForTile(clickedTile);
+
+                        if ((clickedNode.IsPlayerArea == true) && (clickedNode.IsOccupied))
+                        {
+                            clickedTile.SetHighlight(true, true);
+                            clickedTiles.Add(clickedTile);
+                        }
+                    }
+                }
+            }
+
+            if (Input.GetMouseButtonDown(1)) // Check for mouse click
+            {
+                foreach (Tile tile in clickedTiles)
+                {
+                    tile.SetHighlight(false, true);
+                }
+
+                InGameStateManager.gamePased = false;
+                yield break;
+            }
+
+            yield return null; // Wait for the next frame
+        }
+
+        foreach (Tile tile in clickedTiles)
+        {
+            tile.SetHighlight(false, true);
+        }
+
+        InGameStateManager.gamePased = false;
+
+        // 召唤
         sacrfices = new List<BaseEntity>();
-        foreach (Tile tile in tiles)
+        foreach (Tile tile in clickedTiles)
         {
             sacrfices.Add(GridManager.Instance.GetNodeForTile(tile).currentEntity.GetComponent<BaseEntity>());
         }
 
         // 合法，释放卡牌效果
-        CastCard(tToSummon);
+        CastCard(targetNode);
 
         CastComplete();
     }

@@ -215,9 +215,9 @@ public class CardContainer : MonoBehaviour {
         currentDraggedCard = card;
     }
 
-    public void OnCardDragEnd() {
+    public void OnCardDragEnd(bool canceled = false) {
         // If card is in play area, play it!
-        if (IsCursorInPlayArea()) {
+        if (IsCursorInPlayArea() && !canceled) {
             eventsConfig?.OnCardPlayed?.Invoke(new CardPlayed(currentDraggedCard));
             if (cardPlayConfig.destroyOnPlay) {
                 DestroyCard(currentDraggedCard);

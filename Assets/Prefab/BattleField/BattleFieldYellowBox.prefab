@@ -100,8 +100,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   highlightSprite: {fileID: 5615218324049004075}
-  validColor: {r: 1, g: 1, b: 1, a: 0}
-  wrongColor: {r: 0, g: 0, b: 0, a: 0}
+  validColor: {r: 1, g: 1, b: 1, a: 1}
+  wrongColor: {r: 0, g: 0, b: 0, a: 1}
 --- !u!61 &2376763732953110996
 BoxCollider2D:
   m_ObjectHideFlags: 0

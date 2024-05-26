@@ -6,7 +6,7 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public class CardWrapper : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler,
-    IPointerUpHandler {
+    IPointerUpHandler, IPointerClickHandler {
     private const float EPS = 0.01f;
 
     public float targetRotation;
@@ -64,9 +64,11 @@ public class CardWrapper : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
         if (!InGameStateManager.gamePased)
         {
             UpdateRotation();
+            UpdateArrow();
             UpdatePosition();
             UpdateScale();
             UpdateUILayer();
+            
         }
     }
 
@@ -90,7 +92,16 @@ public class CardWrapper : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
             rectTransform.position = Vector2.Lerp(rectTransform.position, target,
                 repositionSpeed / distance * Time.deltaTime);
         }
-        else if (!targetCard)
+    }
+
+    private void UpdateArrow()
+    {
+        if (!isDragged)
+        {
+            return;
+        }
+
+        if (!targetCard)
         {
             var delta = ((Vector2)Input.mousePosition + dragStartPos);
             rectTransform.position = new Vector2(delta.x, delta.y);
@@ -208,46 +219,76 @@ public class CardWrapper : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     }
 
     public void OnPointerDown(PointerEventData eventData) {
-        isDragged = true;
 
-        cardBehavior.OnPointDown();
-
-        if (targetCard)
+        if (eventData.button == PointerEventData.InputButton.Left)
         {
-            // Gets position of the arrows emitter point.
-            this.origin = this.GetComponent<RectTransform>();
-
-            // Instantiates the arrow nodes and arrow head.
-            for (int i = 0; i < this.arrowNodeNum; ++i)
+            if (isDragged)
             {
-                this.arrowNodes.Add(Instantiate(this.ArrowNodePrefab, this.transform).GetComponent<RectTransform>());
+                PointUp(false);
+                return;
             }
 
-            this.arrowNodes.Add(Instantiate(this.ArrowHeadPrefab, this.transform).GetComponent<RectTransform>());
+            isDragged = true;
 
-            // Hides the arrow nodes.
-            this.arrowNodes.ForEach(a => a.GetComponent<RectTransform>().position = new Vector2(-1000, -1000));
+            cardBehavior.OnPointDown();
 
-            // Initializes the control points list.
-            for (int i = 0; i < 4; ++i)
+            if (targetCard)
             {
-                this.controlPoints.Add(Vector2.zero);
+                // Gets position of the arrows emitter point.
+                this.origin = this.GetComponent<RectTransform>();
+
+                // Instantiates the arrow nodes and arrow head.
+                for (int i = 0; i < this.arrowNodeNum; ++i)
+                {
+                    this.arrowNodes.Add(Instantiate(this.ArrowNodePrefab, this.transform).GetComponent<RectTransform>());
+                }
+
+                this.arrowNodes.Add(Instantiate(this.ArrowHeadPrefab, this.transform).GetComponent<RectTransform>());
+
+                // Hides the arrow nodes.
+                this.arrowNodes.ForEach(a => a.GetComponent<RectTransform>().position = new Vector2(-1000, -1000));
+
+                // Initializes the control points list.
+                for (int i = 0; i < 4; ++i)
+                {
+                    this.controlPoints.Add(Vector2.zero);
+                }
             }
+
+            dragStartPos = new Vector2(transform.position.x - eventData.position.x,
+                transform.position.y - eventData.position.y);
+            container.OnCardDragStart(this);
+            eventsConfig?.OnCardUnhover?.Invoke(new CardUnhover(this));
         }
-
-        dragStartPos = new Vector2(transform.position.x - eventData.position.x,
-            transform.position.y - eventData.position.y);
-        container.OnCardDragStart(this);
-        eventsConfig?.OnCardUnhover?.Invoke(new CardUnhover(this));
     }
 
     public void OnPointerUp(PointerEventData eventData) {
+
+        if (eventData.button == PointerEventData.InputButton.Left)
+        {
+            PointUp(false);
+        }
+
+        if (eventData.button == PointerEventData.InputButton.Right)
+        {
+            PointUp(true);
+        }
+    }
+
+    private void PointUp(bool canceled = false)
+    {
+        // 防止取消释放后依然通过松开右键释放ka p
+        if (isDragged == false)
+        {
+            return;
+        }
+
         isDragged = false;
         isHovered = false;
 
         cardBehavior.OnPointUp();
 
-        container.OnCardDragEnd();
+        container.OnCardDragEnd(canceled);
 
         // Destroy all arrow nodes
         foreach (RectTransform arrowNode in arrowNodes)
@@ -255,5 +296,10 @@ public class CardWrapper : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
             Destroy(arrowNode.gameObject);
         }
         arrowNodes.Clear();  // Clear the list after destroying the objects
+    }
+
+    public void OnPointerClick(PointerEventData eventData)
+    {
+        OnPointerDown(eventData);
     }
 }

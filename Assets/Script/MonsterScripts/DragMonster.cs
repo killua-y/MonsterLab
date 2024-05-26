@@ -2,8 +2,9 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
-public class DragMonster : MonoBehaviour
+public class DragMonster : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 {
     private Vector3 dragOffset = new Vector3(0, 0, 0);
 
@@ -22,6 +23,11 @@ public class DragMonster : MonoBehaviour
         spriteRenderer = GetComponent<SpriteRenderer>();
     }
 
+    void Update()
+    {
+        OnDragging();
+    }
+
     public void OnStartDrag()
     {
         oldPosition = this.transform.position;
@@ -35,8 +41,6 @@ public class DragMonster : MonoBehaviour
     {
         if (!IsDragging)
             return;
-
-        //Debug.Log(this.name + " dragging");
 
         Vector3 newPosition = cam.ScreenToWorldPoint(Input.mousePosition) + dragOffset;
         newPosition.z = 0;
@@ -61,8 +65,6 @@ public class DragMonster : MonoBehaviour
     {
         if (!IsDragging)
             return;
-
-        // Debug.Log(this.name + " end drag");
 
         if (!TryRelease())
         {
@@ -106,5 +108,27 @@ public class DragMonster : MonoBehaviour
 
 
         return false;
+    }
+
+    public void OnPointerDown(PointerEventData eventData)
+    {
+        if (InGameStateManager.gamePased)
+        {
+            return;
+        }
+
+        // Check if the left mouse button was pressed
+        if (eventData.button == PointerEventData.InputButton.Left)
+        {
+            OnStartDrag();
+        }
+    }
+
+    public void OnPointerUp(PointerEventData eventData)
+    {
+        if (eventData.button == PointerEventData.InputButton.Left)
+        {
+            OnEndDrag();
+        }
     }
 }

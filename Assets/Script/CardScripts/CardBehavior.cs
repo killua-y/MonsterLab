@@ -27,8 +27,6 @@ public class CardBehavior : MonoBehaviour
     {
         card = _card;
 
-        GetComponent<CardDisplay>().UpdateCardView(card);
-
         // 设置卡牌释放类型
         if (card.castType == CastType.None)
         {

@@ -164,7 +164,6 @@ public class InGameStateManager : Manager<InGameStateManager>
         foreach (Card card in extraDeckPile)
         {
             GameObject cardObject = cardDisplayView.DisPlaySingleCard(card, extraDeck);
-            cardObject.GetComponent<CardDisplay>().UpdateCardView(card);
             cardObject.AddComponent<Scaling>();
             cardObject.AddComponent<ExtraDeckCardOnClick>().SetUp(card);
         }
@@ -212,7 +211,6 @@ public class InGameStateManager : Manager<InGameStateManager>
             foreach (Card card in drawPileCard)
             {
                 GameObject cardObject = cardDisplayView.DisPlaySingleCard(card, drawPileParentContent);
-                cardObject.GetComponent<CardDisplay>().UpdateCardView(card);
                 cardObject.AddComponent<Scaling>();
             }
             drawPileParent.gameObject.SetActive(true);
@@ -238,7 +236,6 @@ public class InGameStateManager : Manager<InGameStateManager>
             foreach (Card card in discardPileCard)
             {
                 GameObject cardObject = cardDisplayView.DisPlaySingleCard(card, discardPileParentContent);
-                cardObject.GetComponent<CardDisplay>().UpdateCardView(card);
                 cardObject.AddComponent<Scaling>();
             }
             discardPileParent.gameObject.SetActive(true);

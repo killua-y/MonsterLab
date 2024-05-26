@@ -50,7 +50,6 @@ public class ActsManager : Manager<ActsManager>
         foreach (Card card in mainDeck)
         {
             GameObject cardObject = CardDisplayView.Instance.DisPlaySingleCard(card, mainDeckScrollContent);
-            cardObject.GetComponent<CardDisplay>().UpdateCardView(card);
             cardObject.AddComponent<Scaling>();
             cardObject.AddComponent<DeckManageCardOnClick>().SetUp(card.id, true);
         }
@@ -67,7 +66,6 @@ public class ActsManager : Manager<ActsManager>
         foreach (Card card in extraDeck)
         {
             GameObject cardObject = CardDisplayView.Instance.DisPlaySingleCard(card, extraDeckScollContent);
-            cardObject.GetComponent<CardDisplay>().UpdateCardView(card);
             cardObject.AddComponent<Scaling>();
             cardObject.AddComponent<DeckManageCardOnClick>().SetUp(card.id, false);
             //Debug.Log("Get card with index : " + card.id);

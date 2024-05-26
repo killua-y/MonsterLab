@@ -93,6 +93,11 @@ public class CardDisplayView : Manager<CardDisplayView>
             Debug.Log("Card : " + _card.cardName + " is not any exist type");
         }
 
+        if (newCard != null)
+        {
+            newCard.GetComponent<CardDisplay>().UpdateCardView(_card);
+        }
+
         return newCard;
     }
 }

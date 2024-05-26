@@ -23,7 +23,6 @@ public class CardRewardBehavior : MonoBehaviour
         foreach (Card card in cards)
         {
             GameObject newCard = CardDisplayView.Instance.DisPlaySingleCard(card, CardHolder);
-            newCard.GetComponent<CardDisplay>().UpdateCardView(card);
             newCard.AddComponent<Scaling>();
             newCard.AddComponent<SingleCardOnClick>();
             newCard.GetComponent<SingleCardOnClick>().SetUp(card.id, this.gameObject);
