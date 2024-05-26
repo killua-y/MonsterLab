@@ -22,12 +22,6 @@ public class RewardManager : Manager<RewardManager>
         InitializeRewardList();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     private void InitializeRewardList()
     {
         allCard = cardDataModel.GetAllCard();

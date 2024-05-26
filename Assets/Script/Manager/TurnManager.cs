@@ -36,12 +36,6 @@ public class TurnManager : Manager<TurnManager>
         LoadEnemy();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     private void LoadEnemy()
     {
         // 这一行会load当前战斗的敌人
@@ -141,9 +135,9 @@ public class TurnManager : Manager<TurnManager>
         else if (currentTurn == finalTurn)
         {
             // 玩家生命值扣除
-            if (PlayerBehavior.playerHealth > 0)
+            if (PlayerStatesManager.playerHealthPoint > 0)
             {
-                PlayerBehavior.playerHealth -= 1;
+                PlayerStatesManager.playerHealthPoint -= 1;
             }
             else
             {

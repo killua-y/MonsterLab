@@ -21,12 +21,6 @@ public class BattleManager : Manager<BattleManager>
         InGameStateManager.Instance.OnBattlePhaseStart += OnBattleTurnStart;
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
-
     public int ConvertRowColumnToIndex(int row, int column)
     {
         int index = row * 8 + column;
@@ -35,6 +29,16 @@ public class BattleManager : Manager<BattleManager>
 
     public void InstaniateMontser(Node node, Team team, MonsterCard monsterCard, List<BaseEntity> sacrifices = null)
     {
+        // 查看场上是否满了，如果满了直接return
+        if (playerEntities.Count >= PlayerStatesManager.maxUnit)
+        {
+            // 如果需要祭品可以执行，反之不能
+            if (sacrifices == null)
+            {
+                return;
+            }
+        }    
+
         // 必须传入monsterCard
         if (monsterCard is null)
         {
@@ -164,7 +168,7 @@ public class BattleManager : Manager<BattleManager>
 
     public void UpdateMonsterSpaceText()
     {
-        monsterSpaceText.text = playerEntities.Count + "/5";
+        monsterSpaceText.text = playerEntities.Count + " / " + PlayerStatesManager.maxUnit;
     }
 
     public void OnBattleTurnStart()

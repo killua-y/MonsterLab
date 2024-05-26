@@ -16,11 +16,6 @@ public class CardBehavior : MonoBehaviour
 
     protected bool IsDragging = false;
     protected Tile previousTile = null;
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
 
     // Update is called once per frame
     void Update()
@@ -100,16 +95,6 @@ public class CardBehavior : MonoBehaviour
         if (PlayerStatesManager.Instance.GetRemainingCost() < card.cost)
         {
             return;
-        }
-
-        // 查看释放单位是否合理
-        if ((card.castType == CastType.AllMonster) || (card.castType == CastType.EnemyMonster) || (card.castType == CastType.PlayerMonster))
-        {
-            // 如果当前格没有怪兽
-            if (node.currentEntity == null)
-            {
-                return;
-            }
         }
 
         // 合法，释放卡牌效果

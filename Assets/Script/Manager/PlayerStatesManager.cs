@@ -7,9 +7,10 @@ public class PlayerStatesManager : Manager<PlayerStatesManager>
 {
     public TextMeshProUGUI costText;
 
-    public static int playerHealthPoint = 5;
+    public static int playerHealthPoint = 3;
     private int maxCost = 3;
     private int currentCost;
+    public static int maxUnit = 5;
 
     // Start is called before the first frame update
     void Start()

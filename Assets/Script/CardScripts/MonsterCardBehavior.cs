@@ -11,21 +11,27 @@ public class MonsterCardBehavior : CardBehavior
     {
         targetNode = node;
 
-        if (card.castType == CastType.PlayerEmptyTile)
-        {
-            if ((node.IsOccupied) || (!node.IsPlayerArea))
-            {
-                return;
-            }
-        }
-
         // 查看是否需要祭品
         if (card.cost != 0)
         {
-            StartCoroutine(GetTiles(card.cost));
+            if (BattleManager.Instance.GetEntitiesAgainst(Team.Enemy).Count >= card.cost)
+            {
+                StartCoroutine(GetTiles(card.cost));
+            }
+            else
+            {
+                // 场上祭品不够
+                return;
+            }
         }
         else
         {
+            // 场上满了，无法召唤
+            if (BattleManager.Instance.GetEntitiesAgainst(Team.Enemy).Count >= PlayerStatesManager.maxUnit)
+            {
+                return;
+            }
+
             // 合法，释放卡牌效果
             CastCard(node);
 
