@@ -232,7 +232,7 @@ public class CardContainer : MonoBehaviour {
         Destroy(card.gameObject);
     }
 
-    private bool IsCursorInPlayArea() {
+    public bool IsCursorInPlayArea() {
         if (cardPlayConfig.playArea == null) return false;
         
         var cursorPosition = Input.mousePosition;

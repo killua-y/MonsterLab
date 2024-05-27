@@ -6,7 +6,7 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public class CardWrapper : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler,
-    IPointerUpHandler, IPointerClickHandler {
+    IPointerUpHandler {
     private const float EPS = 0.01f;
 
     public float targetRotation;
@@ -222,12 +222,14 @@ public class CardWrapper : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     {
         if (eventData.button == PointerEventData.InputButton.Left)
         {
+            // 拖动时再次点击则是释放
             if (isDragged)
             {
                 PointUp(false);
                 return;
             }
 
+            // 第一次点击是开始拖动
             isDragged = true;
 
             cardBehavior.OnPointDown();
@@ -272,18 +274,24 @@ public class CardWrapper : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     {
         if (eventData.button == PointerEventData.InputButton.Left)
         {
+            // 如果是在非释放区域松开则无视
+            if (!container.IsCursorInPlayArea())
+            {
+                return;
+            }
+
+            // 防止取消释放后依然通过松开右键释放卡牌
+            if (isDragged == false)
+            {
+                return;
+            }
+
             PointUp(false);
         }
     }
 
     private void PointUp(bool canceled = false)
     {
-        // 防止取消释放后依然通过松开右键释放卡牌
-        if (isDragged == false)
-        {
-            return;
-        }
-
         isDragged = false;
         isHovered = false;
 
@@ -297,10 +305,5 @@ public class CardWrapper : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
         arrowNodes.Clear();  // Clear the list after destroying the objects
 
         container.OnCardDragEnd(canceled);
-    }
-
-    public void OnPointerClick(PointerEventData eventData)
-    {
-        OnPointerDown(eventData);
     }
 }
