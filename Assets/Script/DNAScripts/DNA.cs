@@ -6,6 +6,8 @@ public class DNA
     public int id;
     // DNA名称
     public string DNAName;
+    // DNA职业颜色
+    public CardColor NDAColor;
     // 稀有度
     public CardRarity DNARarity;
     // 卡牌数值
@@ -17,11 +19,12 @@ public class DNA
     // 图片位置
     public string imageLocation;
 
-    public DNA(int _id, string _DNAName, CardRarity _DNARarity, int _effectData,
+    public DNA(int _id, string _DNAName, CardColor _NDAColor, CardRarity _DNARarity, int _effectData,
         string _effectText, string _scriptLocation, string _imageLocation)
     {
         this.id = _id;
         this.DNAName = _DNAName;
+        this.NDAColor = _NDAColor;
         this.DNARarity = _DNARarity;
         this.effectData = _effectData;
         this.effectText = _effectText;

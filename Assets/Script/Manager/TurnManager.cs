@@ -137,7 +137,7 @@ public class TurnManager : Manager<TurnManager>
             // 玩家生命值扣除
             if (PlayerStatesManager.playerHealthPoint > 0)
             {
-                PlayerStatesManager.playerHealthPoint -= 1;
+                PlayerStatesManager.Instance.DecreaseHealth(1);
             }
             else
             {

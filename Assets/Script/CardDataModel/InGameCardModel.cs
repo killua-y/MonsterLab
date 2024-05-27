@@ -35,7 +35,7 @@ public class InGameCardModel : MonoBehaviour
 
         // 更新currentAssignedID
         currentAssignedID += drawPileList.Count;
-        Shuffle(drawPileList);
+        HelperFunction.Shuffle(drawPileList);
 
         // 将玩家拥有的卡牌导入局内卡牌
         extraDeckPileList = FindObjectOfType<CardDataModel>().InitializeExtraDeck(currentAssignedID);
@@ -111,26 +111,11 @@ public class InGameCardModel : MonoBehaviour
     public void ShuffleDeck()
     {
         // Shuffle 弃牌堆
-        Shuffle(discardPileList);
+        HelperFunction.Shuffle(discardPileList);
 
         // 将卡牌加入抽牌堆，并清空弃牌堆
         drawPileList.AddRange(discardPileList);
         discardPileList.Clear();
-    }
-
-    // 洗牌helper method
-    public static void Shuffle<T>(List<T> list)
-    {
-        System.Random rng = new System.Random();
-        int n = list.Count;
-        while (n > 1)
-        {
-            n--;
-            int k = rng.Next(n + 1);
-            T value = list[k];
-            list[k] = list[n];
-            list[n] = value;
-        }
     }
 
     // 弃牌，传入需要弃掉的卡牌信息

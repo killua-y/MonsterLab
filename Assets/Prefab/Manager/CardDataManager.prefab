@@ -46,7 +46,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   textCardData: {fileID: 4900000, guid: 9731cd73ab9fc478fa12794f16f24daf, type: 3}
-  textPlayerData: {fileID: 4900000, guid: 3918a8897dd1a4857bff586677175b87, type: 3}
+  textDNAData: {fileID: 4900000, guid: c452537270bb146719ee2f71bfa70be2, type: 3}
   warriorCard: {fileID: 4900000, guid: 258a5b7852b094ccf846b7376ff3da21, type: 3}
   enemyTextCardData: {fileID: 4900000, guid: e6f610c702ff44ae0999b65ac2eacf0e, type: 3}
 --- !u!114 &5065150150119910387

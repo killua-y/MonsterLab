@@ -34,6 +34,7 @@ public class CardDataModel : MonoBehaviour
 
         LoadCardList();
         LoadEnemyCardList();
+        LoadDNAList();
 
         if (NewGame)
         {
@@ -50,29 +51,24 @@ public class CardDataModel : MonoBehaviour
         LoadPlayerData();
     }
 
-    private void Start()
-    {
-
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
-    // 加载所有卡牌数据
-    public void LoadCardList()
+    // 加载所有卡牌数据,会根据MainMenuBehavior的基础设置加载不同颜色的卡牌
+    private void LoadCardList()
     {
         int currentIndex = 0;
 
-        //Load 怪兽卡
+        //Load卡片
         string[] MonsterDataArray = textCardData.text.Split('\n');
         foreach (var row in MonsterDataArray)
         {
             string[] rowArray = row.Split(',');
             if (rowArray[0] == "#")
             {
+                continue;
+            }
+            else if ((HelperFunction.ConvertToEnum<CardColor>(rowArray[2]) != MainMenuBehavior.character)
+                && (HelperFunction.ConvertToEnum<CardColor>(rowArray[2]) != CardColor.None))
+            {
+                //Debug.Log("Do not equal, the color is : " + rowArray[2]);
                 continue;
             }
             else if (rowArray[0] == "m")
@@ -147,7 +143,43 @@ public class CardDataModel : MonoBehaviour
         }
     }
 
-    public void LoadEnemyCardList()
+    public void LoadDNAList()
+    {
+        int currentIndex = 0;
+
+        // 加载DNA数据
+        string[] DNADataArray = textDNAData.text.Split('\n');
+        foreach (var row in DNADataArray)
+        {
+            string[] rowArray = row.Split(',');
+            if (rowArray[0] == "#")
+            {
+                continue;
+            }
+            else if ((HelperFunction.ConvertToEnum<CardColor>(rowArray[2]) != MainMenuBehavior.character)
+                && (HelperFunction.ConvertToEnum<CardColor>(rowArray[2]) != CardColor.None))
+            {
+                continue;
+            }
+            else if (rowArray[0] == "DNA")
+            {
+                int id = currentIndex;
+                currentIndex += 1;
+                string DNAName = rowArray[1];
+                CardColor NDAColor = HelperFunction.ConvertToEnum<CardColor>(rowArray[2]);
+                CardRarity DNARarity = HelperFunction.ConvertToEnum<CardRarity>(rowArray[3]);
+                int effectData = int.Parse(rowArray[4]);
+                string effectText = rowArray[5];
+                string scriptLocation = rowArray[6];
+                string imageLocation = rowArray[7];
+
+                DNAList.Add(new DNA(id, DNAName, NDAColor, DNARarity, effectData, effectText, scriptLocation, imageLocation));
+            }
+        }
+    }
+
+
+    private void LoadEnemyCardList()
     {
         int currentIndex = 0;
 
@@ -214,13 +246,26 @@ public class CardDataModel : MonoBehaviour
         SavePlayerData();
     }
 
+    public void ObtainDNA(int _id)
+    {
+        if (playerDNAData[_id] >= 1)
+        {
+            Debug.Log("Error: acquire DNA that already have");
+        }
+
+        // 玩家数据中增加该卡牌
+        playerDNAData[_id] += 1;
+
+        SavePlayerData();
+    }
+
     // 加载玩家卡组数据
     public void LoadPlayerData()
     {
         string path = Application.dataPath + textPlayerDataPath;
 
         playerCardData = new int[cardList.Count];
-        playerDNAData = new int[cardList.Count];
+        playerDNAData = new int[DNAList.Count];
         playerExtraDeckData = new int[cardList.Count];
 
         string[] dataArray = File.ReadAllLines(path);
@@ -248,12 +293,6 @@ public class CardDataModel : MonoBehaviour
                 int id = int.Parse(rowArray[1]);
                 int num = int.Parse(rowArray[2]);
                 playerDNAData[id] = num;
-
-                // 将玩家已经拥有的DNA从卡池中移除
-                if (num != 0)
-                {
-                    DNAList.RemoveAll(dna => dna.id == id);
-                }
             }
             else if (rowArray[0] == "extraDeck")
             {
@@ -286,19 +325,19 @@ public class CardDataModel : MonoBehaviour
             }
         }
 
-        for (int i = 0; i < playerDNAData.Length; i++)
-        {
-            if (playerDNAData[i] != 0)
-            {
-                datas.Add("NDA," + i.ToString() + "," + playerDNAData[i].ToString());
-            }
-        }
-
         for (int i = 0; i < playerExtraDeckData.Length; i++)
         {
             if (playerExtraDeckData[i] != 0)
             {
                 datas.Add("extraDeck," + i.ToString() + "," + playerExtraDeckData[i].ToString());
+            }
+        }
+
+        for (int i = 0; i < playerDNAData.Length; i++)
+        {
+            if (playerDNAData[i] != 0)
+            {
+                datas.Add("NDA," + i.ToString() + "," + playerDNAData[i].ToString());
             }
         }
 
@@ -391,6 +430,12 @@ public class CardDataModel : MonoBehaviour
     public List<Card> GetAllCard()
     {
         return cardList;
+    }
+
+    // 输出所有卡牌信息
+    public List<DNA> GetAllDNA()
+    {
+        return DNAList;
     }
 
     public void ChangeExtraDeck(Card card, bool toExtraDeck)

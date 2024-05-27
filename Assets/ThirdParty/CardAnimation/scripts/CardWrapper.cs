@@ -273,7 +273,6 @@ public class CardWrapper : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
         if (eventData.button == PointerEventData.InputButton.Left)
         {
             PointUp(false);
-            OnPointerDown(eventData);
         }
     }
 

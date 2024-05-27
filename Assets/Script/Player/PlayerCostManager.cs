@@ -8,18 +8,15 @@ public class PlayerCostManager : Manager<PlayerCostManager>
     public TextMeshProUGUI costText;
 
     private int currentCost;
-    private int maxCost;
     // Start is called before the first frame update
     void Start()
     {
-        maxCost = PlayerStatesManager.maxCost;
-
         InGameStateManager.Instance.OnPreparePhaseStart += OnPreparePhaseStart;
     }
 
     private void UpdateCostText()
     {
-        costText.text = currentCost + "/" + maxCost;
+        costText.text = currentCost + "/" + PlayerStatesManager.maxCost;
     }
 
     public int GetRemainingCost()
@@ -41,7 +38,7 @@ public class PlayerCostManager : Manager<PlayerCostManager>
 
     public void OnPreparePhaseStart()
     {
-        currentCost = maxCost;
+        currentCost = PlayerStatesManager.maxCost;
         UpdateCostText();
     }
 }

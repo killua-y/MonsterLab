@@ -599,3 +599,4 @@ MonoBehaviour:
   rewardCanvas: {fileID: 7214307641120354780}
   rewardPanel: {fileID: 7214307641507326070}
   cardReward: {fileID: 7901269292429942830, guid: 5ef3b7654a5b94f34903a7d8ffcff0b1, type: 3}
+  dnaReward: {fileID: 7728632380202260620, guid: 9312109de7bf94bf688fae41216a5b4c, type: 3}

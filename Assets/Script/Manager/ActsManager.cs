@@ -89,15 +89,15 @@ public class ActsManager : Manager<ActsManager>
                 break;
 
             case BoxType.Events:
-                RewardManager.Instance.GenerateReward();
+                RewardManager.Instance.GenerateReward(1,0);
                 break;
 
             case BoxType.Merchant:
-                RewardManager.Instance.GenerateReward();
+                RewardManager.Instance.GenerateReward(0,1);
                 break;
 
             case BoxType.Treasure:
-                RewardManager.Instance.GenerateReward();
+                RewardManager.Instance.GenerateReward(0,1);
                 break;
 
             default:
