@@ -11,6 +11,12 @@ public class MonsterCardBehavior : CardBehavior
     {
         targetNode = node;
 
+        // 查看费用是否合理，召唤怪兽需要1点能量
+        if (PlayerCostManager.Instance.GetRemainingCost() < PlayerStatesManager.monsterSummonCost)
+        {
+            return;
+        }
+
         // 查看是否需要祭品
         if (card.cost != 0)
         {

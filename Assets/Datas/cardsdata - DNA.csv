@@ -1,10 +1,9 @@
-#,1,2,3,4,5,6,7
-#,名称,职业颜色,稀有度,数值,效果文本,Script位置,图片位置
-DNA,battle blood,None,normal,10,all your monster gain 10 attack power,AttackPowerDNABehavior,
-DNA,rocky epidermis,None,normal,100,all your monster gain 100 health,HealthPointDNABehavior,
-DNA,Battle flag,None,legend,1,Gain 1 extra team size,TeamSizeDNABehavior,
-DNA,Beating heart,None,normal,1,Gain 1 extra energy,MaxEnergyDNABehavior,
-DNA,Arcane Codex,None,normal,2,Draw 2 cards if you cast two spell card this turn,,
-DNA,Titan's Talisman,None,rare,10,The first monster you summon each turn gain 10 attack power and 100 health,,
-DNA,unyielding,None,normal,1,restore one health after each boss fight,,
-DNA,piggy bank,None,normal,30,"When you complete the battle, each unused turn provides an additional 30 gold",,
+#,1,2,3,4,5,6,7,8
+#,名称,职业颜色,稀有度,数值,效果文本,Script位置,图片位置,index
+DNA,battle blood,None,normal,10,all your monster gain 10 attack power,AttackPowerDNABehavior,,0
+DNA,rocky epidermis,None,normal,100,all your monster gain 100 health,HealthPointDNABehavior,,1
+DNA,Battle flag,None,legend,1,Gain 1 extra team size,TeamSizeDNABehavior,,2
+DNA,Beating heart,None,normal,1,Gain 1 extra energy,MaxEnergyDNABehavior,,3
+DNA,Arcane Codex,None,normal,2,Draw 2 cards if you cast three spell card this turn,DrawCardIfCastSpellDNA,,4
+DNA,Titan's Talisman,None,rare,10,The first monster you summon each turn gain 10 attack power and 100 health,FirstMonsterBuffDNA,,5
+DNA,piggy bank,None,normal,30,"When you complete the battle, each unused turn provides an additional 30 gold",PiggyBankDNABehavior,,6

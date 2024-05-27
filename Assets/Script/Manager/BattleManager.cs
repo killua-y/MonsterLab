@@ -169,7 +169,6 @@ public class BattleManager : Manager<BattleManager>
 
     public void StopDisplayMonsterSpaceText()
     {
-        UpdateMonsterSpaceText();
         monsterSpaceText.gameObject.SetActive(false);
     }
 

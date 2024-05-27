@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class DNABehavior : MonoBehaviour
 {
-    public static bool firstAcquire = true;
     public DNA DNAModel;
 
     public virtual void SetUp(DNA _DNAModel)
@@ -12,11 +11,7 @@ public class DNABehavior : MonoBehaviour
         DNAModel = _DNAModel;
         this.gameObject.GetComponent<DNAUI>().SetUp(_DNAModel);
 
-        if (firstAcquire)
-        {
-            OnAcquire();
-            firstAcquire = false;
-        }
+        OnAcquire();
     }
 
     public virtual void OnAcquire()

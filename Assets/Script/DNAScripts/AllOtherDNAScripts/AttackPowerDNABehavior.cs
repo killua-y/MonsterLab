@@ -11,7 +11,10 @@ public class AttackPowerDNABehavior : DNABehavior
 
     private void OnSummon(BaseEntity baseEntity)
     {
-        baseEntity.cardModel.attackPower += DNAModel.effectData;
-        baseEntity.UpdateMonster();
+        if (baseEntity.myTeam == Team.Player)
+        {
+            baseEntity.cardModel.attackPower += DNAModel.effectData;
+            baseEntity.UpdateMonster();
+        }
     }
 }

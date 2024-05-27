@@ -13,6 +13,7 @@ public class PlayerStatesManager : Manager<PlayerStatesManager>
     public static int maxCost = 3;
     public static int playerHealthPoint = 3;
     public static int maxUnit = 5;
+    public static int monsterSummonCost = 1;
 
     private List<DNA> playerDNAList = new List<DNA>();
 

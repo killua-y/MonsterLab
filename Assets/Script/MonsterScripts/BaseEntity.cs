@@ -224,6 +224,7 @@ public class BaseEntity : MonoBehaviour
             cardModel = (MonsterCard)Card.CloneCard(card);
         }
 
+        currentHealth = cardModel.healthPoint;
         monsterUI.UpdateUI(cardModel);
     }
 
@@ -409,10 +410,5 @@ public class BaseEntity : MonoBehaviour
     public virtual void UponDeath()
     {
 
-    }
-
-    public virtual void ReceiveWeapon(CardBehavior cardBehavior)
-    {
-        //cardBehavior.CastCard(this.currentNode);
     }
 }

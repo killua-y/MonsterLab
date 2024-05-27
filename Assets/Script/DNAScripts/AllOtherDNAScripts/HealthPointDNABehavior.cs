@@ -11,7 +11,10 @@ public class HealthPointDNABehavior : DNABehavior
 
     private void OnSummon(BaseEntity baseEntity)
     {
-        baseEntity.cardModel.healthPoint += DNAModel.effectData;
-        baseEntity.UpdateMonster();
+        if (baseEntity.myTeam == Team.Player)
+        {
+            baseEntity.cardModel.healthPoint += DNAModel.effectData;
+            baseEntity.UpdateMonster();
+        }
     }
 }

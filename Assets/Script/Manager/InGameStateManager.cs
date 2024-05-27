@@ -28,6 +28,9 @@ public class InGameStateManager : Manager<InGameStateManager>
     public Action OnBattlePhaseStart;
     public Action OnBattlePhaseEnd;
 
+    public Action<CardBehavior, BaseEntity> OnSpellCardPlayed;
+    public Action<CardBehavior, BaseEntity> OnItemCardPlayed;
+
     private InGameCardModel CardModel;
     private CardDisplayView cardDisplayView;
 
@@ -44,8 +47,7 @@ public class InGameStateManager : Manager<InGameStateManager>
 
     void Start()
     {
-        GameStart();
-        UpdatePileText();
+        Invoke("GameStart", 0);
     }
 
     // Update is called once per frame
@@ -59,7 +61,7 @@ public class InGameStateManager : Manager<InGameStateManager>
     {
         CardModel.InitialzeDeck();
         InitizeExtraDeck();
-        Debug.Log("Game Initialzed");
+        UpdatePileText();
 
         OnGameStart?.Invoke(); // Safe way to invoke the delegate
         Invoke("PreparePhaseStart", 0);
@@ -243,6 +245,16 @@ public class InGameStateManager : Manager<InGameStateManager>
             }
             discardPileParent.gameObject.SetActive(true);
         }
+    }
+
+    public void SpellCardPlayed(CardBehavior cardBehavior, BaseEntity targetMonster)
+    {
+        OnSpellCardPlayed?.Invoke(cardBehavior, targetMonster);
+    }
+
+    public void ItemCardPlayed(CardBehavior cardBehavior, BaseEntity targetMonster)
+    {
+        OnItemCardPlayed?.Invoke(cardBehavior, targetMonster);
     }
 }
 

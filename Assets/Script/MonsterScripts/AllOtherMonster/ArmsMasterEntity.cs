@@ -4,8 +4,22 @@ using UnityEngine;
 
 public class ArmsMasterEntity : BaseEntity
 {
-    public override void ReceiveWeapon(CardBehavior cardBehavior)
+    protected override void IndividualStart()
     {
-        cardBehavior.CastCard(this.currentNode);
+        InGameStateManager.Instance.OnItemCardPlayed += ReceiveWeapon;
+    }
+
+    // 对自己释放的装备卡会被再次释放
+    private void ReceiveWeapon(CardBehavior cardBehavior, BaseEntity targetMonster)
+    {
+        if (targetMonster == this)
+        {
+            cardBehavior.CastCard(this.currentNode);
+        }
+    }
+
+    private void OnDestroy()
+    {
+        InGameStateManager.Instance.OnItemCardPlayed -= ReceiveWeapon;
     }
 }

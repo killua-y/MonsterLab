@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -128,16 +129,24 @@ public class CardBehavior : MonoBehaviour
 
     public virtual void CastComplete()
     {
-        // 消耗费用
+        // 消耗费用, 怪兽卡为一点
         if (card is not MonsterCard)
         {
             PlayerCostManager.Instance.DecreaseCost(card.cost);
         }
-
-        // 告诉被装备怪兽你被装备了一张装备卡
-        if (card is ItemCard)
+        else
         {
-            targetMonster.ReceiveWeapon(this);
+            PlayerCostManager.Instance.DecreaseCost(PlayerStatesManager.monsterSummonCost);
+        }
+
+        // 广播释放魔法/装备这个动作
+        if (card is SpellCard)
+        {
+            InGameStateManager.Instance.SpellCardPlayed(this, targetMonster);
+        }
+        else if (card is ItemCard)
+        {
+            InGameStateManager.Instance.ItemCardPlayed(this, targetMonster);
         }
 
         // 判断卡牌是丢弃还是消耗
