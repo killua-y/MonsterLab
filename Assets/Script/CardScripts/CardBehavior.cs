@@ -95,7 +95,6 @@ public class CardBehavior : MonoBehaviour
         // 查看费用是否合理
         if (PlayerCostManager.Instance.GetRemainingCost() < card.cost)
         {
-            Debug.Log("Not enough energy");
             return;
         }
 
