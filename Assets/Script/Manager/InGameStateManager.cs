@@ -9,6 +9,7 @@ using UnityEngine;
 public class InGameStateManager : Manager<InGameStateManager>
 {
     public static bool gamePased = false;
+    public static bool inGame = false;
     public static bool PreparePhase = false;
     public static bool BattelPhase = false;
     public static GamePhase gamePhase;
@@ -27,12 +28,12 @@ public class InGameStateManager : Manager<InGameStateManager>
     public Action OnPreparePhaseEnd;
     public Action OnBattlePhaseStart;
     public Action OnBattlePhaseEnd;
+    public Action OnGameEnd;
 
     public Action<CardBehavior, BaseEntity> OnSpellCardPlayed;
     public Action<CardBehavior, BaseEntity> OnItemCardPlayed;
 
     private InGameCardModel CardModel;
-    private CardDisplayView cardDisplayView;
 
     public TextMeshProUGUI DrawPileText;
     public TextMeshProUGUI DiscardPileText;
@@ -42,29 +43,24 @@ public class InGameStateManager : Manager<InGameStateManager>
     {
         base.Awake();
         CardModel = FindObjectOfType<InGameCardModel>();
-        cardDisplayView = FindObjectOfType<CardDisplayView>();
-    }
-
-    void Start()
-    {
-        Invoke("GameStart", 0);
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 
     // 当战斗开始的时候，初始化卡组内的卡牌
     public void GameStart()
     {
+        inGame = true;
         CardModel.InitialzeDeck();
         InitizeExtraDeck();
         UpdatePileText();
 
         OnGameStart?.Invoke(); // Safe way to invoke the delegate
         Invoke("PreparePhaseStart", 0);
+    }
+
+    // 当战斗开始的时候，初始化卡组内的卡牌
+    public void GameEnd()
+    {
+        inGame = false;
     }
 
     // 回合开始
@@ -137,7 +133,7 @@ public class InGameStateManager : Manager<InGameStateManager>
         // 如果确实抽到了牌，那么将它可视化
         if (newCard != null)
         {
-            cardDisplayView.DisPlaySingleCard(newCard, hand);
+            CardDisplayView.Instance.DisPlaySingleCard(newCard, hand);
         }
 
         UpdatePileText();
@@ -168,7 +164,7 @@ public class InGameStateManager : Manager<InGameStateManager>
         List<Card> extraDeckPile = CardModel.GetExtraDeckPileCard();
         foreach (Card card in extraDeckPile)
         {
-            GameObject cardObject = cardDisplayView.DisPlaySingleCard(card, extraDeck);
+            GameObject cardObject = CardDisplayView.Instance.DisPlaySingleCard(card, extraDeck);
             cardObject.AddComponent<Scaling>();
             cardObject.AddComponent<ExtraDeckCardOnClick>().SetUp(card);
         }
@@ -192,7 +188,7 @@ public class InGameStateManager : Manager<InGameStateManager>
         if (card != null)
         {
             CardModel.AddToHand(card);
-            cardDisplayView.DisPlaySingleCard(card, hand);
+            CardDisplayView.Instance.DisPlaySingleCard(card, hand);
         }
     }
 
@@ -215,7 +211,7 @@ public class InGameStateManager : Manager<InGameStateManager>
 
             foreach (Card card in drawPileCard)
             {
-                GameObject cardObject = cardDisplayView.DisPlaySingleCard(card, drawPileParentContent);
+                GameObject cardObject = CardDisplayView.Instance.DisPlaySingleCard(card, drawPileParentContent);
                 cardObject.AddComponent<Scaling>();
             }
             drawPileParent.gameObject.SetActive(true);
@@ -240,7 +236,7 @@ public class InGameStateManager : Manager<InGameStateManager>
 
             foreach (Card card in discardPileCard)
             {
-                GameObject cardObject = cardDisplayView.DisPlaySingleCard(card, discardPileParentContent);
+                GameObject cardObject = CardDisplayView.Instance.DisPlaySingleCard(card, discardPileParentContent);
                 cardObject.AddComponent<Scaling>();
             }
             discardPileParent.gameObject.SetActive(true);

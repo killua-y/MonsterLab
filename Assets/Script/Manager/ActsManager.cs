@@ -13,6 +13,8 @@ public class ActsManager : Manager<ActsManager>
     private List<Card> mainDeck;
     private List<Card> extraDeck;
 
+    public static string CurrentEnemy = "EnemyBehavior";
+
     // Start is called before the first frame update
     void Start()
     {
@@ -77,15 +79,15 @@ public class ActsManager : Manager<ActsManager>
         switch (_boxType)
         {
             case BoxType.NormalFight:
-                SceneManager.LoadScene("BattleScene");
+                InGameStateManager.Instance.GameStart();
                 break;
 
             case BoxType.EliteFight:
-                SceneManager.LoadScene("BattleScene");
+                InGameStateManager.Instance.GameStart();
                 break;
 
             case BoxType.BossFight:
-                SceneManager.LoadScene("BattleScene");
+                InGameStateManager.Instance.GameStart();
                 break;
 
             case BoxType.Events:

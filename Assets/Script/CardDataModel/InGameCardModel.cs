@@ -18,18 +18,19 @@ public class InGameCardModel : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        currentAssignedID = 0;
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
         
     }
 
     // 加载局内卡牌, call CardDataModel里的InitializeDeck()
     public void InitialzeDeck()
     {
+        handList = new List<Card>(); // 局内存储手牌数据的链表
+        drawPileList = new List<Card>(); // 局内抽堆数据的链表
+        discardPileList = new List<Card>(); // 局内弃牌堆数据的链表
+        extraDeckPileList = new List<Card>(); // 局内弃牌堆数据的链表
+
+        currentAssignedID = 0;
+
         // 将玩家拥有的卡牌导入局内卡牌
         drawPileList = FindObjectOfType<CardDataModel>().InitializeDeck(currentAssignedID);
 

@@ -11,7 +11,6 @@ public class TurnManager : Manager<TurnManager>
     public GameObject turnParent;
     public GameObject singleTurnPrefab;
     public TextMeshProUGUI turnText;
-    private CardDataModel cardDataModel;
 
     // Turn管理
     public bool isFinalWaive = false;
@@ -25,13 +24,16 @@ public class TurnManager : Manager<TurnManager>
     // Start is called before the first frame update
     void Start()
     {
-        cardDataModel = FindObjectOfType<CardDataModel>();
+        InGameStateManager.Instance.OnGameStart += OnGameStart;
         InGameStateManager.Instance.OnPreparePhaseStart += OnPreparePhaseStart;
         InGameStateManager.Instance.OnBattlePhaseEnd += OnBattlePhaseEnd;
 
         // 加载所有怪兽数据
-        monsterList = cardDataModel.GetEnemyMonster();
+        monsterList = CardDataModel.Instance.GetEnemyMonster();
+    }
 
+    void OnGameStart()
+    {
         // 加载当前战斗敌人
         LoadEnemy();
     }
@@ -39,13 +41,14 @@ public class TurnManager : Manager<TurnManager>
     private void LoadEnemy()
     {
         // 这一行会load当前战斗的敌人
-        this.gameObject.AddComponent(Type.GetType("EnemyBehavior"));
+        this.gameObject.AddComponent(Type.GetType(ActsManager.CurrentEnemy));
 
         enemy = this.GetComponent<EnemyBehavior>();
 
         // 让敌人加载自己拥有的怪兽
         enemy.LoadEnemy();
 
+        currentTurn = 0;
         finalTurn = enemy.GetMaxTurn();
         MonsterSummonTurn = enemy.GetTurnList();
         SetUpTurnUI();
@@ -54,6 +57,13 @@ public class TurnManager : Manager<TurnManager>
 
     private void SetUpTurnUI()
     {
+        // 先清除上次战斗的回合
+        foreach (Transform child in turnParent.transform)
+        {
+            // Destroy each child GameObject
+            Destroy(child.gameObject);
+        }
+
         for (int i = 0; i <= finalTurn; i++)
         {
             GameObject newTurn = Instantiate(singleTurnPrefab, turnParent.transform);

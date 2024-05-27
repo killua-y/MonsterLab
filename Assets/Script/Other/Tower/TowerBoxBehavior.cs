@@ -4,7 +4,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class TowerBoxBehavior : MonoBehaviour
+public class TowerBoxBehavior : MonoBehaviour, IPointerDownHandler
 {
     public TextMeshProUGUI boxTypeText;
     public BoxType boxType;
@@ -73,5 +73,13 @@ public class TowerBoxBehavior : MonoBehaviour
     private void ActivateAct()
     {
         ActsManager.Instance.ActivateAct(boxType);
+    }
+
+    public void OnPointerDown(PointerEventData eventData)
+    {
+        if (eventData.button == PointerEventData.InputButton.Left)
+        {
+            OnPointDown();
+        }
     }
 }
