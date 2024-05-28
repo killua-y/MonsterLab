@@ -50,10 +50,12 @@ public class InGameStateManager : Manager<InGameStateManager>
     {
         inGame = true;
         CardModel.InitialzeDeck();
+
+        OnGameStart?.Invoke(); // Safe way to invoke the delegate
+
         InitizeExtraDeck();
         UpdatePileText();
 
-        OnGameStart?.Invoke(); // Safe way to invoke the delegate
         Invoke("PreparePhaseStart", 0);
     }
 

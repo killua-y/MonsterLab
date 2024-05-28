@@ -116,6 +116,9 @@ public class UponSummonFunction : MonoBehaviour
     // 获得能量
     public static void GainEnergyUponSummon(BaseEntity entity)
     {
-
+        Debug.Log("get here");
+        PlayerCostManager.Instance.IncreaseCost(entity.cardModel.effectData);
     }
+
+
 }

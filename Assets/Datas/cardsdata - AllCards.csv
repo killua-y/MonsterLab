@@ -8,11 +8,11 @@ m,Husky,red,legend,1,PlayerEmptyTile,0,When summoned. Repeat all Summon effects 
 m,Shadow Wolf,red,rare,1,PlayerEmptyTile,0,Upon Summon: Create a copy of itself,ShadowWolfEntity,,0,Wolf,5,100,3,0,,,5
 m,Fire Wolf,red,normal,1,PlayerEmptyTile,10,Upon Summon: deal 10 damage to all enemy monster,FireWolfEntity,,0,Wolf,4,160,1.5,0,,,6
 m,Baby Wolf,red,normal,1,PlayerEmptyTile,3,Upon Summon: Draw 3 card,BabyWolfEntity,,0,Wolf,3,50,5,0,,,7
-m,Feral Wolf,red,normal,1,PlayerEmptyTile,2,Upon Summon: Gain 2 enegy,,,0,Wolf,15,200,1.5,0,,,8
+m,Feral Wolf,red,normal,1,PlayerEmptyTile,2,Upon Summon: Gain 2 enegy,GainEnergyWolfEntity,,0,Wolf,15,200,1.5,0,,,8
 m,Gray Wolf,red,normal,1,PlayerEmptyTile,10,Upon Summon: Increase the attack power of the monster to its right by 10.,,,0,Wolf,3,50,1.5,0,,,9
 m,Black Wolf,red,normal,1,PlayerEmptyTile,80,Upon Summon: Increase the health point of the monster to its right of by 80,,,0,Wolf,4,60,1.5,0,,,10
 m,Frostfang,red,rare,1,PlayerEmptyTile,300,Mana 60: Deal 300% attack damage to all enemy monster,,,3,Wolf,20,400,1.5,50,,,11
-m,Scavenger Wolf,red,rare,1,PlayerEmptyTile,0,It's attack power and health will increase by the tribute's stats.,,,1,Wolf,5,40,1.5,50,,,12
+m,Scavenger Wolf,red,rare,1,PlayerEmptyTile,0,It's attack power and health will increase by the tribute's stats.,ScavengerWolfBaseEntity,,1,Wolf,5,40,1.5,50,,,12
 m,Thorn wolf,red,normal,2,PlayerEmptyTile,0,When taking damage. It deals an equal amount of damage to the attacker.,,,1,Wolf,1,100,1.5,0,,,13
 m,Simple Slime,Black,normal,0,PlayerEmptyTile,0,A seemingly harmless monster,,,0,Slime,1,1,1.5,0,,,14
 #,卡名,职业颜色,稀有度,费用,释放类型,数值,技能描述,script位置,图片位置,,,,,,,,,

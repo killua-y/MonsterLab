@@ -4,6 +4,7 @@ DNA,battle blood,None,normal,10,all your monster gain 10 attack power,AttackPowe
 DNA,rocky epidermis,None,normal,100,all your monster gain 100 health,HealthPointDNABehavior,,1
 DNA,Battle flag,None,legend,1,Gain 1 extra team size,TeamSizeDNABehavior,,2
 DNA,Beating heart,None,normal,1,Gain 1 extra energy,MaxEnergyDNABehavior,,3
-DNA,Arcane Codex,None,normal,2,Draw 2 cards if you cast three spell card this turn,DrawCardIfCastSpellDNA,,4
+DNA,Arcane Codex,None,normal,2,Draw 2 cards if you cast two spell card this turn,DrawCardIfCastSpellDNA,,4
 DNA,Titan's Talisman,None,rare,10,The first monster you summon each turn gain 10 attack power and 100 health,FirstMonsterBuffDNA,,5
 DNA,piggy bank,None,normal,30,"When you complete the battle, each unused turn provides an additional 30 gold",PiggyBankDNABehavior,,6
+DNA,blood sacrifice,Red,normal,1,The cost of all your Rank 1 or higher monsters is reduced by 1.,BloodSacrificeDNABehavior,,7

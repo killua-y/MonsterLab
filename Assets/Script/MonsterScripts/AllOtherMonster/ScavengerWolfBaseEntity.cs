@@ -2,17 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class RankDevourerEntity : BaseEntity
+public class ScavengerWolfBaseEntity : BaseEntity
 {
-    // 每有一个2星以上的怪兽，生命值翻倍
+    // 自己的数据会增加召唤物的数值
     protected override void Consume(List<BaseEntity> sacrfices)
     {
         foreach (BaseEntity sacrfice in sacrfices)
         {
-            if (sacrfice.cardModel.cost >= 2)
-            {
-                cardModel.attackPower *= 2;
-            }
+            cardModel.attackPower += sacrfice.cardModel.attackPower;
+            cardModel.healthPoint += sacrfice.cardModel.healthPoint;
         }
 
         base.Consume(sacrfices);

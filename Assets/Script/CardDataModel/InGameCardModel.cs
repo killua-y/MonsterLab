@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class InGameCardModel : MonoBehaviour
 {
+    public static InGameCardModel Instance;
     // 卡牌管理区
     public GameObject cardDataManager;
 
@@ -14,6 +15,11 @@ public class InGameCardModel : MonoBehaviour
     private List<Card> extraDeckPileList = new List<Card>(); // 局内弃牌堆数据的链表
 
     private int currentAssignedID;
+
+    private void Awake()
+    {
+        Instance = this;
+    }
 
     // Start is called before the first frame update
     void Start()
@@ -45,35 +51,20 @@ public class InGameCardModel : MonoBehaviour
         }
     }
 
-    // 三个helper，用于传出三个卡list信息
+    // 四个helper，用于传出四个卡list信息
     public List<Card> GetHandCard()
     {
-        foreach(Card _card in handList)
-        {
-            Debug.Log("Hand contain: " + _card.cardName);
-        }
-
         return handList;
     }
 
     public List<Card> GetDrawPileCard()
     {
-        List<Card> result = new List<Card>();
-        foreach (Card card in drawPileList)
-        {
-            result.Add(card);
-        }
-        return result;
+        return drawPileList;
     }
 
     public List<Card> GetDiscardPileCard()
     {
-        List<Card> result = new List<Card>();
-        foreach (Card card in discardPileList)
-        {
-            result.Add(card);
-        }
-        return result;
+        return discardPileList;
     }
 
     public List<Card> GetExtraDeckPileCard()
