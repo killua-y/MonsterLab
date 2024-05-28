@@ -76,8 +76,6 @@ public class ActsManager : Manager<ActsManager>
 
     public void ActivateAct(BoxType _boxType)
     {
-        RewardManager.Instance.GenerateReward(2, 0);
-        return;
         switch (_boxType)
         {
             case BoxType.NormalFight:
@@ -96,15 +94,15 @@ public class ActsManager : Manager<ActsManager>
                 break;
 
             case BoxType.Events:
-                RewardManager.Instance.GenerateReward(2,0);
+                RewardManager.Instance.GenerateReward(2, 0);
                 break;
 
             case BoxType.Merchant:
-                RewardManager.Instance.GenerateReward(0,1);
+                RewardManager.Instance.GenerateReward(0, 1);
                 break;
 
             case BoxType.Treasure:
-                RewardManager.Instance.GenerateReward(0,1);
+                RewardManager.Instance.GenerateReward(0, 1);
                 break;
 
             default:

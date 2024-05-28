@@ -50,7 +50,7 @@ public class MonsterCardBehavior : CardBehavior
             // 合法，释放卡牌效果
             CastCard(node);
 
-            CastComplete();
+            CastComplete(node);
         }
     }
 
@@ -117,7 +117,7 @@ public class MonsterCardBehavior : CardBehavior
         // 合法，释放卡牌效果
         CastCard(targetNode);
 
-        CastComplete();
+        CastComplete(targetNode);
     }
 
     public override void CastCard(Node node)

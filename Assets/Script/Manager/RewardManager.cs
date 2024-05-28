@@ -29,7 +29,15 @@ public class RewardManager : Manager<RewardManager>
 
     private void InitializeCardRewardList()
     {
-        allCard = CardDataModel.Instance.GetAllCard();
+        // 只添加自己职业颜色和白色的卡
+        foreach (Card card in CardDataModel.Instance.GetAllCard())
+        {
+            if ((card.color == CardColor.None) || (card.color == MainMenuBehavior.character))
+            {
+                allCard.Add(card);
+            }
+        }
+
         foreach (Card card in allCard)
         {
             switch (card.cardRarity)
@@ -158,7 +166,7 @@ public class RewardManager : Manager<RewardManager>
         }
 
         GameObject newReward = Instantiate(cardReward, rewardPanel.transform);
-        newReward.GetComponent<CardRewardBehavior>().AddCard(cards);
+        newReward.GetComponent<CardRewardBehavior>().SetUp(cards);
     }
 
     public void GenerateDNAReward()

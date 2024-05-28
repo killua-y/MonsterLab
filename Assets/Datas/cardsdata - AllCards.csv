@@ -1,6 +1,6 @@
 #,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18
 #,卡名,职业颜色,稀有度,费用,释放类型,数值,技能描述,script位置,图片位置,rank,种族,攻击力,生命值,攻击距离,蓝量,模型位置,skill script位置,index
-m,Howler,red,normal,1,PlayerEmptyTile,0,Normal Monster,,,0,Wolf,5,40,1.5,0,,,0
+m,Howler,Black,normal,1,PlayerEmptyTile,0,Normal Monster,,,0,Wolf,5,40,1.5,0,,,0
 m,Silvermane,red,rare,1,PlayerEmptyTile,200,Mana 30: Next attack deal 200% attack damage.,,,2,Wolf,15,100,3,30,,,1
 m,Arms Master,red,legend,1,PlayerEmptyTile,0,Item card equiped to this monster will be cast again.,ArmsMasterEntity,,2,None,3,80,1.5,0,,,2
 m,Rank Devourer,red,legend,1,PlayerEmptyTile,0,Its attack power is doubled for each 2-star or higher monster used as a tribute.,RankDevourerEntity,,3,None,50,400,1.5,0,,,3
@@ -13,15 +13,18 @@ m,Gray Wolf,red,normal,1,PlayerEmptyTile,10,Upon Summon: Increase the attack pow
 m,Black Wolf,red,normal,1,PlayerEmptyTile,80,Upon Summon: Increase the health point of the monster to its right of by 80,,,0,Wolf,4,60,1.5,0,,,10
 m,Frostfang,red,rare,1,PlayerEmptyTile,300,Mana 60: Deal 300% attack damage to all enemy monster,,,3,Wolf,20,400,1.5,50,,,11
 m,Scavenger Wolf,red,rare,1,PlayerEmptyTile,0,It's attack power and health will increase by the tribute's stats.,,,1,Wolf,5,40,1.5,50,,,12
+m,Thorn wolf,red,normal,2,PlayerEmptyTile,0,When taking damage. It deals an equal amount of damage to the attacker.,,,1,Wolf,1,100,1.5,0,,,13
+m,Simple Slime,Black,normal,0,PlayerEmptyTile,0,A seemingly harmless monster,,,0,Slime,1,1,1.5,0,,,14
 #,卡名,职业颜色,稀有度,费用,释放类型,数值,技能描述,script位置,图片位置,,,,,,,,,
-s,Fire ball,red,normal,1,EnemyMonster,10,Deal 10 damage,FireBallCardBehavior,,,,,,,,,,13
-s,Growth,red,normal,1,PlayerMonster,40,Increase 40 health,IncreaseHealthCardBehavior,,,,,,,,,,14
-s,High Speed,red,normal,1,None,2,Draw 2 card,DrawCardBehavior,,,,,,,,,,15
-i,Sword,red,rare,2,PlayerMonster,10,Apply 10 attack power,IncreaseAttackCardBehavior,,,,,,,,,,16
-s,Magnetic Grabber,red,rare,1,EnemyMonster,0,Choose an enemy monster. You can move its position.,,,,,,,,,,,17
-s,Dual Wield,red,rare,1,None,0,Select one Spell or Weapon card. Create a copy,,,,,,,,,,,18
-i,King Sword,red,legend,2,PlayerMonster,2,Double attrack power,DoubleAttackCardBehavior,,,,,,,,,,19
-s,Mirror ,red,legend,3,AllMonster,0,"Choose a friendly unit, Add a copy to your hand.",,,,,,,,,,,20
-s,Level Up,red,normal,1,PlayerMonster,5,Increase rank by 1 and apply 5 attack power.,,,,,,,,,,,21
-s,Simple Clone,red,rare,2,None,1,"Select one of your monsters on the field, create a 1 attack power, 1 health point copy, and add it to your hand.",,,,,,,,,,,22
-s,Simple Slime Summon,red,normal,1,PlayerEmptyTile,1,Summon a slime with 1 attack power and 1 health point.,,,,,,,,,,,
+s,Fire ball,Black,normal,1,EnemyMonster,10,Deal 10 damage,FireBallCardBehavior,,,,,,,,,,15
+s,Growth,Black,normal,1,PlayerMonster,40,Increase 40 health,IncreaseHealthCardBehavior,,,,,,,,,,16
+s,High Speed,red,normal,1,None,2,Draw 2 card,DrawCardBehavior,,,,,,,,,,17
+i,Sword,red,rare,2,PlayerMonster,10,Apply 10 attack power,IncreaseAttackCardBehavior,,,,,,,,,,18
+s,Magnetic Grabber,red,normal,0,EnemyMonster,0,Choose an enemy monster. You can move its position.,MagneticGrabberCardBehavior,,,,,,,,,,19
+i,King Sword,red,legend,2,PlayerMonster,2,Double attrack power,DoubleAttackCardBehavior,,,,,,,,,,20
+s,Mirror ,red,legend,3,PlayerMonster,0,Choose a friendly unit. Add a copy to your hand.,MirrorCardBehavior,,,,,,,,,,21
+s,Level Up,red,normal,1,PlayerMonster,5,Increase rank by 1 and apply 5 attack power.,LevelUpCardBehavior,,,,,,,,,,22
+s,Simple Clone,red,rare,2,PlayerMonster,0,Select one of your monsters on the field. Create a 1 attack power 1 health point copy. And add it to your hand.,SimpleCloneCardBehavior,,,,,,,,,,23
+s,Simple Slime Summon,red,normal,1,PlayerEmptyTile,14,Summon a slime with 1 attack power and 1 health point.,SimpleSlimeSummonCardBehavior,,,,,,,,,,24
+i,Growth On Death,red,rare,2,PlayerMonster,20,The equipped monster gains 20 maximum health each time it dies.,IncreaseHealthOnDeathCardBehavior,,,,,,,,,,25
+i,Heavy Shackles,red,normal,1,EnemyMonster,10,Choose an enemy monster. It's attack power reduced by 10 (Cannot less than 1),ReduceAttackCardBehavior,,,,,,,,,,26

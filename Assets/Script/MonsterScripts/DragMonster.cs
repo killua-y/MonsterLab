@@ -17,6 +17,8 @@ public class DragMonster : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 
     private bool IsDragging = false;
 
+    private bool isPlayerMontser;
+
     private void Start()
     {
         cam = Camera.main;
@@ -30,6 +32,8 @@ public class DragMonster : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 
     public void OnStartDrag()
     {
+        isPlayerMontser = (this.GetComponent<BaseEntity>().myTeam == Team.Player);
+
         oldPosition = this.transform.position;
         oldSortingOrder = spriteRenderer.sortingOrder;
 
@@ -49,12 +53,12 @@ public class DragMonster : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
         Tile tileUnder = HelperFunction.GetTileUnder();
         if (tileUnder != null)
         {
-            tileUnder.SetHighlight(true, !GridManager.Instance.GetNodeForTile(tileUnder).IsOccupied);
-
             if (previousTile != null && tileUnder != previousTile)
             {
                 //We are over a different tile.
                 previousTile.SetHighlight(false, false);
+
+                tileUnder.SetHighlight(true, isValid(GridManager.Instance.GetNodeForTile(tileUnder)));
             }
 
             previousTile = tileUnder;
@@ -94,7 +98,7 @@ public class DragMonster : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
             Node candidateNode = GridManager.Instance.GetNodeForTile(t);
             if (candidateNode != null && thisEntity != null)
             {
-                if ((!candidateNode.IsOccupied) && (candidateNode.IsPlayerArea))
+                if (isValid(candidateNode))
                 {
                     //Let's move this unity to that node
                     thisEntity.StandUp();
@@ -105,9 +109,19 @@ public class DragMonster : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
                 }
             }
         }
-
-
         return false;
+    }
+
+    private bool isValid(Node node)
+    {
+        if ((!node.IsOccupied) && (isPlayerMontser == node.IsPlayerArea))
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 
     public void OnPointerDown(PointerEventData eventData)

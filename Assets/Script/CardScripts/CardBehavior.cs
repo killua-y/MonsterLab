@@ -10,7 +10,7 @@ public class CardBehavior : MonoBehaviour
     public CastType castType;
     public bool isValid = true;
 
-    protected Card card;
+    public Card card;
 
     protected Node targetNode;
     protected BaseEntity targetMonster;
@@ -99,13 +99,14 @@ public class CardBehavior : MonoBehaviour
             return;
         }
 
-        // 合法，释放卡牌效果
         targetMonster = node.currentEntity;
+
+        // 合法，释放卡牌效果
         Debug.Log("Cast Card: " + card.cardName);
         CastCard(node);
 
         // 释放结束
-        CastComplete();
+        CastComplete(node);
     }
 
     public virtual void OnPointDown()
@@ -127,8 +128,10 @@ public class CardBehavior : MonoBehaviour
         Debug.Log("Please attach correspond card behavior srcipt to this card: " + card.cardName);
     }
 
-    public virtual void CastComplete()
+    public virtual void CastComplete(Node node)
     {
+        IndividualCastComplete(node);
+
         // 消耗费用
         PlayerCostManager.Instance.DecreaseCost(card.cost);
 
@@ -155,5 +158,11 @@ public class CardBehavior : MonoBehaviour
             InGameStateManager.Instance.ExhaustOneCard(card);
             Destroy(this.gameObject);
         }
+    }
+
+    // 有些卡牌会存在特殊的释放结束代价
+    public virtual void IndividualCastComplete(Node node)
+    {
+
     }
 }

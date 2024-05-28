@@ -15,6 +15,7 @@ public class ArmsMasterEntity : BaseEntity
         if (targetMonster == this)
         {
             cardBehavior.CastCard(this.currentNode);
+            cardBehavior.IndividualCastComplete(this.currentNode);
         }
     }
 

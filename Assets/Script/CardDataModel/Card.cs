@@ -1,4 +1,6 @@
 
+using System.Collections.Generic;
+
 public class Card
 {
     // 卡牌编号
@@ -58,11 +60,14 @@ public class Card
         public string modelLocation;
         // 怪兽技能脚本位置
         public string skillScriptLocation;
+        // 被装备的卡片list
+        public List<Card> equipedCard;
 
 
         public MonsterCard(int _id, int _uniqueID, string _cardName, CardColor _color, CardRarity _cardRarity,
         int _cost, CastType _castType, int _effectData, string _effectText, string _cardLocation, string _imageLocation,
-        int _rank, MonsterType _type, int _attackPower, int _healthPoint, float _attackRange, int _Mana, string _modelLocation, string _skillScriptLocation) :
+        int _rank, MonsterType _type, int _attackPower, int _healthPoint, float _attackRange,
+        int _Mana, string _modelLocation, string _skillScriptLocation, List<Card> _equipedCard = null) :
             base(_id, _uniqueID, _cardName, _color, _cardRarity, _cost, _castType, _effectData, _effectText, _cardLocation, _imageLocation)
         {
             this.rank = _rank;
@@ -73,6 +78,14 @@ public class Card
             this.Mana = _Mana;
             this.modelLocation = _modelLocation;
             this.skillScriptLocation = _skillScriptLocation;
+            if (_equipedCard == null)
+            {
+                this.equipedCard = new List<Card>();
+            }
+            else
+            {
+                this.equipedCard = _equipedCard;
+            }
         }
     }
 
@@ -122,7 +135,8 @@ public class Card
                 monsterCard.attackRange,
                 monsterCard.Mana,
                 monsterCard.modelLocation,
-                monsterCard.skillScriptLocation
+                monsterCard.skillScriptLocation,
+                monsterCard.equipedCard
             );
         }
         else if (originalCard is SpellCard spellCard)

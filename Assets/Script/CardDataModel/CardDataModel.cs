@@ -51,7 +51,7 @@ public class CardDataModel : MonoBehaviour
         LoadPlayerData();
     }
 
-    // 加载所有卡牌数据,会根据MainMenuBehavior的基础设置加载不同颜色的卡牌
+    // 加载所有卡牌数据
     private void LoadCardList()
     {
         int currentIndex = 0;
@@ -63,12 +63,6 @@ public class CardDataModel : MonoBehaviour
             string[] rowArray = row.Split(',');
             if (rowArray[0] == "#")
             {
-                continue;
-            }
-            else if ((HelperFunction.ConvertToEnum<CardColor>(rowArray[2]) != MainMenuBehavior.character)
-                && (HelperFunction.ConvertToEnum<CardColor>(rowArray[2]) != CardColor.None))
-            {
-                //Debug.Log("Do not equal, the color is : " + rowArray[2]);
                 continue;
             }
             else if (rowArray[0] == "m")
@@ -154,11 +148,6 @@ public class CardDataModel : MonoBehaviour
         {
             string[] rowArray = row.Split(',');
             if (rowArray[0] == "#")
-            {
-                continue;
-            }
-            else if ((HelperFunction.ConvertToEnum<CardColor>(rowArray[2]) != MainMenuBehavior.character)
-                && (HelperFunction.ConvertToEnum<CardColor>(rowArray[2]) != CardColor.None))
             {
                 continue;
             }

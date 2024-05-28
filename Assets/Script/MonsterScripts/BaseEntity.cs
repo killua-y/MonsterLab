@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,22 +25,23 @@ public class BaseEntity : MonoBehaviour
     // 储存了怪兽所有数据的卡牌信息
     public MonsterCard cardModel;
 
+    // 自走棋部分
     public Team myTeam;
     protected BaseEntity currentTarget = null;
     protected Node currentNode;
     public Node BattleStartNode;
-
     public Node CurrentNode => currentNode;
-
     protected bool HasEnemy => currentTarget != null;
     protected bool IsInRange => currentTarget != null && Vector3.Distance(this.transform.position, currentTarget.transform.position) <= range;
     protected bool moving;
     protected Node destination;
 
+    //其他
     protected bool dead = false;
     protected bool canAttack = true;
     protected bool CanBattle = false;
     protected float waitBetweenAttack;
+    public Action OnDeath;
 
     public virtual void Setup(Team team, Node node, MonsterCard monsterCard, List<BaseEntity> sacrifices = null)
     {
@@ -83,6 +85,44 @@ public class BaseEntity : MonoBehaviour
         if ((range > 1.5) && (bullet == null))
         {
             bullet = Resources.Load<GameObject>("MonsterPrefab/bullet");
+        }
+
+        // 重新施加记录下的装备
+        if (monsterCard.equipedCard.Count > 0)
+        {
+            Debug.Log("Start recast equipedCard");
+            foreach (Card card in monsterCard.equipedCard)
+            {
+                System.Type scriptType = System.Type.GetType(card.scriptLocation);
+
+                if (scriptType != null)
+                {
+                    // Use an existing GameObject or create a new one
+                    GameObject tempObject = new GameObject("TempCardBehaviorObject");
+
+                    // Add the component to the GameObject
+                    MonoBehaviour scriptInstance = tempObject.AddComponent(scriptType) as MonoBehaviour;
+
+                    // Ensure the script instance implements ICardBehavior
+                    if (scriptInstance is CardBehavior cardBehavior)
+                    {
+                        cardBehavior.card = card;
+                        // Call the CastCard method
+                        cardBehavior.CastCard(currentNode);
+                    }
+                    else
+                    {
+                        Debug.LogWarning($"The script type {scriptType} does not implement CardBehavior.");
+                    }
+
+                    // Optionally, destroy the temporary object if it's no longer needed
+                    Destroy(tempObject);
+                }
+                else
+                {
+                    Debug.LogError($"The script type '{card.scriptLocation}' could not be found.");
+                }
+            }
         }
 
         // 最后再update一次UI
@@ -387,7 +427,6 @@ public class BaseEntity : MonoBehaviour
             {
                 bulletInstance.GetComponent<Bullet>().Initialize(currentTarget, cardModel.attackPower, this);
             }
-
         }
         // 播放攻击后摇
         yield return new WaitForSeconds(attackRecover);
@@ -409,6 +448,6 @@ public class BaseEntity : MonoBehaviour
 
     public virtual void UponDeath()
     {
-
+        OnDeath?.Invoke();
     }
 }
