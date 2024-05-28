@@ -43,6 +43,7 @@ public class Card
     // 怪兽卡类
     public class MonsterCard : Card
     {
+        public int rank;
         // 种族
         public MonsterType type;
         // 攻击力
@@ -61,9 +62,10 @@ public class Card
 
         public MonsterCard(int _id, int _uniqueID, string _cardName, CardColor _color, CardRarity _cardRarity,
         int _cost, CastType _castType, int _effectData, string _effectText, string _cardLocation, string _imageLocation,
-        MonsterType _type, int _attackPower, int _healthPoint, float _attackRange, int _Mana, string _modelLocation, string _skillScriptLocation) :
+        int _rank, MonsterType _type, int _attackPower, int _healthPoint, float _attackRange, int _Mana, string _modelLocation, string _skillScriptLocation) :
             base(_id, _uniqueID, _cardName, _color, _cardRarity, _cost, _castType, _effectData, _effectText, _cardLocation, _imageLocation)
         {
+            this.rank = _rank;
             this.type = _type;
             this.attackPower = _attackPower;
             this.healthPoint = _healthPoint;
@@ -113,6 +115,7 @@ public class Card
                 monsterCard.effectText,
                 monsterCard.scriptLocation,
                 monsterCard.imageLocation,
+                monsterCard.rank,
                 monsterCard.type,
                 monsterCard.attackPower,
                 monsterCard.healthPoint,

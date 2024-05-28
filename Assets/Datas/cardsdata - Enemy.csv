@@ -1,6 +1,6 @@
-#,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17
-#,卡名,职业颜色,稀有度,费用,释放类型,数值,技能描述,script位置,图片位置,种族,攻击力,生命值,攻击距离,蓝量,模型位置,skill script位置,index
-m,Slime,black,Normal,0,PlayerEmptyTile,0,Normal Enemy,,,Slime,5,50,1.5,0,,,0
-m,Acid Slime,black,Normal,0,PlayerEmptyTile,0,Normal Enemy,,,Slime,15,10,5,0,,,1
-m,Black Slime,black,Normal,0,PlayerEmptyTile,0,Normal Enemy,,,Slime,2,100,1.5,0,,,2
-m,Fire Slime,black,Normal,0,PlayerEmptyTile,0,Normal Enemy,,,Slime,10,30,1.5,0,,,3
+#,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18
+#,卡名,职业颜色,稀有度,费用,释放类型,数值,技能描述,script位置,图片位置,rank,种族,攻击力,生命值,攻击距离,蓝量,模型位置,skill script位置,index
+m,Slime,black,Normal,0,PlayerEmptyTile,0,Normal Enemy,,,0,Slime,5,50,1.5,0,,,0
+m,Acid Slime,black,Normal,0,PlayerEmptyTile,0,Normal Enemy,,,0,Slime,15,10,5,0,,,1
+m,Black Slime,black,Normal,0,PlayerEmptyTile,0,Normal Enemy,,,0,Slime,2,100,1.5,0,,,2
+m,Fire Slime,black,Normal,0,PlayerEmptyTile,0,Normal Enemy,,,0,Slime,10,30,1.5,0,,,3

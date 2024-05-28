@@ -221,7 +221,7 @@ public class BaseEntity : MonoBehaviour
     {
         if (card != null)
         {
-            cardModel = (MonsterCard)Card.CloneCard(card);
+            cardModel = card;
         }
 
         currentHealth = cardModel.healthPoint;

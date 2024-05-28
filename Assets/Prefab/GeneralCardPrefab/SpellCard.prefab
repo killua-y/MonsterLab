@@ -358,7 +358,7 @@ GameObject:
   - component: {fileID: 1821335004688730538}
   - component: {fileID: 1821335004688730537}
   m_Layer: 5
-  m_Name: Cost
+  m_Name: CostText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -577,4 +577,4 @@ MonoBehaviour:
   CardPicture: {fileID: 1821335003726137152}
   nameText: {fileID: 1821335003645222114}
   effectText: {fileID: 1821335002987784893}
-  cost: {fileID: 1821335004688730537}
+  costText: {fileID: 1821335004688730537}

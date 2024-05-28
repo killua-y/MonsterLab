@@ -7,8 +7,8 @@ public class MainMenuBehavior : MonoBehaviour
 {
     public static CardColor character = CardColor.Red;
 
-    public void StartGameRed()
+    public void StartGame()
     {
-        SceneManager.LoadScene("TowerScene");
+        SceneManager.LoadScene("BattleScene");
     }
 }

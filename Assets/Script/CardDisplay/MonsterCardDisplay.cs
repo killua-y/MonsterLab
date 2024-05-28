@@ -9,7 +9,9 @@ using static Card;
 public class MonsterCardDisplay : CardDisplay
 {
     public Image CardPicture;
-    public TextMeshProUGUI rankText;
+    public TextMeshProUGUI costText;
+    public Transform rankParent;
+    public GameObject rankPrefab;
     public TextMeshProUGUI nameText;
     public TextMeshProUGUI effectText;
     public TextMeshProUGUI attack;
@@ -33,7 +35,7 @@ public class MonsterCardDisplay : CardDisplay
         
     }
 
-    public override void UpdateCardView(Card _card)
+    public override void UpdateIndividualCardView(Card _card)
     {
         if (_card is not MonsterCard)
         {
@@ -46,12 +48,70 @@ public class MonsterCardDisplay : CardDisplay
         {
             CardPicture = Resources.Load<Image>(cardModel.imageLocation);
         }
-        rankText.text = Convert.ToString(cardModel.cost);
+        costText.text = Convert.ToString(cardModel.cost);
         nameText.text = cardModel.cardName;
         effectText.text = cardModel.effectText;
         attack.text = Convert.ToString(cardModel.attackPower);
         health.text = Convert.ToString(cardModel.healthPoint);
         typeText.text = cardModel.type.ToString();
         rangeText.text = "range: " + (int)cardModel.attackRange;
+
+
+        foreach (Transform child in rankParent)
+        {
+            Destroy(child.gameObject);
+        }
+        for (int i = 0; i < cardModel.rank; i++)
+        {
+            Instantiate(rankPrefab, rankParent);
+        }
+    }
+
+    public override void UpdateColor(Card _card, Card originalCard)
+    {
+        MonsterCard cardModel = (MonsterCard)_card;
+        MonsterCard originalCardModel = (MonsterCard)originalCard;
+
+        // 费用
+        if (cardModel.cost == originalCardModel.cost)
+        {
+            costText.color = Color.white;
+        }
+        else if (cardModel.cost < originalCardModel.cost)
+        {
+            costText.color = Color.green;
+        }
+        else
+        {
+            costText.color = Color.red;
+        }
+
+        // 攻击力
+        if (cardModel.attackPower == originalCardModel.attackPower)
+        {
+            attack.color = Color.white;
+        }
+        else if (cardModel.attackPower > originalCardModel.attackPower)
+        {
+            attack.color = Color.green;
+        }
+        else
+        {
+            attack.color = Color.red;
+        }
+
+        // 生命值
+        if (cardModel.healthPoint == originalCardModel.healthPoint)
+        {
+            health.color = Color.white;
+        }
+        else if (cardModel.healthPoint > originalCardModel.healthPoint)
+        {
+            health.color = Color.green;
+        }
+        else
+        {
+            health.color = Color.red;
+        }
     }
 }

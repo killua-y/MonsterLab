@@ -5,7 +5,7 @@ using UnityEngine.SceneManagement;
 
 public class ActsManager : Manager<ActsManager>
 {
-    private CardDataModel cardData;
+    public GameObject MapCanvas;
     public Transform Deck;
     public Transform mainDeckScrollContent;
     public Transform extraDeckScollContent;
@@ -18,7 +18,7 @@ public class ActsManager : Manager<ActsManager>
     // Start is called before the first frame update
     void Start()
     {
-        cardData = FindObjectOfType<CardDataModel>();
+
     }
 
     // Update is called once per frame
@@ -48,7 +48,7 @@ public class ActsManager : Manager<ActsManager>
             Destroy(child.gameObject);
         }
 
-        mainDeck = cardData.InitializeDeck(0);
+        mainDeck = CardDataModel.Instance.InitializeDeck();
         foreach (Card card in mainDeck)
         {
             GameObject cardObject = CardDisplayView.Instance.DisPlaySingleCard(card, mainDeckScrollContent);
@@ -64,7 +64,7 @@ public class ActsManager : Manager<ActsManager>
             Destroy(child.gameObject);
         }
 
-        extraDeck = cardData.InitializeExtraDeck(0);
+        extraDeck = CardDataModel.Instance.InitializeExtraDeck();
         foreach (Card card in extraDeck)
         {
             GameObject cardObject = CardDisplayView.Instance.DisPlaySingleCard(card, extraDeckScollContent);
@@ -76,22 +76,27 @@ public class ActsManager : Manager<ActsManager>
 
     public void ActivateAct(BoxType _boxType)
     {
+        RewardManager.Instance.GenerateReward(2, 0);
+        return;
         switch (_boxType)
         {
             case BoxType.NormalFight:
                 InGameStateManager.Instance.GameStart();
+                MapCanvas.SetActive(false);
                 break;
 
             case BoxType.EliteFight:
                 InGameStateManager.Instance.GameStart();
+                MapCanvas.SetActive(false);
                 break;
 
             case BoxType.BossFight:
                 InGameStateManager.Instance.GameStart();
+                MapCanvas.SetActive(false);
                 break;
 
             case BoxType.Events:
-                RewardManager.Instance.GenerateReward(1,0);
+                RewardManager.Instance.GenerateReward(2,0);
                 break;
 
             case BoxType.Merchant:
@@ -109,6 +114,11 @@ public class ActsManager : Manager<ActsManager>
 
     public void ChangeDeckFromMainToExtra(int cardIndex, bool fromMainToExtra, GameObject cardObject)
     {
+        if (InGameStateManager.inGame)
+        {
+            return;
+        }
+
         if (fromMainToExtra)
         {
             cardObject.transform.SetParent(extraDeckScollContent);
@@ -120,6 +130,18 @@ public class ActsManager : Manager<ActsManager>
             cardObject.GetComponent<DeckManageCardOnClick>().isMainDeck = true;
         }
 
-        cardData.ChangeDeckFromMainToExtra(cardIndex, fromMainToExtra);
+        CardDataModel.Instance.ChangeDeckFromMainToExtra(cardIndex, fromMainToExtra);
+    }
+
+    public void OpenMap()
+    {
+        if (MapCanvas.activeSelf)
+        {
+            MapCanvas.SetActive(false);
+        }
+        else
+        {
+            MapCanvas.SetActive(true);
+        }
     }
 }

@@ -6,23 +6,32 @@ using static Card;
 public class MonsterCardBehavior : CardBehavior
 {
     private List<BaseEntity> sacrfices = null;
+    protected MonsterCard monsterCard;
 
     public override void CheckLegality(Node node)
     {
+        if (card is not MonsterCard)
+        {
+            Debug.Log("Worng card model");
+            return;
+        }
+
+        monsterCard = (MonsterCard)card;
+
         targetNode = node;
 
-        // 查看费用是否合理，召唤怪兽需要1点能量
-        if (PlayerCostManager.Instance.GetRemainingCost() < PlayerStatesManager.monsterSummonCost)
+        // 查看费用是否合理
+        if (PlayerCostManager.Instance.GetRemainingCost() < monsterCard.cost)
         {
             return;
         }
 
         // 查看是否需要祭品
-        if (card.cost != 0)
+        if (monsterCard.rank != 0)
         {
-            if (BattleManager.Instance.GetEntitiesAgainst(Team.Enemy).Count >= card.cost)
+            if (BattleManager.Instance.GetEntitiesAgainst(Team.Enemy).Count >= monsterCard.rank)
             {
-                StartCoroutine(GetTiles(card.cost));
+                StartCoroutine(GetTiles(monsterCard.rank));
             }
             else
             {
@@ -113,15 +122,7 @@ public class MonsterCardBehavior : CardBehavior
 
     public override void CastCard(Node node)
     {
-        if (card is not MonsterCard)
-        {
-            Debug.Log("Worng card model");
-            return;
-        }
-
-        MonsterCard cardModel = (MonsterCard)card;
-
-        BattleManager.Instance.InstaniateMontser(node, Team.Player, cardModel, sacrfices);
+        BattleManager.Instance.InstaniateMontser(node, Team.Player, monsterCard, sacrfices);
     }
 
     public override void OnPointDown()

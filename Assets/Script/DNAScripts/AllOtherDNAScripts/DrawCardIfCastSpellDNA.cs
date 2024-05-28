@@ -16,7 +16,7 @@ public class DrawCardIfCastSpellDNA : DNABehavior
     void OnSpellCardPlayed(CardBehavior cardBehavior, BaseEntity targetMonster)
     {
         Counter += 1;
-        if (Counter >= 3)
+        if (Counter >= 2)
         {
             DrawCard();
         }

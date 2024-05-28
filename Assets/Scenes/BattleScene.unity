@@ -810,7 +810,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: -301.9, y: -220.4}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &234566720
@@ -1484,6 +1484,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 950c2efeffc7a4023a2a77705a87e861, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  MapCanvas: {fileID: 1838172071}
   Deck: {fileID: 1933177995}
   mainDeckScrollContent: {fileID: 217347391}
   extraDeckScollContent: {fileID: 1374233324}
@@ -3840,7 +3841,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 963271046}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 345174066}
+        m_TargetAssemblyTypeName: ActsManager, Assembly-CSharp
+        m_MethodName: OpenMap
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &963271046
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8328,32 +8341,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1926536831}
   m_CullTransparentMesh: 1
---- !u!1 &1931654308 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 907875784869000146, guid: 338f731b4cfd6468bbd2b835fa6fafef, type: 3}
-  m_PrefabInstance: {fileID: 907875785383637851}
-  m_PrefabAsset: {fileID: 0}
---- !u!223 &1931654312
-Canvas:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1931654308}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_RenderMode: 2
-  m_Camera: {fileID: 0}
-  m_PlaneDistance: 100
-  m_PixelPerfect: 0
-  m_ReceivesEvents: 1
-  m_OverrideSorting: 1
-  m_OverridePixelPerfect: 0
-  m_SortingBucketNormalizedSize: 0
-  m_AdditionalShaderChannelsFlag: 0
-  m_SortingLayerID: 0
-  m_SortingOrder: 10
-  m_TargetDisplay: 0
 --- !u!1 &1933177994
 GameObject:
   m_ObjectHideFlags: 0
@@ -8738,6 +8725,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5065150150119910387, guid: 4f3da324ef0de428e9f6feb9c107789f, type: 3}
+      propertyPath: MonsterCardModel
+      value: 
+      objectReference: {fileID: 3298322266678957522, guid: 0fba6b0fec3284087b892325ffdb64b9, type: 3}
     - target: {fileID: 5065150150119910396, guid: 4f3da324ef0de428e9f6feb9c107789f, type: 3}
       propertyPath: m_Name
       value: CardDataManager

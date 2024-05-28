@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class CardRewardBehavior : MonoBehaviour
 {
-    public Transform CardHolder;
+    public RectTransform CardHolder;
 
     // Start is called before the first frame update
     void Start()
@@ -12,16 +12,13 @@ public class CardRewardBehavior : MonoBehaviour
 
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     public void AddCard(List<Card> cards)
     {
         foreach (Card card in cards)
         {
+            // Set the anchored position to zero
+            CardHolder.anchoredPosition = new Vector2(0, -150);
+
             GameObject newCard = CardDisplayView.Instance.DisPlaySingleCard(card, CardHolder);
             newCard.AddComponent<Scaling>();
             newCard.AddComponent<SingleCardOnClick>();

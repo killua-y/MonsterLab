@@ -77,6 +77,11 @@ public class TowerBoxBehavior : MonoBehaviour, IPointerDownHandler
 
     public void OnPointerDown(PointerEventData eventData)
     {
+        if (InGameStateManager.inGame)
+        {
+            return;
+        }
+
         if (eventData.button == PointerEventData.InputButton.Left)
         {
             OnPointDown();

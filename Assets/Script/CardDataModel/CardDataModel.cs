@@ -86,17 +86,18 @@ public class CardDataModel : MonoBehaviour
                 string scriptLocation = rowArray[8];
                 string imageLocation = rowArray[9];
 
-                MonsterType type = HelperFunction.ConvertToEnum<MonsterType>(rowArray[10]);
-                int attackPower = int.Parse(rowArray[11]);
-                int healthPoint = int.Parse(rowArray[12]);
-                float attackRange = float.Parse(rowArray[13]);
-                int mana = int.Parse(rowArray[14]);
-                string modelLocation = rowArray[15];
-                string skillScriptLocation = rowArray[16];
+                int rank = int.Parse(rowArray[10]);
+                MonsterType type = HelperFunction.ConvertToEnum<MonsterType>(rowArray[11]);
+                int attackPower = int.Parse(rowArray[12]);
+                int healthPoint = int.Parse(rowArray[13]);
+                float attackRange = float.Parse(rowArray[14]);
+                int mana = int.Parse(rowArray[15]);
+                string modelLocation = rowArray[16];
+                string skillScriptLocation = rowArray[17];
 
                 cardList.Add(new MonsterCard(id, uniqueID, cardName, color, cardRarity,
                     cost, castType, effectData, effectText, scriptLocation, imageLocation,
-                    type, attackPower, healthPoint, attackRange, mana, modelLocation, skillScriptLocation));
+                    rank, type, attackPower, healthPoint, attackRange, mana, modelLocation, skillScriptLocation));
 
                 //Debug.Log("Load monster card: " + name);
             }
@@ -208,17 +209,18 @@ public class CardDataModel : MonoBehaviour
                 string cardLocation = rowArray[8];
                 string imageLocation = rowArray[9];
 
-                MonsterType type = HelperFunction.ConvertToEnum<MonsterType>(rowArray[10]);
-                int attackPower = int.Parse(rowArray[11]);
-                int healthPoint = int.Parse(rowArray[12]);
-                float attackRange = float.Parse(rowArray[13]);
-                int mana = int.Parse(rowArray[14]);
-                string modelLocation = rowArray[15];
-                string skillScriptLocation = rowArray[16];
+                int rank = int.Parse(rowArray[10]);
+                MonsterType type = HelperFunction.ConvertToEnum<MonsterType>(rowArray[11]);
+                int attackPower = int.Parse(rowArray[12]);
+                int healthPoint = int.Parse(rowArray[13]);
+                float attackRange = float.Parse(rowArray[14]);
+                int mana = int.Parse(rowArray[15]);
+                string modelLocation = rowArray[16];
+                string skillScriptLocation = rowArray[17];
 
                 enemyCardList.Add(new MonsterCard(id, uniqueID, cardName, color, cardRarity,
                     cost, castType, effectData, effectText, cardLocation, imageLocation,
-                    type, attackPower, healthPoint, attackRange, mana, modelLocation, skillScriptLocation));
+                    rank, type, attackPower, healthPoint, attackRange, mana, modelLocation, skillScriptLocation));
 
                 //Debug.Log("Load enemy monster card: " + name);
             }
@@ -346,8 +348,8 @@ public class CardDataModel : MonoBehaviour
         //Debug.Log("Saved data: " + string.Join("\n", datas));
     }
 
-    // 加载局内卡组，赋予uniqueID
-    public List<Card> InitializeDeck(int currentAssignedID)
+    // 加载局内卡组
+    public List<Card> InitializeDeck()
     {
         List<Card> deckCardList = new List<Card>();
 
@@ -361,10 +363,7 @@ public class CardDataModel : MonoBehaviour
                 {
                     if (cardIndex < cardList.Count)  // Ensure the index is within the range of available cards
                     {
-                        Card newCard = Card.CloneCard(cardList[cardIndex]);  // Assuming constructor cloning or similar method
-                        newCard.uniqueID = currentAssignedID;
-                        currentAssignedID += 1;
-                        deckCardList.Add(newCard);
+                        deckCardList.Add(cardList[cardIndex]);
                     }
                 }
             }
@@ -373,8 +372,8 @@ public class CardDataModel : MonoBehaviour
         return deckCardList;
     }
 
-    // 加载局内额外卡组，赋予uniqueID
-    public List<Card> InitializeExtraDeck(int currentAssignedID)
+    // 加载局内额外卡组
+    public List<Card> InitializeExtraDeck()
     {
         List<Card> extraDeckCardList = new List<Card>();
 
@@ -388,10 +387,7 @@ public class CardDataModel : MonoBehaviour
                 {
                     if (cardIndex < cardList.Count)  // Ensure the index is within the range of available cards
                     {
-                        Card newCard = Card.CloneCard(cardList[cardIndex]);  // Assuming constructor cloning or similar method
-                        newCard.uniqueID = currentAssignedID;
-                        currentAssignedID += 1;
-                        extraDeckCardList.Add(newCard);
+                        extraDeckCardList.Add(cardList[cardIndex]);
                         //Debug.Log("generate extra deck card : " + newCard.id);
                     }
                 }
@@ -436,6 +432,12 @@ public class CardDataModel : MonoBehaviour
     public List<DNA> GetAllDNA()
     {
         return DNAList;
+    }
+
+    // 输出需要的卡牌信息
+    public Card GetCard(int index)
+    {
+        return cardList[index];
     }
 
     public void ChangeExtraDeck(Card card, bool toExtraDeck)

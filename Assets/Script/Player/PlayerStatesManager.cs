@@ -13,7 +13,6 @@ public class PlayerStatesManager : Manager<PlayerStatesManager>
     public static int maxCost = 3;
     public static int playerHealthPoint = 3;
     public static int maxUnit = 5;
-    public static int monsterSummonCost = 1;
 
     private List<DNA> playerDNAList = new List<DNA>();
 
@@ -35,8 +34,6 @@ public class PlayerStatesManager : Manager<PlayerStatesManager>
     public void AcquireDNA(DNA DNAModel)
     {
         CardDataModel.Instance.ObtainDNA(DNAModel.id);
-
-        // 这三个需要在战斗开始时重新call
         GameObject newDNA = Instantiate(DNAPrefab, DNAParent);
         newDNA.AddComponent(Type.GetType(DNAModel.scriptLocation));
         newDNA.GetComponent<DNABehavior>().SetUp(DNAModel);

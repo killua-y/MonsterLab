@@ -18,31 +18,31 @@ public class InGameCardModel : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        InGameStateManager.Instance.OnGameEnd += OnGameEnd;
     }
 
-    // 加载局内卡牌, call CardDataModel里的InitializeDeck()
+    // 加载局内卡牌, call CardDataModel里的InitializeDeck()，对输出的每张卡进行clone
     public void InitialzeDeck()
     {
-        handList = new List<Card>(); // 局内存储手牌数据的链表
-        drawPileList = new List<Card>(); // 局内抽堆数据的链表
-        discardPileList = new List<Card>(); // 局内弃牌堆数据的链表
-        extraDeckPileList = new List<Card>(); // 局内弃牌堆数据的链表
-
         currentAssignedID = 0;
 
-        // 将玩家拥有的卡牌导入局内卡牌
-        drawPileList = FindObjectOfType<CardDataModel>().InitializeDeck(currentAssignedID);
+        foreach (Card card in CardDataModel.Instance.InitializeDeck())
+        {
+            Card newCard = Card.CloneCard(card);
+            newCard.uniqueID = currentAssignedID;
+            currentAssignedID += 1;
+            drawPileList.Add(newCard);
+        }
 
-        // 更新currentAssignedID
-        currentAssignedID += drawPileList.Count;
         HelperFunction.Shuffle(drawPileList);
 
-        // 将玩家拥有的卡牌导入局内卡牌
-        extraDeckPileList = FindObjectOfType<CardDataModel>().InitializeExtraDeck(currentAssignedID);
-
-        // 更新currentAssignedID
-        currentAssignedID += extraDeckPileList.Count;
+        foreach (Card card in CardDataModel.Instance.InitializeExtraDeck())
+        {
+            Card newCard = Card.CloneCard(card);
+            newCard.uniqueID = currentAssignedID;
+            currentAssignedID += 1;
+            extraDeckPileList.Add(newCard);
+        }
     }
 
     // 三个helper，用于传出三个卡list信息
@@ -166,5 +166,24 @@ public class InGameCardModel : MonoBehaviour
     public void AddToHand(Card card)
     {
         handList.Add(card);
+    }
+
+    private void OnGameEnd()
+    {
+        //清空列表
+        ClearCardList(handList);
+        ClearCardList(drawPileList);
+        ClearCardList(discardPileList);
+        ClearCardList(extraDeckPileList);
+    }
+
+    // helper，用于清空列表
+    private void ClearCardList(List<Card> cardList)
+    {
+        for (int i = 0; i < cardList.Count; i++)
+        {
+            cardList[i] = null;
+        }
+        cardList.Clear();
     }
 }

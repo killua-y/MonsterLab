@@ -11,7 +11,7 @@ public class ItemCardDisplay : CardDisplay
     public Image CardPicture;
     public TextMeshProUGUI nameText;
     public TextMeshProUGUI effectText;
-    public TextMeshProUGUI cost;
+    public TextMeshProUGUI costText;
 
     // Start is called before the first frame update
     void Start()
@@ -26,7 +26,7 @@ public class ItemCardDisplay : CardDisplay
     }
 
     // 将怪兽卡数据导入模型
-    public override void UpdateCardView(Card _card)
+    public override void UpdateIndividualCardView(Card _card)
     {
         if (_card is not ItemCard)
         {
@@ -39,8 +39,25 @@ public class ItemCardDisplay : CardDisplay
         {
             CardPicture = Resources.Load<Image>(cardModel.imageLocation);
         }
-        cost.text = Convert.ToString(cardModel.cost);
+        costText.text = Convert.ToString(cardModel.cost);
         nameText.text = cardModel.cardName;
         effectText.text = cardModel.effectText;
+    }
+
+    public override void UpdateColor(Card _card, Card originalCard)
+    {
+        // 费用
+        if (_card.cost == originalCard.cost)
+        {
+            costText.color = Color.white;
+        }
+        else if (_card.cost < originalCard.cost)
+        {
+            costText.color = Color.green;
+        }
+        else
+        {
+            costText.color = Color.red;
+        }
     }
 }

@@ -10,7 +10,7 @@ public class CardBehavior : MonoBehaviour
     public CastType castType;
     public bool isValid = true;
 
-    public Card card;
+    protected Card card;
 
     protected Node targetNode;
     protected BaseEntity targetMonster;
@@ -129,15 +129,8 @@ public class CardBehavior : MonoBehaviour
 
     public virtual void CastComplete()
     {
-        // 消耗费用, 怪兽卡为一点
-        if (card is not MonsterCard)
-        {
-            PlayerCostManager.Instance.DecreaseCost(card.cost);
-        }
-        else
-        {
-            PlayerCostManager.Instance.DecreaseCost(PlayerStatesManager.monsterSummonCost);
-        }
+        // 消耗费用
+        PlayerCostManager.Instance.DecreaseCost(card.cost);
 
         // 广播释放魔法/装备这个动作
         if (card is SpellCard)

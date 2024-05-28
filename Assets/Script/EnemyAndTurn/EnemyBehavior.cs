@@ -57,21 +57,27 @@ public class EnemyBehavior : MonoBehaviour
     {
         if (index == 0)
         {
-            BattleManager.Instance.InstaniateMontser(0, 5, Team.Enemy, normal);
-            BattleManager.Instance.InstaniateMontser(1, 5, Team.Enemy, normal);
-            BattleManager.Instance.InstaniateMontser(1, 7, Team.Enemy, ranged);
-            BattleManager.Instance.InstaniateMontser(3, 7, Team.Enemy, ranged);
-            BattleManager.Instance.InstaniateMontser(2, 4, Team.Enemy, tank);
-            BattleManager.Instance.InstaniateMontser(4, 4, Team.Enemy, highAttack);
+            SummonEnenmy(0, 5, normal);
+            SummonEnenmy(1, 5, normal);
+            SummonEnenmy(1, 7, ranged);
+            SummonEnenmy(3, 7, ranged);
+            SummonEnenmy(2, 4, tank);
+            SummonEnenmy(4, 4, highAttack);
         }
         else if (index == 1)
         {
-            BattleManager.Instance.InstaniateMontser(0, 7, Team.Enemy, ranged);
+            SummonEnenmy(1, 7, ranged);
 
             // 最后一波
             TurnManager.Instance.isFinalWaive = true;
         }
 
         index += 1;
+    }
+
+    protected void SummonEnenmy(int rowIndex, int columnIndex, MonsterCard card)
+    {
+        MonsterCard newCard = (MonsterCard)Card.CloneCard(card);
+        BattleManager.Instance.InstaniateMontser(GridManager.Instance.GetFreeNode(rowIndex,columnIndex,false), Team.Enemy, newCard);
     }
 }
