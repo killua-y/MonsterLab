@@ -8,12 +8,8 @@ using static Card;
 
 public class MonsterCardDisplay : CardDisplay
 {
-    public Image CardPicture;
-    public TextMeshProUGUI costText;
     public Transform rankParent;
     public GameObject rankPrefab;
-    public TextMeshProUGUI nameText;
-    public TextMeshProUGUI effectText;
     public TextMeshProUGUI attack;
     public TextMeshProUGUI health;
     public TextMeshProUGUI typeText;
@@ -35,7 +31,7 @@ public class MonsterCardDisplay : CardDisplay
         
     }
 
-    public override void UpdateIndividualCardView(Card _card)
+    public override void UpdateCardView(Card _card)
     {
         if (_card is not MonsterCard)
         {
@@ -44,18 +40,11 @@ public class MonsterCardDisplay : CardDisplay
         }
 
         MonsterCard cardModel = (MonsterCard)_card;
-        if (cardModel.imageLocation != "")
-        {
-            CardPicture = Resources.Load<Image>(cardModel.imageLocation);
-        }
-        costText.text = Convert.ToString(cardModel.cost);
-        nameText.text = cardModel.cardName;
-        effectText.text = cardModel.effectText;
+
         attack.text = Convert.ToString(cardModel.attackPower);
         health.text = Convert.ToString(cardModel.healthPoint);
         typeText.text = cardModel.type.ToString();
         rangeText.text = "range: " + (int)cardModel.attackRange;
-
 
         foreach (Transform child in rankParent)
         {
@@ -65,26 +54,14 @@ public class MonsterCardDisplay : CardDisplay
         {
             Instantiate(rankPrefab, rankParent);
         }
+
+        base.UpdateCardView(_card);
     }
 
     public override void UpdateColor(Card _card, Card originalCard)
     {
         MonsterCard cardModel = (MonsterCard)_card;
         MonsterCard originalCardModel = (MonsterCard)originalCard;
-
-        // 费用
-        if (cardModel.cost == originalCardModel.cost)
-        {
-            costText.color = Color.white;
-        }
-        else if (cardModel.cost < originalCardModel.cost)
-        {
-            costText.color = Color.green;
-        }
-        else
-        {
-            costText.color = Color.red;
-        }
 
         // 攻击力
         if (cardModel.attackPower == originalCardModel.attackPower)
@@ -113,5 +90,7 @@ public class MonsterCardDisplay : CardDisplay
         {
             health.color = Color.red;
         }
+
+        base.UpdateColor(_card, originalCard);
     }
 }
