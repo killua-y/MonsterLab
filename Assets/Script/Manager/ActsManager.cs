@@ -13,12 +13,15 @@ public class ActsManager : Manager<ActsManager>
     private List<Card> mainDeck;
     private List<Card> extraDeck;
 
-    public static string CurrentEnemy = "EnemyBehavior";
+    public static string CurrentEnemy = "AcidSlimeEnermy";
+    private List<string> normalNnemyList = new List<string>();
+    private List<string> eliteNnemyList = new List<string>();
+    private List<string> bossList = new List<string>();
 
     // Start is called before the first frame update
     void Start()
     {
-
+        normalNnemyList.Add("EnemyBheavior");
     }
 
     // Update is called once per frame

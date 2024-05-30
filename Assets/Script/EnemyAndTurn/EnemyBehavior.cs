@@ -7,39 +7,18 @@ public class EnemyBehavior : MonoBehaviour
 {
     private List<MonsterCard> monsterList = new List<MonsterCard>();
 
-    private int MaxTurn = 4;
+    // 从0开始数
+    protected int MaxTurn = 4;
 
     // 怪兽波次记录
-    private int index = 0;
-    private List<int> MonsterSummonTurn = new List<int>();
+    protected int index = 0;
+    protected List<int> MonsterSummonTurn = new List<int>();
 
     // 该敌人拥有的怪兽
-    private MonsterCard normal;
-    private MonsterCard ranged;
-    private MonsterCard tank;
-    private MonsterCard highAttack;
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 
     public virtual void LoadEnemy()
     {
-        normal = TurnManager.Instance.monsterList[0];
-        ranged = TurnManager.Instance.monsterList[1];
-        tank = TurnManager.Instance.monsterList[2];
-        highAttack = TurnManager.Instance.monsterList[3];
 
-        // 该在哪几个回合召唤怪兽
-        MonsterSummonTurn.Add(0);
-        MonsterSummonTurn.Add(3);
     }
 
     public virtual List<int> GetTurnList()
@@ -55,29 +34,30 @@ public class EnemyBehavior : MonoBehaviour
     // 根据当前回合召唤怪兽
     public virtual void SummonEnemy()
     {
-        if (index == 0)
-        {
-            SummonEnenmy(0, 5, normal);
-            SummonEnenmy(1, 5, normal);
-            SummonEnenmy(1, 7, ranged);
-            SummonEnenmy(3, 7, ranged);
-            SummonEnenmy(2, 4, tank);
-            SummonEnenmy(4, 4, highAttack);
-        }
-        else if (index == 1)
-        {
-            SummonEnenmy(1, 7, ranged);
+        index += 1;
 
-            // 最后一波
+        // 如果所有怪兽都召唤完成
+        if (MonsterSummonTurn.Count == (index + 1))
+        {
+            // 告诉TurnManager这是最后一波
             TurnManager.Instance.isFinalWaive = true;
         }
-
-        index += 1;
     }
 
-    protected void SummonEnenmy(int rowIndex, int columnIndex, MonsterCard card)
+    public static void SummonEnenmy(int rowIndex, int columnIndex, MonsterCard card)
+    {
+        int attackPower = card.attackPower;
+        int healthPoint = card.healthPoint;
+
+        SummonEnenmy(rowIndex, columnIndex, card, attackPower, healthPoint);
+
+    }
+
+    public static void SummonEnenmy(int rowIndex, int columnIndex, MonsterCard card, int attackPower, int healthPoint)
     {
         MonsterCard newCard = (MonsterCard)Card.CloneCard(card);
-        BattleManager.Instance.InstaniateMontser(GridManager.Instance.GetFreeNode(rowIndex,columnIndex,false), Team.Enemy, newCard);
+        newCard.attackPower = attackPower;
+        newCard.healthPoint = healthPoint;
+        BattleManager.Instance.InstaniateMontser(GridManager.Instance.GetFreeNode(rowIndex, columnIndex, false), Team.Enemy, newCard);
     }
 }

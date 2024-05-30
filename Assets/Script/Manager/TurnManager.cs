@@ -35,13 +35,13 @@ public class TurnManager : Manager<TurnManager>
     void OnGameStart()
     {
         // 加载当前战斗敌人
-        LoadEnemy();
+        LoadEnemy(ActsManager.CurrentEnemy);
     }
 
-    private void LoadEnemy()
+    private void LoadEnemy(String enemyScriptLocatiom)
     {
         // 这一行会load当前战斗的敌人
-        this.gameObject.AddComponent(Type.GetType(ActsManager.CurrentEnemy));
+        this.gameObject.AddComponent(Type.GetType(enemyScriptLocatiom));
 
         enemy = this.GetComponent<EnemyBehavior>();
 

@@ -62,9 +62,12 @@ public class UponSummonFunction : MonoBehaviour
         if (node != null)
         {
             MonsterCard newMonsterCard = (MonsterCard)Card.CloneCard(entity.cardModel);
-            // 设置为通常怪兽
+            // 先设置为通常怪兽避免触发战吼
             newMonsterCard.scriptLocation = "";
             BattleManager.Instance.InstaniateMontser(node, entity.myTeam, newMonsterCard);
+
+            // 再设置回去
+            newMonsterCard.scriptLocation = entity.cardModel.scriptLocation;
         }
 
         if (recordEnabled)
