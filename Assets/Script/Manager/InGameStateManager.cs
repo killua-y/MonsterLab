@@ -60,9 +60,19 @@ public class InGameStateManager : Manager<InGameStateManager>
     }
 
     // 当战斗开始的时候，初始化卡组内的卡牌
-    public void GameEnd()
+    public void GameEnd(int remainningTurn)
     {
         inGame = false;
+
+        //将手牌中的卡片删除
+        foreach (Transform child in hand)
+        {
+            GameObject.Destroy(child.gameObject);
+        }
+
+        RewardManager.Instance.GenerateReward(remainningTurn);
+
+        OnGameEnd?.Invoke(); // Safe way to invoke the delegate
     }
 
     // 回合开始

@@ -5,7 +5,7 @@ using static Card;
 
 public class AcidSlimeEnemy : EnemyBehavior
 {
-    protected new int MaxTurn = 2;
+    protected override int MaxTurn { get; set; } = 2;
 
     // 该敌人拥有的怪兽
     private MonsterCard Slime;
@@ -46,8 +46,8 @@ public class BlackSlimeEnemy : EnemyBehavior
 
     public override void LoadEnemy()
     {
-        BlackSlime = TurnManager.Instance.monsterList[3];
-        FireSlime = TurnManager.Instance.monsterList[4];
+        BlackSlime = TurnManager.Instance.monsterList[2];
+        FireSlime = TurnManager.Instance.monsterList[3];
 
         // 该在哪几个回合召唤怪兽
         MonsterSummonTurn.Add(0);

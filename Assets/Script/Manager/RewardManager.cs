@@ -7,8 +7,7 @@ public class RewardManager : Manager<RewardManager>
 {
     public GameObject rewardCanvas;
     public GameObject rewardPanel;
-    public GameObject cardReward;
-    public GameObject dnaReward;
+    public GameObject Reward;
 
     // 不区分卡牌种类
     public List<Card> allCard = new List<Card>();
@@ -25,6 +24,7 @@ public class RewardManager : Manager<RewardManager>
     void Start()
     {
         InitializeCardRewardList();
+        InitializeDNARewardList();
     }
 
     private void InitializeCardRewardList()
@@ -111,6 +111,34 @@ public class RewardManager : Manager<RewardManager>
         HelperFunction.Shuffle(legendDNA);
     }
 
+    public void GenerateReward(int remainningTurn)
+    {
+        EnemyType enemyType = ActsManager.currentEnemyType;
+
+        switch (enemyType)
+        {
+            case EnemyType.Normal:
+                GenerateGoldReward(remainningTurn);
+                GenerateReward(1, 0);
+                break;
+
+            case EnemyType.Elite:
+                GenerateGoldReward(remainningTurn);
+                GenerateReward(1, 1);
+                break;
+
+            case EnemyType.Boss:
+                GenerateGoldReward(remainningTurn);
+                GenerateReward(1, 0);
+                GenerateCardReward(CardRarity.Legend);
+                GenerateLegendDNAReward();
+                break;
+
+            default:
+                break;
+        }
+    }
+
     public void GenerateReward(int CardReward, int DNAReward)
     {
         rewardCanvas.SetActive(true);
@@ -131,33 +159,53 @@ public class RewardManager : Manager<RewardManager>
         int randNumber = Random.Range(1, 101);
 
         List<Card> cards = new List<Card>();
+        HelperFunction.Shuffle(legendCard);
+        HelperFunction.Shuffle(rareCard);
+        HelperFunction.Shuffle(normalCard);
 
-        if (randomRange(randNumber, 1, 30))
+        if (randomRange(randNumber, 1, 5))
         {
-            // Legend
-            HelperFunction.Shuffle(legendCard);
+            // All Legend
             for (int i = 0; i < 3; i++)
             {
                 cards.Add(legendCard[i]);
             }
         }
+        else if (randomRange(randNumber, 6, 30))
+        {
+            // 2 normal
+            for (int i = 0; i < 2; i++)
+            {
+                cards.Add(normalCard[i]);
+            }
+            // 1 rare
+            cards.Add(rareCard[0]);
+        }
         else if (randomRange(randNumber, 31, 60))
         {
-            // Rare
-            HelperFunction.Shuffle(rareCard);
+            // All Rare
             for (int i = 0; i < 3; i++)
             {
                 cards.Add(rareCard[i]);
             }
         }
-        else if (randomRange(randNumber, 61, 100))
+        else if (randomRange(randNumber, 61, 90))
         {
-            // Normal
-            HelperFunction.Shuffle(normalCard);
+            // All Normal
             for (int i = 0; i < 3; i++)
             {
                 cards.Add(normalCard[i]);
             }
+        }
+        else if (randomRange(randNumber, 91, 100))
+        {
+            // 2 rare
+            for (int i = 0; i < 2; i++)
+            {
+                cards.Add(rareCard[i]);
+            }
+            // 1 legend
+            cards.Add(legendCard[0]);
         }
         else
         {
@@ -165,33 +213,72 @@ public class RewardManager : Manager<RewardManager>
             return;
         }
 
-        GameObject newReward = Instantiate(cardReward, rewardPanel.transform);
-        newReward.GetComponent<CardRewardBehavior>().SetUp(cards);
+        GameObject newReward = Instantiate(Reward, rewardPanel.transform);
+        newReward.AddComponent<CardRewardBehavior>().SetUp(cards);
+    }
+
+    public void GenerateCardReward(CardRarity cardRarity)
+    {
+        int randNumber = Random.Range(1, 101);
+
+        List<Card> cards = new List<Card>();
+
+        switch (cardRarity)
+        {
+            case CardRarity.Normal:
+                // Normal
+                HelperFunction.Shuffle(normalCard);
+                for (int i = 0; i < 3; i++)
+                {
+                    cards.Add(normalCard[i]);
+                }
+                break;
+            case CardRarity.Rare:
+                HelperFunction.Shuffle(rareCard);
+                for (int i = 0; i < 3; i++)
+                {
+                    cards.Add(rareCard[i]);
+                }
+                break;
+            case CardRarity.Legend:
+                HelperFunction.Shuffle(legendCard);
+                for (int i = 0; i < 3; i++)
+                {
+                    cards.Add(legendCard[i]);
+                }
+                break;
+            default:
+                break;
+        }
+
+        GameObject newReward = Instantiate(Reward, rewardPanel.transform);
+        newReward.AddComponent<CardRewardBehavior>().SetUp(cards);
     }
 
     public void GenerateDNAReward()
     {
-        // 更新DNA奖池
-        InitializeDNARewardList();
-
         int randNumber = Random.Range(1, 101);
 
         DNA dna = null;
 
-        if (randomRange(randNumber, 1, 30))
+        if (randomRange(randNumber, 1, 50))
         {
-            // Legend
-            dna = legendDNA[0];
-            legendDNA.Remove(legendDNA[0]);
-        }
-        else if (randomRange(randNumber, 31, 60))
-        {
+            if (rareDNA.Count == 0)
+            {
+                return;
+            }
+
             // Rare
             dna = rareDNA[0];
             rareDNA.Remove(rareDNA[0]);
         }
-        else if (randomRange(randNumber, 61, 100))
+        else if (randomRange(randNumber, 51, 100))
         {
+            if (normalDNA.Count == 0)
+            {
+                return;
+            }
+
             // Normal
             dna = normalDNA[0];
             normalDNA.Remove(normalDNA[0]);
@@ -204,9 +291,42 @@ public class RewardManager : Manager<RewardManager>
 
         if (dna != null)
         {
-            GameObject newReward = Instantiate(dnaReward, rewardPanel.transform);
-            newReward.GetComponent<DNARewardBehavior>().SetUp(dna);
+            GameObject newReward = Instantiate(Reward, rewardPanel.transform);
+            newReward.AddComponent<DNARewardBehavior>().SetUp(dna);
         }
+    }
+
+    public void GenerateLegendDNAReward()
+    {
+        DNA dna = null;
+
+        // legend
+        if (legendDNA.Count == 0)
+        {
+            return;
+        }
+
+        dna = legendDNA[0];
+        rareDNA.Remove(legendDNA[0]);
+
+        if (dna != null)
+        {
+            GameObject newReward = Instantiate(Reward, rewardPanel.transform);
+            newReward.AddComponent<DNARewardBehavior>().SetUp(dna);
+        }
+    }
+
+    public void GenerateGoldReward(int remainningTurn)
+    {
+        if (remainningTurn == 0)
+        {
+            return;
+        }
+
+        int gold = remainningTurn * 50;
+
+        GameObject newReward = Instantiate(Reward, rewardPanel.transform);
+        newReward.AddComponent<GoldRewardBehavior>().SetUp(gold);
     }
 
     bool randomRange(int test, int min, int max)

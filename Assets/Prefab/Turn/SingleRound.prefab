@@ -322,10 +322,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   dot: {fileID: 337650432502201287}
   arrow: {fileID: 337650432614226688}
-  passedTurn: {fileID: 0}
-  currentTurn: {fileID: 0}
-  futureTurn: {fileID: 0}
   SummonTurn: {fileID: 5398298249632950984}
+  turnType: 0
   index: 0
 --- !u!1 &337650434224015921
 GameObject:
@@ -491,7 +489,7 @@ GameObject:
   - component: {fileID: 5843944829616784989}
   - component: {fileID: 3196875455066643434}
   m_Layer: 5
-  m_Name: Image
+  m_Name: BattleTurn
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

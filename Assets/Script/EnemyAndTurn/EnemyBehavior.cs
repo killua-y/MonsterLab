@@ -8,14 +8,13 @@ public class EnemyBehavior : MonoBehaviour
     private List<MonsterCard> monsterList = new List<MonsterCard>();
 
     // 从0开始数
-    protected int MaxTurn = 4;
+    protected virtual int MaxTurn { get; set; } = 4;
 
     // 怪兽波次记录
     protected int index = 0;
     protected List<int> MonsterSummonTurn = new List<int>();
 
     // 该敌人拥有的怪兽
-
     public virtual void LoadEnemy()
     {
 
@@ -37,7 +36,7 @@ public class EnemyBehavior : MonoBehaviour
         index += 1;
 
         // 如果所有怪兽都召唤完成
-        if (MonsterSummonTurn.Count == (index + 1))
+        if (MonsterSummonTurn.Count == index)
         {
             // 告诉TurnManager这是最后一波
             TurnManager.Instance.isFinalWaive = true;
@@ -50,7 +49,6 @@ public class EnemyBehavior : MonoBehaviour
         int healthPoint = card.healthPoint;
 
         SummonEnenmy(rowIndex, columnIndex, card, attackPower, healthPoint);
-
     }
 
     public static void SummonEnenmy(int rowIndex, int columnIndex, MonsterCard card, int attackPower, int healthPoint)

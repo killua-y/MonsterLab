@@ -21,7 +21,7 @@ public class CardDataModel : MonoBehaviour
     private int[] playerExtraDeckData; // 储存玩家额外卡组数据的array
     private int[] playerCardData; // 储存玩家卡牌数据的array
     private int[] playerDNAData; // 储存玩家DNA数据的array
-    private int totalCoins;
+    public int totalCoins;
 
     // 怪兽链表
     public TextAsset enemyTextCardData; // 地方怪兽卡牌数据txt文件

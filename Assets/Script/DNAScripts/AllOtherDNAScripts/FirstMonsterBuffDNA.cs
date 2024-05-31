@@ -12,14 +12,17 @@ public class FirstMonsterBuffDNA : DNABehavior
         BattleManager.Instance.OnUnitSummon += OnUnitSummon;
     }
 
-    void OnUnitSummon(BaseEntity targetMonster)
+    void OnUnitSummon(BaseEntity baseEntity)
     {
-        if (isFirst)
+        if (baseEntity.myTeam == Team.Player)
         {
-            targetMonster.cardModel.attackPower += DNAModel.effectData;
-            targetMonster.cardModel.healthPoint += (DNAModel.effectData * 10);
-            targetMonster.UpdateMonster();
-            isFirst = false;
+            if (isFirst)
+            {
+                baseEntity.cardModel.attackPower += DNAModel.effectData;
+                baseEntity.cardModel.healthPoint += (DNAModel.effectData * 10);
+                baseEntity.UpdateMonster();
+                isFirst = false;
+            }
         }
     }
 

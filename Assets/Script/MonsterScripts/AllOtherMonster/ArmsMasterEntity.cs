@@ -20,8 +20,9 @@ public class ArmsMasterEntity : BaseEntity
         }
     }
 
-    private void OnDestroy()
+    protected override void OnDestroy()
     {
         InGameStateManager.Instance.OnItemCardPlayed -= ReceiveWeapon;
+        base.OnDestroy();
     }
 }

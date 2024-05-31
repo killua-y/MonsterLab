@@ -10,6 +10,7 @@ public class CanvasManager : MonoBehaviour
 
     // 所有canvas
     public Canvas HighPriorityCanvas;
+    public Canvas MapCanvas;
 
     // 用于holding dna preview
     public GameObject DNAPreview;
@@ -22,6 +23,11 @@ public class CanvasManager : MonoBehaviour
     private void Awake()
     {
         Instance = this;
+    }
+
+    private void Start()
+    {
+        InGameStateManager.Instance.OnGameEnd += OnGameEnd;
     }
 
     void Update()
@@ -86,5 +92,27 @@ public class CanvasManager : MonoBehaviour
         {
             Destroy(cardPreview);
         }
+    }
+
+    public void SetMapCanvasActive(bool active)
+    {
+        MapCanvas.gameObject.SetActive(active);
+    }
+
+    public void OpenMap()
+    {
+        if (MapCanvas.gameObject.activeSelf)
+        {
+            MapCanvas.gameObject.SetActive(false);
+        }
+        else
+        {
+            MapCanvas.gameObject.SetActive(true);
+        }
+    }
+
+    private void OnGameEnd()
+    {
+        SetMapCanvasActive(true);
     }
 }

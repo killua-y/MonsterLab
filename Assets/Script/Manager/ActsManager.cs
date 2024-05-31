@@ -157,16 +157,4 @@ public class ActsManager : Manager<ActsManager>
 
         CardDataModel.Instance.ChangeDeckFromMainToExtra(cardIndex, fromMainToExtra);
     }
-
-    public void OpenMap()
-    {
-        if (MapCanvas.activeSelf)
-        {
-            MapCanvas.SetActive(false);
-        }
-        else
-        {
-            MapCanvas.SetActive(true);
-        }
-    }
 }

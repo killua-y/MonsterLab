@@ -53,4 +53,9 @@ public class MonsterUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
     {
         CanvasManager.Instance.HideCardPreview();
     }
+
+    private void OnDestroy()
+    {
+        CanvasManager.Instance.HideCardPreview();
+    }
 }

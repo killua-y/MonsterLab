@@ -1,52 +1,30 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class TurnUnitBehavior : MonoBehaviour
 {
     public GameObject dot;
     public GameObject arrow;
-    public GameObject passedTurn;
-    public GameObject currentTurn;
-    public GameObject futureTurn;
     public GameObject SummonTurn;
 
     public TurnType turnType;
     public int index;
-    // Start is called before the first frame update
-    void Start()
-    {
-
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 
     public void UpdateTurn(int turnIndex)
     {
         if (index == turnIndex)
         {
-            if (currentTurn != null)
-            {
-                currentTurn.SetActive(true);
-            }
+            this.GetComponent<Image>().color = Color.yellow;
         }
         else if (index > turnIndex)
         {
-            if (futureTurn != null)
-            {
-                futureTurn.SetActive(true);
-            }
+            this.GetComponent<Image>().color = Color.white;
         }
         else if (index < turnIndex)
         {
-            if (passedTurn != null)
-            {
-                passedTurn.SetActive(true);
-            }
+            this.GetComponent<Image>().color = Color.gray;
         }
         else
         {

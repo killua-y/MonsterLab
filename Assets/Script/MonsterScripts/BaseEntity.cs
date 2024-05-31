@@ -230,7 +230,10 @@ public class BaseEntity : MonoBehaviour
     public void StandUp()
     {
         // 当前格子设置不占用，同时SetOccupied会把自己格子内的怪兽设为null
-        currentNode.SetOccupied(false);
+        if (currentNode != null)
+        {
+            currentNode.SetOccupied(false);
+        }
     }
 
     // 把currentnode设置为传入的node
@@ -328,14 +331,6 @@ public class BaseEntity : MonoBehaviour
         dead = true;
         StandUp();
 
-        if (myTeam == Team.Enemy)
-        {
-            InGameStateManager.Instance.OnPreparePhaseStart -= OnPreparePhaseStart;
-            InGameStateManager.Instance.OnPreparePhaseEnd -= OnPreparePhaseEnd;
-            InGameStateManager.Instance.OnBattlePhaseStart -= OnBattlePhaseStart;
-            InGameStateManager.Instance.OnBattlePhaseEnd -= OnBattlePhaseEnd;
-        }
-
         // 亡语效果
         if (!isSacrifice)
         {
@@ -360,10 +355,6 @@ public class BaseEntity : MonoBehaviour
             }
             else
             {
-                InGameStateManager.Instance.OnPreparePhaseStart -= OnPreparePhaseStart;
-                InGameStateManager.Instance.OnPreparePhaseEnd -= OnPreparePhaseEnd;
-                InGameStateManager.Instance.OnBattlePhaseStart -= OnBattlePhaseStart;
-                InGameStateManager.Instance.OnBattlePhaseEnd -= OnBattlePhaseEnd;
                 Destroy(this.gameObject);
             }
         }
@@ -434,5 +425,14 @@ public class BaseEntity : MonoBehaviour
     public virtual void UponDeath()
     {
         OnDeath?.Invoke();
+    }
+
+    protected virtual void OnDestroy()
+    {
+        StandUp();
+        InGameStateManager.Instance.OnPreparePhaseStart -= OnPreparePhaseStart;
+        InGameStateManager.Instance.OnPreparePhaseEnd -= OnPreparePhaseEnd;
+        InGameStateManager.Instance.OnBattlePhaseStart -= OnBattlePhaseStart;
+        InGameStateManager.Instance.OnBattlePhaseEnd -= OnBattlePhaseEnd;
     }
 }

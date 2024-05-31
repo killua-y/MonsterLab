@@ -10,10 +10,6 @@ public class UponSummonFunction : MonoBehaviour
 
     private static bool recordEnabled = true;
 
-    private void Awake()
-    {
-    }
-
     // Start is called before the first frame update
     void Start()
     {
@@ -24,7 +20,6 @@ public class UponSummonFunction : MonoBehaviour
     {
         AllUponSummonFunctionsCalled = new List<System.Action<BaseEntity>>();
         AllEffectData = new List<int>();
-        Debug.Log("reset summon function");
     }
 
     // 重复所有战吼

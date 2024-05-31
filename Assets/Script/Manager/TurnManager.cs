@@ -10,15 +10,14 @@ public class TurnManager : Manager<TurnManager>
     // 卡牌管理区
     public GameObject turnParent;
     public GameObject singleTurnPrefab;
-    public TextMeshProUGUI turnText;
 
     // Turn管理
-    public bool isFinalWaive = false;
-    private int currentTurn = 0;
-    private int finalTurn = 0;
-    private List<int> MonsterSummonTurn = new List<int>();
+    public bool isFinalWaive;
+    private int currentTurn;
+    private int finalTurn;
     public List<MonsterCard> monsterList = new List<MonsterCard>();
-    private List<TurnUnitBehavior> allTurns = new List<TurnUnitBehavior>();
+    private List<int> MonsterSummonTurn;
+    private List<TurnUnitBehavior> allTurns;
 
     private EnemyBehavior enemy;
     // Start is called before the first frame update
@@ -34,12 +33,15 @@ public class TurnManager : Manager<TurnManager>
 
     void OnGameStart()
     {
+
         // 加载当前战斗敌人
         LoadEnemy(ActsManager.currentEnemy);
     }
 
     private void LoadEnemy(String enemyScriptLocatiom)
     {
+        isFinalWaive = false;
+
         // 这一行会load当前战斗的敌人
         this.gameObject.AddComponent(Type.GetType(enemyScriptLocatiom));
 
@@ -50,6 +52,7 @@ public class TurnManager : Manager<TurnManager>
 
         currentTurn = 0;
         finalTurn = enemy.GetMaxTurn();
+        MonsterSummonTurn = new List<int>();
         MonsterSummonTurn = enemy.GetTurnList();
         SetUpTurnUI();
         UpdateTurnView();
@@ -64,14 +67,14 @@ public class TurnManager : Manager<TurnManager>
             Destroy(child.gameObject);
         }
 
+        allTurns = new List<TurnUnitBehavior>();
+
         for (int i = 0; i <= finalTurn; i++)
         {
             GameObject newTurn = Instantiate(singleTurnPrefab, turnParent.transform);
             TurnUnitBehavior turnBehavior = newTurn.GetComponent<TurnUnitBehavior>();
             allTurns.Add(turnBehavior);
             turnBehavior.index = i;
-
-            turnParent.GetComponent<TurnUnitHorizontalLayout>().SortAndPositionChildren();
 
             if (MonsterSummonTurn.Contains(i))
             {
@@ -82,6 +85,9 @@ public class TurnManager : Manager<TurnManager>
                 turnBehavior.turnType = TurnType.Rest;
             }
         }
+
+        turnParent.GetComponent<TurnUnitHorizontalLayout>().SortAndPositionChildren();
+        turnParent.GetComponent<TurnUnitHorizontalLayout>().SortAndPositionChildren();
     }
 
     // 每个准备阶段开始都call一下enemy看看要不要召唤怪兽
@@ -113,8 +119,11 @@ public class TurnManager : Manager<TurnManager>
             if (isFinalWaive)
             {
                 int remainningTurn = finalTurn - currentTurn;
+
                 // 过关
-                Debug.Log("You win!, remainning turn = " + remainningTurn);
+                EnemyBehavior enemy = this.GetComponent<EnemyBehavior>();
+                Destroy(enemy);
+                InGameStateManager.Instance.GameEnd(remainningTurn);
             }
             else
             {
@@ -189,8 +198,6 @@ public class TurnManager : Manager<TurnManager>
 
     private void UpdateTurnView()
     {
-        turnText.text = "Turn: " + (currentTurn + 1);
-
         foreach (TurnUnitBehavior turnUnitBehavior in allTurns)
         {
             turnUnitBehavior.UpdateTurn(currentTurn);

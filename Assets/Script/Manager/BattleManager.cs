@@ -22,6 +22,7 @@ public class BattleManager : Manager<BattleManager>
     {
         base.Awake();
         InGameStateManager.Instance.OnBattlePhaseStart += OnBattleTurnStart;
+        InGameStateManager.Instance.OnGameEnd += OnGameEnd;
     }
 
     public int ConvertRowColumnToIndex(int row, int column)
@@ -186,6 +187,23 @@ public class BattleManager : Manager<BattleManager>
         else if (enemyEntities.Count == 0)
         {
             Invoke("NewTurn", 2f);
+        }
+    }
+
+    public void OnGameEnd()
+    {
+        foreach (Transform child in playerParent)
+        {
+            BaseEntity entity = child.GetComponent<BaseEntity>();
+            playerEntities.Remove(entity);
+            Destroy(entity.gameObject);
+        }
+
+        foreach (Transform child in enemyParent)
+        {
+            BaseEntity entity = child.GetComponent<BaseEntity>();
+            enemyEntities.Remove(entity);
+            Destroy(entity.gameObject);
         }
     }
 }
