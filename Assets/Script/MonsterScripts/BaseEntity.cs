@@ -31,7 +31,7 @@ public class BaseEntity : MonoBehaviour
     protected Node currentNode;
     public Node BattleStartNode;
     public Node CurrentNode => currentNode;
-    protected bool HasEnemy => currentTarget != null;
+    protected bool HasEnemy => ((currentTarget != null) && (!currentTarget.dead));
     protected bool IsInRange => currentTarget != null && Vector3.Distance(this.transform.position, currentTarget.transform.position) <= range;
     protected bool moving;
     protected Node destination;
@@ -141,7 +141,11 @@ public class BaseEntity : MonoBehaviour
     {
         if (CanBattle)
         {
-            if (IsInRange && !moving)
+            if (!HasEnemy)
+            {
+                FindTarget();
+            }
+            else if ((!moving) && (IsInRange))
             {
                 //In range for attack!
                 if (canAttack)
@@ -194,6 +198,7 @@ public class BaseEntity : MonoBehaviour
         {
             //重制target
             FindTarget();
+
             if(currentTarget == null)
             {
                 return;
@@ -372,7 +377,6 @@ public class BaseEntity : MonoBehaviour
     {
         if (currentTarget.dead)
         {
-            FindTarget();
             yield break;
         }
 

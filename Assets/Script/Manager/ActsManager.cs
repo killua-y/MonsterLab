@@ -74,7 +74,7 @@ public class ActsManager : Manager<ActsManager>
                 break;
 
             case BoxType.Events:
-                RewardManager.Instance.GenerateReward(2, 0);
+                RewardManager.Instance.GenerateReward(1, 0);
                 break;
 
             case BoxType.Merchant:

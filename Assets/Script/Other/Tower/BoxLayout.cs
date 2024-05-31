@@ -93,14 +93,33 @@ public class BoxLayout : MonoBehaviour
             validBoxes.Add(box);
         }
 
+        List<TowerBoxBehavior> boxs = new List<TowerBoxBehavior>();
+        // Get two boxes from row 0, column 0 to 3
+        boxs = GetRandomBoxesFromRange(0, 0, 0, 3, 2);
+        boxs[0].SetupBox(BoxType.EliteFight);
+        boxs[1].SetupBox(BoxType.Merchant);
+        validBoxes.Remove(boxs[0]);
+        validBoxes.Remove(boxs[1]);
+
+        // Get two boxes from column 3, row 1 to 3
+        boxs = GetRandomBoxesFromRange(1, 3, 3, 3, 2);
+        boxs[0].SetupBox(BoxType.EliteFight);
+        boxs[1].SetupBox(BoxType.Merchant);
+        validBoxes.Remove(boxs[0]);
+        validBoxes.Remove(boxs[1]);
+
+        // Get two boxes from column 4, row 1 to 3
+        boxs = GetRandomBoxesFromRange(1, 3, 4, 4, 2);
+        boxs[0].SetupBox(BoxType.EliteFight);
+        boxs[1].SetupBox(BoxType.Treasure);
+        validBoxes.Remove(boxs[0]);
+        validBoxes.Remove(boxs[1]);
+
         // Create a list of box types with the specified counts
         List<BoxType> boxTypes = new List<BoxType>
         {
-            BoxType.EliteFight, BoxType.EliteFight, BoxType.EliteFight,
             BoxType.NormalFight, BoxType.NormalFight, BoxType.NormalFight, BoxType.NormalFight, BoxType.NormalFight, BoxType.NormalFight,
             BoxType.Events, BoxType.Events, BoxType.Events, BoxType.Events, BoxType.Events, BoxType.Events,
-            BoxType.Merchant, BoxType.Merchant,
-            BoxType.Treasure
         };
 
         // Shuffle the list of box types
@@ -120,5 +139,49 @@ public class BoxLayout : MonoBehaviour
         {
             validBoxes[i].SetupBox(boxTypes[i]);
         }
+    }
+
+    private TowerBoxBehavior FindBox(int row, int column)
+    {
+        foreach (var box in objectsToArrange)
+        {
+            if ((box.row == row) && (box.column == column))
+            {
+                return box;
+            }
+        }
+        return null;
+    }
+
+    private List<TowerBoxBehavior> GetRandomBoxesFromRange(int rowStart, int rowEnd, int columnStart, int columnEnd, int count)
+    {
+        List<TowerBoxBehavior> selectedBoxes = new List<TowerBoxBehavior>();
+
+        List<TowerBoxBehavior> rangeBoxes = new List<TowerBoxBehavior>();
+        for (int row = rowStart; row <= rowEnd; row++)
+        {
+            for (int column = columnStart; column <= columnEnd; column++)
+            {
+                var box = FindBox(row, column);
+                if (box != null)
+                {
+                    rangeBoxes.Add(box);
+                }
+            }
+        }
+
+        for (int i = 0; i < count; i++)
+        {
+            if (rangeBoxes.Count == 0)
+            {
+                break;
+            }
+            int randomIndex = Random.Range(0, rangeBoxes.Count);
+            selectedBoxes.Add(rangeBoxes[randomIndex]);
+            rangeBoxes.RemoveAt(randomIndex);
+        }
+
+        HelperFunction.Shuffle(selectedBoxes);
+        return selectedBoxes;
     }
 }

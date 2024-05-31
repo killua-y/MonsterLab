@@ -20,6 +20,7 @@ public class TurnManager : Manager<TurnManager>
     private List<TurnUnitBehavior> allTurns;
 
     private EnemyBehavior enemy;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -36,6 +37,21 @@ public class TurnManager : Manager<TurnManager>
 
         // 加载当前战斗敌人
         LoadEnemy(ActsManager.currentEnemy);
+    }
+
+    void PassTheBattle()
+    {
+        // 清除战斗的回合
+        foreach (Transform child in turnParent.transform)
+        {
+            // Destroy each child GameObject
+            Destroy(child.gameObject);
+        }
+
+        int remainningTurn = finalTurn - currentTurn;
+        EnemyBehavior enemy = this.GetComponent<EnemyBehavior>();
+        Destroy(enemy);
+        InGameStateManager.Instance.GameEnd(remainningTurn);
     }
 
     private void LoadEnemy(String enemyScriptLocatiom)
@@ -60,13 +76,6 @@ public class TurnManager : Manager<TurnManager>
 
     private void SetUpTurnUI()
     {
-        // 先清除上次战斗的回合
-        foreach (Transform child in turnParent.transform)
-        {
-            // Destroy each child GameObject
-            Destroy(child.gameObject);
-        }
-
         allTurns = new List<TurnUnitBehavior>();
 
         for (int i = 0; i <= finalTurn; i++)
@@ -86,7 +95,6 @@ public class TurnManager : Manager<TurnManager>
             }
         }
 
-        turnParent.GetComponent<TurnUnitHorizontalLayout>().SortAndPositionChildren();
         turnParent.GetComponent<TurnUnitHorizontalLayout>().SortAndPositionChildren();
     }
 
@@ -118,12 +126,8 @@ public class TurnManager : Manager<TurnManager>
         {
             if (isFinalWaive)
             {
-                int remainningTurn = finalTurn - currentTurn;
-
                 // 过关
-                EnemyBehavior enemy = this.GetComponent<EnemyBehavior>();
-                Destroy(enemy);
-                InGameStateManager.Instance.GameEnd(remainningTurn);
+                PassTheBattle();
             }
             else
             {

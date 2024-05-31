@@ -173,6 +173,11 @@ public class InGameStateManager : Manager<InGameStateManager>
 
     public void InitizeExtraDeck()
     {
+        foreach (Transform child in extraDeck)
+        {
+            Destroy(child.gameObject);
+        }
+
         List<Card> extraDeckPile = CardModel.GetExtraDeckPileCard();
         foreach (Card card in extraDeckPile)
         {
