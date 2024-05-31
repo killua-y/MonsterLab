@@ -35,7 +35,7 @@ public class TurnManager : Manager<TurnManager>
     void OnGameStart()
     {
         // 加载当前战斗敌人
-        LoadEnemy(ActsManager.CurrentEnemy);
+        LoadEnemy(ActsManager.currentEnemy);
     }
 
     private void LoadEnemy(String enemyScriptLocatiom)

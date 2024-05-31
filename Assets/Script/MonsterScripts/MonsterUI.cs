@@ -6,7 +6,7 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using static Card;
 
-public class MonsterUI : MonoBehaviour, IPointerDownHandler, IPointerExitHandler
+public class MonsterUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
     // 怪兽UI部分
     public SpriteRenderer spriteRender;
@@ -15,22 +15,6 @@ public class MonsterUI : MonoBehaviour, IPointerDownHandler, IPointerExitHandler
     public TextMeshProUGUI attackText;
     private Image fillImage;
     public GameObject bullet;
-    public GameObject cardPreviewParent;
-
-    // 卡片预览
-    BaseEntity baseEntity;
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 
     public void EnemyMonster()
     {
@@ -53,60 +37,20 @@ public class MonsterUI : MonoBehaviour, IPointerDownHandler, IPointerExitHandler
         healthText.text = cardModel.healthPoint + "";
     }
 
-    public void RightPointDown()
+    public void OnPointerEnter(PointerEventData eventData)
     {
-        if (cardPreviewParent != null)
+        Card card = null;
+
+        card = this.GetComponent<BaseEntity>().cardModel;
+
+        if (card != null)
         {
-            if (cardPreviewParent.activeSelf)
-            {
-                PointExist();
-                return;
-            }
-
-            if (baseEntity == null)
-            {
-                baseEntity = GetComponent<BaseEntity>();
-            }
-
-            if (baseEntity != null)
-            {
-                MonsterCard card = GetComponent<BaseEntity>().cardModel;
-                GameObject newCardObject = CardDisplayView.Instance.DisPlaySingleCard(card, cardPreviewParent.transform);
-                newCardObject.AddComponent<Canvas>().sortingOrder = 10;
-            }
-
-            cardPreviewParent.SetActive(true);
-        }
-    }
-
-    public void PointExist()
-    {
-        if (cardPreviewParent != null)
-        {
-            if (cardPreviewParent.activeSelf)
-            {
-                cardPreviewParent.SetActive(false);
-
-                // Iterate through each child of the parent
-                foreach (Transform child in cardPreviewParent.transform)
-                {
-                    // Destroy the child GameObject
-                    Destroy(child.gameObject);
-                }
-            }
-        }
-    }
-
-    public void OnPointerDown(PointerEventData eventData)
-    {
-        if (eventData.button == PointerEventData.InputButton.Right)
-        {
-            RightPointDown();
+            CanvasManager.Instance.GenerateCardPreview(card);
         }
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        PointExist();
+        CanvasManager.Instance.HideCardPreview();
     }
 }

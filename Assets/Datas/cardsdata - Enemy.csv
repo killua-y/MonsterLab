@@ -1,6 +1,16 @@
-#,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18
-#,卡名,职业颜色,稀有度,费用,释放类型,数值,技能描述,script位置,图片位置,rank,种族,攻击力,生命值,攻击距离,蓝量,模型位置,skill script位置,index
-m,Slime,black,Normal,0,PlayerEmptyTile,0,Normal Enemy,,,0,Slime,5,50,1.5,0,,,0
-m,Acid Slime,black,Normal,0,PlayerEmptyTile,0,Normal Enemy,,,0,Slime,15,10,5,0,,,1
-m,Black Slime,black,Normal,0,PlayerEmptyTile,0,Normal Enemy,,,0,Slime,2,100,1.5,0,,,2
-m,Fire Slime,black,Normal,0,PlayerEmptyTile,0,Normal Enemy,,,0,Slime,10,30,1.5,0,,,3
+#,名称,层数,类型,script位置,,,,,,,,,,,,,,,
+e,AcidSlime,1,normal,AcidSlimeEnemy,,,,,,,,,,,,,,,
+e,BlackSlime,1,normal,BlackSlimeEnemy,,,,,,,,,,,,,,,
+e,Archer,1,Elite,ArcherEnemy,,,,,,,,,,,,,,,
+e,BombCarrier,1,Elite,BombCarrierEnemy,,,,,,,,,,,,,,,
+e,MotherSlime,1,Boss,MotherSlimeEnemy,,,,,,,,,,,,,,,
+#,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19
+#,卡名,职业颜色,稀有度,费用,释放类型,数值,技能描述,script位置,图片位置,rank,种族,攻击力,生命值,攻击距离,蓝量,模型位置,skill script位置,index,附属怪兽
+m,Slime,black,Normal,0,PlayerEmptyTile,0,Normal Enemy,,,0,Slime,5,50,1.5,0,,,0,AcidSlimeEnemy
+m,Acid Slime,black,Normal,0,PlayerEmptyTile,0,Normal Enemy,,,0,Slime,5,10,5,0,,,1,AcidSlimeEnemy + MotherSlimeEnemy
+m,Black Slime,black,Normal,0,PlayerEmptyTile,0,Normal Enemy,,,0,Slime,2,100,1.5,0,,,2,BlackSlimeEnemy+ArcherEnemy
+m,Fire Slime,black,Normal,0,PlayerEmptyTile,0,Normal Enemy,,,0,Slime,10,30,1.5,0,,,3,BlackSlimeEnemy
+m,Archer,black,Rare,0,PlayerEmptyTile,0,Normal Enemy,,,0,None,20,60,5,0,,,4,ArcherEnemy
+m,Bomb Carrier,black,Normal,0,PlayerEmptyTile,200,Upon death: Deal 200% attack damage to opponent within 8 blocks.,BombCarrierEntity,,0,None,5,10,1.5,0,,,5,BombCarrierEnemy
+m,MotherSlime,black,Normal,0,PlayerEmptyTile,0,OnEveryTurn: Summon one 5/10 acid slime,MotherSlimeEntity,,0,Slime,5,100,1.5,0,,,6,MotherSlimeEnemy
+m,Slave,black,Normal,0,PlayerEmptyTile,0,Normal Enemy,,,0,None,10,60,1.5,0,,,7,BombCarrierEnemy

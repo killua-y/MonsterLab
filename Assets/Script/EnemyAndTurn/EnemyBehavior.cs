@@ -61,3 +61,26 @@ public class EnemyBehavior : MonoBehaviour
         BattleManager.Instance.InstaniateMontser(GridManager.Instance.GetFreeNode(rowIndex, columnIndex, false), Team.Enemy, newCard);
     }
 }
+
+public class Enemy
+{
+    public string name;
+    public int layer;
+    public EnemyType enemyType;
+    public string scriptLocation;
+
+    public Enemy(string _name, int _layer, EnemyType _enemyType, string _scriptLocation)
+    {
+        this.name = _name;
+        this.layer = _layer;
+        this.enemyType = _enemyType;
+        this.scriptLocation = _scriptLocation;
+    }
+}
+
+public enum EnemyType
+{
+    Normal,
+    Elite,
+    Boss
+}

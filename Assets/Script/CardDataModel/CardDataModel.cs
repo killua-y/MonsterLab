@@ -25,6 +25,7 @@ public class CardDataModel : MonoBehaviour
 
     // 怪兽链表
     public TextAsset enemyTextCardData; // 地方怪兽卡牌数据txt文件
+    public List<Enemy> enemyList = new List<Enemy>(); // 所有敌人的数据
     private List<MonsterCard> enemyCardList = new List<MonsterCard>(); // 存储地方怪兽卡牌数据的链表
 
     // Start is called before the first frame update
@@ -135,6 +136,14 @@ public class CardDataModel : MonoBehaviour
 
                 //Debug.Log("Load item card: " + name);
             }
+            else if (rowArray[0] == "")
+            {
+
+            }
+            else
+            {
+                Debug.Log("Card cvs data error, the first string is : " + rowArray[0]);
+            }
         }
     }
 
@@ -164,6 +173,14 @@ public class CardDataModel : MonoBehaviour
                 string imageLocation = rowArray[7];
 
                 DNAList.Add(new DNA(id, DNAName, NDAColor, DNARarity, effectData, effectText, scriptLocation, imageLocation));
+            }
+            else if (rowArray[0] == "")
+            {
+
+            }
+            else
+            {
+                Debug.Log("DNA cvs data error, the first string is : " + rowArray[0]);
             }
         }
     }
@@ -212,6 +229,22 @@ public class CardDataModel : MonoBehaviour
                     rank, type, attackPower, healthPoint, attackRange, mana, modelLocation, skillScriptLocation));
 
                 //Debug.Log("Load enemy monster card: " + name);
+            }
+            else if (rowArray[0] == "e")
+            {
+                string name = rowArray[1];
+                int layer = int.Parse(rowArray[2]);
+                EnemyType enemyType = HelperFunction.ConvertToEnum<EnemyType>(rowArray[3]);
+                string scriptLocation = rowArray[4];
+                enemyList.Add(new Enemy(name, layer, enemyType, scriptLocation));
+            }
+            else if (rowArray[0] == "")
+            {
+
+            }
+            else
+            {
+                Debug.Log("enemy cvs data error, the first string is : " + rowArray[0]);
             }
         }
     }
@@ -292,9 +325,13 @@ public class CardDataModel : MonoBehaviour
                 playerExtraDeckData[id] = num;
                 //Debug.Log("Load extra deck card with id : " + id + " num: " + num);
             }
+            else if (rowArray[0] == "")
+            {
+
+            }
             else
             {
-                Debug.Log("player cvs data error, the first string is : " + rowArray[0]);
+                Debug.Log("Player cvs data error, the first string is : " + rowArray[0]);
             }
         }
         //Debug.Log("Player data loaded. Path: " + path);

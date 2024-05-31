@@ -1,11 +1,11 @@
 coins,100
 card,0,4
-card,8,1
-card,7,1
 card,4,1
 card,5,1
 card,6,1
-card,12,1
+card,7,1
+card,8,1
+card,12,2
 card,19,1
 card,20,1
 card,21,1
@@ -15,4 +15,5 @@ card,24,1
 card,25,2
 card,26,1
 extraDeck,2,1
-DNA,7,1
+extraDeck,11,1
+NDA,7,1

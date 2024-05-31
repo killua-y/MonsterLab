@@ -4,9 +4,10 @@ using UnityEngine;
 
 public class ArmsMasterEntity : BaseEntity
 {
-    protected override void IndividualStart()
+    protected override void Start()
     {
         InGameStateManager.Instance.OnItemCardPlayed += ReceiveWeapon;
+        base.Start();
     }
 
     // 对自己释放的装备卡会被再次释放

@@ -13,7 +13,7 @@ public class CardSelectBehavior : MonoBehaviour
         this.gameObject.SetActive(false);
     }
 
-    public void AddCard(List<Card> cards)
+    public void AddCard(List<Card> cards, GameObject reawrdParent)
     {
         this.gameObject.SetActive(true);
 
@@ -26,8 +26,13 @@ public class CardSelectBehavior : MonoBehaviour
         {
             GameObject newCard = CardDisplayView.Instance.DisPlaySingleCard(card, CardHolder);
             newCard.AddComponent<Scaling>();
-            newCard.AddComponent<SingleCardOnClick>();
-            newCard.GetComponent<SingleCardOnClick>().SetUp(card.id, this.gameObject);
+            newCard.AddComponent<RewardCardOnClick>();
+            newCard.GetComponent<RewardCardOnClick>().SetUp(card.id, reawrdParent);
         }
+    }
+
+    public void FinishCardSelect()
+    {
+        this.gameObject.SetActive(false);
     }
 }

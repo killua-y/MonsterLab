@@ -129,30 +129,18 @@ public class BaseEntity : MonoBehaviour
         UpdateMonster();
     }
     
-    protected void Start()
+    protected virtual void Start()
     {
         InGameStateManager.Instance.OnPreparePhaseStart += OnPreparePhaseStart;
         InGameStateManager.Instance.OnPreparePhaseEnd += OnPreparePhaseEnd;
         InGameStateManager.Instance.OnBattlePhaseStart += OnBattlePhaseStart;
         InGameStateManager.Instance.OnBattlePhaseEnd += OnBattlePhaseEnd;
-
-        IndividualStart();
-    }
-
-    protected virtual void IndividualStart()
-    {
-
     }
 
     public virtual void Update()
     {
         if (CanBattle)
         {
-            if (!HasEnemy)
-            {
-                FindTarget();
-            }
-
             if (IsInRange && !moving)
             {
                 //In range for attack!
@@ -201,9 +189,6 @@ public class BaseEntity : MonoBehaviour
 
     protected void GetInRange()
     {
-        if (currentTarget == null)
-            return;
-
         // 说明已经到达新的节点，需要寻找下一个路径
         if (!moving)
         {

@@ -15,11 +15,11 @@ public class DNAUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        DNAParent.Instance.GenerateDNAPreview(DNAmodel.DNAName, DNAmodel.effectText);
+        CanvasManager.Instance.GenerateDNAPreview(DNAmodel.DNAName, DNAmodel.effectText);
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        DNAParent.Instance.HidePreview();
+        CanvasManager.Instance.HideDNAPreview();
     }
 }

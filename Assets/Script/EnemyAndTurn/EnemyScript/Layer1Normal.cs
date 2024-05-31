@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using static Card;
 
-public class AcidSlimeEnermy : EnemyBehavior
+public class AcidSlimeEnemy : EnemyBehavior
 {
     protected new int MaxTurn = 2;
 
@@ -36,7 +36,7 @@ public class AcidSlimeEnermy : EnemyBehavior
     }
 }
 
-public class BlackSlimeEnermy : EnemyBehavior
+public class BlackSlimeEnemy : EnemyBehavior
 {
     protected new int MaxTurn = 3;
 
