@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ArmsMasterEntity : BaseEntity
+public class JaxEntity : BaseEntity
 {
     protected override void Start()
     {

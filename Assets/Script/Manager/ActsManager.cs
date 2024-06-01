@@ -11,12 +11,6 @@ public class ActsManager : Manager<ActsManager>
     public static string currentEnemy = "AcidSlimeEnermy";
 
     public GameObject MapCanvas;
-    public Transform Deck;
-    public Transform mainDeckScrollContent;
-    public Transform extraDeckScollContent;
-
-    private List<Card> mainDeck;
-    private List<Card> extraDeck;
 
     private List<Enemy> allEnemyList = new List<Enemy>();
 
@@ -78,7 +72,7 @@ public class ActsManager : Manager<ActsManager>
                 break;
 
             case BoxType.Merchant:
-                RewardManager.Instance.GenerateReward(0, 1);
+                CanvasManager.Instance.OpenShopCanvas();
                 break;
 
             case BoxType.Treasure:
@@ -88,73 +82,5 @@ public class ActsManager : Manager<ActsManager>
             default:
                 break;
         }
-    }
-
-    public void OpenDeck()
-    {
-        if (Deck.gameObject.activeSelf)
-        {
-            Deck.gameObject.SetActive(false);
-        }
-        else
-        {
-            ShowMainDeck();
-            ShowExtraDeck();
-            Deck.gameObject.SetActive(true);
-        }
-    }
-
-    private void ShowMainDeck()
-    {
-        foreach (Transform child in mainDeckScrollContent.transform)
-        {
-            Destroy(child.gameObject);
-        }
-
-        mainDeck = CardDataModel.Instance.InitializeDeck();
-        foreach (Card card in mainDeck)
-        {
-            GameObject cardObject = CardDisplayView.Instance.DisPlaySingleCard(card, mainDeckScrollContent);
-            cardObject.AddComponent<Scaling>();
-            cardObject.AddComponent<DeckManageCardOnClick>().SetUp(card.id, true);
-        }
-    }
-
-    private void ShowExtraDeck()
-    {
-        foreach (Transform child in extraDeckScollContent.transform)
-        {
-            Destroy(child.gameObject);
-        }
-
-        extraDeck = CardDataModel.Instance.InitializeExtraDeck();
-        foreach (Card card in extraDeck)
-        {
-            GameObject cardObject = CardDisplayView.Instance.DisPlaySingleCard(card, extraDeckScollContent);
-            cardObject.AddComponent<Scaling>();
-            cardObject.AddComponent<DeckManageCardOnClick>().SetUp(card.id, false);
-            //Debug.Log("Get card with index : " + card.id);
-        }
-    }
-
-    public void ChangeDeckFromMainToExtra(int cardIndex, bool fromMainToExtra, GameObject cardObject)
-    {
-        if (InGameStateManager.inGame)
-        {
-            return;
-        }
-
-        if (fromMainToExtra)
-        {
-            cardObject.transform.SetParent(extraDeckScollContent);
-            cardObject.GetComponent<DeckManageCardOnClick>().isMainDeck = false;
-        }
-        else
-        {
-            cardObject.transform.SetParent(mainDeckScrollContent);
-            cardObject.GetComponent<DeckManageCardOnClick>().isMainDeck = true;
-        }
-
-        CardDataModel.Instance.ChangeDeckFromMainToExtra(cardIndex, fromMainToExtra);
     }
 }

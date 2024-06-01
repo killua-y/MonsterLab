@@ -122,17 +122,7 @@ public class BoxLayout : MonoBehaviour
             BoxType.Events, BoxType.Events, BoxType.Events, BoxType.Events, BoxType.Events, BoxType.Events,
         };
 
-        // Shuffle the list of box types
-        System.Random random = new System.Random();
-        int n = boxTypes.Count;
-        while (n > 1)
-        {
-            n--;
-            int k = random.Next(n + 1);
-            BoxType value = boxTypes[k];
-            boxTypes[k] = boxTypes[n];
-            boxTypes[n] = value;
-        }
+        HelperFunction.Shuffle(validBoxes, RandomManager.BoxLayoutRand);
 
         // Assign the box types to the valid boxes
         for (int i = 0; i < validBoxes.Count; i++)
@@ -176,12 +166,13 @@ public class BoxLayout : MonoBehaviour
             {
                 break;
             }
-            int randomIndex = Random.Range(0, rangeBoxes.Count);
+
+            int randomIndex = RandomManager.BoxLayoutRand.Next(0, rangeBoxes.Count);
             selectedBoxes.Add(rangeBoxes[randomIndex]);
             rangeBoxes.RemoveAt(randomIndex);
         }
 
-        HelperFunction.Shuffle(selectedBoxes);
+        HelperFunction.Shuffle(selectedBoxes, RandomManager.BoxLayoutRand);
         return selectedBoxes;
     }
 }

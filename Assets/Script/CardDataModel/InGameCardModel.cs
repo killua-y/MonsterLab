@@ -40,7 +40,7 @@ public class InGameCardModel : MonoBehaviour
             drawPileList.Add(newCard);
         }
 
-        HelperFunction.Shuffle(drawPileList);
+        HelperFunction.Shuffle(drawPileList, RandomManager.shuffleCardRand);
 
         foreach (Card card in CardDataModel.Instance.InitializeExtraDeck())
         {
@@ -103,7 +103,7 @@ public class InGameCardModel : MonoBehaviour
     public void ShuffleDeck()
     {
         // Shuffle 弃牌堆
-        HelperFunction.Shuffle(discardPileList);
+        HelperFunction.Shuffle(discardPileList, RandomManager.shuffleCardRand);
 
         // 将卡牌加入抽牌堆，并清空弃牌堆
         drawPileList.AddRange(discardPileList);
@@ -134,7 +134,6 @@ public class InGameCardModel : MonoBehaviour
         while (handList.Count > 0)
         {
             DiscardCard(handList[0]);
-            
         }
     }
 

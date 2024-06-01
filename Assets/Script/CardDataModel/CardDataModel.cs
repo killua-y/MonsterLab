@@ -266,6 +266,14 @@ public class CardDataModel : MonoBehaviour
         {
             playerCardData[_id] -= 1;
         }
+        else if(playerExtraDeckData[_id] >= 1)
+        {
+            playerExtraDeckData[_id] -= 1;
+        }
+        else
+        {
+            Debug.Log("Trying to delete card that do not have");
+        }
 
         SavePlayerData();
     }
@@ -277,7 +285,7 @@ public class CardDataModel : MonoBehaviour
             Debug.Log("Error: acquire DNA that already have");
         }
 
-        // 玩家数据中增加该卡牌
+        // 玩家数据中增加该DNA
         playerDNAData[_id] += 1;
 
         SavePlayerData();

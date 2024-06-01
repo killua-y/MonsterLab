@@ -9,15 +9,19 @@ public class CanvasManager : MonoBehaviour
     public static CanvasManager Instance;
 
     // 所有canvas
+    [Header("All canvas")]
     public Canvas HighPriorityCanvas;
     public Canvas MapCanvas;
+    public Canvas ShopCanvas;
 
     // 用于holding dna preview
+    [Header("DNA preview")]
     public GameObject DNAPreview;
     public TextMeshProUGUI DNANameText;
     public TextMeshProUGUI DNADescriptionText;
 
     // 用于holding card preview
+    [Header("Monster Card Preview")]
     public GameObject cardPreview;
 
     private void Awake()
@@ -54,6 +58,27 @@ public class CanvasManager : MonoBehaviour
 
             rectTransform.position = adjustedPosition;
         }
+    }
+
+    private void OnGameEnd()
+    {
+        SetMapCanvasActive(true);
+    }
+
+    public void HideAllOtherPanel()
+    {
+
+    }
+
+    public void OpenDeck()
+    {
+        DeckManage.Instance.OpenDeck();
+    }
+
+    public void OpenShopCanvas()
+    {
+        ShopCanvas.gameObject.SetActive(true);
+        ShopManager.Instance.GenerateShop();
     }
 
     public void GenerateDNAPreview(string Name, string description)
@@ -109,10 +134,5 @@ public class CanvasManager : MonoBehaviour
         {
             MapCanvas.gameObject.SetActive(true);
         }
-    }
-
-    private void OnGameEnd()
-    {
-        SetMapCanvasActive(true);
     }
 }
