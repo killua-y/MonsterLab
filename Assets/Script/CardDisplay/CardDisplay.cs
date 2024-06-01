@@ -55,7 +55,15 @@ public class CardDisplay : MonoBehaviour
             }
         }
 
-        Card originalCard = CardDataModel.Instance.GetCard(_card.id);
+        Card originalCard;
+        if (_card.color == CardColor.Black)
+        {
+            originalCard = TurnManager.Instance.monsterList[_card.id];
+        }
+        else
+        {
+            originalCard = CardDataModel.Instance.GetCard(_card.id);
+        }
 
         UpdateColor(_card, originalCard);
     }

@@ -11,10 +11,20 @@ public class MonsterUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
     // 怪兽UI部分
     public SpriteRenderer spriteRender;
     public Slider healthBar;
+    public Slider manaBar;
     public TextMeshProUGUI healthText;
     public TextMeshProUGUI attackText;
     private Image fillImage;
     public GameObject bullet;
+
+    private void Awake()
+    {
+        // 如果没有子弹，则会添加默认子弹
+        if (bullet == null)
+        {
+            bullet = Resources.Load<GameObject>("MonsterPrefab/bullet");
+        }
+    }
 
     public void EnemyMonster()
     {
@@ -35,6 +45,17 @@ public class MonsterUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
         healthBar.value = cardModel.healthPoint;
         attackText.text = cardModel.attackPower + "";
         healthText.text = cardModel.healthPoint + "";
+    }
+
+    public void UpdateManaUI(int maxAmount, int currentAmount)
+    {
+        if (!manaBar.gameObject.activeSelf)
+        {
+            manaBar.gameObject.SetActive(true);
+        }
+
+        manaBar.maxValue = maxAmount;
+        manaBar.value = currentAmount;
     }
 
     public void OnPointerEnter(PointerEventData eventData)

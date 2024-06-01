@@ -25,9 +25,9 @@ public class AcidSlimeEnemy : EnemyBehavior
     {
         if (index == 0)
         {
-            SummonEnenmy(1, 5, Slime);
-            SummonEnenmy(2, 5, Slime);
-            SummonEnenmy(3, 5, Slime);
+            SummonEnenmy(1, 4, Slime);
+            SummonEnenmy(2, 4, Slime);
+            SummonEnenmy(3, 4, Slime);
             SummonEnenmy(1, 7, AcidSlime);
             SummonEnenmy(3, 7, AcidSlime);
         }

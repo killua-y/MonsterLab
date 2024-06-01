@@ -27,11 +27,11 @@ public class BaseEntity : MonoBehaviour
 
     // 自走棋部分
     public Team myTeam;
-    protected BaseEntity currentTarget = null;
+    public BaseEntity currentTarget = null;
     protected Node currentNode;
     public Node BattleStartNode;
     public Node CurrentNode => currentNode;
-    protected bool HasEnemy => ((currentTarget != null) && (!currentTarget.dead));
+    public bool HasEnemy => ((currentTarget != null) && (!currentTarget.dead));
     protected bool IsInRange => currentTarget != null && Vector3.Distance(this.transform.position, currentTarget.transform.position) <= range;
     protected bool moving;
     protected Node destination;
@@ -42,6 +42,8 @@ public class BaseEntity : MonoBehaviour
     protected bool CanBattle = false;
     protected float waitBetweenAttack;
     public Action OnDeath;
+    public Action OnAttack;
+    public Action<int> OnTakeDamage;
 
     public virtual void Setup(Team team, Node node, MonsterCard monsterCard, List<BaseEntity> sacrifices = null)
     {
@@ -81,12 +83,6 @@ public class BaseEntity : MonoBehaviour
         // 加载弹道prefab
         bullet = this.gameObject.GetComponent<MonsterUI>().bullet;
 
-        // 如果是远程单位但并没有子弹，则会添加默认子弹
-        if ((range > 1.5) && (bullet == null))
-        {
-            bullet = Resources.Load<GameObject>("MonsterPrefab/bullet");
-        }
-
         // 重新施加记录下的装备
         if (monsterCard.equipedCard.Count > 0)
         {
@@ -123,6 +119,12 @@ public class BaseEntity : MonoBehaviour
                     Debug.LogError($"The script type '{card.scriptLocation}' could not be found.");
                 }
             }
+        }
+
+        // 加载skill script
+        if (monsterCard.skillScriptLocation != "")
+        {
+            this.gameObject.AddComponent(Type.GetType(monsterCard.skillScriptLocation));
         }
 
         // 最后再update一次UI
@@ -204,19 +206,21 @@ public class BaseEntity : MonoBehaviour
                 return;
             }
 
-            destination = null;
-            List<Node> candidates = GridManager.Instance.GetNodesCloseTo(currentTarget.CurrentNode);
-            candidates = candidates.OrderBy(x => Vector2.Distance(x.worldPosition, this.transform.position)).ToList();
-            for (int i = 0; i < candidates.Count; i++)
-            {
-                if (!candidates[i].IsOccupied)
-                {
-                    destination = candidates[i];
-                    break;
-                }
-            }
-            if (destination == null)
-                return;
+            //destination = null;
+            //List<Node> candidates = GridManager.Instance.GetNodesCloseTo(currentTarget.CurrentNode);
+            //candidates = candidates.OrderBy(x => Vector2.Distance(x.worldPosition, this.transform.position)).ToList();
+            //for (int i = 0; i < candidates.Count; i++)
+            //{
+            //    if (!candidates[i].IsOccupied)
+            //    {
+            //        destination = candidates[i];
+            //        break;
+            //    }
+            //}
+            //if (destination == null)
+            //    return;
+
+            destination = currentTarget.CurrentNode;
 
             var path = GridManager.Instance.GetPath(currentNode, destination);
             if (path == null || path.Count == 1)
@@ -314,11 +318,18 @@ public class BaseEntity : MonoBehaviour
         }
     }
 
-    public void TakeDamage(int amount, BaseEntity from = null)
+    public virtual void TakeDamage(int amount, BaseEntity from = null)
     {
         if(dead)
         {
+            Debug.Log("Should not take damage");
             return;
+        }
+
+        // 播放自己收到伤害的action
+        if (from != null)
+        {
+            OnTakeDamage?.Invoke(amount);
         }
 
         currentHealth -= amount;
@@ -385,18 +396,23 @@ public class BaseEntity : MonoBehaviour
         // 开始播放攻击动画
         yield return new WaitForSeconds(attackPreparation);
 
+        // 前摇结束检测目标是否还存活
+        if ((currentTarget == null) || (currentTarget.dead))
+        {
+            yield break;
+        }
+
+        // 播放自己攻击的action
+        OnAttack?.Invoke();
+
         // 攻击击中敌方
         if (bullet == null)
         {
-            if (currentTarget == null)
-            {
-                yield break;
-            }
             currentTarget.TakeDamage(cardModel.attackPower, this);
         }
         else
         {
-            // 远程单位，构建攻击子弹
+            // 构建攻击子弹
             // Instantiate and initialize the bullet
             GameObject bulletInstance = Instantiate(bullet, transform.position, Quaternion.identity);
             if (bulletInstance.GetComponent<Bullet>() == null)

@@ -5,15 +5,19 @@ using static Card;
 
 public class BombCarrierEntity : BaseEntity
 {
-
     public override void UponDeath()
     {
         // 战斗中自爆产生1.5格的范围伤害
         if (CanBattle)
         {
-            var allEnemies = BattleManager.Instance.GetEntitiesAgainst(myTeam);
+            List<BaseEntity> allEnemies = BattleManager.Instance.GetEntitiesAgainst(myTeam);
+            if (allEnemies.Count == 0)
+            {
+                return;
+            }
+
             float minDistance = range;
-            List<BaseEntity> entitys = null;
+            List<BaseEntity> entitys = new List<BaseEntity>();
             foreach (BaseEntity e in allEnemies)
             {
                 if (Vector3.Distance(e.transform.position, this.transform.position) <= minDistance)
@@ -22,11 +26,12 @@ public class BombCarrierEntity : BaseEntity
                 }
             }
 
+            float damage = ((float)cardModel.effectData / 100) * cardModel.attackPower;
+            int intDamage = (int)damage;
             // 对每个敌人造成爆炸伤害
             foreach (BaseEntity e in entitys)
             {
-                int damage = (cardModel.effectData / 100) * cardModel.attackPower;
-                e.TakeDamage(damage, this);
+                e.TakeDamage(intDamage, this);
             }
         }
 
