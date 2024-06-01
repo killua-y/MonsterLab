@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -11,20 +12,60 @@ public class ShopManager : Manager<ShopManager>
     public GameObject AllDeck;
     public Transform AllDeckContent;
 
+    public TextMeshProUGUI refreshCostText;
+    public TextMeshProUGUI deleteCostText;
+
     // private
     private int refreshCost;
+    private int deleteCost;
     private List<Card> cardList;
     private List<DNA> dnaList;
 
     public void GenerateShop()
     {
+        refreshCost = 0;
+        //RefreshDNA();
+        RefreshShopCard();
         refreshCost = 50;
+        deleteCost = 100;
+
+        UpdateShopCostView();
+    }
+
+    public void RefreshShopCard()
+    {
+        // 扣钱
+        if (PlayerStatesManager.Gold < refreshCost)
+        {
+            Debug.Log("Not enough gold");
+            return;
+        }
+        else
+        {
+            PlayerStatesManager.Instance.DecreaseGold(refreshCost);
+        }
+
         cardList = new List<Card>();
-        for (int i = 0; i < 4; i ++)
+        List<int> cardAlreadyHave = new List<int>();
+        while (cardList.Count < 4)
         {
             int index = RewardManager.Instance.GetNextCardID();
-            cardList.Add(CardDataModel.Instance.GetCard(index));
+
+            if (!cardAlreadyHave.Contains(index))
+            {
+                cardAlreadyHave.Add(index);
+                cardList.Add(CardDataModel.Instance.GetCard(index));
+            }
         }
+
+        refreshCost += 25;
+
+        UpdateShopItemView();
+        UpdateShopCostView();
+    }
+
+    public void RefreshDNA()
+    {
         dnaList = new List<DNA>();
         for (int i = 0; i < 3; i++)
         {
@@ -32,48 +73,116 @@ public class ShopManager : Manager<ShopManager>
             dnaList.Add(dna);
         }
 
-        UpdateShopItemView();
-    }
-
-    public void RefreshShopCard()
-    {
-        refreshCost += 25;
-
-        cardList = new List<Card>();
-        for (int i = 0; i < 4; i++)
-        {
-            int index = RewardManager.Instance.GetNextCardID();
-            cardList.Add(CardDataModel.Instance.GetCard(index));
-        }
+        UpdateShopDNAView();
     }
 
     public void UpdateShopItemView()
     {
-        
+        foreach (Transform child in CardHolder)
+        {
+            Destroy(child.gameObject);
+        }
+
+        foreach (Card card in cardList)
+        {
+            GameObject newCard = CardDisplayView.Instance.DisPlaySingleCard(card, CardHolder);
+            newCard.AddComponent<Scaling>();
+
+            int price = 0;
+            switch (card.cardRarity)
+            {
+                case CardRarity.Normal:
+                    price = RandomManager.shuffleCardRand.Next(50, 101);
+                    break;
+                case CardRarity.Rare:
+                    price = RandomManager.shuffleCardRand.Next(100, 151);
+                    break;
+                case CardRarity.Legend:
+                    price = RandomManager.shuffleCardRand.Next(150, 201);
+                    break;
+                default:
+                    break;
+            }
+
+            newCard.AddComponent<ShopCardBuyOnClick>().SetUp(card.id, price);
+        }
+
+        // 还没写
+        //foreach (DNA dna in dnaList)
+        //{
+
+        //}
+
+        refreshCostText.text = refreshCost + "";
+    }
+
+    public void UpdateShopDNAView()
+    {
+        // 还没写
+        //foreach (DNA dna in dnaList)
+        //{
+
+        //}
+    }
+
+    public void UpdateShopCostView()
+    {
+        refreshCostText.text = refreshCost + "";
+        deleteCostText.text = deleteCost + "";
     }
 
     public void DeleteCard(int cardIndex)
     {
         // 扣钱
-
+        if (PlayerStatesManager.Gold < deleteCost)
+        {
+            Debug.Log("Not enough gold");
+            return;
+        }
+        else
+        {
+            PlayerStatesManager.Instance.DecreaseGold(deleteCost);
+        }
 
         OpenPlayerDeck();
 
         CardDataModel.Instance.DeleteCard(cardIndex);
+
+        deleteCost += 50;
     }
 
-    public void BuyCard(int cardIndex, int price)
+    public void BuyCard(int cardIndex, int price, GameObject card)
     {
         // 扣钱
+        if (PlayerStatesManager.Gold < price)
+        {
+            Debug.Log("Not enough gold");
+            return;
+        }
+        else
+        {
+            PlayerStatesManager.Instance.DecreaseGold(price);
+        }
 
         CardDataModel.Instance.ObtainCard(cardIndex);
+        Destroy(card);
     }
 
-    public void BuyDNA(int cardIndex, int price)
+    public void BuyDNA(int cardIndex, int price, GameObject dna)
     {
         // 扣钱
+        if (PlayerStatesManager.Gold < price)
+        {
+            Debug.Log("Not enough gold");
+            return;
+        }
+        else
+        {
+            PlayerStatesManager.Instance.DecreaseGold(price);
+        }
 
         CardDataModel.Instance.ObtainDNA(cardIndex);
+        Destroy(dna);
     }
 
     public void OpenPlayerDeck()
@@ -131,17 +240,35 @@ public class ShopCardBuyOnClick : MonoBehaviour, IPointerClickHandler
     private int cardIndex;
     private int price;
 
+    public TextMeshProUGUI priceText;
+
     public void SetUp(int index, int _price)
     {
         cardIndex = index;
         price = _price;
+
+        // Check if a TextMeshProUGUI component already exists, otherwise create one
+        if (priceText == null)
+        {
+            // Create a new GameObject to hold the TextMeshProUGUI component
+            GameObject textObject = new GameObject("PriceText");
+            textObject.transform.SetParent(this.transform);
+            textObject.transform.localPosition = new Vector3(0, -255, 0); // Move down by -255 units
+
+            // Add the TextMeshProUGUI component
+            priceText = textObject.AddComponent<TextMeshProUGUI>();
+            priceText.fontSize = 34; // Set the font size
+            priceText.alignment = TextAlignmentOptions.Center; // Set the alignment
+        }
+
+        priceText.text = "Price: " + price;
     }
 
     public void OnPointerClick(PointerEventData eventData)
     {
         if (eventData.button == PointerEventData.InputButton.Left)
         {
-            ShopManager.Instance.BuyCard(cardIndex, price);
+            ShopManager.Instance.BuyCard(cardIndex, price, this.gameObject);
         }
     }
 }
@@ -161,7 +288,7 @@ public class ShopDNAOnClick : MonoBehaviour, IPointerClickHandler
     {
         if (eventData.button == PointerEventData.InputButton.Left)
         {
-            ShopManager.Instance.BuyCard(index, price);
+            ShopManager.Instance.BuyCard(index, price, this.gameObject);
         }
     }
 }
