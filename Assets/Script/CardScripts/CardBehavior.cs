@@ -102,7 +102,7 @@ public class CardBehavior : MonoBehaviour
         targetMonster = node.currentEntity;
 
         // 合法，释放卡牌效果
-        Debug.Log("Cast Card: " + card.cardName);
+        //Debug.Log("Cast Card: " + card.cardName);
         CastCard(node);
 
         // 释放结束

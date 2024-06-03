@@ -29,7 +29,10 @@ public class Bullet : MonoBehaviour
         // Check if bullet has reached the target
         if (Vector3.Distance(transform.position, target.transform.position) < 0.1f)
         {
-            target.TakeDamage(damage, attacker);
+            if (!target.dead)
+            {
+                target.TakeDamage(damage, attacker);
+            }
             Destroy(gameObject);
         }
     }

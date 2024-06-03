@@ -84,8 +84,12 @@ public class BoxLayout : MonoBehaviour
         // Exclude specific boxes
         foreach (var box in allBox)
         {
-            if ((box.row == 0 && box.column == 4) ||
-                (box.row == 3 && box.column == 0))
+            if (box.row == 0 && box.column == 4)
+            {
+                box.SetupBox(BoxType.BossFight);
+                continue;
+            }
+            else if (box.row == 3 && box.column == 0)
             {
                 continue;
             }

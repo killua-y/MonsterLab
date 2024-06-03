@@ -33,14 +33,6 @@ public class MonsterSkill : MonoBehaviour
         }
     }
 
-    private void Update()
-    {
-        if (currentMana >= baseEntity.cardModel.Mana)
-        {
-            CastSpell();
-        }
-    }
-
     void OnAttack()
     {
         IncreaseMana(10);
@@ -54,6 +46,11 @@ public class MonsterSkill : MonoBehaviour
     void IncreaseMana(int amount)
     {
         currentMana += amount;
+
+        if (currentMana >= baseEntity.cardModel.Mana)
+        {
+            CastSpell();
+        }
 
         monsterUI.UpdateManaUI(baseEntity.cardModel.Mana, currentMana);
     }

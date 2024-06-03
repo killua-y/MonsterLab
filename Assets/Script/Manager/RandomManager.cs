@@ -18,7 +18,7 @@ public class RandomManager : Manager<RandomManager>
         base.Awake();
         if (cardRewardRand == null)
         {
-            seed = 1;
+            seed = 2;
             InitializeRand();
         }
     }

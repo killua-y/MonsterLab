@@ -23,6 +23,7 @@ public class SilvermaneSkill : MonsterSkill
 
         // 构建攻击子弹
         GameObject bulletInstance = Instantiate(bullet, transform.position, Quaternion.identity);
+        bulletInstance.GetComponent<SpriteRenderer>().color = Color.blue;
         if (bulletInstance.GetComponent<Bullet>() == null)
         {
             bulletInstance.AddComponent<Bullet>().Initialize(target, intDamage, baseEntity);
@@ -55,6 +56,7 @@ public class FrostFangSkill : MonsterSkill
         {
             // 构建攻击子弹
             GameObject bulletInstance = Instantiate(bullet, transform.position, Quaternion.identity);
+            bulletInstance.GetComponent<SpriteRenderer>().color = Color.blue;
             if (bulletInstance.GetComponent<Bullet>() == null)
             {
                 bulletInstance.AddComponent<Bullet>().Initialize(target, intDamage, baseEntity);
