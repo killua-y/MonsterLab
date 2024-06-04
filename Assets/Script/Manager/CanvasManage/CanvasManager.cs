@@ -109,6 +109,7 @@ public class CanvasManager : MonoBehaviour
     {
         DNAPreview.SetActive(true);
         DNAPreview.GetComponent<AdjustImageSize>().Setup(Name, description);
+        DNAPreview.GetComponent<AdjustImageSize>().AdjustImageSizeToText();
     }
 
     public void HideDNAPreview()

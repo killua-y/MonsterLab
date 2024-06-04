@@ -15,6 +15,7 @@ public class CardDisplay : MonoBehaviour, IPointerExitHandler, IPointerEnterHand
     public GameObject keyWordParent;
     public GameObject keyWordPrefab;
 
+    private List<AdjustImageSize> keyWordPanelList = new List<AdjustImageSize>();
     public virtual void UpdateCardView(Card _card)
     {
         if (_card.imageLocation != "")
@@ -95,22 +96,39 @@ public class CardDisplay : MonoBehaviour, IPointerExitHandler, IPointerEnterHand
             string description = keyWordsDefinition[keyWords.IndexOf(keyword)];
 
             newKeyWordExplain.GetComponent<AdjustImageSize>().Setup(keyword, description);
+
+            keyWordPanelList.Add(newKeyWordExplain.GetComponent<AdjustImageSize>());
         }
     }
 
-    public void OnPointerEnter(PointerEventData eventData)
+    public void ShowKeyWord()
     {
         if (!keyWordParent.activeSelf)
         {
+            foreach (AdjustImageSize adjustImageSize in keyWordPanelList)
+            {
+                adjustImageSize.AdjustImageSizeToText();
+            }
+
             keyWordParent.SetActive(true);
         }
     }
 
-    public void OnPointerExit(PointerEventData eventData)
+    public void HideKeyword()
     {
         if (keyWordParent.activeSelf)
         {
             keyWordParent.SetActive(false);
         }
+    }
+
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        ShowKeyWord();
+    }
+
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        HideKeyword();
     }
 }

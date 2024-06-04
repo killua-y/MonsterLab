@@ -112,6 +112,7 @@ public class CardBehavior : MonoBehaviour
     public virtual void OnPointDown()
     {
         IsDragging = true;
+        this.GetComponent<CardDisplay>().HideKeyword();
     }
 
     public virtual void OnPointUp()

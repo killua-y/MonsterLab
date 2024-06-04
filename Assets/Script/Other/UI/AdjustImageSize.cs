@@ -18,11 +18,9 @@ public class AdjustImageSize : MonoBehaviour
 
         // Force update the canvas to ensure text info is updated
         Canvas.ForceUpdateCanvases();
-
-        //Invoke("AdjustImageSizeToText", 0);
     }
 
-    void AdjustImageSizeToText()
+    public void AdjustImageSizeToText()
     {
         if (headerText == null || contentText == null)
         {
