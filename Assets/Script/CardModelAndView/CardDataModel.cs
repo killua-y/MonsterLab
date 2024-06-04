@@ -7,11 +7,12 @@ using static Card;
 public class CardDataModel : MonoBehaviour
 {
     public static CardDataModel Instance;
-    public TextAsset textCardData; // 卡牌数据txt文件
-    public TextAsset textDNAData; // DNA数据text文件
-    // 玩家的卡牌数据存储文件
-    private string textPlayerDataPath = "/Datas/playerdata.csv";
+
     public TextAsset warriorCard; // 战士的默认卡组
+
+    private string textCardDataPath = "/Datas/cardsdata - AllCards.csv"; // 卡牌数据txt文件
+    private string textDNADataPath = "/Datas/cardsdata - DNA.csv"; // DNA数据text文件
+    private string textPlayerDataPath = "/Datas/playerdata.csv"; // 玩家的卡牌数据存储文件
 
     public static bool NewGame = true;
 
@@ -28,11 +29,17 @@ public class CardDataModel : MonoBehaviour
     public List<Enemy> enemyList = new List<Enemy>(); // 所有敌人的数据
     private List<MonsterCard> enemyCardList = new List<MonsterCard>(); // 存储地方怪兽卡牌数据的链表
 
+    // keyword
+    private string keyWordsDataPath = "/Datas/cardsdata - Keyword.csv";
+    private List<string> keyWords = new List<string>();
+    public List<string> keyWordsDefinition = new List<string>();
+
     // Start is called before the first frame update
     void Awake()
     {
         Instance = this;
 
+        LoadKeyWordList();
         LoadCardList();
         LoadEnemyCardList();
         LoadDNAList();
@@ -49,134 +56,85 @@ public class CardDataModel : MonoBehaviour
         }
 
         // 需要在LoadCardList()之后call
-        LoadPlayerData();
     }
 
-    // 加载所有卡牌数据
-    private void LoadCardList()
+    private void LoadKeyWordList()
     {
-        int currentIndex = 0;
+        string path = Application.dataPath + keyWordsDataPath;
+        string[] keyWordArray = File.ReadAllLines(path);
 
-        //Load卡片
-        string[] MonsterDataArray = textCardData.text.Split('\n');
-        foreach (var row in MonsterDataArray)
+        foreach (var row in keyWordArray)
         {
             string[] rowArray = row.Split(',');
             if (rowArray[0] == "#")
             {
                 continue;
             }
-            else if (rowArray[0] == "m")
-            {
-                int id = currentIndex;
-                currentIndex += 1;
-                int uniqueID = 0;
-                string cardName = rowArray[1];
-                CardColor color = HelperFunction.ConvertToEnum<CardColor>(rowArray[2]);
-                CardRarity cardRarity = HelperFunction.ConvertToEnum<CardRarity>(rowArray[3]);
-                int cost = int.Parse(rowArray[4]);
-                CastType castType = HelperFunction.ConvertToEnum<CastType>(rowArray[5]);
-                int effectData = int.Parse(rowArray[6]);
-                string effectText = rowArray[7];
-                string scriptLocation = rowArray[8];
-                string imageLocation = rowArray[9];
-
-                int rank = int.Parse(rowArray[10]);
-                MonsterType type = HelperFunction.ConvertToEnum<MonsterType>(rowArray[11]);
-                int attackPower = int.Parse(rowArray[12]);
-                int healthPoint = int.Parse(rowArray[13]);
-                float attackRange = float.Parse(rowArray[14]);
-                int mana = int.Parse(rowArray[15]);
-                string modelLocation = rowArray[16];
-                string skillScriptLocation = rowArray[17];
-
-                cardList.Add(new MonsterCard(id, uniqueID, cardName, color, cardRarity,
-                    cost, castType, effectData, effectText, scriptLocation, imageLocation,
-                    rank, type, attackPower, healthPoint, attackRange, mana, modelLocation, skillScriptLocation));
-
-                //Debug.Log("Load monster card: " + name);
-            }
-            else if (rowArray[0] == "s")
-            {
-                int id = currentIndex;
-                currentIndex += 1;
-                int uniqueID = 0;
-                string cardName = rowArray[1];
-                CardColor color = HelperFunction.ConvertToEnum<CardColor>(rowArray[2]);
-                CardRarity cardRarity = HelperFunction.ConvertToEnum<CardRarity>(rowArray[3]);
-                int cost = int.Parse(rowArray[4]);
-                CastType castType = HelperFunction.ConvertToEnum<CastType>(rowArray[5]);
-                int effectData = int.Parse(rowArray[6]);
-                string effectText = rowArray[7];
-                string scriptLocation = rowArray[8];
-                string imageLocation = rowArray[9];
-
-                cardList.Add(new SpellCard(id, uniqueID, cardName, color, cardRarity,
-                    cost, castType, effectData, effectText, scriptLocation, imageLocation));
-
-                //Debug.Log("Load magic card: " + name);
-            }
-            else if (rowArray[0] == "i")
-            {
-                int id = currentIndex;
-                currentIndex += 1;
-                int uniqueID = 0;
-                string cardName = rowArray[1];
-                CardColor color = HelperFunction.ConvertToEnum<CardColor>(rowArray[2]);
-                CardRarity cardRarity = HelperFunction.ConvertToEnum<CardRarity>(rowArray[3]);
-                int cost = int.Parse(rowArray[4]);
-                CastType castType = HelperFunction.ConvertToEnum<CastType>(rowArray[5]);
-                int effectData = int.Parse(rowArray[6]);
-                string effectText = rowArray[7];
-                string scriptLocation = rowArray[8];
-                string imageLocation = rowArray[9];
-
-                cardList.Add(new ItemCard(id, uniqueID, cardName, color, cardRarity,
-                    cost, castType, effectData, effectText, scriptLocation, imageLocation));
-
-                //Debug.Log("Load item card: " + name);
-            }
             else if (rowArray[0] == "")
             {
-
+                continue;
             }
             else
             {
-                Debug.Log("Card cvs data error, the first string is : " + rowArray[0]);
+                keyWords.Add(rowArray[1]);
+                keyWordsDefinition.Add(rowArray[2]);
+            }
+        }
+    }
+
+    // 加载所有卡牌数据
+    private void LoadCardList()
+    {
+        //Load卡片
+        string path = Application.dataPath + textCardDataPath;
+        string[] dataArray = File.ReadAllLines(path);
+
+        foreach (var row in dataArray)
+        {
+            string[] rowArray = row.Split(',');
+            if (rowArray[0] == "#")
+            {
+                continue;
+            }
+            else if (rowArray[0] == "")
+            {
+                continue;
+            }
+            else
+            {
+                Card newCard = HelperFunction.LoadCard(rowArray, keyWords);
+                if (newCard != null)
+                {
+                    cardList.Add(newCard);
+                }
             }
         }
     }
 
     public void LoadDNAList()
     {
-        int currentIndex = 0;
-
         // 加载DNA数据
-        string[] DNADataArray = textDNAData.text.Split('\n');
-        foreach (var row in DNADataArray)
+        string path = Application.dataPath + textDNADataPath;
+        string[] dataArray = File.ReadAllLines(path);
+
+        foreach (var row in dataArray)
         {
             string[] rowArray = row.Split(',');
             if (rowArray[0] == "#")
             {
                 continue;
             }
-            else if (rowArray[0] == "DNA")
-            {
-                int id = currentIndex;
-                currentIndex += 1;
-                string DNAName = rowArray[1];
-                CardColor NDAColor = HelperFunction.ConvertToEnum<CardColor>(rowArray[2]);
-                CardRarity DNARarity = HelperFunction.ConvertToEnum<CardRarity>(rowArray[3]);
-                int effectData = int.Parse(rowArray[4]);
-                string effectText = rowArray[5];
-                string scriptLocation = rowArray[6];
-                string imageLocation = rowArray[7];
-
-                DNAList.Add(new DNA(id, DNAName, NDAColor, DNARarity, effectData, effectText, scriptLocation, imageLocation));
-            }
             else if (rowArray[0] == "")
             {
-
+                continue;
+            }
+            else if (rowArray[0] == "DNA")
+            {
+                DNA newdna = HelperFunction.LoadDNA(rowArray, keyWords);
+                if (newdna != null)
+                {
+                    DNAList.Add(newdna);
+                }
             }
             else
             {
@@ -188,8 +146,6 @@ public class CardDataModel : MonoBehaviour
 
     private void LoadEnemyCardList()
     {
-        int currentIndex = 0;
-
         // 加载敌方怪兽数据
         // Load 怪兽卡
         string[] enemyMonsterDataArray = enemyTextCardData.text.Split('\n');
@@ -200,47 +156,27 @@ public class CardDataModel : MonoBehaviour
             {
                 continue;
             }
+            else if (rowArray[0] == "")
+            {
+                continue;
+            }
             else if (rowArray[0] == "m")
             {
-                int id = currentIndex;
-                currentIndex += 1;
-                int uniqueID = 0;
-                string cardName = rowArray[1];
-                CardColor color = HelperFunction.ConvertToEnum<CardColor>(rowArray[2]);
-                CardRarity cardRarity = HelperFunction.ConvertToEnum<CardRarity>(rowArray[3]);
-                int cost = int.Parse(rowArray[4]);
-                CastType castType = HelperFunction.ConvertToEnum<CastType>(rowArray[5]);
-                int effectData = int.Parse(rowArray[6]);
-                string effectText = rowArray[7];
-                string cardLocation = rowArray[8];
-                string imageLocation = rowArray[9];
-
-                int rank = int.Parse(rowArray[10]);
-                MonsterType type = HelperFunction.ConvertToEnum<MonsterType>(rowArray[11]);
-                int attackPower = int.Parse(rowArray[12]);
-                int healthPoint = int.Parse(rowArray[13]);
-                float attackRange = float.Parse(rowArray[14]);
-                int mana = int.Parse(rowArray[15]);
-                string modelLocation = rowArray[16];
-                string skillScriptLocation = rowArray[17];
-
-                enemyCardList.Add(new MonsterCard(id, uniqueID, cardName, color, cardRarity,
-                    cost, castType, effectData, effectText, cardLocation, imageLocation,
-                    rank, type, attackPower, healthPoint, attackRange, mana, modelLocation, skillScriptLocation));
+                MonsterCard newCard = (MonsterCard)HelperFunction.LoadCard(rowArray, keyWords);
+                if (newCard != null)
+                {
+                    enemyCardList.Add(newCard);
+                }
 
                 //Debug.Log("Load enemy monster card: " + name);
             }
             else if (rowArray[0] == "e")
             {
-                string name = rowArray[1];
-                int layer = int.Parse(rowArray[2]);
-                EnemyType enemyType = HelperFunction.ConvertToEnum<EnemyType>(rowArray[3]);
-                string scriptLocation = rowArray[4];
+                string name = rowArray[2];
+                int layer = int.Parse(rowArray[3]);
+                EnemyType enemyType = HelperFunction.ConvertToEnum<EnemyType>(rowArray[4]);
+                string scriptLocation = rowArray[5];
                 enemyList.Add(new Enemy(name, layer, enemyType, scriptLocation));
-            }
-            else if (rowArray[0] == "")
-            {
-
             }
             else
             {
@@ -295,17 +231,20 @@ public class CardDataModel : MonoBehaviour
     public void LoadPlayerData()
     {
         string path = Application.dataPath + textPlayerDataPath;
+        string[] dataArray = File.ReadAllLines(path);
 
         playerCardData = new int[cardList.Count];
         playerDNAData = new int[DNAList.Count];
         playerExtraDeckData = new int[cardList.Count];
 
-        string[] dataArray = File.ReadAllLines(path);
-
         foreach (var row in dataArray)
         {
             string[] rowArray = row.Split(',');
             if (rowArray[0] == "#")
+            {
+                continue;
+            }
+            else if (rowArray[0] == "")
             {
                 continue;
             }
@@ -332,10 +271,6 @@ public class CardDataModel : MonoBehaviour
                 int num = int.Parse(rowArray[2]);
                 playerExtraDeckData[id] = num;
                 //Debug.Log("Load extra deck card with id : " + id + " num: " + num);
-            }
-            else if (rowArray[0] == "")
-            {
-
             }
             else
             {

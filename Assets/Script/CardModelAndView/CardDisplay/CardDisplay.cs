@@ -13,18 +13,6 @@ public class CardDisplay : MonoBehaviour
     public TextMeshProUGUI costText;
     public Image rarityGem;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     public virtual void UpdateCardView(Card _card)
     {
         if (_card.imageLocation != "")
@@ -83,5 +71,10 @@ public class CardDisplay : MonoBehaviour
         {
             costText.color = Color.red;
         }
+    }
+
+    private void showKeyWord()
+    {
+
     }
 }

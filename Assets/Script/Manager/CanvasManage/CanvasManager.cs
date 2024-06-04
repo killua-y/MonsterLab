@@ -49,14 +49,31 @@ public class CanvasManager : MonoBehaviour
         }
         else if (cardPreview != null)
         {
+            RectTransform rectTransform = cardPreview.GetComponent<RectTransform>();
             // Update the position of the text to follow the mouse
             Vector2 mousePosition = Input.mousePosition;
 
-            RectTransform rectTransform = cardPreview.GetComponent<RectTransform>();
+            // Convert mouse position to canvas space
+            RectTransformUtility.ScreenPointToLocalPointInRectangle(HighPriorityCanvas.transform as RectTransform, mousePosition, HighPriorityCanvas.worldCamera, out Vector2 localPoint);
 
-            Vector2 adjustedPosition = mousePosition + new Vector2(rectTransform.rect.width / 2 + 100, 0);
+            // Calculate the new anchored position
+            Vector2 newPosition = localPoint;
 
-            rectTransform.position = adjustedPosition;
+            // Get the canvas size
+            RectTransform canvasRect = HighPriorityCanvas.transform as RectTransform;
+            Vector2 canvasSize = canvasRect.sizeDelta;
+
+            // Get the size of the image
+            Vector2 imageSize = rectTransform.sizeDelta;
+
+            // Adjust the position to stay within screen boundaries
+            newPosition.x = Mathf.Clamp(newPosition.x, -canvasSize.x / 2 + imageSize.x / 2, canvasSize.x / 2 - imageSize.x / 2);
+            newPosition.y = Mathf.Clamp(newPosition.y, -canvasSize.y / 2 + imageSize.y / 2, canvasSize.y / 2 - imageSize.y / 2);
+
+            Vector2 adjustedPosition = newPosition + new Vector2(rectTransform.rect.width / 2 + 100, 0);
+
+            // Set the new anchored position
+            rectTransform.anchoredPosition = adjustedPosition;
         }
     }
 

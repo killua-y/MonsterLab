@@ -84,10 +84,10 @@ public class BaseEntity : MonoBehaviour
         bullet = this.gameObject.GetComponent<MonsterUI>().bullet;
 
         // 重新施加记录下的装备
-        if (monsterCard.equipedCard.Count > 0)
+        if (monsterCard.equippedCard.Count > 0)
         {
             Debug.Log("Start recast equipedCard");
-            foreach (Card card in monsterCard.equipedCard)
+            foreach (Card card in monsterCard.equippedCard)
             {
                 System.Type scriptType = System.Type.GetType(card.scriptLocation);
 

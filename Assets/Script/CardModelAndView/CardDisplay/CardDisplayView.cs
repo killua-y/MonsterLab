@@ -1,27 +1,21 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 using static Card;
 
-public class CardDisplayView : Manager<CardDisplayView>
+public class CardDisplayView : MonoBehaviour
 {
+    public static CardDisplayView Instance;
+
     public GameObject MonsterCardModel;
-
     public GameObject SpellCardModel;
-
     public GameObject ItemCardModel;
 
-    // Start is called before the first frame update
-    void Start()
+    private void Awake()
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        Instance = this;
     }
 
     // 可视化单个卡牌，将卡牌的可视化后加入到parent下面

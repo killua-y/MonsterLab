@@ -20,7 +20,7 @@ public class IncreaseHealthOnDeathCardBehavior : CardBehavior
 
     public override void IndividualCastComplete(Node node)
     {
-        node.currentEntity.cardModel.equipedCard.Add(card);
+        node.currentEntity.cardModel.equippedCard.Add(card);
     }
 }
 
