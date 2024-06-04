@@ -79,19 +79,25 @@ public class CardWrapper : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     }
 
     private void UpdatePosition() {
-        if (!isDragged) {
-            var target = new Vector2(targetPosition.x, targetPosition.y + targetVerticalDisplacement);
-            if (isHovered && zoomConfig.overrideYPosition != -1) {
+        var target = new Vector2(targetPosition.x, targetPosition.y + targetVerticalDisplacement);
+        if (isHovered && zoomConfig.overrideYPosition != -1)
+        {
+            if (!isDragged)
+            {
                 target = new Vector2(target.x, zoomConfig.overrideYPosition);
             }
-
-            var distance = Vector2.Distance(rectTransform.position, target);
-            var repositionSpeed = rectTransform.position.y > target.y || rectTransform.position.y < 0
-                ? animationSpeedConfig.releasePosition
-                : animationSpeedConfig.position;
-            rectTransform.position = Vector2.Lerp(rectTransform.position, target,
-                repositionSpeed / distance * Time.deltaTime);
+            else
+            {
+                target = new Vector2(target.x, 70f);
+            }
         }
+
+        var distance = Vector2.Distance(rectTransform.position, target);
+        var repositionSpeed = rectTransform.position.y > target.y || rectTransform.position.y < 0
+            ? animationSpeedConfig.releasePosition
+            : animationSpeedConfig.position;
+        rectTransform.position = Vector2.Lerp(rectTransform.position, target,
+            repositionSpeed / distance * Time.deltaTime);
     }
 
     private void UpdateArrow()
@@ -158,7 +164,7 @@ public class CardWrapper : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     }
 
     private void UpdateScale() {
-        var targetZoom = (isDragged || isHovered) && zoomConfig.zoomOnHover ? zoomConfig.multiplier : 1;
+        var targetZoom = (!isDragged) && isHovered && zoomConfig.zoomOnHover ? zoomConfig.multiplier : 1;
         var delta = Mathf.Abs(rectTransform.localScale.x - targetZoom);
         var newZoom = Mathf.Lerp(rectTransform.localScale.x, targetZoom,
             animationSpeedConfig.zoom / delta * Time.deltaTime);

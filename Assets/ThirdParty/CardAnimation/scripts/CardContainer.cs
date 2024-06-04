@@ -157,7 +157,8 @@ public class CardContainer : MonoBehaviour {
 
     private void SetCardsPosition() {
         // Compute the total width of all the cards in global space
-        var cardsTotalWidth = cards.Sum(card => card.width * card.transform.lossyScale.x);
+        //var cardsTotalWidth = cards.Sum(card => card.width * card.transform.lossyScale.x);
+        var cardsTotalWidth = cards.Sum(card => Mathf.Min(card.width, 250) * Mathf.Min(card.transform.lossyScale.x, 1.2f));
         // Compute the width of the container in global space
         var containerWidth = rectTransform.rect.width * transform.lossyScale.x;
         if (forceFitContainer && cardsTotalWidth > containerWidth) {
@@ -176,7 +177,8 @@ public class CardContainer : MonoBehaviour {
         // Set all children's positions to be evenly spaced out
         var currentX = transform.position.x - width / 2;
         foreach (CardWrapper child in cards) {
-            var adjustedChildWidth = child.width * child.transform.lossyScale.x;
+            //var adjustedChildWidth = child.width * child.transform.lossyScale.x;
+            var adjustedChildWidth = Mathf.Min(child.width, 250) * Mathf.Min(child.transform.lossyScale.x, 1.2f);
             child.targetPosition = new Vector2(currentX + adjustedChildWidth / 2, transform.position.y);
             currentX += adjustedChildWidth + distanceBetweenChildren;
         }
@@ -185,7 +187,8 @@ public class CardContainer : MonoBehaviour {
     private void DistributeChildrenWithoutOverlap(float childrenTotalWidth) {
         var currentPosition = GetAnchorPositionByAlignment(childrenTotalWidth);
         foreach (CardWrapper child in cards) {
-            var adjustedChildWidth = child.width * child.transform.lossyScale.x;
+            //var adjustedChildWidth = child.width * child.transform.lossyScale.x;
+            var adjustedChildWidth = Mathf.Min(child.width, 250) * Mathf.Min(child.transform.lossyScale.x, 1.2f);
             child.targetPosition = new Vector2(currentPosition + adjustedChildWidth / 2, transform.position.y);
             currentPosition += adjustedChildWidth;
         }
