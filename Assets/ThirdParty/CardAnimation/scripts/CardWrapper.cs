@@ -6,7 +6,8 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public class CardWrapper : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler,
-    IPointerUpHandler {
+    IPointerUpHandler
+{
     private const float EPS = 0.01f;
 
     public float targetRotation;
@@ -42,15 +43,18 @@ public class CardWrapper : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     private CardBehavior cardBehavior;
     private bool targetCard;
 
-    public float width {
+    public float width
+    {
         get => rectTransform.rect.width * rectTransform.localScale.x;
     }
 
-    private void Awake() {
+    private void Awake()
+    {
         rectTransform = GetComponent<RectTransform>();
     }
 
-    private void Start() {
+    private void Start()
+    {
         canvas = GetComponent<Canvas>();
         cardBehavior = GetComponent<CardBehavior>();
         targetCard = cardBehavior.targetCard;
@@ -60,7 +64,8 @@ public class CardWrapper : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
         ArrowNodePrefab = Resources.Load<GameObject>("Arrow/ArrowNode");
     }
 
-    private void Update() {
+    private void Update()
+    {
         if (!InGameStateManager.gamePased)
         {
             UpdateRotation();
@@ -68,17 +73,20 @@ public class CardWrapper : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
             UpdatePosition();
             UpdateScale();
             UpdateUILayer();
-            
+
         }
     }
 
-    private void UpdateUILayer() {
-        if (!isHovered && !isDragged) {
+    private void UpdateUILayer()
+    {
+        if (!isHovered && !isDragged)
+        {
             canvas.sortingOrder = uiLayer;
         }
     }
 
-    private void UpdatePosition() {
+    private void UpdatePosition()
+    {
         var target = new Vector2(targetPosition.x, targetPosition.y + targetVerticalDisplacement);
         if (isHovered && zoomConfig.overrideYPosition != -1)
         {
@@ -99,6 +107,7 @@ public class CardWrapper : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
         rectTransform.position = Vector2.Lerp(rectTransform.position, target,
             repositionSpeed / distance * Time.deltaTime);
     }
+
 
     private void UpdateArrow()
     {
@@ -163,7 +172,8 @@ public class CardWrapper : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
         }
     }
 
-    private void UpdateScale() {
+    private void UpdateScale()
+    {
         var targetZoom = (!isDragged) && isHovered && zoomConfig.zoomOnHover ? zoomConfig.multiplier : 1;
         var delta = Mathf.Abs(rectTransform.localScale.x - targetZoom);
         var newZoom = Mathf.Lerp(rectTransform.localScale.x, targetZoom,
@@ -171,7 +181,8 @@ public class CardWrapper : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
         rectTransform.localScale = new Vector3(newZoom, newZoom, 1);
     }
 
-    private void UpdateRotation() {
+    private void UpdateRotation()
+    {
         var crtAngle = rectTransform.rotation.eulerAngles.z;
         // If the angle is negative, add 360 to it to get the positive equivalent
         crtAngle = crtAngle < 0 ? crtAngle + 360 : crtAngle;
@@ -196,26 +207,40 @@ public class CardWrapper : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     }
 
 
-    public void SetAnchor(Vector2 min, Vector2 max) {
+    public void SetAnchor(Vector2 min, Vector2 max)
+    {
         rectTransform.anchorMin = min;
         rectTransform.anchorMax = max;
     }
 
-    public void OnPointerEnter(PointerEventData eventData) {
-        if (isDragged) {
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        if (isDragged)
+        {
             // Avoid hover events while dragging
             return;
         }
-        if (zoomConfig.bringToFrontOnHover) {
+
+        if (zoomConfig.bringToFrontOnHover)
+        {
             canvas.sortingOrder = zoomConfig.zoomedSortOrder;
         }
+
+        var target = new Vector2(targetPosition.x, targetPosition.y + targetVerticalDisplacement);
+        target = new Vector2(target.x, zoomConfig.overrideYPosition);
+        rectTransform.position = target;
+
+        var targetZoom = zoomConfig.multiplier;
+        rectTransform.localScale = new Vector3(targetZoom, targetZoom, targetZoom);
 
         eventsConfig?.OnCardHover?.Invoke(new CardHover(this));
         isHovered = true;
     }
 
-    public void OnPointerExit(PointerEventData eventData) {
-        if (isDragged) {
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        if (isDragged)
+        {
             // Avoid hover events while dragging
             return;
         }

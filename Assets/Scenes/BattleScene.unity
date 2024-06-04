@@ -428,6 +428,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1674425592}
     m_Modifications:
+    - target: {fileID: 2543968898848007393, guid: 0fba6b0fec3284087b892325ffdb64b9, type: 3}
+      propertyPath: m_RootOrder
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 4054322692370627254, guid: 0fba6b0fec3284087b892325ffdb64b9, type: 3}
+      propertyPath: m_RootOrder
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 5394154256429420093, guid: 0fba6b0fec3284087b892325ffdb64b9, type: 3}
       propertyPath: m_Name
       value: MonsterCard (3)
@@ -575,6 +583,7 @@ MonoBehaviour:
   DNANameText: {fileID: 1473635793}
   DNADescriptionText: {fileID: 403936845}
   cardPreview: {fileID: 0}
+  cardPreviewRectTransform: {fileID: 0}
 --- !u!4 &145571902 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7621347303202980719, guid: f4d7c127d6da944389899bc42df4ac4d, type: 3}
@@ -860,6 +869,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1674425592}
     m_Modifications:
+    - target: {fileID: 2543968898848007393, guid: 0fba6b0fec3284087b892325ffdb64b9, type: 3}
+      propertyPath: m_RootOrder
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4054322692370627254, guid: 0fba6b0fec3284087b892325ffdb64b9, type: 3}
+      propertyPath: m_RootOrder
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 5394154256429420093, guid: 0fba6b0fec3284087b892325ffdb64b9, type: 3}
       propertyPath: m_Name
       value: MonsterCard (2)
@@ -1719,11 +1736,6 @@ MonoBehaviour:
   GridMap: {fileID: 1501578449}
   fromIndex: 0
   toIndex: 0
---- !u!224 &280414664 stripped
-RectTransform:
-  m_CorrespondingSourceObject: {fileID: 5394154256429420098, guid: 0fba6b0fec3284087b892325ffdb64b9, type: 3}
-  m_PrefabInstance: {fileID: 93267827}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &302111403
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2624,11 +2636,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 01fc034ab533d4c71b177a78d7c306ce, type: 3}
---- !u!224 &396389633 stripped
-RectTransform:
-  m_CorrespondingSourceObject: {fileID: 5394154256429420098, guid: 0fba6b0fec3284087b892325ffdb64b9, type: 3}
-  m_PrefabInstance: {fileID: 1900210148}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &403936843
 GameObject:
   m_ObjectHideFlags: 0
@@ -2687,7 +2694,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: New Text
+  m_text: new text
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -3767,11 +3774,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 7621347303202980719, guid: f4d7c127d6da944389899bc42df4ac4d, type: 3}
   m_PrefabInstance: {fileID: 630842207}
   m_PrefabAsset: {fileID: 0}
---- !u!224 &634026975 stripped
-RectTransform:
-  m_CorrespondingSourceObject: {fileID: 5394154256429420098, guid: 0fba6b0fec3284087b892325ffdb64b9, type: 3}
-  m_PrefabInstance: {fileID: 1125962066}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &652890840
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4181,17 +4183,17 @@ MonoBehaviour:
   maxHeightDisplacement: 20
   zoomConfig:
     zoomOnHover: 1
-    multiplier: 1.1
-    overrideYPosition: 70
+    multiplier: 1.5
+    overrideYPosition: 250
     defaultSortOrder: 0
     bringToFrontOnHover: 1
     zoomedSortOrder: 100
     resetRotationOnZoom: 1
   animationSpeedConfig:
     rotation: 700
-    position: 1000
+    position: 500
     releasePosition: 2000
-    zoom: 5
+    zoom: 3
   cardPlayConfig:
     playArea: {fileID: 1298343870}
     destroyOnPlay: 0
@@ -4213,34 +4215,10 @@ MonoBehaviour:
           m_CallState: 2
     OnCardHover:
       m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 1635617892}
-          m_TargetAssemblyTypeName: demo.ClonePreviewManager, Assembly-CSharp
-          m_MethodName: OnCardHover
-          m_Mode: 0
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
+        m_Calls: []
     OnCardUnhover:
       m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 1635617892}
-          m_TargetAssemblyTypeName: demo.ClonePreviewManager, Assembly-CSharp
-          m_MethodName: OnCardUnhover
-          m_Mode: 0
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
+        m_Calls: []
     OnCardDestroy:
       m_PersistentCalls:
         m_Calls: []
@@ -4601,7 +4579,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &750278124
 RectTransform:
   m_ObjectHideFlags: 0
@@ -4635,6 +4613,7 @@ GameObject:
   - component: {fileID: 783532170}
   - component: {fileID: 783532172}
   - component: {fileID: 783532171}
+  - component: {fileID: 783532173}
   m_Layer: 5
   m_Name: DNAPreview
   m_TagString: Untagged
@@ -4702,6 +4681,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 783532169}
   m_CullTransparentMesh: 1
+--- !u!114 &783532173
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 783532169}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c7261f6d49a7c4280947d5e73f5f43e6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  headerText: {fileID: 1473635793}
+  contentText: {fileID: 403936845}
 --- !u!1 &806178505
 GameObject:
   m_ObjectHideFlags: 0
@@ -5871,6 +5864,11 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!224 &1030869390 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 4054322692370627254, guid: 0fba6b0fec3284087b892325ffdb64b9, type: 3}
+  m_PrefabInstance: {fileID: 1900210148}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1062586473
 GameObject:
   m_ObjectHideFlags: 0
@@ -6127,6 +6125,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1674425592}
     m_Modifications:
+    - target: {fileID: 2543968898848007393, guid: 0fba6b0fec3284087b892325ffdb64b9, type: 3}
+      propertyPath: m_RootOrder
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4054322692370627254, guid: 0fba6b0fec3284087b892325ffdb64b9, type: 3}
+      propertyPath: m_RootOrder
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5394154256429420093, guid: 0fba6b0fec3284087b892325ffdb64b9, type: 3}
       propertyPath: m_Name
       value: MonsterCard (1)
@@ -8881,6 +8887,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 5615218323875792399, guid: 0f7575288603249f8a06fa3ffa960ca9, type: 3}
   m_PrefabInstance: {fileID: 1577164530}
   m_PrefabAsset: {fileID: 0}
+--- !u!224 &1584380279 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 4054322692370627254, guid: 0fba6b0fec3284087b892325ffdb64b9, type: 3}
+  m_PrefabInstance: {fileID: 93267827}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1596692076
 GameObject:
   m_ObjectHideFlags: 0
@@ -9012,6 +9023,11 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 8327036608166500693, guid: 01fc034ab533d4c71b177a78d7c306ce, type: 3}
   m_PrefabInstance: {fileID: 388466356}
   m_PrefabAsset: {fileID: 0}
+--- !u!224 &1631428841 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 4054322692370627254, guid: 0fba6b0fec3284087b892325ffdb64b9, type: 3}
+  m_PrefabInstance: {fileID: 1125962066}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1635617890
 GameObject:
   m_ObjectHideFlags: 0
@@ -9021,10 +9037,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1635617891}
-  - component: {fileID: 1635617892}
   - component: {fileID: 1635617893}
   m_Layer: 0
-  m_Name: PreviewAndPlayManager
+  m_Name: CardPlayManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -9045,21 +9060,6 @@ Transform:
   m_Father: {fileID: 338134590}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1635617892
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1635617890}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 70f9ed3920ca40b2a02266c4e1703f5a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  verticalPosition: 320
-  previewScale: 1.5
-  previewSortingOrder: 101
 --- !u!114 &1635617893
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9073,11 +9073,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   container: {fileID: 704935959}
---- !u!224 &1642316644 stripped
-RectTransform:
-  m_CorrespondingSourceObject: {fileID: 5394154256429420098, guid: 0fba6b0fec3284087b892325ffdb64b9, type: 3}
-  m_PrefabInstance: {fileID: 179625436}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1665597080
 GameObject:
   m_ObjectHideFlags: 0
@@ -9249,10 +9244,10 @@ RectTransform:
   m_LocalScale: {x: 0.8, y: 0.8, z: 0.8}
   m_ConstrainProportionsScale: 1
   m_Children:
-  - {fileID: 396389633}
-  - {fileID: 634026975}
-  - {fileID: 1642316644}
-  - {fileID: 280414664}
+  - {fileID: 1030869390}
+  - {fileID: 1631428841}
+  - {fileID: 1682221228}
+  - {fileID: 1584380279}
   m_Father: {fileID: 1596692077}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -9348,6 +9343,11 @@ PrefabInstance:
 Transform:
   m_CorrespondingSourceObject: {fileID: 7621347303202980719, guid: f4d7c127d6da944389899bc42df4ac4d, type: 3}
   m_PrefabInstance: {fileID: 1675054504}
+  m_PrefabAsset: {fileID: 0}
+--- !u!224 &1682221228 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 4054322692370627254, guid: 0fba6b0fec3284087b892325ffdb64b9, type: 3}
+  m_PrefabInstance: {fileID: 179625436}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &1690356107
 GameObject:
@@ -12000,11 +12000,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c931d54ccdd784d3ab81876d3d396d0b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  textCardData: {fileID: 4900000, guid: 9731cd73ab9fc478fa12794f16f24daf, type: 3}
-  textDNAData: {fileID: 4900000, guid: c452537270bb146719ee2f71bfa70be2, type: 3}
   warriorCard: {fileID: 4900000, guid: 258a5b7852b094ccf846b7376ff3da21, type: 3}
   totalCoins: 0
   enemyTextCardData: {fileID: 4900000, guid: e6f610c702ff44ae0999b65ac2eacf0e, type: 3}
+  keyWords: []
+  keyWordsDefinition: []
 --- !u!4 &2112958808
 Transform:
   m_ObjectHideFlags: 0
@@ -12032,9 +12032,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4d1a29ccb44f943a6be53a38e2cea5ef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MonsterCardModel: {fileID: 5394154256429420093, guid: 0fba6b0fec3284087b892325ffdb64b9, type: 3}
-  SpellCardModel: {fileID: 120855665334487933, guid: 640f2969063b84ff3ae9ca96b30b7183, type: 3}
-  ItemCardModel: {fileID: 3999010592038799275, guid: d10e5ddb8187f4fdb8eb50489cf5676a, type: 3}
+  MonsterCardModel: {fileID: 4054322692370627273, guid: 0fba6b0fec3284087b892325ffdb64b9, type: 3}
+  SpellCardModel: {fileID: 1090874280078719978, guid: 640f2969063b84ff3ae9ca96b30b7183, type: 3}
+  ItemCardModel: {fileID: 1430281289934144757, guid: d10e5ddb8187f4fdb8eb50489cf5676a, type: 3}
 --- !u!1001 &2125890362
 PrefabInstance:
   m_ObjectHideFlags: 0
