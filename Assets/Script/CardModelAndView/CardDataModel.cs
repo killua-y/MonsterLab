@@ -31,7 +31,7 @@ public class CardDataModel : MonoBehaviour
 
     // keyword
     private string keyWordsDataPath = "/Datas/cardsdata - Keyword.csv";
-    private List<string> keyWords = new List<string>();
+    public List<string> keyWords = new List<string>();
     public List<string> keyWordsDefinition = new List<string>();
 
     // Start is called before the first frame update
@@ -56,6 +56,7 @@ public class CardDataModel : MonoBehaviour
         }
 
         // 需要在LoadCardList()之后call
+        LoadPlayerData();
     }
 
     private void LoadKeyWordList()
@@ -109,6 +110,7 @@ public class CardDataModel : MonoBehaviour
                 }
             }
         }
+
     }
 
     public void LoadDNAList()

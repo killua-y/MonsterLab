@@ -1,17 +1,19 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class CardDisplay : MonoBehaviour
+public class CardDisplay : MonoBehaviour, IPointerExitHandler, IPointerEnterHandler
 {
     public Image cardPicture;
     public TextMeshProUGUI nameText;
     public TextMeshProUGUI effectText;
     public TextMeshProUGUI costText;
     public Image rarityGem;
+    public GameObject keyWordParent;
+    public GameObject keyWordPrefab;
 
     public virtual void UpdateCardView(Card _card)
     {
@@ -54,6 +56,7 @@ public class CardDisplay : MonoBehaviour
         }
 
         UpdateColor(_card, originalCard);
+        generateKeyWord(_card);
     }
 
     public virtual void UpdateColor(Card _card, Card originalCard)
@@ -73,8 +76,41 @@ public class CardDisplay : MonoBehaviour
         }
     }
 
-    private void showKeyWord()
+    private void generateKeyWord(Card _card)
     {
+        if (_card.keyWords.Count == 0)
+        {
+            return;
+        }
 
+        List<string> keyWordsDefinition = CardDataModel.Instance.keyWordsDefinition;
+        List<string> keyWords = CardDataModel.Instance.keyWords;
+
+        foreach (string keyword in _card.keyWords)
+        {
+
+            Debug.Log("generate word " + keyword);
+            GameObject newKeyWordExplain = Instantiate(keyWordPrefab, keyWordParent.transform);
+
+            string description = keyWordsDefinition[keyWords.IndexOf(keyword)];
+
+            newKeyWordExplain.GetComponent<AdjustImageSize>().Setup(keyword, description);
+        }
+    }
+
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        if (!keyWordParent.activeSelf)
+        {
+            keyWordParent.SetActive(true);
+        }
+    }
+
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        if (keyWordParent.activeSelf)
+        {
+            keyWordParent.SetActive(false);
+        }
     }
 }
