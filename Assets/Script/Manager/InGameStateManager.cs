@@ -120,7 +120,10 @@ public class InGameStateManager : Manager<InGameStateManager>
     {
         OnBattlePhaseEnd();
 
-        PreparePhaseStart();
+        if (inGame)
+        {
+            PreparePhaseStart();
+        }
     }
 
     public void DisCardAllCard()

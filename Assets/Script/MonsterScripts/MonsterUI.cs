@@ -31,6 +31,14 @@ public class MonsterUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
         spriteRender.flipX = true;
         fillImage = healthBar.fillRect.GetComponent<Image>();
         fillImage.color = Color.red;
+        DragMonster dragComponent = this.GetComponent<DragMonster>();
+        if (dragComponent != null)
+        {
+            Destroy(dragComponent);
+        }
+
+        // 这一行是为了更加方便分辨怪兽所属，以后要删除
+        spriteRender.color = Color.red;
     }
 
     public void UpdateHealth(int currentHealth)

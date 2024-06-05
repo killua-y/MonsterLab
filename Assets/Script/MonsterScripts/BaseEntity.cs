@@ -276,6 +276,7 @@ public class BaseEntity : MonoBehaviour
             // 复活，重新把自己添加回索敌list
             if (dead)
             {
+                Debug.Log("Card " + cardModel.cardName + " respond");
                 dead = false;
                 BattleManager.Instance.AddToTeam(this);
             }
