@@ -6,7 +6,8 @@ using events;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class CardContainer : MonoBehaviour {
+public class CardContainer : MonoBehaviour
+{
     [Header("Constraints")]
     [SerializeField]
     private bool forceFitContainer;
@@ -34,34 +35,39 @@ public class CardContainer : MonoBehaviour {
 
     [SerializeField]
     private CardPlayConfig cardPlayConfig;
-    
+
     [Header("Events")]
     [SerializeField]
     private EventsConfig eventsConfig;
-    
+
     private List<CardWrapper> cards = new();
 
     private RectTransform rectTransform;
     private CardWrapper currentDraggedCard;
 
-    private void Start() {
+    private void Start()
+    {
         rectTransform = GetComponent<RectTransform>();
         InitCards();
     }
 
-    public void InitCards() {
+    public void InitCards()
+    {
         SetUpCards();
         SetCardsAnchor();
     }
 
-    private void SetCardsRotation() {
-        for (var i = 0; i < cards.Count; i++) {
+    private void SetCardsRotation()
+    {
+        for (var i = 0; i < cards.Count; i++)
+        {
             cards[i].targetRotation = GetCardRotation(i);
             cards[i].targetVerticalDisplacement = GetCardVerticalDisplacement(i);
         }
     }
 
-    private float GetCardVerticalDisplacement(int index) {
+    private float GetCardVerticalDisplacement(int index)
+    {
         if (cards.Count < 3) return 0;
         // Associate a vertical displacement based on the index in the cards list
         // so that the center card is at max displacement while the edges are at 0 displacement
@@ -69,25 +75,30 @@ public class CardContainer : MonoBehaviour {
                (1 - Mathf.Pow(index - (cards.Count - 1) / 2f, 2) / Mathf.Pow((cards.Count - 1) / 2f, 2));
     }
 
-    private float GetCardRotation(int index) {
+    private float GetCardRotation(int index)
+    {
         if (cards.Count < 3) return 0;
         // Associate a rotation based on the index in the cards list
         // so that the first and last cards are at max rotation, mirrored around the center
         return -maxCardRotation * (index - (cards.Count - 1) / 2f) / ((cards.Count - 1) / 2f);
     }
 
-    void Update() {
+    void Update()
+    {
         if (!InGameStateManager.gamePased)
         {
             UpdateCards();
         }
     }
 
-    void SetUpCards() {
+    void SetUpCards()
+    {
         cards.Clear();
-        foreach (Transform card in transform) {
+        foreach (Transform card in transform)
+        {
             var wrapper = card.GetComponent<CardWrapper>();
-            if (wrapper == null) {
+            if (wrapper == null)
+            {
                 wrapper = card.gameObject.AddComponent<CardWrapper>();
             }
 
@@ -103,25 +114,31 @@ public class CardContainer : MonoBehaviour {
         }
     }
 
-    private void AddOtherComponentsIfNeeded(CardWrapper wrapper) {
+    private void AddOtherComponentsIfNeeded(CardWrapper wrapper)
+    {
         var canvas = wrapper.GetComponent<Canvas>();
-        if (canvas == null) {
+        if (canvas == null)
+        {
             canvas = wrapper.gameObject.AddComponent<Canvas>();
         }
 
         canvas.overrideSorting = true;
 
-        if (wrapper.GetComponent<GraphicRaycaster>() == null) {
+        if (wrapper.GetComponent<GraphicRaycaster>() == null)
+        {
             wrapper.gameObject.AddComponent<GraphicRaycaster>();
         }
     }
 
-    private void UpdateCards() {
-        if (transform.childCount != cards.Count) {
+    private void UpdateCards()
+    {
+        if (transform.childCount != cards.Count)
+        {
             InitCards();
         }
 
-        if (cards.Count == 0) {
+        if (cards.Count == 0)
+        {
             return;
         }
 
@@ -131,21 +148,26 @@ public class CardContainer : MonoBehaviour {
         UpdateCardOrder();
     }
 
-    private void SetCardsUILayers() {
-        for (var i = 0; i < cards.Count; i++) {
+    private void SetCardsUILayers()
+    {
+        for (var i = 0; i < cards.Count; i++)
+        {
             cards[i].uiLayer = zoomConfig.defaultSortOrder + i;
         }
     }
 
-    private void UpdateCardOrder() {
+    private void UpdateCardOrder()
+    {
         if (!allowCardRepositioning || currentDraggedCard == null) return;
 
         // Get the index of the dragged card depending on its position
         var newCardIdx = cards.Count(card => currentDraggedCard.transform.position.x > card.transform.position.x);
         var originalCardIdx = cards.IndexOf(currentDraggedCard);
-        if (newCardIdx != originalCardIdx) {
+        if (newCardIdx != originalCardIdx)
+        {
             cards.RemoveAt(originalCardIdx);
-            if (newCardIdx > originalCardIdx && newCardIdx < cards.Count - 1) {
+            if (newCardIdx > originalCardIdx && newCardIdx < cards.Count - 1)
+            {
                 newCardIdx--;
             }
 
@@ -155,45 +177,57 @@ public class CardContainer : MonoBehaviour {
         currentDraggedCard.transform.SetSiblingIndex(newCardIdx);
     }
 
-    private void SetCardsPosition() {
+    private void SetCardsPosition()
+    {
         // Compute the total width of all the cards in global space
-        var cardsTotalWidth = cards.Sum(card => card.width * card.transform.lossyScale.x);
+        //var cardsTotalWidth = cards.Sum(card => card.width * card.transform.lossyScale.x);
+        var cardsTotalWidth = cards.Sum(card => Mathf.Min(card.width, 250) * Mathf.Min(card.transform.lossyScale.x, 1.5f));
         // Compute the width of the container in global space
         var containerWidth = rectTransform.rect.width * transform.lossyScale.x;
-        if (forceFitContainer && cardsTotalWidth > containerWidth) {
+        if (forceFitContainer && cardsTotalWidth > containerWidth)
+        {
             DistributeChildrenToFitContainer(cardsTotalWidth);
         }
-        else {
+        else
+        {
             DistributeChildrenWithoutOverlap(cardsTotalWidth);
         }
     }
 
-    private void DistributeChildrenToFitContainer(float childrenTotalWidth) {
+    private void DistributeChildrenToFitContainer(float childrenTotalWidth)
+    {
         // Get the width of the container
         var width = rectTransform.rect.width * transform.lossyScale.x;
         // Get the distance between each child
         var distanceBetweenChildren = (width - childrenTotalWidth) / (cards.Count - 1);
         // Set all children's positions to be evenly spaced out
         var currentX = transform.position.x - width / 2;
-        foreach (CardWrapper child in cards) {
-            var adjustedChildWidth = child.width * child.transform.lossyScale.x;
+        foreach (CardWrapper child in cards)
+        {
+            //var adjustedChildWidth = child.width * child.transform.lossyScale.x;
+            var adjustedChildWidth = Mathf.Min(child.width, 250) * Mathf.Min(child.transform.lossyScale.x, 1.5f);
             child.targetPosition = new Vector2(currentX + adjustedChildWidth / 2, transform.position.y);
             currentX += adjustedChildWidth + distanceBetweenChildren;
         }
     }
 
-    private void DistributeChildrenWithoutOverlap(float childrenTotalWidth) {
+    private void DistributeChildrenWithoutOverlap(float childrenTotalWidth)
+    {
         var currentPosition = GetAnchorPositionByAlignment(childrenTotalWidth);
-        foreach (CardWrapper child in cards) {
-            var adjustedChildWidth = child.width * child.transform.lossyScale.x;
+        foreach (CardWrapper child in cards)
+        {
+            //var adjustedChildWidth = child.width * child.transform.lossyScale.x;
+            var adjustedChildWidth = Mathf.Min(child.width, 250) * Mathf.Min(child.transform.lossyScale.x, 1.5f);
             child.targetPosition = new Vector2(currentPosition + adjustedChildWidth / 2, transform.position.y);
             currentPosition += adjustedChildWidth;
         }
     }
 
-    private float GetAnchorPositionByAlignment(float childrenWidth) {
+    private float GetAnchorPositionByAlignment(float childrenWidth)
+    {
         var containerWidthInGlobalSpace = rectTransform.rect.width * transform.lossyScale.x;
-        switch (alignment) {
+        switch (alignment)
+        {
             case CardAlignment.Left:
                 return transform.position.x - containerWidthInGlobalSpace / 2;
             case CardAlignment.Center:
@@ -205,36 +239,44 @@ public class CardContainer : MonoBehaviour {
         }
     }
 
-    private void SetCardsAnchor() {
-        foreach (CardWrapper child in cards) {
+    private void SetCardsAnchor()
+    {
+        foreach (CardWrapper child in cards)
+        {
             child.SetAnchor(new Vector2(0, 0.5f), new Vector2(0, 0.5f));
         }
     }
 
-    public void OnCardDragStart(CardWrapper card) {
+    public void OnCardDragStart(CardWrapper card)
+    {
         currentDraggedCard = card;
     }
 
-    public void OnCardDragEnd(bool canceled = false) {
+    public void OnCardDragEnd(bool canceled = false)
+    {
         // If card is in play area, play it!
-        if (IsCursorInPlayArea() && !canceled) {
+        if (IsCursorInPlayArea() && !canceled)
+        {
             eventsConfig?.OnCardPlayed?.Invoke(new CardPlayed(currentDraggedCard));
-            if (cardPlayConfig.destroyOnPlay) {
+            if (cardPlayConfig.destroyOnPlay)
+            {
                 DestroyCard(currentDraggedCard);
             }
         }
         currentDraggedCard = null;
     }
-    
-    public void DestroyCard(CardWrapper card) {
+
+    public void DestroyCard(CardWrapper card)
+    {
         cards.Remove(card);
         eventsConfig.OnCardDestroy?.Invoke(new CardDestroy(card));
         Destroy(card.gameObject);
     }
 
-    public bool IsCursorInPlayArea() {
+    public bool IsCursorInPlayArea()
+    {
         if (cardPlayConfig.playArea == null) return false;
-        
+
         var cursorPosition = Input.mousePosition;
         var playArea = cardPlayConfig.playArea;
         var playAreaCorners = new Vector3[4];
@@ -243,6 +285,6 @@ public class CardContainer : MonoBehaviour {
                cursorPosition.x < playAreaCorners[2].x &&
                cursorPosition.y > playAreaCorners[0].y &&
                cursorPosition.y < playAreaCorners[2].y;
-        
+
     }
 }

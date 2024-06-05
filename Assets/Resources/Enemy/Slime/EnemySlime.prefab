@@ -304,10 +304,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spriteRender: {fileID: 4194997673314662460}
   healthBar: {fileID: 3507302775434832314}
+  manaBar: {fileID: 0}
   healthText: {fileID: 6924219838419779231}
   attackText: {fileID: 921082472947015523}
   bullet: {fileID: 0}
-  cardPreviewParent: {fileID: 0}
 --- !u!61 &4151733296364864047
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -773,7 +773,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7722234700171513201}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: dc42784cf147c0c48a680349fa168899, type: 3}
   m_Name: 

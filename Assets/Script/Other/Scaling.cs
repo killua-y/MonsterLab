@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 public class Scaling : MonoBehaviour, IPointerExitHandler, IPointerEnterHandler
 {
@@ -10,12 +11,38 @@ public class Scaling : MonoBehaviour, IPointerExitHandler, IPointerEnterHandler
 
     private Coroutine scalingCoroutine;
 
+    private Canvas canvas;
+    private int originalSortingOrder;
+
+    void Start()
+    {
+        // Ensure the GameObject has a Canvas component
+        canvas = GetComponent<Canvas>();
+        if (canvas == null)
+        {
+            canvas = gameObject.AddComponent<Canvas>();
+        }
+        canvas.overrideSorting = true;
+        canvas.sortingOrder = 18;
+        originalSortingOrder = canvas.sortingOrder;
+
+        // Ensure the GameObject has a GraphicRaycaster component
+        if (GetComponent<GraphicRaycaster>() == null)
+        {
+            gameObject.AddComponent<GraphicRaycaster>();
+        }
+    }
+
     public void OnPointerEnter(PointerEventData eventData)
     {
         if (scalingCoroutine != null)
         {
             StopCoroutine(scalingCoroutine);
         }
+
+        // Bring to front layer
+        canvas.sortingOrder = 19; // Set a high sorting order to bring it to the front
+
         scalingCoroutine = StartCoroutine(ScaleTo(new Vector3(zoomScale, zoomScale, 1.0f)));
     }
 
@@ -25,6 +52,10 @@ public class Scaling : MonoBehaviour, IPointerExitHandler, IPointerEnterHandler
         {
             StopCoroutine(scalingCoroutine);
         }
+
+        // Restore original layer order
+        canvas.sortingOrder = originalSortingOrder;
+
         scalingCoroutine = StartCoroutine(ScaleTo(new Vector3(1f, 1f, 1f)));
     }
 

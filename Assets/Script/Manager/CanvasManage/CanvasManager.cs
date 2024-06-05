@@ -22,7 +22,8 @@ public class CanvasManager : MonoBehaviour
 
     // 用于holding card preview
     [Header("Monster Card Preview")]
-    public GameObject cardPreview;
+    private GameObject cardPreview;
+    private RectTransform cardPreviewRectTransform;
 
     private void Awake()
     {
@@ -47,16 +48,39 @@ public class CanvasManager : MonoBehaviour
 
             rectTransform.position = adjustedPosition;
         }
-        else if (cardPreview != null)
+        else if (cardPreviewRectTransform != null)
         {
             // Update the position of the text to follow the mouse
             Vector2 mousePosition = Input.mousePosition;
 
-            RectTransform rectTransform = cardPreview.GetComponent<RectTransform>();
+            // Convert mouse position to canvas space
+            RectTransformUtility.ScreenPointToLocalPointInRectangle(HighPriorityCanvas.transform as RectTransform, mousePosition, HighPriorityCanvas.worldCamera, out Vector2 localPoint);
 
-            Vector2 adjustedPosition = mousePosition + new Vector2(rectTransform.rect.width / 2 + 100, 0);
+            // Calculate the new anchored position
+            Vector2 newPosition = localPoint;
 
-            rectTransform.position = adjustedPosition;
+            // Determine if the mouse is on the left or right side of the screen
+            if (mousePosition.x < Screen.width / 2)
+            {
+                newPosition = newPosition + new Vector2(cardPreviewRectTransform.rect.width / 2 + 100, 0);
+            }
+            else
+            {
+                newPosition = newPosition - new Vector2(cardPreviewRectTransform.rect.width / 2 + 100, 0);
+            }
+
+            // Get the canvas size
+            RectTransform canvasRect = HighPriorityCanvas.transform as RectTransform;
+            Vector2 canvasSize = canvasRect.sizeDelta - new Vector2(100, 100);
+
+            // Get the size of the image
+            Vector2 imageSize = cardPreviewRectTransform.sizeDelta;
+
+            // Adjust the position to stay within screen boundaries
+            newPosition.y = Mathf.Clamp(newPosition.y, -canvasSize.y / 2 + imageSize.y / 2, canvasSize.y / 2 - imageSize.y / 2);
+
+            // Set the new anchored position
+            cardPreviewRectTransform.anchoredPosition = newPosition;
         }
     }
 
@@ -84,8 +108,8 @@ public class CanvasManager : MonoBehaviour
     public void GenerateDNAPreview(string Name, string description)
     {
         DNAPreview.SetActive(true);
-        DNANameText.text = Name;
-        DNADescriptionText.text = description;
+        DNAPreview.GetComponent<AdjustImageSize>().Setup(Name, description);
+        DNAPreview.GetComponent<AdjustImageSize>().AdjustImageSizeToText();
     }
 
     public void HideDNAPreview()
@@ -100,15 +124,41 @@ public class CanvasManager : MonoBehaviour
     {
         Card card = cardModel;
         cardPreview = CardDisplayView.Instance.DisPlaySingleCard(card, HighPriorityCanvas.transform);
+        cardPreviewRectTransform = cardPreview.GetComponent<RectTransform>();
+        cardPreview.GetComponent<CardDisplay>().ShowKeyWord();
 
         // Update the position of the text to follow the mouse
         Vector2 mousePosition = Input.mousePosition;
 
-        RectTransform rectTransform = cardPreview.GetComponent<RectTransform>();
+        // Convert mouse position to canvas space
+        RectTransformUtility.ScreenPointToLocalPointInRectangle(HighPriorityCanvas.transform as RectTransform, mousePosition, HighPriorityCanvas.worldCamera, out Vector2 localPoint);
 
-        Vector2 adjustedPosition = mousePosition + new Vector2(rectTransform.rect.width / 2 + 100, 0);
+        // Calculate the new anchored position
+        Vector2 newPosition = localPoint;
 
-        rectTransform.position = adjustedPosition;
+        // Determine if the mouse is on the left or right side of the screen
+        if (mousePosition.x < Screen.width / 2)
+        {
+            newPosition = newPosition + new Vector2(cardPreviewRectTransform.rect.width / 2 + 100, 0);
+        }
+        else
+        {
+            newPosition = newPosition - new Vector2(cardPreviewRectTransform.rect.width / 2 + 100, 0);
+            cardPreview.GetComponent<CardDisplay>().FlipKeyWord();
+        }
+
+        // Get the canvas size
+        RectTransform canvasRect = HighPriorityCanvas.transform as RectTransform;
+        Vector2 canvasSize = canvasRect.sizeDelta - new Vector2(100, 100);
+
+        // Get the size of the image
+        Vector2 imageSize = cardPreviewRectTransform.sizeDelta;
+
+        // Adjust the position to stay within screen boundaries
+        newPosition.y = Mathf.Clamp(newPosition.y, -canvasSize.y / 2 + imageSize.y / 2, canvasSize.y / 2 - imageSize.y / 2);
+
+        // Set the new anchored position
+        cardPreviewRectTransform.anchoredPosition = newPosition;
     }
 
     public void HideCardPreview()

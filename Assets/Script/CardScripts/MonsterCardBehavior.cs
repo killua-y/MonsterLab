@@ -127,17 +127,13 @@ public class MonsterCardBehavior : CardBehavior
 
     public override void OnPointDown()
     {
-        IsDragging = true;
+        base.OnPointDown();
         BattleManager.Instance.DisplayMonsterSpaceText();
     }
 
     public override void OnPointUp()
     {
-        IsDragging = false;
+        base.OnPointUp();
         BattleManager.Instance.StopDisplayMonsterSpaceText();
-        if (previousTile != null)
-        {
-            previousTile.SetHighlight(false, false);
-        }
     }
 }

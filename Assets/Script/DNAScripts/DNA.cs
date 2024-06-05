@@ -1,5 +1,7 @@
 
 
+using System.Collections.Generic;
+
 public class DNA
 {
     // 编号
@@ -18,9 +20,11 @@ public class DNA
     public string scriptLocation;
     // 图片位置
     public string imageLocation;
+    // 关键词列表
+    public List<string> keyWords;
 
     public DNA(int _id, string _DNAName, CardColor _NDAColor, CardRarity _DNARarity, int _effectData,
-        string _effectText, string _scriptLocation, string _imageLocation)
+        string _effectText, string _scriptLocation, string _imageLocation, List<string> _keyWords = null)
     {
         this.id = _id;
         this.DNAName = _DNAName;
@@ -30,5 +34,6 @@ public class DNA
         this.effectText = _effectText;
         this.scriptLocation = _scriptLocation;
         this.imageLocation = _imageLocation;
+        this.keyWords = _keyWords ?? new List<string>();
     }
 }

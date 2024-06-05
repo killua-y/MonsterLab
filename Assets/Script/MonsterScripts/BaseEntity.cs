@@ -37,7 +37,7 @@ public class BaseEntity : MonoBehaviour
     protected Node destination;
 
     //其他
-    protected bool dead = false;
+    public bool dead = false;
     protected bool canAttack = true;
     protected bool CanBattle = false;
     protected float waitBetweenAttack;
@@ -84,10 +84,10 @@ public class BaseEntity : MonoBehaviour
         bullet = this.gameObject.GetComponent<MonsterUI>().bullet;
 
         // 重新施加记录下的装备
-        if (monsterCard.equipedCard.Count > 0)
+        if (monsterCard.equippedCard.Count > 0)
         {
             Debug.Log("Start recast equipedCard");
-            foreach (Card card in monsterCard.equipedCard)
+            foreach (Card card in monsterCard.equippedCard)
             {
                 System.Type scriptType = System.Type.GetType(card.scriptLocation);
 
@@ -206,20 +206,6 @@ public class BaseEntity : MonoBehaviour
                 return;
             }
 
-            //destination = null;
-            //List<Node> candidates = GridManager.Instance.GetNodesCloseTo(currentTarget.CurrentNode);
-            //candidates = candidates.OrderBy(x => Vector2.Distance(x.worldPosition, this.transform.position)).ToList();
-            //for (int i = 0; i < candidates.Count; i++)
-            //{
-            //    if (!candidates[i].IsOccupied)
-            //    {
-            //        destination = candidates[i];
-            //        break;
-            //    }
-            //}
-            //if (destination == null)
-            //    return;
-
             destination = currentTarget.CurrentNode;
 
             var path = GridManager.Instance.GetPath(currentNode, destination);
@@ -242,6 +228,10 @@ public class BaseEntity : MonoBehaviour
         if (currentNode != null)
         {
             currentNode.SetOccupied(false);
+        }
+        else
+        {
+            Debug.Log("Trying to call standUp when unit is not on a node");
         }
     }
 
@@ -286,8 +276,6 @@ public class BaseEntity : MonoBehaviour
             // 复活，重新把自己添加回索敌list
             if (dead)
             {
-                // 这一行是因为如果在攻击过程中死亡不会重制canAttack计数器
-                canAttack = true;
                 dead = false;
                 BattleManager.Instance.AddToTeam(this);
             }
