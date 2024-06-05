@@ -15,13 +15,13 @@ public class AdjustImageSize : MonoBehaviour
 
         headerText.text = _headerText;
         contentText.text = _contentText;
-
-        // Force update the canvas to ensure text info is updated
-        Canvas.ForceUpdateCanvases();
     }
 
     public void AdjustImageSizeToText()
     {
+        // Force update the canvas to ensure text info is updated
+        Canvas.ForceUpdateCanvases();
+
         if (headerText == null || contentText == null)
         {
             Debug.LogError("TextMeshProUGUI components are not assigned.");

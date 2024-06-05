@@ -10,6 +10,7 @@ public class AcidSlimeEnemy : EnemyBehavior
     // 该敌人拥有的怪兽
     private MonsterCard Slime;
     private MonsterCard AcidSlime;
+    private MonsterCard test;
 
     public override void LoadEnemy()
     {

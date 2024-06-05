@@ -66,7 +66,7 @@ public class GridManager : Manager<GridManager>
         {
             foreach (Node to in allNodes)
             {
-                if (Vector2.Distance(from.worldPosition, to.worldPosition) < 1.5f && from != to)
+                if (Vector2.Distance(from.worldPosition, to.worldPosition) < 1.1f && from != to)
                 {
                     graph.AddEdge(from, to);
                 }

@@ -15,13 +15,14 @@ public class CardDisplay : MonoBehaviour, IPointerExitHandler, IPointerEnterHand
     public GameObject keyWordParent;
     public GameObject keyWordPrefab;
 
-    private List<AdjustImageSize> keyWordPanelList = new List<AdjustImageSize>();
+    private List<AdjustImageSize> keyWordList = new List<AdjustImageSize>();
     public virtual void UpdateCardView(Card _card)
     {
         if (_card.imageLocation != "")
         {
             cardPicture.sprite = Resources.Load<Sprite>(_card.imageLocation);
         }
+
         costText.text = Convert.ToString(_card.cost);
         nameText.text = _card.cardName;
         effectText.text = _card.effectText;
@@ -89,15 +90,13 @@ public class CardDisplay : MonoBehaviour, IPointerExitHandler, IPointerEnterHand
 
         foreach (string keyword in _card.keyWords)
         {
-
-            Debug.Log("generate word " + keyword);
             GameObject newKeyWordExplain = Instantiate(keyWordPrefab, keyWordParent.transform);
 
             string description = keyWordsDefinition[keyWords.IndexOf(keyword)];
 
             newKeyWordExplain.GetComponent<AdjustImageSize>().Setup(keyword, description);
 
-            keyWordPanelList.Add(newKeyWordExplain.GetComponent<AdjustImageSize>());
+            keyWordList.Add(newKeyWordExplain.GetComponent<AdjustImageSize>());
         }
     }
 
@@ -105,21 +104,27 @@ public class CardDisplay : MonoBehaviour, IPointerExitHandler, IPointerEnterHand
     {
         if (!keyWordParent.activeSelf)
         {
-            foreach (AdjustImageSize adjustImageSize in keyWordPanelList)
+            keyWordParent.SetActive(true);
+
+            foreach (AdjustImageSize adjustImageSize in keyWordList)
             {
                 adjustImageSize.AdjustImageSizeToText();
             }
-
-            keyWordParent.SetActive(true);
         }
     }
 
-    public void HideKeyword()
+    public void HideKeyWord()
     {
         if (keyWordParent.activeSelf)
         {
             keyWordParent.SetActive(false);
         }
+    }
+
+    public void FlipKeyWord()
+    {
+        RectTransform keyWordParentRectTransform = keyWordParent.GetComponent<RectTransform>();
+        keyWordParentRectTransform.localPosition = new Vector2(-keyWordParentRectTransform.localPosition.x, keyWordParentRectTransform.localPosition.y);
     }
 
     public void OnPointerEnter(PointerEventData eventData)
@@ -129,6 +134,6 @@ public class CardDisplay : MonoBehaviour, IPointerExitHandler, IPointerEnterHand
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        HideKeyword();
+        HideKeyWord();
     }
 }
