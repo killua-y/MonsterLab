@@ -423,12 +423,14 @@ public class BaseEntity : MonoBehaviour
         // 播放攻击后摇
         yield return new WaitForSeconds(attackRecover);
 
-        canAttack = true;
         // 结束播放攻击动画
         if (animator != null)
         {
             animator.SetInteger("AnimationInt", 0);
         }
+
+        yield return new WaitForSeconds(attackSpeed - (attackPreparation + attackRecover));
+        canAttack = true;
     }
 
     protected virtual void Consume(List<BaseEntity> sacrfices)
