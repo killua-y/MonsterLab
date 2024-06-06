@@ -1,7 +1,7 @@
 #,1,2,3,4,5,6,7,8,9,10,10,12,13,14,15,16,17,18,19
 #,Index,卡名,职业颜色,稀有度,费用,释放类型,数值,技能描述,script位置,图片位置,rank,种族,攻击力,生命值,攻击距离,蓝量,模型位置,skill script位置,End
 m,0,Jax,red,legend,1,PlayerEmptyTile,0,Item card equiped to this monster will be cast again.,JaxEntity,,2,None,5,80,1.5,0,,,
-m,1,Howler,start,normal,1,PlayerEmptyTile,0,Normal Monster,,MonsterCardPicture/killua5607_httpss.mj.runO94IGAXc56o_tarot_card_of_pokemonworlf__04cfc51f-304b-4f2f-8c88-a5177f5ebfc8,0,Wolf,5,40,1.5,0,,,
+m,1,Howler,start,normal,1,PlayerEmptyTile,0,Normal Monster,,MonsterCardPicture/killua5607_httpss.mj.runO94IGAXc56o_tarot_card_of_pokemonworlf__04cfc51f-304b-4f2f-8c88-a5177f5ebfc8,0,Wolf,5,40,1.5,0,MonsterPrefab/NormalWolf,,
 m,2,Silvermane,red,rare,1,PlayerEmptyTile,200,Mana 30: Next attack deal 200% attack damage.,,MonsterCardPicture/killua5607_httpss.mj.runzqQS3N6KoqA_tarot_card_of_pokemonworlf_06a6c8b7-6e1e-4037-ae64-683e87a40e3e,2,Wolf,15,100,3,30,,SilvermaneSkill,
 m,3,Rank Devourer,red,legend,1,PlayerEmptyTile,0,Its attack power is doubled for each 2-star or higher monster used as a tribute.,RankDevourerEntity,,3,None,25,200,1.5,0,,,
 m,4,Husky,red,legend,1,PlayerEmptyTile,0,When summoned. Repeat all Summon effects triggered so far this battle.,HuskyEntity,,0,Wolf,5,40,3,0,,,

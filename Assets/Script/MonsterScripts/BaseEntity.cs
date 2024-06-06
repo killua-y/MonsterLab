@@ -18,8 +18,8 @@ public class BaseEntity : MonoBehaviour
     [Range(1.5f, 10)]
     protected float range = 1.5f;
     public float attackSpeed = 1f; //攻击间隔
-    public float attackPreparation = 0.5f; //攻击前摇
-    public float attackRecover = 0.5f; //攻击后摇
+    public float attackPreparation = 0.3f; //攻击前摇
+    public float attackRecover = 0.7f; //攻击后摇
     protected float movementSpeed = 1.3f; //移动速度
 
     // 储存了怪兽所有数据的卡牌信息
@@ -45,10 +45,14 @@ public class BaseEntity : MonoBehaviour
     public Action OnAttack;
     public Action<int> OnTakeDamage;
 
+    // 动画
+    private Animator animator;
+
     public virtual void Setup(Team team, Node node, MonsterCard monsterCard, List<BaseEntity> sacrifices = null)
     {
         // 加载怪兽UI script
         monsterUI = this.gameObject.GetComponent<MonsterUI>();
+        animator = this.gameObject.GetComponent<Animator>();
 
         myTeam = team;
 
@@ -381,8 +385,11 @@ public class BaseEntity : MonoBehaviour
         }
 
         canAttack = false;
-
         // 开始播放攻击动画
+        if (animator != null)
+        {
+            animator.SetInteger("AnimationInt", 1);
+        }
         yield return new WaitForSeconds(attackPreparation);
 
         // 前摇结束检测目标是否还存活
@@ -415,7 +422,13 @@ public class BaseEntity : MonoBehaviour
         }
         // 播放攻击后摇
         yield return new WaitForSeconds(attackRecover);
+
         canAttack = true;
+        // 结束播放攻击动画
+        if (animator != null)
+        {
+            animator.SetInteger("AnimationInt", 0);
+        }
     }
 
     protected virtual void Consume(List<BaseEntity> sacrfices)
