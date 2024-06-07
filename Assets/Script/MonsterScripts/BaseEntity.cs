@@ -15,12 +15,12 @@ public class BaseEntity : MonoBehaviour
     // 怪兽属性部分
     private GameObject bullet;
     private Transform attackOragn;
-    protected int currentHealth;
+    public int currentHealth;
     [Range(1.5f, 10)]
     protected float range = 1.5f;
     public float attackSpeed = 1f; //攻击间隔
-    public float attackPreparation = 0.3f; //攻击前摇
-    public float attackRecover = 0.7f; //攻击后摇
+    public float attackPreparation = 0.5f; //攻击前摇
+    public float attackRecover = 0.5f; //攻击后摇
     protected float movementSpeed = 1.3f; //移动速度
 
     // 储存了怪兽所有数据的卡牌信息
@@ -149,7 +149,11 @@ public class BaseEntity : MonoBehaviour
     {
         if (canBattle)
         {
-            if (!HasEnemy)
+            if (!canAttack)
+            {
+                // wait
+            }
+            else if (!HasEnemy)
             {
                 FindTarget();
             }
@@ -160,10 +164,6 @@ public class BaseEntity : MonoBehaviour
                 {
                     Attack();
                 }
-            }
-            else if (!canAttack)
-            {
-                // wait
             }
             // 移动
             else
