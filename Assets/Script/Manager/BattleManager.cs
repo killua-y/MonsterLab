@@ -15,6 +15,7 @@ public class BattleManager : Manager<BattleManager>
 
     public Action<BaseEntity> OnUnitDied;
     public Action<BaseEntity> OnUnitSummon;
+    public Action<BaseEntity, BaseEntity, int> OnUnitTakingDamage;
 
     public TextMeshProUGUI monsterSpaceText;
     // Start is called before the first frame update
@@ -131,6 +132,11 @@ public class BattleManager : Manager<BattleManager>
         {
             Invoke("NewTurn", 2f);
         }
+    }
+
+    public void UnitTakingDamage(BaseEntity from, BaseEntity to, int amount)
+    {
+        OnUnitTakingDamage?.Invoke(from, to, amount);
     }
 
     // helper，用于延迟call一下新回合

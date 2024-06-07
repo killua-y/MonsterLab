@@ -8,7 +8,7 @@ public class BombCarrierEntity : BaseEntity
     public override void UponDeath()
     {
         // 战斗中自爆产生1.5格的范围伤害
-        if (CanBattle)
+        if (canBattle)
         {
             List<BaseEntity> allEnemies = BattleManager.Instance.GetEntitiesAgainst(myTeam);
             if (allEnemies.Count == 0)

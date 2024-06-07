@@ -5,7 +5,7 @@ using UnityEngine;
 // 单体造成额外伤害
 public class SilvermaneSkill : MonsterSkill
 {
-    protected override void CastSpell()
+    public override void CastSpell(Transform attackOrgan = null)
     {
         // 计算伤害
         float damage = ((float)baseEntity.cardModel.effectData / 100) * baseEntity.cardModel.attackPower;
@@ -33,6 +33,11 @@ public class SilvermaneSkill : MonsterSkill
             bulletInstance.GetComponent<Bullet>().Initialize(target, intDamage, baseEntity);
         }
 
+        if (attackOrgan != null)
+        {
+            bulletInstance.transform.position = attackOrgan.position;
+        }
+
         base.CastSpell();
     }
 }
@@ -40,7 +45,7 @@ public class SilvermaneSkill : MonsterSkill
 // 对所有敌人造成伤害
 public class FrostFangSkill : MonsterSkill
 {
-    protected override void CastSpell()
+    public override void CastSpell(Transform attackOrgan = null)
     {
         float damage = ((float)baseEntity.cardModel.effectData / 100) * baseEntity.cardModel.attackPower;
         int intDamage = (int)damage;
@@ -64,6 +69,11 @@ public class FrostFangSkill : MonsterSkill
             else
             {
                 bulletInstance.GetComponent<Bullet>().Initialize(target, intDamage, baseEntity);
+            }
+
+            if (attackOrgan != null)
+            {
+                bulletInstance.transform.position = attackOrgan.position;
             }
         }
 

@@ -9,13 +9,13 @@ using static Card;
 public class MonsterUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
     // 怪兽UI部分
-    public SpriteRenderer spriteRender;
     public Slider healthBar;
     public Slider manaBar;
     public TextMeshProUGUI healthText;
     public TextMeshProUGUI attackText;
     private Image fillImage;
     public GameObject bullet;
+    public Transform attackOrgan;
 
     private void Awake()
     {
@@ -28,7 +28,17 @@ public class MonsterUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
 
     public void EnemyMonster()
     {
-        spriteRender.flipX = true;
+        // 如果是敌方则需要翻转x轴
+        Vector3 newScale = transform.localScale;
+        newScale.x = -Mathf.Abs(newScale.x);
+        transform.localScale = newScale;
+
+        // 防止血条也被翻转
+        Transform canvasTransform = GetComponentInChildren<Canvas>().transform;
+        Vector3 canvasScale = canvasTransform.localScale;
+        canvasScale.x = 1f / newScale.x;
+        canvasTransform.localScale = canvasScale;
+
         fillImage = healthBar.fillRect.GetComponent<Image>();
         fillImage.color = Color.red;
         DragMonster dragComponent = this.GetComponent<DragMonster>();
@@ -36,9 +46,6 @@ public class MonsterUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
         {
             Destroy(dragComponent);
         }
-
-        // 这一行是为了更加方便分辨怪兽所属，以后要删除
-        spriteRender.color = Color.red;
     }
 
     public void UpdateHealth(int currentHealth)
