@@ -7,7 +7,7 @@ e,3,BombCarrier,1,Elite,BombCarrierEnemy,,,,,,,,,,,,,,,
 e,4,MotherSlime,1,Boss,MotherSlimeEnemy,,,,,,,,,,,,,,,
 #,Index,卡名,职业颜色,稀有度,费用,释放类型,数值,技能描述,script位置,图片位置,rank,种族,攻击力,生命值,攻击距离,蓝量,模型位置,skill script位置,index,附属怪兽
 m,0,Slime,black,Normal,0,PlayerEmptyTile,0,Normal Enemy,,MonsterCardPicture/slime,0,Slime,5,50,1.5,0,,,0,AcidSlimeEnemy
-m,1,Acid Slime,black,Normal,0,PlayerEmptyTile,0,Normal Enemy,,MonsterCardPicture/AcidSlime,0,Slime,5,10,5,0,,,1,AcidSlimeEnemy + MotherSlimeEnemy
+m,1,Acid Slime,black,Normal,0,PlayerEmptyTile,0,Normal Enemy,,MonsterCardPicture/AcidSlime,0,Slime,5,10,5,0,MonsterPrefab/AcidSlime,,1,AcidSlimeEnemy + MotherSlimeEnemy
 m,2,Black Slime,black,Normal,0,PlayerEmptyTile,0,Normal Enemy,,,0,Slime,2,100,1.5,0,,,2,BlackSlimeEnemy+ArcherEnemy
 m,3,Fire Slime,black,Normal,0,PlayerEmptyTile,0,Normal Enemy,,,0,Slime,10,30,1.5,0,,,3,BlackSlimeEnemy
 m,4,Archer,black,Rare,0,PlayerEmptyTile,0,Normal Enemy,,,0,None,20,60,5,0,,,4,ArcherEnemy
