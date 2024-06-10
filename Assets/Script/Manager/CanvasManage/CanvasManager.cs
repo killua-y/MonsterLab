@@ -25,6 +25,12 @@ public class CanvasManager : MonoBehaviour
     private GameObject cardPreview;
     private RectTransform cardPreviewRectTransform;
 
+    [Header("CardHolder")]
+    [SerializeField]
+    public Transform extraDeck;
+    public Transform drawPileParent;
+    public Transform discardPileParent;
+
     private void Awake()
     {
         Instance = this;
@@ -37,6 +43,12 @@ public class CanvasManager : MonoBehaviour
 
     void Update()
     {
+        // 右键点击清除所有额外界面
+        if (Input.GetMouseButtonDown(1))
+        {
+            HideAllOtherPanel();
+        }
+
         if (DNAPreview.activeSelf)
         {
             // Update the position of the text to follow the mouse
@@ -84,14 +96,32 @@ public class CanvasManager : MonoBehaviour
         }
     }
 
+    private void HideAllOtherPanel()
+    {
+        if (InGameStateManager.inGame)
+        {
+            if (extraDeck.gameObject.activeSelf)
+            {
+                extraDeck.gameObject.SetActive(false);
+            }
+            else if (drawPileParent.gameObject.activeSelf)
+            {
+                drawPileParent.gameObject.SetActive(false);
+            }
+            else if (discardPileParent.gameObject.activeSelf)
+            {
+                discardPileParent.gameObject.SetActive(false);
+            }
+            else if (MapCanvas.gameObject.activeSelf)
+            {
+                MapCanvas.gameObject.SetActive(false);
+            }
+        }
+    }
+
     private void OnGameEnd()
     {
         SetMapCanvasActive(true);
-    }
-
-    public void HideAllOtherPanel()
-    {
-
     }
 
     public void OpenDeck()
@@ -182,7 +212,47 @@ public class CanvasManager : MonoBehaviour
         }
         else
         {
+            HideAllOtherPanel();
             MapCanvas.gameObject.SetActive(true);
+        }
+    }
+
+    public void ShowExtraDeck()
+    {
+        if (extraDeck.gameObject.activeSelf)
+        {
+            extraDeck.gameObject.SetActive(false);
+        }
+        else
+        {
+            HideAllOtherPanel();
+            extraDeck.gameObject.SetActive(true);
+        }
+    }
+
+    public void ShowDarwPile()
+    {
+        if (drawPileParent.gameObject.activeSelf)
+        {
+            drawPileParent.gameObject.SetActive(false);
+        }
+        else
+        {
+            HideAllOtherPanel();
+            InGameStateManager.Instance.ShowDarwPile();
+        }
+    }
+
+    public void ShowDiscardPile()
+    {
+        if (discardPileParent.gameObject.activeSelf)
+        {
+            discardPileParent.gameObject.SetActive(false);
+        }
+        else
+        {
+            HideAllOtherPanel();
+            InGameStateManager.Instance.ShowDiscardPile();
         }
     }
 }

@@ -96,7 +96,7 @@ public class CardWrapper : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
             }
             else
             {
-                target = new Vector2(target.x, 70f);
+                target = new Vector2(target.x, zoomConfig.clickedYPosition);
             }
         }
 

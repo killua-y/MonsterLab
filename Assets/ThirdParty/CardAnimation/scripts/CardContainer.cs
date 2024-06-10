@@ -47,8 +47,28 @@ public class CardContainer : MonoBehaviour
 
     private void Start()
     {
+        AdjustForScreenResolution();
         rectTransform = GetComponent<RectTransform>();
         InitCards();
+    }
+
+    private void AdjustForScreenResolution()
+    {
+        animationSpeedConfig.AdjustForScreenResolution();
+        zoomConfig.AdjustForScreenResolution();
+
+        float referenceWidth = 1920f;
+        float referenceHeight = 1080f;
+
+        float screenWidth = Screen.width;
+        float screenHeight = Screen.height;
+
+        float widthScale = screenWidth / referenceWidth;
+        float heightScale = screenHeight / referenceHeight;
+
+        float scaleFactor = (widthScale + heightScale) / 2;
+
+        maxHeightDisplacement *= scaleFactor;
     }
 
     public void InitCards()

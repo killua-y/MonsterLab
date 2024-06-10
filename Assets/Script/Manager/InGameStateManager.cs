@@ -12,7 +12,6 @@ public class InGameStateManager : Manager<InGameStateManager>
     public static bool inGame = false;
     public static bool PreparePhase = false;
     public static bool BattelPhase = false;
-    public static GamePhase gamePhase;
 
     [Header("CardHolder")]
     [SerializeField]
@@ -78,7 +77,6 @@ public class InGameStateManager : Manager<InGameStateManager>
     // 回合开始
     public void PreparePhaseStart()
     {
-        gamePhase = GamePhase.PreparePhase;
         PreparePhase = true;
         BattelPhase = false;
 
@@ -94,7 +92,6 @@ public class InGameStateManager : Manager<InGameStateManager>
     // 回合结束，丢弃所有手牌，进入战斗回合
     public void PreparePhaseEnd()
     {
-        gamePhase = GamePhase.BattlePhase;
         PreparePhase = false;
         BattelPhase = true;
 
@@ -190,18 +187,6 @@ public class InGameStateManager : Manager<InGameStateManager>
         }
     }
 
-    public void ShowExtraDeck()
-    {
-        if (extraDeck.gameObject.activeSelf)
-        {
-            extraDeck.gameObject.SetActive(false);
-        }
-        else
-        {
-            extraDeck.gameObject.SetActive(true);
-        }
-    }
-
     // 将一张卡添加到手牌
     public void AddToHand(Card card)
     {
@@ -214,53 +199,38 @@ public class InGameStateManager : Manager<InGameStateManager>
 
     public void ShowDarwPile()
     {
-        if (drawPileParent.gameObject.activeSelf)
+        foreach (Transform child in drawPileParentContent)
         {
-            foreach (Transform child in drawPileParentContent)
-            {
-                Destroy(child.gameObject);
-            }
-
-
-            drawPileParent.gameObject.SetActive(false);
+            Destroy(child.gameObject);
         }
-        else
+
+        List<Card> drawPileCard = CardModel.GetDrawPileCard();
+        drawPileCard.Sort((card1, card2) => card1.id.CompareTo(card2.id));
+
+        foreach (Card card in drawPileCard)
         {
-            List<Card> drawPileCard = CardModel.GetDrawPileCard();
-            drawPileCard.Sort((card1, card2) => card1.id.CompareTo(card2.id));
-
-            foreach (Card card in drawPileCard)
-            {
-                GameObject cardObject = CardDisplayView.Instance.DisPlaySingleCard(card, drawPileParentContent);
-                cardObject.AddComponent<Scaling>();
-            }
-            drawPileParent.gameObject.SetActive(true);
+            GameObject cardObject = CardDisplayView.Instance.DisPlaySingleCard(card, drawPileParentContent);
+            cardObject.AddComponent<Scaling>();
         }
+        drawPileParent.gameObject.SetActive(true);
     }
 
     public void ShowDiscardPile()
     {
-        if (discardPileParent.gameObject.activeSelf)
+        foreach (Transform child in discardPileParentContent)
         {
-            foreach (Transform child in discardPileParentContent)
-            {
-                Destroy(child.gameObject);
-            }
-
-            discardPileParent.gameObject.SetActive(false);
+            Destroy(child.gameObject);
         }
-        else
+
+        List<Card> discardPileCard = CardModel.GetDiscardPileCard();
+        discardPileCard.Sort((card1, card2) => card1.id.CompareTo(card2.id));
+
+        foreach (Card card in discardPileCard)
         {
-            List<Card> discardPileCard = CardModel.GetDiscardPileCard();
-            discardPileCard.Sort((card1, card2) => card1.id.CompareTo(card2.id));
-
-            foreach (Card card in discardPileCard)
-            {
-                GameObject cardObject = CardDisplayView.Instance.DisPlaySingleCard(card, discardPileParentContent);
-                cardObject.AddComponent<Scaling>();
-            }
-            discardPileParent.gameObject.SetActive(true);
+            GameObject cardObject = CardDisplayView.Instance.DisPlaySingleCard(card, discardPileParentContent);
+            cardObject.AddComponent<Scaling>();
         }
+        discardPileParent.gameObject.SetActive(true);
     }
 
     public void SpellCardPlayed(CardBehavior cardBehavior, BaseEntity targetMonster)
@@ -272,11 +242,4 @@ public class InGameStateManager : Manager<InGameStateManager>
     {
         OnItemCardPlayed?.Invoke(cardBehavior, targetMonster);
     }
-}
-
-public enum GamePhase
-{
-    InvestigationPhase,
-    PreparePhase,
-    BattlePhase
 }
