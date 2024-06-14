@@ -78,7 +78,6 @@ public class InGameStateManager : Manager<InGameStateManager>
     public void PreparePhaseStart()
     {
         PreparePhase = true;
-        BattelPhase = false;
 
         //5张抽牌, 将它们可视化
         for (int i = 0; i < 5; i++)
@@ -92,8 +91,12 @@ public class InGameStateManager : Manager<InGameStateManager>
     // 回合结束，丢弃所有手牌，进入战斗回合
     public void PreparePhaseEnd()
     {
+        if (!PreparePhase)
+        {
+            return;
+        }
+
         PreparePhase = false;
-        BattelPhase = true;
 
         CardModel.DisCardAllCard();
 
@@ -110,11 +113,15 @@ public class InGameStateManager : Manager<InGameStateManager>
 
     public void BattlePhaseStart()
     {
+        BattelPhase = true;
+
         OnBattlePhaseStart();
     }
 
     public void BattlePhaseEnd()
     {
+        BattelPhase = false;
+
         OnBattlePhaseEnd();
 
         if (inGame)

@@ -329,7 +329,14 @@ public class BaseEntity : MonoBehaviour
         // 播放自己收到伤害的action
         if (from != null)
         {
-            BattleManager.Instance.UnitTakingDamage(from, this, amount);
+            if (currentHealth < amount)
+            {
+                BattleManager.Instance.UnitTakingDamage(from, this, currentHealth);
+            }
+            else
+            {
+                BattleManager.Instance.UnitTakingDamage(from, this, amount);
+            }
         }
 
         currentHealth -= amount;

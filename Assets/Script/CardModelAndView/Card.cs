@@ -80,6 +80,8 @@ public class Card
         public string modelLocation;
         // 怪兽技能脚本位置
         public string skillScriptLocation;
+        // 怪兽的小头像位置
+        public string smallIconLocation;
         // 被装备的卡片list
         public List<Card> equippedCard;
 
@@ -87,7 +89,8 @@ public class Card
         public MonsterCard(int _id, int _uniqueID, string _cardName, CardColor _color, CardRarity _cardRarity,
         int _cost, CastType _castType, int _effectData, string _effectText, string _cardLocation, string _imageLocation,
         int _rank, MonsterType _type, int _attackPower, int _healthPoint, float _attackRange,
-        int _Mana, string _modelLocation, string _skillScriptLocation, List<Card> _equippedCard = null, List<string> _keyWords = null) :
+        int _Mana, string _modelLocation, string _skillScriptLocation, string _smallIconLocation,
+        List<Card> _equippedCard = null, List<string> _keyWords = null) :
             base(_id, _uniqueID, _cardName, _color, _cardRarity, _cost, _castType, _effectData, _effectText, _cardLocation, _imageLocation, _keyWords)
         {
             this.rank = _rank;
@@ -98,6 +101,7 @@ public class Card
             this.Mana = _Mana;
             this.modelLocation = _modelLocation;
             this.skillScriptLocation = _skillScriptLocation;
+            this.smallIconLocation = _smallIconLocation;
             this.equippedCard = _equippedCard ?? new List<Card>();
         }
 
@@ -111,6 +115,7 @@ public class Card
             this.Mana = original.Mana;
             this.modelLocation = original.modelLocation;
             this.skillScriptLocation = original.skillScriptLocation;
+            this.smallIconLocation = original.smallIconLocation;
             this.equippedCard = new List<Card>(original.equippedCard);
         }
     }

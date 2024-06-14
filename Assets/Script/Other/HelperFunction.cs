@@ -73,10 +73,12 @@ public class HelperFunction : MonoBehaviour
             int mana = int.Parse(rowArray[16]);
             string modelLocation = rowArray[17];
             string skillScriptLocation = rowArray[18];
+            string smallIconLocation = rowArray[19];
 
             resultCard = new MonsterCard(id, uniqueID, cardName, color, cardRarity,
                 cost, castType, effectData, effectText, scriptLocation, imageLocation,
-                rank, type, attackPower, healthPoint, attackRange, mana, modelLocation, skillScriptLocation);
+                rank, type, attackPower, healthPoint, attackRange, mana, modelLocation,
+                skillScriptLocation, smallIconLocation);
         }
         else if (rowArray[0] == "s")
         {
