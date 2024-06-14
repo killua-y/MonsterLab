@@ -6,6 +6,10 @@ public class DamageBoarderBehavior : VerticalLayoutGroup
 {
     public override void SetLayoutVertical()
     {
+        // Check if the base components and children are valid
+        if (this == null || transform == null)
+            return;
+
         base.SetLayoutVertical();
         SortChildren();
     }

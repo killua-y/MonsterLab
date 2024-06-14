@@ -25,6 +25,11 @@ public class DamageCalculate : MonoBehaviour
 
     void OnUnitTakingDamage(BaseEntity from, BaseEntity to, int amount)
     {
+        if (!InGameStateManager.BattelPhase)
+        {
+            return;
+        }
+
         // 更新造成伤害面板
         if (from.myTeam == Team.Player)
         {
@@ -110,13 +115,14 @@ public class DamageCalculate : MonoBehaviour
     private IEnumerator SmoothMoveCoroutine(float startX, float endX)
     {
         float elapsedTime = 0;
+        float duration = 0.2f;
         Vector3 startPosition = transform.localPosition;
         Vector3 targetPosition = new Vector3(endX, startPosition.y, startPosition.z);
 
-        while (elapsedTime < 0.5f)
+        while (elapsedTime < duration)
         {
             // Calculate the current position using Lerp
-            float newX = Mathf.Lerp(startX, endX, elapsedTime / 0.5f);
+            float newX = Mathf.Lerp(startX, endX, elapsedTime / duration);
             transform.localPosition = new Vector3(newX, startPosition.y, startPosition.z);
 
             elapsedTime += Time.deltaTime;

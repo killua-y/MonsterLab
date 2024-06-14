@@ -40,4 +40,9 @@ public class AdjustImageSize : MonoBehaviour
         // Adjust the size of the image
         imageRectTransform.sizeDelta = new Vector2(imageRectTransform.sizeDelta.x, newHeight);
     }
+
+    private void OnEnable()
+    {
+        AdjustImageSizeToText();
+    }
 }
