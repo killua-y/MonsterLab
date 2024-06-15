@@ -111,6 +111,15 @@ public class RewardManager : Manager<RewardManager>
         HelperFunction.Shuffle(legendDNA, RandomManager.DNARewardRand);
     }
 
+    public void Finish()
+    {
+        foreach (Transform child in rewardPanel.transform)
+        {
+            Destroy(child.gameObject);
+        }
+        rewardCanvas.gameObject.SetActive(false);
+    }
+
     public void GenerateReward(int remainningTurn)
     {
         EnemyType enemyType = ActsManager.currentEnemyType;

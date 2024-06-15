@@ -3,16 +3,16 @@ using System.Collections.Generic;
 
 public class GoldForDeleteOneCardEvent : EventBehavior
 {
-    public new int optionNumber = 2;
+    protected override int optionNumber { get; set; } = 2;
 
-    public override List<string> optionsText { get; set; } = new List<string>()
+    protected override List<string> optionsText { get; set; } = new List<string>()
     {
         "Remove one card from your deck",
         "Not what I want, leave"
     };
 
-    public override List<string> eventText { get; set; } = new List<string>();
-    public override string eventImageLocation { get; set; } = "";
+    protected override List<string> eventText { get; set; } = new List<string>();
+    protected override string eventImageLocation { get; set; } = "";
 
     protected override void bindAction()
     {
@@ -36,17 +36,19 @@ public class GoldForDeleteOneCardEvent : EventBehavior
 
 public class SelectOneCardEvent : EventBehavior
 {
-    public override List<string> optionsText { get; set; } = new List<string>()
+    protected override int optionNumber { get; set; } = 1;
+
+    protected override List<string> optionsText { get; set; } = new List<string>()
     {
         "Select One Card",
     };
 
-    public override List<string> eventText { get; set; } = new List<string>()
+    protected override List<string> eventText { get; set; } = new List<string>()
     {
         "Select one card event"
     };
 
-    public override string eventImageLocation { get; set; } = "";
+    protected override string eventImageLocation { get; set; } = "";
 
     protected override void bindAction()
     {
@@ -54,7 +56,6 @@ public class SelectOneCardEvent : EventBehavior
         {
             Option1,
         };
-        optionNumber = 1;
     }
 
     private void Option1()
@@ -66,18 +67,18 @@ public class SelectOneCardEvent : EventBehavior
 
 public class GainGoldEvent : EventBehavior
 {
-    public new int optionNumber = 1;
+    protected override int optionNumber { get; set; } = 1;
 
-    public override List<string> optionsText { get; set; } = new List<string>()
+    protected override List<string> optionsText { get; set; } = new List<string>()
     {
         "Gain 150 gold",
     };
 
-    public override List<string> eventText { get; set; } = new List<string>()
+    protected override List<string> eventText { get; set; } = new List<string>()
     {
         "You find a dead body and while search on it"
     };
-    public override string eventImageLocation { get; set; } = "";
+    protected override string eventImageLocation { get; set; } = "";
 
     protected override void bindAction()
     {

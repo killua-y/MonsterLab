@@ -36,9 +36,10 @@ public class DamageCalculate : MonoBehaviour
             if ((dealDamageSliders[from].amount + amount) > maxDealDamage)
             {
                 maxDealDamage = (dealDamageSliders[from].amount + amount);
+                UpdateMaxDamage(dealDamageSliders, maxDealDamage);
             }
 
-            dealDamageSliders[from].UpdateDamageSlide(maxDealDamage, amount);
+            dealDamageSliders[from].UpdateDamageSlide(amount);
         }
         // 更新承受伤害面板
         else if (from.myTeam == Team.Enemy)
@@ -46,9 +47,10 @@ public class DamageCalculate : MonoBehaviour
             if ((takeDamageSliders[to].amount + amount) > maxTakeDamage)
             {
                 maxTakeDamage = (takeDamageSliders[to].amount + amount);
+                UpdateMaxDamage(takeDamageSliders, maxTakeDamage);
             }
 
-            takeDamageSliders[to].UpdateDamageSlide(maxTakeDamage, amount);
+            takeDamageSliders[to].UpdateDamageSlide(amount);
         }
         else
         {
@@ -56,6 +58,14 @@ public class DamageCalculate : MonoBehaviour
         }
 
         UpdateOrder();
+    }
+
+    void UpdateMaxDamage(Dictionary<BaseEntity, DamageSliderBehavior> damageSliders, int maxDamage)
+    {
+        foreach (var slider in damageSliders)
+        {
+            slider.Value.UpdateMaxDamage(maxDamage);
+        }
     }
 
     void UpdateOrder()
@@ -80,12 +90,12 @@ public class DamageCalculate : MonoBehaviour
         {
             // 造成伤害
             DamageSliderBehavior dealDamageSlider = Instantiate(damageSliderPrefab, dealDamageBoard.transform).GetComponent<DamageSliderBehavior>();
-            dealDamageSlider.UpdateSmallIcon(baseEntity.cardModel.smallIconLocation);
+            dealDamageSlider.UpdateSmallIcon(baseEntity.cardModel);
             dealDamageSliders.Add(baseEntity, dealDamageSlider);
 
             // 承受伤害
             DamageSliderBehavior takeDamageSlider = Instantiate(damageSliderPrefab, takeDamageBoard.transform).GetComponent<DamageSliderBehavior>();
-            takeDamageSlider.UpdateSmallIcon(baseEntity.cardModel.smallIconLocation);
+            takeDamageSlider.UpdateSmallIcon(baseEntity.cardModel);
             takeDamageSliders.Add(baseEntity, takeDamageSlider);
         }
     }

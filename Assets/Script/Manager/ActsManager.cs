@@ -42,8 +42,6 @@ public class ActsManager : Manager<ActsManager>
 
     public void ActivateAct(BoxType _boxType)
     {
-        EventCanvasBehavior.instance.LoadEvent(currentLayer);
-        return;
         switch (_boxType)
         {
             case BoxType.NormalFight:

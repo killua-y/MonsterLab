@@ -8,11 +8,11 @@ using UnityEngine.UI;
 public class EventBehavior : MonoBehaviour
 {
     // 从0开始数
-    public virtual int optionNumber { get; set; } = 2;
-    public virtual List<string> optionsText { get; set; } = new List<string>();
-    public List<Action> optionsAction;
-    public virtual List<string> eventText { get; set; } = new List<string>();
-    public virtual string eventImageLocation { get; set; } = "";
+    protected virtual int optionNumber { get; set; } = 2;
+    protected virtual List<string> optionsText { get; set; } = new List<string>();
+    protected List<Action> optionsAction;
+    protected virtual List<string> eventText { get; set; } = new List<string>();
+    protected virtual string eventImageLocation { get; set; } = "";
 
     protected EventCanvasBehavior eventCanvasBehavior;
     protected GameObject optionButtonPrefab;
@@ -42,6 +42,12 @@ public class EventBehavior : MonoBehaviour
 
         // 生成按钮
         bindAction();
+
+        foreach (Transform child in buttonParent)
+        {
+            Destroy(child.gameObject);
+        }
+
         for (int i = 0; i < optionNumber; i++)
         {
             GameObject buttonObject = Instantiate(optionButtonPrefab, buttonParent);
@@ -56,8 +62,7 @@ public class EventBehavior : MonoBehaviour
 
     protected void Leave()
     {
-        this.gameObject.SetActive(false);
+        eventCanvasBehavior.ChangePosition();
         Destroy(this);
-        //eventCanvasBehavior.ChangePosition();
     }
 }

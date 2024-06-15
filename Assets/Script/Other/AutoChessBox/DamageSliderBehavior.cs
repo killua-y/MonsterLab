@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using static Card;
 
 public class DamageSliderBehavior : MonoBehaviour
 {
@@ -11,17 +12,28 @@ public class DamageSliderBehavior : MonoBehaviour
     public int amount = 0;
     public TextMeshProUGUI damageText;
 
-    public void UpdateSmallIcon(string spriteLocation)
+    public void UpdateSmallIcon(MonsterCard cardModel)
     {
-        smallIcon.sprite = Resources.Load<Sprite>(spriteLocation);
+        if (cardModel.smallIconLocation != "")
+        {
+            smallIcon.sprite = Resources.Load<Sprite>(cardModel.smallIconLocation);
+        }
+        else if (cardModel.imageLocation != "")
+        {
+            smallIcon.sprite = Resources.Load<Sprite>(cardModel.imageLocation);
+        }
     }
 
-    public void UpdateDamageSlide(int maxValue, int newDamage)
+    public void UpdateDamageSlide(int newDamage)
     {
         amount += newDamage;
-        damageBar.maxValue = maxValue;
         damageBar.value = amount;
 
         damageText.text = amount.ToString();
+    }
+
+    public void UpdateMaxDamage(int maxValue)
+    {
+        damageBar.maxValue = maxValue;
     }
 }

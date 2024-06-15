@@ -149,15 +149,33 @@ public class CardBehavior : MonoBehaviour
         // 判断卡牌是丢弃还是消耗
         if (card is SpellCard)
         {
-            // 丢弃
-            InGameStateManager.Instance.DiscardOneCard(card);
-            Destroy(this.gameObject);
+            if (card.keyWords.Contains("Exhaust"))
+            {
+                // 消耗
+                InGameStateManager.Instance.ExhaustOneCard(card);
+                Destroy(this.gameObject);
+            }
+            else
+            {
+                // 丢弃
+                InGameStateManager.Instance.DiscardOneCard(card);
+                Destroy(this.gameObject);
+            }
         }
         else
         {
-            // 消耗
-            InGameStateManager.Instance.ExhaustOneCard(card);
-            Destroy(this.gameObject);
+            if (card.keyWords.Contains("Reuse"))
+            {
+                // 丢弃
+                InGameStateManager.Instance.DiscardOneCard(card);
+                Destroy(this.gameObject);
+            }
+            else
+            {
+                // 消耗
+                InGameStateManager.Instance.ExhaustOneCard(card);
+                Destroy(this.gameObject);
+            }
         }
     }
 
