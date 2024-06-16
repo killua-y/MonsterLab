@@ -300,13 +300,13 @@ public class CardDataModel : MonoBehaviour
     }
 
     // 加载局内卡组
-    public List<Card> InitializeDeck()
+    public List<Card> GetMainDeck()
     {
         return playerCardData1;
     }
 
     // 加载局内额外卡组
-    public List<Card> InitializeExtraDeck()
+    public List<Card> GetExtraDeck()
     {
         return playerExtraDeckData1;
     }
@@ -352,6 +352,12 @@ public class CardDataModel : MonoBehaviour
     public Card GetCard(int index)
     {
         return cardList[index];
+    }
+
+    // 输出需要的卡牌信息
+    public Card GetEnemyCard(int index)
+    {
+        return enemyCardList[index];
     }
 
     public void ChangeDeckFromMainToExtra(Card card, bool fromMainToExtra)

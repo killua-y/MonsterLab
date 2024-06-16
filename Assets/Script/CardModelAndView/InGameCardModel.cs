@@ -28,7 +28,7 @@ public class InGameCardModel : MonoBehaviour
     // 加载局内卡牌, call CardDataModel里的InitializeDeck()，对输出的每张卡进行clone
     public void InitialzeDeck()
     {
-        foreach (Card card in CardDataModel.Instance.InitializeDeck())
+        foreach (Card card in CardDataModel.Instance.GetMainDeck())
         {
             Card newCard = Card.CloneCard(card);
             drawPileList.Add(newCard);
@@ -36,7 +36,7 @@ public class InGameCardModel : MonoBehaviour
 
         HelperFunction.Shuffle(drawPileList, GameSetting.shuffleCardRand);
 
-        foreach (Card card in CardDataModel.Instance.InitializeExtraDeck())
+        foreach (Card card in CardDataModel.Instance.GetExtraDeck())
         {
             Card newCard = Card.CloneCard(card);
             extraDeckPileList.Add(newCard);

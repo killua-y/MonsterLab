@@ -47,8 +47,8 @@ public class CardSelectPanelBehavior : MonoBehaviour
     public void OpenPlayerDeck()
     {
         List<Card> cardList = new List<Card>();
-        cardList = CardDataModel.Instance.InitializeDeck();
-        foreach (Card card in CardDataModel.Instance.InitializeExtraDeck())
+        cardList = CardDataModel.Instance.GetMainDeck();
+        foreach (Card card in CardDataModel.Instance.GetExtraDeck())
         {
             cardList.Add(card);
         }

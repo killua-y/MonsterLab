@@ -34,7 +34,7 @@ public class DeckManage : Manager<DeckManage>
             Destroy(child.gameObject);
         }
 
-        mainDeck = CardDataModel.Instance.InitializeDeck();
+        mainDeck = CardDataModel.Instance.GetMainDeck();
         foreach (Card card in mainDeck)
         {
             GameObject cardObject = CardDisplayView.Instance.DisPlaySingleCard(card, mainDeckScrollContent);
@@ -50,7 +50,7 @@ public class DeckManage : Manager<DeckManage>
             Destroy(child.gameObject);
         }
 
-        extraDeck = CardDataModel.Instance.InitializeExtraDeck();
+        extraDeck = CardDataModel.Instance.GetExtraDeck();
         foreach (Card card in extraDeck)
         {
             GameObject cardObject = CardDisplayView.Instance.DisPlaySingleCard(card, extraDeckScollContent);
