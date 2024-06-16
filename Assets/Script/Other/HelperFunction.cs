@@ -54,7 +54,6 @@ public class HelperFunction : MonoBehaviour
         if (rowArray[0] == "m")
         {
             int id = int.Parse(rowArray[1]);
-            int uniqueID = 0;
             string cardName = rowArray[2];
             CardColor color = HelperFunction.ConvertToEnum<CardColor>(rowArray[3]);
             CardRarity cardRarity = HelperFunction.ConvertToEnum<CardRarity>(rowArray[4]);
@@ -75,7 +74,7 @@ public class HelperFunction : MonoBehaviour
             string skillScriptLocation = rowArray[18];
             string smallIconLocation = rowArray[19];
 
-            resultCard = new MonsterCard(id, uniqueID, cardName, color, cardRarity,
+            resultCard = new MonsterCard(id, cardName, color, cardRarity,
                 cost, castType, effectData, effectText, scriptLocation, imageLocation,
                 rank, type, attackPower, healthPoint, attackRange, mana, modelLocation,
                 skillScriptLocation, smallIconLocation);
@@ -83,7 +82,6 @@ public class HelperFunction : MonoBehaviour
         else if (rowArray[0] == "s")
         {
             int id = int.Parse(rowArray[1]);
-            int uniqueID = 0;
             string cardName = rowArray[2];
             CardColor color = HelperFunction.ConvertToEnum<CardColor>(rowArray[3]);
             CardRarity cardRarity = HelperFunction.ConvertToEnum<CardRarity>(rowArray[4]);
@@ -94,7 +92,7 @@ public class HelperFunction : MonoBehaviour
             string scriptLocation = rowArray[9];
             string imageLocation = rowArray[10];
 
-            resultCard = new SpellCard(id, uniqueID, cardName, color, cardRarity,
+            resultCard = new SpellCard(id, cardName, color, cardRarity,
                 cost, castType, effectData, effectText, scriptLocation, imageLocation);
 
             //Debug.Log("Load magic card: " + name);
@@ -102,7 +100,6 @@ public class HelperFunction : MonoBehaviour
         else if (rowArray[0] == "i")
         {
             int id = int.Parse(rowArray[1]);
-            int uniqueID = 0;
             string cardName = rowArray[2];
             CardColor color = HelperFunction.ConvertToEnum<CardColor>(rowArray[3]);
             CardRarity cardRarity = HelperFunction.ConvertToEnum<CardRarity>(rowArray[4]);
@@ -113,7 +110,7 @@ public class HelperFunction : MonoBehaviour
             string scriptLocation = rowArray[9];
             string imageLocation = rowArray[10];
 
-            resultCard = new ItemCard(id, uniqueID, cardName, color, cardRarity,
+            resultCard = new ItemCard(id, cardName, color, cardRarity,
                 cost, castType, effectData, effectText, scriptLocation, imageLocation);
 
             //Debug.Log("Load item card: " + name);

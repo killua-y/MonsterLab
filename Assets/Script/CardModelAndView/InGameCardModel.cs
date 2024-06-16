@@ -14,8 +14,6 @@ public class InGameCardModel : MonoBehaviour
     private List<Card> discardPileList = new List<Card>(); // 局内弃牌堆数据的链表
     private List<Card> extraDeckPileList = new List<Card>(); // 局内弃牌堆数据的链表
 
-    private int currentAssignedID;
-
     private void Awake()
     {
         Instance = this;
@@ -30,23 +28,17 @@ public class InGameCardModel : MonoBehaviour
     // 加载局内卡牌, call CardDataModel里的InitializeDeck()，对输出的每张卡进行clone
     public void InitialzeDeck()
     {
-        currentAssignedID = 0;
-
         foreach (Card card in CardDataModel.Instance.InitializeDeck())
         {
             Card newCard = Card.CloneCard(card);
-            newCard.uniqueID = currentAssignedID;
-            currentAssignedID += 1;
             drawPileList.Add(newCard);
         }
 
-        HelperFunction.Shuffle(drawPileList, RandomManager.shuffleCardRand);
+        HelperFunction.Shuffle(drawPileList, GameSetting.shuffleCardRand);
 
         foreach (Card card in CardDataModel.Instance.InitializeExtraDeck())
         {
             Card newCard = Card.CloneCard(card);
-            newCard.uniqueID = currentAssignedID;
-            currentAssignedID += 1;
             extraDeckPileList.Add(newCard);
         }
     }
@@ -103,7 +95,7 @@ public class InGameCardModel : MonoBehaviour
     public void ShuffleDeck()
     {
         // Shuffle 弃牌堆
-        HelperFunction.Shuffle(discardPileList, RandomManager.shuffleCardRand);
+        HelperFunction.Shuffle(discardPileList, GameSetting.shuffleCardRand);
 
         // 将卡牌加入抽牌堆，并清空弃牌堆
         drawPileList.AddRange(discardPileList);

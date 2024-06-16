@@ -5,8 +5,6 @@ public class Card
 {
     // 卡牌编号
     public int id;
-    // 卡牌在游戏内的专属编号
-    public int uniqueID;
     // 卡牌名称
     public string cardName;
     // 卡牌职业颜色
@@ -28,12 +26,11 @@ public class Card
     // 关键词列表
     public List<string> keyWords;
 
-    public Card(int _id, int _uniqueID, string _cardName, CardColor _color, CardRarity _cardRarity,
+    public Card(int _id, string _cardName, CardColor _color, CardRarity _cardRarity,
         int _cost, CastType _castType, int _effectData, string _effectText, string _scriptLocation,
         string _imageLocation, List<string> _keyWords = null)
     {
         this.id = _id;
-        this.uniqueID = _uniqueID;
         this.cardName = _cardName;
         this.color = _color;
         this.cardRarity = _cardRarity;
@@ -49,7 +46,6 @@ public class Card
     public Card(Card original)
     {
         this.id = original.id;
-        this.uniqueID = original.uniqueID;
         this.cardName = original.cardName;
         this.color = original.color;
         this.cardRarity = original.cardRarity;
@@ -86,12 +82,12 @@ public class Card
         public List<Card> equippedCard;
 
 
-        public MonsterCard(int _id, int _uniqueID, string _cardName, CardColor _color, CardRarity _cardRarity,
+        public MonsterCard(int _id, string _cardName, CardColor _color, CardRarity _cardRarity,
         int _cost, CastType _castType, int _effectData, string _effectText, string _cardLocation, string _imageLocation,
         int _rank, MonsterType _type, int _attackPower, int _healthPoint, float _attackRange,
         int _Mana, string _modelLocation, string _skillScriptLocation, string _smallIconLocation,
         List<Card> _equippedCard = null, List<string> _keyWords = null) :
-            base(_id, _uniqueID, _cardName, _color, _cardRarity, _cost, _castType, _effectData, _effectText, _cardLocation, _imageLocation, _keyWords)
+            base(_id, _cardName, _color, _cardRarity, _cost, _castType, _effectData, _effectText, _cardLocation, _imageLocation, _keyWords)
         {
             this.rank = _rank;
             this.type = _type;
@@ -123,9 +119,9 @@ public class Card
     // 法术卡类 继承自卡牌类
     public class SpellCard : Card
     {
-        public SpellCard(int _id, int _uniqueID, string _cardName, CardColor _color, CardRarity _cardRarity,
+        public SpellCard(int _id, string _cardName, CardColor _color, CardRarity _cardRarity,
         int _cost, CastType _castType, int _effectData, string _effectText, string _cardLocation, string _imageLocation, List<string> _keyWords = null) :
-            base(_id, _uniqueID, _cardName, _color, _cardRarity, _cost, _castType, _effectData, _effectText, _cardLocation, _imageLocation, _keyWords)
+            base(_id, _cardName, _color, _cardRarity, _cost, _castType, _effectData, _effectText, _cardLocation, _imageLocation, _keyWords)
         {
 
         }
@@ -138,9 +134,9 @@ public class Card
     // 装备卡类，继承自卡牌类
     public class ItemCard : Card
     {
-        public ItemCard(int _id, int _uniqueID, string _cardName, CardColor _color, CardRarity _cardRarity,
+        public ItemCard(int _id, string _cardName, CardColor _color, CardRarity _cardRarity,
         int _cost, CastType _castType, int _effectData, string _effectText, string _cardLocation, string _imageLocation, List<string> _keyWords = null) :
-            base(_id, _uniqueID, _cardName, _color, _cardRarity, _cost, _castType, _effectData, _effectText, _cardLocation, _imageLocation, _keyWords)
+            base(_id, _cardName, _color, _cardRarity, _cost, _castType, _effectData, _effectText, _cardLocation, _imageLocation, _keyWords)
         {
 
         }

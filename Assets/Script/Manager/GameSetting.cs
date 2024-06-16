@@ -5,13 +5,15 @@ using System.Linq;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.IO;
 
-public class RandomManager : Manager<RandomManager>
+public class GameSetting : Manager<GameSetting>
 {
     public static System.Random cardRewardRand;
     public static System.Random DNARewardRand;
     public static System.Random shuffleCardRand;
     public static System.Random BoxLayoutRand;
     private int seed;
+
+    public static float scaleFactor;
 
     private new void Awake()
     {
@@ -20,13 +22,22 @@ public class RandomManager : Manager<RandomManager>
         {
             seed = 2;
             InitializeRand();
+            AdjustForScreenResolution();
         }
     }
 
-    // Update is called once per frame
-    void Update()
+    private void AdjustForScreenResolution()
     {
-        
+        float referenceWidth = 1920f;
+        float referenceHeight = 1080f;
+
+        float screenWidth = Screen.width;
+        float screenHeight = Screen.height;
+
+        float widthScale = screenWidth / referenceWidth;
+        float heightScale = screenHeight / referenceHeight;
+
+        scaleFactor = (widthScale + heightScale) / 2;
     }
 
     public void InitializeRand()

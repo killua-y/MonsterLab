@@ -126,7 +126,7 @@ public class BoxLayout : MonoBehaviour
             BoxType.Events, BoxType.Events, BoxType.Events, BoxType.Events, BoxType.Events, BoxType.Events,
         };
 
-        HelperFunction.Shuffle(validBoxes, RandomManager.BoxLayoutRand);
+        HelperFunction.Shuffle(validBoxes, GameSetting.BoxLayoutRand);
 
         // Assign the box types to the valid boxes
         for (int i = 0; i < validBoxes.Count; i++)
@@ -171,12 +171,12 @@ public class BoxLayout : MonoBehaviour
                 break;
             }
 
-            int randomIndex = RandomManager.BoxLayoutRand.Next(0, rangeBoxes.Count);
+            int randomIndex = GameSetting.BoxLayoutRand.Next(0, rangeBoxes.Count);
             selectedBoxes.Add(rangeBoxes[randomIndex]);
             rangeBoxes.RemoveAt(randomIndex);
         }
 
-        HelperFunction.Shuffle(selectedBoxes, RandomManager.BoxLayoutRand);
+        HelperFunction.Shuffle(selectedBoxes, GameSetting.BoxLayoutRand);
         return selectedBoxes;
     }
 }

@@ -105,10 +105,8 @@ public class CardDisplay : MonoBehaviour, IPointerExitHandler, IPointerEnterHand
             keyWordParent.SetActive(true);
         }
 
-        Vector2 mousePosition = Input.mousePosition;
-
         // 查看鼠标是否在屏幕右1/4
-        if (mousePosition.x > Screen.width * 3 / 4)
+        if (this.transform.position.x > Screen.width * 3 / 4)
         {
             FlipKeyWord(true);
         }
