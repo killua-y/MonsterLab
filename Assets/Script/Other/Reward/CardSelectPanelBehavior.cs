@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -15,26 +16,32 @@ public class CardSelectPanelBehavior : MonoBehaviour
         Instance = this;
     }
 
-    public List<Card> SelectCardFromDeck(int amount)
+    public void SelectCardFromDeck(int amount, Action<List<Card>> callback)
     {
-        StartCoroutine(SelectCard(amount));
-        return resultCardList;
+        StartCoroutine(SelectCard(amount, callback));
     }
 
-    private IEnumerator SelectCard(int amount)
+    public void SelectCardFromDeck(Action<Card> callback)
+    {
+        StartCoroutine(SelectCard(1, cards => callback(cards[0])));
+    }
+
+    private IEnumerator SelectCard(int amount, Action<List<Card>> callback)
     {
         resultCardList = new List<Card>();
+
+        OpenPlayerDeck();
         while (resultCardList.Count < amount)
         {
             if (Input.GetMouseButtonDown(1)) // Check for mouse click
             {
                 resultCardList = new List<Card>();
             }
-
             yield return null; // Wait for the next frame
         }
 
         CloseDeck();
+        callback(resultCardList);
     }
 
     public void OpenPlayerDeck()

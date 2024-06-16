@@ -19,10 +19,9 @@ public class CardDataModel : MonoBehaviour
     private List<Card> cardList = new List<Card>(); // 存储卡牌数据的链表
     private List<DNA> DNAList = new List<DNA>(); // 存储DNA数据的链表
 
-    private int[] playerExtraDeckData; // 储存玩家额外卡组数据的array
-    private List<Card> playerExtraDeckData1;
-    private int[] playerCardData; // 储存玩家卡牌数据的array
-    private List<Card> playerCardData1;
+    //储存玩家卡牌数据的list
+    private List<Card> playerExtraDeckData1 = new List<Card>();
+    private List<Card> playerCardData1 = new List<Card>();
     private int[] playerDNAData; // 储存玩家DNA数据的array
     public int totalCoins;
 
@@ -190,32 +189,28 @@ public class CardDataModel : MonoBehaviour
     }
 
     // 获得卡牌
-    public void ObtainCard(int _id)
+    public void ObtainCard(Card _card)
     {
         // 玩家数据中增加该卡牌
-        playerCardData[_id] += 1;
-
-        SavePlayerData();
+        playerCardData1.Add(Card.CloneCard(_card));
     }
 
     // 删除卡牌
-    public void DeleteCard(int _id)
+    public void DeleteCard(Card _card)
     {
         // 查看剩余卡牌是否大于0
-        if(playerCardData[_id] >= 1)
+        if (playerCardData1.Contains(_card))
         {
-            playerCardData[_id] -= 1;
+            playerCardData1.Remove(_card);
         }
-        else if(playerExtraDeckData[_id] >= 1)
+        else if (playerExtraDeckData1.Contains(_card))
         {
-            playerExtraDeckData[_id] -= 1;
+            playerExtraDeckData1.Remove(_card);
         }
         else
         {
             Debug.Log("Trying to delete card that do not have");
         }
-
-        SavePlayerData();
     }
 
     public void ObtainDNA(int _id)
@@ -227,8 +222,6 @@ public class CardDataModel : MonoBehaviour
 
         // 玩家数据中增加该DNA
         playerDNAData[_id] += 1;
-
-        SavePlayerData();
     }
 
     // 加载玩家卡组数据
@@ -237,9 +230,7 @@ public class CardDataModel : MonoBehaviour
         string path = Application.dataPath + textPlayerDataPath;
         string[] dataArray = File.ReadAllLines(path);
 
-        playerCardData = new int[cardList.Count];
         playerDNAData = new int[DNAList.Count];
-        playerExtraDeckData = new int[cardList.Count];
 
         foreach (var row in dataArray)
         {
@@ -260,8 +251,10 @@ public class CardDataModel : MonoBehaviour
             {
                 int id = int.Parse(rowArray[1]);
                 int num = int.Parse(rowArray[2]);
-                playerCardData[id] = num;
-                //Debug.Log("Load card with id : " + id);
+                for (int i = 0; i < num; i++)
+                {
+                    playerCardData1.Add(Card.CloneCard(cardList[id]));
+                }
             }
             else if (rowArray[0] == "DNA")
             {
@@ -273,7 +266,10 @@ public class CardDataModel : MonoBehaviour
             {
                 int id = int.Parse(rowArray[1]);
                 int num = int.Parse(rowArray[2]);
-                playerExtraDeckData[id] = num;
+                for (int i = 0; i < num; i++)
+                {
+                    playerExtraDeckData1.Add(Card.CloneCard(cardList[id]));
+                }
                 //Debug.Log("Load extra deck card with id : " + id + " num: " + num);
             }
             else
@@ -292,22 +288,6 @@ public class CardDataModel : MonoBehaviour
         string path = Application.dataPath + textPlayerDataPath;
         datas.Add("coins," + totalCoins.ToString());
 
-        for (int i = 0; i < playerCardData.Length; i++)
-        {
-            if (playerCardData[i] != 0)
-            {
-                datas.Add("card," + i.ToString() + "," + playerCardData[i].ToString());
-            }
-        }
-
-        for (int i = 0; i < playerExtraDeckData.Length; i++)
-        {
-            if (playerExtraDeckData[i] != 0)
-            {
-                datas.Add("extraDeck," + i.ToString() + "," + playerExtraDeckData[i].ToString());
-            }
-        }
-
         for (int i = 0; i < playerDNAData.Length; i++)
         {
             if (playerDNAData[i] != 0)
@@ -317,57 +297,18 @@ public class CardDataModel : MonoBehaviour
         }
 
         File.WriteAllLines(path, datas);
-        //Debug.Log("Player data saved. Path: " + path);
-        //Debug.Log("Saved data: " + string.Join("\n", datas));
     }
 
     // 加载局内卡组
     public List<Card> InitializeDeck()
     {
-        List<Card> deckCardList = new List<Card>();
-
-        for (int cardIndex = 0; cardIndex < playerCardData.Length; cardIndex++)
-        {
-            int quantity = playerCardData[cardIndex];
-
-            if (quantity >= 1)
-            {
-                for (int i = 0; i < quantity; i++)
-                {
-                    if (cardIndex < cardList.Count)  // Ensure the index is within the range of available cards
-                    {
-                        deckCardList.Add(cardList[cardIndex]);
-                    }
-                }
-            }
-        }
-
-        return deckCardList;
+        return playerCardData1;
     }
 
     // 加载局内额外卡组
     public List<Card> InitializeExtraDeck()
     {
-        List<Card> extraDeckCardList = new List<Card>();
-
-        for (int cardIndex = 0; cardIndex < playerExtraDeckData.Length; cardIndex++)
-        {
-            int quantity = playerExtraDeckData[cardIndex];
-
-            if (quantity >= 1)
-            {
-                for (int i = 0; i < quantity; i++)
-                {
-                    if (cardIndex < cardList.Count)  // Ensure the index is within the range of available cards
-                    {
-                        extraDeckCardList.Add(cardList[cardIndex]);
-                        //Debug.Log("generate extra deck card : " + newCard.id);
-                    }
-                }
-            }
-        }
-
-        return extraDeckCardList;
+        return playerExtraDeckData1;
     }
 
     // 加载玩家DNA
@@ -413,46 +354,32 @@ public class CardDataModel : MonoBehaviour
         return cardList[index];
     }
 
-    public void ChangeExtraDeck(Card card, bool toExtraDeck)
-    {
-        int cardIndex = card.id;
-
-        // 如果bool为true说明是从卡组向extra deck添加卡片
-        if (toExtraDeck)
-        {
-            playerCardData[cardIndex] -= 1;
-            playerExtraDeckData[cardIndex] += 1;
-        }
-        // 反之为从extra deck向卡组添加卡片
-        else
-        {
-            playerCardData[cardIndex] += 1;
-            playerExtraDeckData[cardIndex] -= 1;
-        }
-    }
-
-    public void ChangeDeckFromMainToExtra(int cardIndex, bool fromMainToExtra)
+    public void ChangeDeckFromMainToExtra(Card card, bool fromMainToExtra)
     {
         if (fromMainToExtra)
         {
-            playerCardData[cardIndex] -= 1;
-            playerExtraDeckData[cardIndex] += 1;
-            if (playerCardData[cardIndex] < 0)
+            if (playerCardData1.Contains(card))
+            {
+                playerCardData1.Remove(card);
+                playerExtraDeckData1.Add(card);
+            }
+            else
             {
                 Debug.Log("Bad bug");
             }
         }
         else
         {
-            playerExtraDeckData[cardIndex] -= 1;
-            playerCardData[cardIndex] += 1;
-            if (playerExtraDeckData[cardIndex] < 0)
+            if (playerExtraDeckData1.Contains(card))
+            {
+                playerExtraDeckData1.Remove(card);
+                playerCardData1.Add(card);
+            }
+            else
             {
                 Debug.Log("Bad bug");
             }
         }
-
-        SavePlayerData();
     }
 
     public void LoadData()

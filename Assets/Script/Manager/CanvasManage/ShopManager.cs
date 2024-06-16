@@ -104,7 +104,7 @@ public class ShopManager : Manager<ShopManager>
                     break;
             }
 
-            newCard.AddComponent<ShopCardBuyOnClick>().SetUp(card.id, price);
+            newCard.AddComponent<ShopCardBuyOnClick>().SetUp(card, price);
         }
 
         // 还没写
@@ -131,7 +131,7 @@ public class ShopManager : Manager<ShopManager>
         deleteCostText.text = deleteCost + "";
     }
 
-    public void DeleteCard(int cardIndex)
+    public void DeleteCard()
     {
         // 扣钱
         if (PlayerStatesManager.Gold < deleteCost)
@@ -141,17 +141,20 @@ public class ShopManager : Manager<ShopManager>
         }
         else
         {
+            CardHolder.gameObject.SetActive(false);
             PlayerStatesManager.Instance.DecreaseGold(deleteCost);
+            deleteCost += 50;
+            CardSelectPanelBehavior.Instance.SelectCardFromDeck(DeleteCardHelper);
         }
-
-        OpenPlayerDeck();
-
-        CardDataModel.Instance.DeleteCard(cardIndex);
-
-        deleteCost += 50;
     }
 
-    public void BuyCard(int cardIndex, int price, GameObject card)
+    private void DeleteCardHelper(Card card)
+    {
+        CardDataModel.Instance.DeleteCard(card);
+        CardHolder.gameObject.SetActive(true);
+    }
+
+    public void BuyCard(Card _card, int price, GameObject card)
     {
         // 扣钱
         if (PlayerStatesManager.Gold < price)
@@ -164,7 +167,7 @@ public class ShopManager : Manager<ShopManager>
             PlayerStatesManager.Instance.DecreaseGold(price);
         }
 
-        CardDataModel.Instance.ObtainCard(cardIndex);
+        CardDataModel.Instance.ObtainCard(_card);
         Destroy(card);
     }
 
@@ -184,67 +187,18 @@ public class ShopManager : Manager<ShopManager>
         CardDataModel.Instance.ObtainDNA(cardIndex);
         Destroy(dna);
     }
-
-    public void OpenPlayerDeck()
-    {
-        if (AllDeck.activeSelf)
-        {
-            foreach (Transform child in AllDeckContent)
-            {
-                Destroy(child.gameObject);
-            }
-
-            AllDeck.SetActive(false);
-        }
-        else
-        {
-            cardList = new List<Card>();
-            cardList = CardDataModel.Instance.InitializeDeck();
-            foreach (Card card in CardDataModel.Instance.InitializeExtraDeck())
-            {
-                cardList.Add(card);
-            }
-
-            foreach (Card card in cardList)
-            {
-                GameObject newCard = CardDisplayView.Instance.DisPlaySingleCard(card, AllDeckContent);
-                newCard.AddComponent<Scaling>();
-                newCard.AddComponent<ShopCardDeleteOnClick>().SetUp(card.id);
-            }
-
-            AllDeck.SetActive(true);
-        }
-    }
-}
-
-public class ShopCardDeleteOnClick : MonoBehaviour, IPointerClickHandler
-{
-    private int cardIndex;
-
-    public void SetUp(int index)
-    {
-        cardIndex = index;
-    }
-
-    public void OnPointerClick(PointerEventData eventData)
-    {
-        if (eventData.button == PointerEventData.InputButton.Left)
-        {
-            ShopManager.Instance.DeleteCard(cardIndex);
-        }
-    }
 }
 
 public class ShopCardBuyOnClick : MonoBehaviour, IPointerClickHandler
 {
-    private int cardIndex;
+    private Card card;
     private int price;
 
     public TextMeshProUGUI priceText;
 
-    public void SetUp(int index, int _price)
+    public void SetUp(Card _card, int _price)
     {
-        cardIndex = index;
+        card = _card;
         price = _price;
 
         // Check if a TextMeshProUGUI component already exists, otherwise create one
@@ -268,7 +222,7 @@ public class ShopCardBuyOnClick : MonoBehaviour, IPointerClickHandler
     {
         if (eventData.button == PointerEventData.InputButton.Left)
         {
-            ShopManager.Instance.BuyCard(cardIndex, price, this.gameObject);
+            ShopManager.Instance.BuyCard(card, price, this.gameObject);
         }
     }
 }
@@ -288,7 +242,7 @@ public class ShopDNAOnClick : MonoBehaviour, IPointerClickHandler
     {
         if (eventData.button == PointerEventData.InputButton.Left)
         {
-            ShopManager.Instance.BuyCard(index, price, this.gameObject);
+            ShopManager.Instance.BuyDNA(index, price, this.gameObject);
         }
     }
 }

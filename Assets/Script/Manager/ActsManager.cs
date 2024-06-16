@@ -42,6 +42,7 @@ public class ActsManager : Manager<ActsManager>
 
     public void ActivateAct(BoxType _boxType)
     {
+        _boxType = BoxType.Merchant;
         switch (_boxType)
         {
             case BoxType.NormalFight:

@@ -28,7 +28,7 @@ public class RewardCardSelectBehavior : MonoBehaviour
             GameObject newCard = CardDisplayView.Instance.DisPlaySingleCard(card, CardHolder);
             newCard.AddComponent<Scaling>();
             newCard.AddComponent<RewardCardOnClick>();
-            newCard.GetComponent<RewardCardOnClick>().SetUp(card.id, reawrdParent);
+            newCard.GetComponent<RewardCardOnClick>().SetUp(card, reawrdParent);
         }
     }
 
@@ -40,20 +40,20 @@ public class RewardCardSelectBehavior : MonoBehaviour
 
 public class RewardCardOnClick : MonoBehaviour, IPointerClickHandler
 {
-    private int cardIndex;
+    private Card card;
     private GameObject rewardParent;
 
     public void OnPointerClick(PointerEventData eventData)
     {
         CardDataModel cardDataModel = FindObjectOfType<CardDataModel>();
-        cardDataModel.ObtainCard(cardIndex);
+        cardDataModel.ObtainCard(card);
         RewardCardSelectBehavior.Instance.FinishCardSelect();
         Destroy(rewardParent);
     }
 
-    public void SetUp(int _cardIdex, GameObject _parent)
+    public void SetUp(Card _card, GameObject _parent)
     {
-        cardIndex = _cardIdex;
+        card = _card;
         rewardParent = _parent;
     }
 }

@@ -24,7 +24,7 @@ public class Scaling : MonoBehaviour, IPointerExitHandler, IPointerEnterHandler
         }
         //originalSortingOrder = this.gameObject.transform.parent.GetComponent<Canvas>().sortingOrder;
         canvas.overrideSorting = true;
-        originalSortingOrder = 18;
+        originalSortingOrder = 19;
         canvas.sortingOrder = originalSortingOrder;
 
         // Ensure the GameObject has a GraphicRaycaster component
