@@ -92,17 +92,27 @@ public class UponSummonFunction : MonoBehaviour
     // 对所有敌方造成伤害
     public static void FireWolfUponSummon(BaseEntity entity)
     {
-        List<BaseEntity> enemyList = new List<BaseEntity>();
+        List<BaseEntity> enemyList = BattleManager.Instance.GetEntitiesAgainst(entity.myTeam);
 
-        foreach (BaseEntity enemy in BattleManager.Instance.GetEntitiesAgainst(entity.myTeam))
+        // 寻找生命值最高的怪兽
+        if (enemyList.Count != 0)
         {
-            enemyList.Add(enemy);
+            int heighestHealth = 0;
+            BaseEntity highestHealthMonster = null;
+
+            foreach (BaseEntity enemy in enemyList)
+            {
+                if (enemy.currentHealth > heighestHealth)
+                {
+                    highestHealthMonster = enemy;
+                    heighestHealth = enemy.currentHealth;
+                }
+            }
+
+            // 造成伤害
+            highestHealthMonster.TakeDamage(entity.cardModel.effectData, entity);
         }
 
-        foreach (BaseEntity enemy in enemyList)
-        {
-            enemy.TakeDamage(entity.cardModel.effectData, null);
-        }
 
         if (recordEnabled)
         {

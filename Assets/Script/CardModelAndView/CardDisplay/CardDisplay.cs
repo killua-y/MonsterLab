@@ -4,6 +4,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using static Card;
 
 public class CardDisplay : MonoBehaviour, IPointerExitHandler, IPointerEnterHandler
 {
@@ -15,7 +16,6 @@ public class CardDisplay : MonoBehaviour, IPointerExitHandler, IPointerEnterHand
     public GameObject keyWordParent;
     public GameObject keyWordPrefab;
 
-    private List<AdjustImageSize> keyWordList = new List<AdjustImageSize>();
     public virtual void UpdateCardView(Card _card)
     {
         if (_card.imageLocation != "")
@@ -95,25 +95,24 @@ public class CardDisplay : MonoBehaviour, IPointerExitHandler, IPointerEnterHand
             string description = keyWordsDefinition[keyWords.IndexOf(keyword)];
 
             newKeyWordExplain.GetComponent<AdjustImageSize>().Setup(keyword, description);
-
-            keyWordList.Add(newKeyWordExplain.GetComponent<AdjustImageSize>());
         }
     }
 
-    public void ShowKeyWord()
+    public virtual void ShowKeyWord()
     {
         if (!keyWordParent.activeSelf)
         {
             keyWordParent.SetActive(true);
+        }
 
-            foreach (AdjustImageSize adjustImageSize in keyWordList)
-            {
-                adjustImageSize.AdjustImageSizeToText();
-            }
+        // 查看鼠标是否在屏幕右1/4
+        if (this.transform.position.x > Screen.width * 3 / 4)
+        {
+            FlipKeyWord(true);
         }
     }
 
-    public void HideKeyWord()
+    public virtual void HideKeyWord()
     {
         if (keyWordParent.activeSelf)
         {
@@ -121,10 +120,23 @@ public class CardDisplay : MonoBehaviour, IPointerExitHandler, IPointerEnterHand
         }
     }
 
-    public void FlipKeyWord()
+    public virtual void FlipKeyWord(bool reverse)
     {
         RectTransform keyWordParentRectTransform = keyWordParent.GetComponent<RectTransform>();
-        keyWordParentRectTransform.localPosition = new Vector2(-keyWordParentRectTransform.localPosition.x, keyWordParentRectTransform.localPosition.y);
+        if (reverse)
+        {
+            if (keyWordParentRectTransform.localPosition.x > 0)
+            {
+                keyWordParentRectTransform.localPosition = new Vector2(-keyWordParentRectTransform.localPosition.x, keyWordParentRectTransform.localPosition.y);
+            }
+        }
+        else
+        {
+            if (keyWordParentRectTransform.localPosition.x < 0)
+            {
+                keyWordParentRectTransform.localPosition = new Vector2(-keyWordParentRectTransform.localPosition.x, keyWordParentRectTransform.localPosition.y);
+            }
+        }
     }
 
     public void OnPointerEnter(PointerEventData eventData)

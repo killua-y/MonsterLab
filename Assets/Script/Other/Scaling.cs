@@ -22,9 +22,10 @@ public class Scaling : MonoBehaviour, IPointerExitHandler, IPointerEnterHandler
         {
             canvas = gameObject.AddComponent<Canvas>();
         }
+        //originalSortingOrder = this.gameObject.transform.parent.GetComponent<Canvas>().sortingOrder;
         canvas.overrideSorting = true;
-        canvas.sortingOrder = 18;
-        originalSortingOrder = canvas.sortingOrder;
+        originalSortingOrder = 18;
+        canvas.sortingOrder = originalSortingOrder;
 
         // Ensure the GameObject has a GraphicRaycaster component
         if (GetComponent<GraphicRaycaster>() == null)
@@ -41,7 +42,7 @@ public class Scaling : MonoBehaviour, IPointerExitHandler, IPointerEnterHandler
         }
 
         // Bring to front layer
-        canvas.sortingOrder = 19; // Set a high sorting order to bring it to the front
+        canvas.sortingOrder += 1; // Set a high sorting order to bring it to the front
 
         scalingCoroutine = StartCoroutine(ScaleTo(new Vector3(zoomScale, zoomScale, 1.0f)));
     }

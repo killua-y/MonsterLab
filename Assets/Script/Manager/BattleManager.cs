@@ -15,6 +15,7 @@ public class BattleManager : Manager<BattleManager>
 
     public Action<BaseEntity> OnUnitDied;
     public Action<BaseEntity> OnUnitSummon;
+    public Action<BaseEntity, BaseEntity, int> OnUnitTakingDamage;
 
     public TextMeshProUGUI monsterSpaceText;
     // Start is called before the first frame update
@@ -41,7 +42,7 @@ public class BattleManager : Manager<BattleManager>
             {
                 return;
             }
-        }    
+        }
 
         // 必须传入monsterCard
         if (monsterCard is null)
@@ -58,15 +59,7 @@ public class BattleManager : Manager<BattleManager>
         }
         else
         {
-            // 根据Team安排不同的默认模型, 以后可以删除
-            if (team == Team.Player)
-            {
-                modelPath = "MonsterPrefab/Slime";
-            }
-            else
-            {
-                modelPath = "Enemy/Slime/EnemySlime";
-            }
+            modelPath = "MonsterPrefab/Slime";
         }
 
         GameObject monsterPrefab = Resources.Load<GameObject>(modelPath);
@@ -141,6 +134,11 @@ public class BattleManager : Manager<BattleManager>
         }
     }
 
+    public void UnitTakingDamage(BaseEntity from, BaseEntity to, int amount)
+    {
+        OnUnitTakingDamage?.Invoke(from, to, amount);
+    }
+
     // helper，用于延迟call一下新回合
     public void NewTurn()
     {
@@ -196,12 +194,14 @@ public class BattleManager : Manager<BattleManager>
         {
             BaseEntity entity = child.GetComponent<BaseEntity>();
             playerEntities.Remove(entity);
+            enemyEntities.Remove(entity);
             Destroy(entity.gameObject);
         }
 
         foreach (Transform child in enemyParent)
         {
             BaseEntity entity = child.GetComponent<BaseEntity>();
+            playerEntities.Remove(entity);
             enemyEntities.Remove(entity);
             Destroy(entity.gameObject);
         }

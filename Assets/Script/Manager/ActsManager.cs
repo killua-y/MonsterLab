@@ -11,6 +11,7 @@ public class ActsManager : Manager<ActsManager>
     public static string currentEnemy = "AcidSlimeEnermy";
 
     public GameObject MapCanvas;
+    public GameObject EventCanvas;
 
     private List<Enemy> allEnemyList = new List<Enemy>();
 
@@ -68,7 +69,7 @@ public class ActsManager : Manager<ActsManager>
                 break;
 
             case BoxType.Events:
-                RewardManager.Instance.GenerateReward(1, 0);
+                EventCanvasBehavior.instance.LoadEvent(currentLayer);
                 break;
 
             case BoxType.Merchant:
@@ -82,5 +83,10 @@ public class ActsManager : Manager<ActsManager>
             default:
                 break;
         }
+    }
+
+    public void LeaveEvent()
+    {
+
     }
 }

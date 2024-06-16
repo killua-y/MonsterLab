@@ -7,7 +7,7 @@ using UnityEngine;
 public class PlayerStatesManager : Manager<PlayerStatesManager>
 {
     public static int Gold = 0;
-    public static int maxCost = 3;
+    public static int maxCost = 10;
     public static int playerHealthPoint = 3;
     public static int maxUnit = 5;
 

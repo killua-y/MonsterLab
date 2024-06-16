@@ -16,5 +16,24 @@ namespace config {
 
         [SerializeField]
         public float zoom = 0.3f;
+
+        private float referenceWidth = 1920f;
+        private float referenceHeight = 1080f;
+
+        public void AdjustForScreenResolution()
+        {
+            float screenWidth = Screen.width;
+            float screenHeight = Screen.height;
+
+            float widthScale = screenWidth / referenceWidth;
+            float heightScale = screenHeight / referenceHeight;
+
+            float scaleFactor = (widthScale + heightScale) / 2;
+
+            rotation *= scaleFactor;
+            position *= scaleFactor;
+            releasePosition *= scaleFactor;
+            zoom *= scaleFactor;
+        }
     }
 }

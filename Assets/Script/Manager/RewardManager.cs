@@ -106,9 +106,18 @@ public class RewardManager : Manager<RewardManager>
             }
         }
 
-        HelperFunction.Shuffle(normalDNA, RandomManager.DNARewardRand);
-        HelperFunction.Shuffle(rareDNA, RandomManager.DNARewardRand);
-        HelperFunction.Shuffle(legendDNA, RandomManager.DNARewardRand);
+        HelperFunction.Shuffle(normalDNA, GameSetting.DNARewardRand);
+        HelperFunction.Shuffle(rareDNA, GameSetting.DNARewardRand);
+        HelperFunction.Shuffle(legendDNA, GameSetting.DNARewardRand);
+    }
+
+    public void Finish()
+    {
+        foreach (Transform child in rewardPanel.transform)
+        {
+            Destroy(child.gameObject);
+        }
+        rewardCanvas.gameObject.SetActive(false);
     }
 
     public void GenerateReward(int remainningTurn)
@@ -176,21 +185,21 @@ public class RewardManager : Manager<RewardManager>
         {
             case CardRarity.Normal:
                 // Normal
-                HelperFunction.Shuffle(normalCard, RandomManager.cardRewardRand);
+                HelperFunction.Shuffle(normalCard, GameSetting.cardRewardRand);
                 for (int i = 0; i < 3; i++)
                 {
                     cards.Add(normalCard[i]);
                 }
                 break;
             case CardRarity.Rare:
-                HelperFunction.Shuffle(rareCard, RandomManager.cardRewardRand);
+                HelperFunction.Shuffle(rareCard, GameSetting.cardRewardRand);
                 for (int i = 0; i < 3; i++)
                 {
                     cards.Add(rareCard[i]);
                 }
                 break;
             case CardRarity.Legend:
-                HelperFunction.Shuffle(legendCard, RandomManager.cardRewardRand);
+                HelperFunction.Shuffle(legendCard, GameSetting.cardRewardRand);
                 for (int i = 0; i < 3; i++)
                 {
                     cards.Add(legendCard[i]);
@@ -206,7 +215,7 @@ public class RewardManager : Manager<RewardManager>
 
     public void GenerateDNAReward()
     {
-        int randNumber = RandomManager.DNARewardRand.Next(1, 101);
+        int randNumber = GameSetting.DNARewardRand.Next(1, 101);
 
         DNA dna = GetNextDNA();
 
@@ -264,7 +273,7 @@ public class RewardManager : Manager<RewardManager>
     // Method to get a single card ID based on probabilities
     public int GetNextCardID()
     {
-        float randomValue = (float)RandomManager.cardRewardRand.NextDouble();
+        float randomValue = (float)GameSetting.cardRewardRand.NextDouble();
 
         if (randomValue < 0.5f)
         {
@@ -290,13 +299,13 @@ public class RewardManager : Manager<RewardManager>
             throw new System.Exception("Card list is empty");
         }
 
-        int index = RandomManager.cardRewardRand.Next(cardList.Count);
+        int index = GameSetting.cardRewardRand.Next(cardList.Count);
         return cardList[index].id;
     }
 
     public DNA GetNextDNA()
     {
-        int randNumber = RandomManager.DNARewardRand.Next(1, 101);
+        int randNumber = GameSetting.DNARewardRand.Next(1, 101);
 
         DNA dna = null;
 

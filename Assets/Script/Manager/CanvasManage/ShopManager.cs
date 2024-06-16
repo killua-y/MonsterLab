@@ -92,13 +92,13 @@ public class ShopManager : Manager<ShopManager>
             switch (card.cardRarity)
             {
                 case CardRarity.Normal:
-                    price = RandomManager.shuffleCardRand.Next(50, 101);
+                    price = GameSetting.shuffleCardRand.Next(50, 101);
                     break;
                 case CardRarity.Rare:
-                    price = RandomManager.shuffleCardRand.Next(100, 151);
+                    price = GameSetting.shuffleCardRand.Next(100, 151);
                     break;
                 case CardRarity.Legend:
-                    price = RandomManager.shuffleCardRand.Next(150, 201);
+                    price = GameSetting.shuffleCardRand.Next(150, 201);
                     break;
                 default:
                     break;

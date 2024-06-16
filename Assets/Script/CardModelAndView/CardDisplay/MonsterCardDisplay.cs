@@ -19,6 +19,8 @@ public class MonsterCardDisplay : CardDisplay
     //攻击力 生命值 攻击距离 数值 技能描述
     //卡片位置 模型位置
 
+    public GameObject equipedItemParent;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -54,6 +56,8 @@ public class MonsterCardDisplay : CardDisplay
         {
             Instantiate(rankPrefab, rankParent);
         }
+
+        generateEquipedItem(_card);
 
         base.UpdateCardView(_card);
     }
@@ -92,5 +96,75 @@ public class MonsterCardDisplay : CardDisplay
         }
 
         base.UpdateColor(_card, originalCard);
+    }
+
+    private void generateEquipedItem(Card _card)
+    {
+        MonsterCard card;
+
+        if (_card is MonsterCard)
+        {
+            card = (MonsterCard)_card;
+            if (card.equippedCard.Count == 0)
+            {
+                return;
+            }
+        }
+        else
+        {
+            return;
+        }
+
+        if (_card.keyWords.Count == 0)
+        {
+            equipedItemParent.transform.position = keyWordParent.transform.position;
+        }
+
+        foreach (Card itemCard in card.equippedCard)
+        {
+            GameObject newItemCardExplain = Instantiate(keyWordPrefab, equipedItemParent.transform);
+
+            newItemCardExplain.GetComponent<AdjustImageSize>().Setup(itemCard.cardName, itemCard.effectText);
+        }
+    }
+
+    public override void ShowKeyWord()
+    {
+        if (!equipedItemParent.activeSelf)
+        {
+            equipedItemParent.SetActive(true);
+        }
+
+        base.ShowKeyWord();
+    }
+
+    public override void HideKeyWord()
+    {
+        if (equipedItemParent.activeSelf)
+        {
+            equipedItemParent.SetActive(false);
+        }
+        base.HideKeyWord();
+    }
+
+    public override void FlipKeyWord(bool reverse)
+    {
+        RectTransform keyWordParentRectTransform = equipedItemParent.GetComponent<RectTransform>();
+        if (reverse)
+        {
+            if (keyWordParentRectTransform.localPosition.x > 0)
+            {
+                keyWordParentRectTransform.localPosition = new Vector2(-keyWordParentRectTransform.localPosition.x, keyWordParentRectTransform.localPosition.y);
+            }
+        }
+        else
+        {
+            if (keyWordParentRectTransform.localPosition.x < 0)
+            {
+                keyWordParentRectTransform.localPosition = new Vector2(-keyWordParentRectTransform.localPosition.x, keyWordParentRectTransform.localPosition.y);
+            }
+        }
+
+        base.FlipKeyWord(reverse);
     }
 }

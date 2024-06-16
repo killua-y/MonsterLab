@@ -16,6 +16,10 @@ namespace config {
         [SerializeField]
         public float overrideYPosition = -1;
 
+        [Tooltip("This is the Y position of the card when it is clicked")]
+        [SerializeField]
+        public float clickedYPosition;
+
         [Header("UI Layer")]
         [Tooltip("This is the sorting order of the first card when it is not zoomed in. Subsequent cards will have a higher sorting order.")]
         [SerializeField]
@@ -30,5 +34,22 @@ namespace config {
 
         [SerializeField]
         public bool resetRotationOnZoom;
+
+        private float referenceWidth = 1920f;
+        private float referenceHeight = 1080f;
+
+        public void AdjustForScreenResolution()
+        {
+            float screenWidth = Screen.width;
+            float screenHeight = Screen.height;
+
+            float widthScale = screenWidth / referenceWidth;
+            float heightScale = screenHeight / referenceHeight;
+
+            float scaleFactor = (widthScale + heightScale) / 2;
+
+            overrideYPosition *= scaleFactor;
+            clickedYPosition *= scaleFactor;
+        }
     }
 }

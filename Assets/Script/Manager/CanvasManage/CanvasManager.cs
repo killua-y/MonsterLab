@@ -24,6 +24,13 @@ public class CanvasManager : MonoBehaviour
     [Header("Monster Card Preview")]
     private GameObject cardPreview;
     private RectTransform cardPreviewRectTransform;
+    private int disPlayOffset = 100;
+
+    [Header("CardHolder")]
+    [SerializeField]
+    public Transform extraDeck;
+    public Transform drawPileParent;
+    public Transform discardPileParent;
 
     private void Awake()
     {
@@ -37,6 +44,12 @@ public class CanvasManager : MonoBehaviour
 
     void Update()
     {
+        // 右键点击清除所有额外界面
+        if (Input.GetMouseButtonDown(1))
+        {
+            HideAllOtherPanel();
+        }
+
         if (DNAPreview.activeSelf)
         {
             // Update the position of the text to follow the mouse
@@ -44,7 +57,8 @@ public class CanvasManager : MonoBehaviour
 
             RectTransform rectTransform = DNAPreview.GetComponent<RectTransform>();
 
-            Vector2 adjustedPosition = mousePosition + new Vector2(rectTransform.rect.width / 2 + 20, -rectTransform.rect.height / 2 - 20);
+            Vector2 adjustedPosition = mousePosition +
+                new Vector2(rectTransform.rect.width / 2 + 20, -rectTransform.rect.height / 2 - 20);
 
             rectTransform.position = adjustedPosition;
         }
@@ -59,15 +73,7 @@ public class CanvasManager : MonoBehaviour
             // Calculate the new anchored position
             Vector2 newPosition = localPoint;
 
-            // Determine if the mouse is on the left or right side of the screen
-            if (mousePosition.x < Screen.width / 2)
-            {
-                newPosition = newPosition + new Vector2(cardPreviewRectTransform.rect.width / 2 + 100, 0);
-            }
-            else
-            {
-                newPosition = newPosition - new Vector2(cardPreviewRectTransform.rect.width / 2 + 100, 0);
-            }
+            newPosition = newPosition + new Vector2((cardPreviewRectTransform.rect.width / 2 + 100) * disPlayOffset, 0);
 
             // Get the canvas size
             RectTransform canvasRect = HighPriorityCanvas.transform as RectTransform;
@@ -84,14 +90,32 @@ public class CanvasManager : MonoBehaviour
         }
     }
 
+    private void HideAllOtherPanel()
+    {
+        if (InGameStateManager.inGame)
+        {
+            if (extraDeck.gameObject.activeSelf)
+            {
+                extraDeck.gameObject.SetActive(false);
+            }
+            else if (drawPileParent.gameObject.activeSelf)
+            {
+                drawPileParent.gameObject.SetActive(false);
+            }
+            else if (discardPileParent.gameObject.activeSelf)
+            {
+                discardPileParent.gameObject.SetActive(false);
+            }
+            else if (MapCanvas.gameObject.activeSelf)
+            {
+                MapCanvas.gameObject.SetActive(false);
+            }
+        }
+    }
+
     private void OnGameEnd()
     {
         SetMapCanvasActive(true);
-    }
-
-    public void HideAllOtherPanel()
-    {
-
     }
 
     public void OpenDeck()
@@ -107,9 +131,9 @@ public class CanvasManager : MonoBehaviour
 
     public void GenerateDNAPreview(string Name, string description)
     {
-        DNAPreview.SetActive(true);
         DNAPreview.GetComponent<AdjustImageSize>().Setup(Name, description);
-        DNAPreview.GetComponent<AdjustImageSize>().AdjustImageSizeToText();
+        DNAPreview.SetActive(true);
+        //DNAPreview.GetComponent<AdjustImageSize>().AdjustImageSizeToText();
     }
 
     public void HideDNAPreview()
@@ -130,35 +154,16 @@ public class CanvasManager : MonoBehaviour
         // Update the position of the text to follow the mouse
         Vector2 mousePosition = Input.mousePosition;
 
-        // Convert mouse position to canvas space
-        RectTransformUtility.ScreenPointToLocalPointInRectangle(HighPriorityCanvas.transform as RectTransform, mousePosition, HighPriorityCanvas.worldCamera, out Vector2 localPoint);
-
-        // Calculate the new anchored position
-        Vector2 newPosition = localPoint;
-
         // Determine if the mouse is on the left or right side of the screen
         if (mousePosition.x < Screen.width / 2)
         {
-            newPosition = newPosition + new Vector2(cardPreviewRectTransform.rect.width / 2 + 100, 0);
+            disPlayOffset = 1;
         }
         else
         {
-            newPosition = newPosition - new Vector2(cardPreviewRectTransform.rect.width / 2 + 100, 0);
-            cardPreview.GetComponent<CardDisplay>().FlipKeyWord();
+            disPlayOffset = -1;
+            cardPreview.GetComponent<CardDisplay>().FlipKeyWord(true);
         }
-
-        // Get the canvas size
-        RectTransform canvasRect = HighPriorityCanvas.transform as RectTransform;
-        Vector2 canvasSize = canvasRect.sizeDelta - new Vector2(100, 100);
-
-        // Get the size of the image
-        Vector2 imageSize = cardPreviewRectTransform.sizeDelta;
-
-        // Adjust the position to stay within screen boundaries
-        newPosition.y = Mathf.Clamp(newPosition.y, -canvasSize.y / 2 + imageSize.y / 2, canvasSize.y / 2 - imageSize.y / 2);
-
-        // Set the new anchored position
-        cardPreviewRectTransform.anchoredPosition = newPosition;
     }
 
     public void HideCardPreview()
@@ -182,7 +187,47 @@ public class CanvasManager : MonoBehaviour
         }
         else
         {
+            HideAllOtherPanel();
             MapCanvas.gameObject.SetActive(true);
+        }
+    }
+
+    public void ShowExtraDeck()
+    {
+        if (extraDeck.gameObject.activeSelf)
+        {
+            extraDeck.gameObject.SetActive(false);
+        }
+        else
+        {
+            HideAllOtherPanel();
+            extraDeck.gameObject.SetActive(true);
+        }
+    }
+
+    public void ShowDarwPile()
+    {
+        if (drawPileParent.gameObject.activeSelf)
+        {
+            drawPileParent.gameObject.SetActive(false);
+        }
+        else
+        {
+            HideAllOtherPanel();
+            InGameStateManager.Instance.ShowDarwPile();
+        }
+    }
+
+    public void ShowDiscardPile()
+    {
+        if (discardPileParent.gameObject.activeSelf)
+        {
+            discardPileParent.gameObject.SetActive(false);
+        }
+        else
+        {
+            HideAllOtherPanel();
+            InGameStateManager.Instance.ShowDiscardPile();
         }
     }
 }

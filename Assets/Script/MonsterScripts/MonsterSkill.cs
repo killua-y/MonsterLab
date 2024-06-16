@@ -27,7 +27,6 @@ public class MonsterSkill : MonoBehaviour
             }
 
             baseEntity.OnAttack += OnAttack;
-            baseEntity.OnTakeDamage += OnTakeDamage;
             InGameStateManager.Instance.OnPreparePhaseStart += OnPreparePhaseStart;
             bullet = monsterUI.bullet;
         }
@@ -38,26 +37,32 @@ public class MonsterSkill : MonoBehaviour
         IncreaseMana(10);
     }
 
-    void OnTakeDamage(int damageAmount)
-    {
-        IncreaseMana(damageAmount);
-    }
-
     void IncreaseMana(int amount)
     {
+        if (currentMana >= baseEntity.cardModel.Mana)
+        {
+            return;
+        }
+
         currentMana += amount;
 
         if (currentMana >= baseEntity.cardModel.Mana)
         {
-            CastSpell();
+            ReadyToCastSpell();
         }
 
         monsterUI.UpdateManaUI(baseEntity.cardModel.Mana, currentMana);
     }
 
-    protected virtual void CastSpell()
+    private void ReadyToCastSpell()
+    {
+        baseEntity.canCastSkill = true;
+    }
+
+    public virtual void CastSpell(Transform attackOrgan = null)
     {
         currentMana = 0;
+        monsterUI.UpdateManaUI(baseEntity.cardModel.Mana, currentMana);
     }
 
     private void OnPreparePhaseStart()
@@ -69,7 +74,6 @@ public class MonsterSkill : MonoBehaviour
     private void OnDestroy()
     {
         baseEntity.OnAttack -= OnAttack;
-        baseEntity.OnTakeDamage -= OnTakeDamage;
         InGameStateManager.Instance.OnPreparePhaseStart -= OnPreparePhaseStart;
     }
 }

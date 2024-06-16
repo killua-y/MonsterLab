@@ -4,15 +4,21 @@ using UnityEngine;
 
 public class SaveAndLoadManager : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    public static SaveAndLoadManager instance;
+
+    private void Awake()
     {
-        
+        instance = this;
     }
 
-    // Update is called once per frame
-    void Update()
+    public void LoadData()
     {
-        
+        CardDataModel.Instance.LoadPlayerData();
     }
+
+    public void SaveData()
+    {
+        CardDataModel.Instance.SavePlayerData();
+    }
+
 }

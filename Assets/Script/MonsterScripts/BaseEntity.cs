@@ -14,7 +14,8 @@ public class BaseEntity : MonoBehaviour
 
     // 怪兽属性部分
     private GameObject bullet;
-    protected int currentHealth;
+    private Transform attackOragn;
+    public int currentHealth;
     [Range(1.5f, 10)]
     protected float range = 1.5f;
     public float attackSpeed = 1f; //攻击间隔
@@ -39,16 +40,20 @@ public class BaseEntity : MonoBehaviour
     //其他
     public bool dead = false;
     protected bool canAttack = true;
-    protected bool CanBattle = false;
+    protected bool canBattle = false;
+    public bool canCastSkill = false;
     protected float waitBetweenAttack;
     public Action OnDeath;
     public Action OnAttack;
-    public Action<int> OnTakeDamage;
+
+    // 动画
+    private Animator animator;
 
     public virtual void Setup(Team team, Node node, MonsterCard monsterCard, List<BaseEntity> sacrifices = null)
     {
         // 加载怪兽UI script
         monsterUI = this.gameObject.GetComponent<MonsterUI>();
+        animator = this.gameObject.GetComponent<Animator>();
 
         myTeam = team;
 
@@ -80,8 +85,9 @@ public class BaseEntity : MonoBehaviour
         // 以后记得改
         range = monsterCard.attackRange;
 
-        // 加载弹道prefab
+        // 加载弹道prefab 和攻击器官位置
         bullet = this.gameObject.GetComponent<MonsterUI>().bullet;
+        attackOragn = this.gameObject.GetComponent<MonsterUI>().attackOrgan;
 
         // 重新施加记录下的装备
         if (monsterCard.equippedCard.Count > 0)
@@ -141,9 +147,13 @@ public class BaseEntity : MonoBehaviour
 
     public virtual void Update()
     {
-        if (CanBattle)
+        if (canBattle)
         {
-            if (!HasEnemy)
+            if (!canAttack)
+            {
+                // wait
+            }
+            else if (!HasEnemy)
             {
                 FindTarget();
             }
@@ -155,6 +165,7 @@ public class BaseEntity : MonoBehaviour
                     Attack();
                 }
             }
+            // 移动
             else
             {
                 GetInRange();
@@ -260,7 +271,7 @@ public class BaseEntity : MonoBehaviour
     {
         this.gameObject.SetActive(true);
 
-        CanBattle = false;
+        canBattle = false;
 
         canAttack = true;
 
@@ -276,6 +287,7 @@ public class BaseEntity : MonoBehaviour
             // 复活，重新把自己添加回索敌list
             if (dead)
             {
+                Debug.Log("Card " + cardModel.cardName + " respond");
                 dead = false;
                 BattleManager.Instance.AddToTeam(this);
             }
@@ -291,7 +303,7 @@ public class BaseEntity : MonoBehaviour
     // 战斗阶段开始
     protected virtual void OnBattlePhaseStart()
     {
-        CanBattle = true;
+        canBattle = true;
         BattleStartNode = currentNode;
     }
 
@@ -317,7 +329,14 @@ public class BaseEntity : MonoBehaviour
         // 播放自己收到伤害的action
         if (from != null)
         {
-            OnTakeDamage?.Invoke(amount);
+            if (currentHealth < amount)
+            {
+                BattleManager.Instance.UnitTakingDamage(from, this, currentHealth);
+            }
+            else
+            {
+                BattleManager.Instance.UnitTakingDamage(from, this, amount);
+            }
         }
 
         currentHealth -= amount;
@@ -366,9 +385,6 @@ public class BaseEntity : MonoBehaviour
 
     protected virtual void Attack()
     {
-        if (!canAttack)
-            return;
-
         StartCoroutine(StartAttack());
     }
 
@@ -380,24 +396,48 @@ public class BaseEntity : MonoBehaviour
         }
 
         canAttack = false;
-
         // 开始播放攻击动画
+        if (animator != null)
+        {
+            animator.SetInteger("AnimationInt", 1);
+        }
         yield return new WaitForSeconds(attackPreparation);
 
         // 前摇结束检测目标是否还存活
         if ((currentTarget == null) || (currentTarget.dead))
         {
-            yield break;
+            // 如果死了就重新在范围内寻找目标
+            FindTarget();
+            if (IsInRange)
+            {
+                // 继续
+            }
+            // 攻击目标不在范围或者战斗已经结束
+            else
+            {
+                // 播放攻击后摇
+                yield return new WaitForSeconds(attackRecover);
+
+                // 结束播放攻击动画
+                if (animator != null)
+                {
+                    animator.SetInteger("AnimationInt", 0);
+                }
+
+                yield return new WaitForSeconds(attackSpeed - (attackPreparation + attackRecover));
+                canAttack = true;
+
+                yield break;
+            }
         }
 
-        // 播放自己攻击的action
-        OnAttack?.Invoke();
-
-        // 攻击击中敌方
-        if (bullet == null)
+        // 如果有技能的话先释放技能
+        if (canCastSkill)
         {
-            currentTarget.TakeDamage(cardModel.attackPower, this);
+            this.gameObject.GetComponent<MonsterSkill>().CastSpell(attackOragn);
+            canCastSkill = false;
         }
+        // 攻击
         else
         {
             // 构建攻击子弹
@@ -411,9 +451,27 @@ public class BaseEntity : MonoBehaviour
             {
                 bulletInstance.GetComponent<Bullet>().Initialize(currentTarget, cardModel.attackPower, this);
             }
+
+            // 从攻击器官生成
+            if (attackOragn != null)
+            {
+                bulletInstance.transform.position = attackOragn.position;
+            }
+
+            // 播放自己攻击的action
+            OnAttack?.Invoke();
         }
+
         // 播放攻击后摇
         yield return new WaitForSeconds(attackRecover);
+
+        // 结束播放攻击动画
+        if (animator != null)
+        {
+            animator.SetInteger("AnimationInt", 0);
+        }
+
+        yield return new WaitForSeconds(attackSpeed - (attackPreparation + attackRecover));
         canAttack = true;
     }
 
