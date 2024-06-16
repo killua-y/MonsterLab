@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class CardSelectBehavior : MonoBehaviour
+public class RewardCardSelectBehavior : MonoBehaviour
 {
-    public static CardSelectBehavior Instance;
+    public static RewardCardSelectBehavior Instance;
     public Transform CardHolder;
 
     private void Awake()
@@ -47,7 +47,7 @@ public class RewardCardOnClick : MonoBehaviour, IPointerClickHandler
     {
         CardDataModel cardDataModel = FindObjectOfType<CardDataModel>();
         cardDataModel.ObtainCard(cardIndex);
-        CardSelectBehavior.Instance.FinishCardSelect();
+        RewardCardSelectBehavior.Instance.FinishCardSelect();
         Destroy(rewardParent);
     }
 
