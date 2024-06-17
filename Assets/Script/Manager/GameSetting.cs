@@ -48,7 +48,6 @@ public class GameSetting : Manager<GameSetting>
         BoxLayoutRand = new System.Random(seed);
     }
 
-
     // 暂时不用
     // Save the state of the random number generator
     public void SaveState(string filePath)

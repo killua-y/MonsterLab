@@ -25,7 +25,13 @@ public class GoldForDeleteOneCardEvent : EventBehavior
 
     private void Option1()
     {
-        PlayerStatesManager.Instance.DecreaseGold(100);
+        CardSelectPanelBehavior.Instance.SelectCardFromDeck(DeleteCardHelper);
+    }
+
+    private void DeleteCardHelper(Card card)
+    {
+        CardDataModel.Instance.DeleteCard(card);
+        Leave();
     }
 
     private void Option2()
@@ -49,6 +55,11 @@ public class SelectOneCardEvent : EventBehavior
     };
 
     protected override string eventImageLocation { get; set; } = "";
+
+    public override bool isValid()
+    {
+        return false;
+    }
 
     protected override void bindAction()
     {

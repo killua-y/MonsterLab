@@ -69,7 +69,7 @@ public class ActsManager : Manager<ActsManager>
                 break;
 
             case BoxType.Events:
-                EventCanvasBehavior.instance.LoadEvent(currentLayer);
+                EventManager.instance.LoadEvent(currentLayer);
                 break;
 
             case BoxType.Merchant:

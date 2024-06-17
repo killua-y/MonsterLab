@@ -14,18 +14,24 @@ public class EventBehavior : MonoBehaviour
     protected virtual List<string> eventText { get; set; } = new List<string>();
     protected virtual string eventImageLocation { get; set; } = "";
 
-    protected EventCanvasBehavior eventCanvasBehavior;
+    protected EventManager eventCanvasBehavior;
     protected GameObject optionButtonPrefab;
     protected Transform buttonParent;
 
     protected virtual void bindAction()
     {
+         
+    }
 
+    public virtual bool isValid()
+    {
+        return true;
     }
 
     public virtual void SetUp()
     {
-        eventCanvasBehavior = this.gameObject.GetComponent<EventCanvasBehavior>();
+        Debug.Log("SetUp");
+        eventCanvasBehavior = this.gameObject.GetComponent<EventManager>();
         if (eventCanvasBehavior == null)
         {
             Debug.Log("please attach EventBehavior to event canvas");
@@ -53,10 +59,8 @@ public class EventBehavior : MonoBehaviour
             GameObject buttonObject = Instantiate(optionButtonPrefab, buttonParent);
             Button optionButton = buttonObject.GetComponent<Button>();
             TextMeshProUGUI buttonText = buttonObject.GetComponentInChildren<TextMeshProUGUI>();
-
             buttonText.text = optionsText[i]; 
             optionButton.onClick.AddListener(() => optionsAction[0].Invoke()); // Assumes single option action
-
         }
     }
 

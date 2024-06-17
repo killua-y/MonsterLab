@@ -33,8 +33,6 @@ public class BoxLayout : MonoBehaviour
         {
             Debug.LogWarning("No child GameObjects found to arrange.");
         }
-
-
     }
 
     void ArrangeGrid()

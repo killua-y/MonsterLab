@@ -20,8 +20,8 @@ public class CardDataModel : MonoBehaviour
     private List<DNA> DNAList = new List<DNA>(); // 存储DNA数据的链表
 
     //储存玩家卡牌数据的list
-    private List<Card> playerExtraDeckData1 = new List<Card>();
-    private List<Card> playerCardData1 = new List<Card>();
+    private List<Card> playerExtraDeckData = new List<Card>();
+    private List<Card> playerCardData = new List<Card>();
     private int[] playerDNAData; // 储存玩家DNA数据的array
     public int totalCoins;
 
@@ -192,20 +192,20 @@ public class CardDataModel : MonoBehaviour
     public void ObtainCard(Card _card)
     {
         // 玩家数据中增加该卡牌
-        playerCardData1.Add(Card.CloneCard(_card));
+        playerCardData.Add(Card.CloneCard(_card));
     }
 
     // 删除卡牌
     public void DeleteCard(Card _card)
     {
         // 查看剩余卡牌是否大于0
-        if (playerCardData1.Contains(_card))
+        if (playerCardData.Contains(_card))
         {
-            playerCardData1.Remove(_card);
+            playerCardData.Remove(_card);
         }
-        else if (playerExtraDeckData1.Contains(_card))
+        else if (playerExtraDeckData.Contains(_card))
         {
-            playerExtraDeckData1.Remove(_card);
+            playerExtraDeckData.Remove(_card);
         }
         else
         {
@@ -253,7 +253,7 @@ public class CardDataModel : MonoBehaviour
                 int num = int.Parse(rowArray[2]);
                 for (int i = 0; i < num; i++)
                 {
-                    playerCardData1.Add(Card.CloneCard(cardList[id]));
+                    playerCardData.Add(Card.CloneCard(cardList[id]));
                 }
             }
             else if (rowArray[0] == "DNA")
@@ -268,7 +268,7 @@ public class CardDataModel : MonoBehaviour
                 int num = int.Parse(rowArray[2]);
                 for (int i = 0; i < num; i++)
                 {
-                    playerExtraDeckData1.Add(Card.CloneCard(cardList[id]));
+                    playerExtraDeckData.Add(Card.CloneCard(cardList[id]));
                 }
                 //Debug.Log("Load extra deck card with id : " + id + " num: " + num);
             }
@@ -302,13 +302,22 @@ public class CardDataModel : MonoBehaviour
     // 加载局内卡组
     public List<Card> GetMainDeck()
     {
-        return playerCardData1;
+        return playerCardData;
     }
 
     // 加载局内额外卡组
     public List<Card> GetExtraDeck()
     {
-        return playerExtraDeckData1;
+        return playerExtraDeckData;
+    }
+
+    // 加载局内额外卡组
+    public List<Card> GetPlayerDeck()
+    {
+        List<Card> cardList = new List<Card>();
+        cardList.AddRange(playerCardData);
+        cardList.AddRange(playerExtraDeckData);
+        return cardList;
     }
 
     // 加载玩家DNA
@@ -364,10 +373,10 @@ public class CardDataModel : MonoBehaviour
     {
         if (fromMainToExtra)
         {
-            if (playerCardData1.Contains(card))
+            if (playerCardData.Contains(card))
             {
-                playerCardData1.Remove(card);
-                playerExtraDeckData1.Add(card);
+                playerCardData.Remove(card);
+                playerExtraDeckData.Add(card);
             }
             else
             {
@@ -376,10 +385,10 @@ public class CardDataModel : MonoBehaviour
         }
         else
         {
-            if (playerExtraDeckData1.Contains(card))
+            if (playerExtraDeckData.Contains(card))
             {
-                playerExtraDeckData1.Remove(card);
-                playerCardData1.Add(card);
+                playerExtraDeckData.Remove(card);
+                playerCardData.Add(card);
             }
             else
             {
@@ -390,14 +399,14 @@ public class CardDataModel : MonoBehaviour
 
     public void LoadData()
     {
-        string jsonString = JsonUtility.ToJson(playerExtraDeckData1);
-        playerExtraDeckData1 = JsonUtility.FromJson<List<Card>>(jsonString);
+        string jsonString = JsonUtility.ToJson(playerExtraDeckData);
+        playerExtraDeckData = JsonUtility.FromJson<List<Card>>(jsonString);
     }
 
     public void SaveData()
     {
         // Serialize the list to JSON
-        string jsonString = JsonUtility.ToJson(playerExtraDeckData1);
+        string jsonString = JsonUtility.ToJson(playerExtraDeckData);
 
         // Write the JSON string to a file
         File.WriteAllText("playerCards.json", jsonString);

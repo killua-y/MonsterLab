@@ -339,6 +339,9 @@ public class BaseEntity : MonoBehaviour
             }
         }
 
+        // 生成伤害text
+        EffectManager.Instance.GenerateDamageText(this.transform.position, amount);
+
         currentHealth -= amount;
         monsterUI.UpdateHealth(currentHealth);
 

@@ -5,15 +5,14 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class EventCanvasBehavior : MonoBehaviour
+public class EventManager : MonoBehaviour
 {
-    public static EventCanvasBehavior instance;
+    public static EventManager instance;
     public Transform buttonParent;
     public TextMeshProUGUI eventText;
     public Image eventImage;
     public GameObject optionButtonPrefab;
 
-    private int layer1Index = 0;
     private bool isOpen = false;
 
     private List<string> layer1Event = new List<string>()
@@ -66,13 +65,12 @@ public class EventCanvasBehavior : MonoBehaviour
     {
         ChangePosition();
 
-        this.gameObject.SetActive(true);
         if (layerNumber == 1)
         {
-            this.gameObject.AddComponent(Type.GetType(layer1Event[layer1Index]));
+            HelperFunction.Shuffle(layer1Event, GameSetting.BoxLayoutRand);
+            this.gameObject.AddComponent(Type.GetType(layer1Event[0]));
             EventBehavior newEvent = this.gameObject.GetComponent<EventBehavior>();
             newEvent.SetUp();
-            layer1Index += 1;
         }
     }
 }
