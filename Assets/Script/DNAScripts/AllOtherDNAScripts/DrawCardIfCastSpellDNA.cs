@@ -29,9 +29,6 @@ public class DrawCardIfCastSpellDNA : DNABehavior
 
     void DrawCard()
     {
-        for (int i = 0; i < DNAModel.effectData; i++)
-        {
-            InGameStateManager.Instance.DrawOneCard();
-        }
+        InGameStateManager.Instance.DrawCards(DNAModel.effectData);
     }
 }

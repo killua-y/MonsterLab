@@ -15,22 +15,15 @@ public class IncreaseHealthCardBehavior : CardBehavior
 {
     public override void CastCard(Node node)
     {
-        targetMonster.cardModel.healthPoint += card.effectData;
-
-        targetMonster.UpdateMonster();
+        CardEffectFunction.IncreaseHealth(targetMonster, card.effectData);
     }
 }
 
 public class DrawCardBehavior : CardBehavior
 {
-
     public override void CastCard(Node node)
     {
-        //n张抽牌
-        for (int i = 0; i < card.effectData; i++)
-        {
-            InGameStateManager.Instance.DrawOneCard();
-        }
+        InGameStateManager.Instance.DrawCards(card.effectData);
     }
 }
 
@@ -38,7 +31,7 @@ public class LevelUpCardBehavior : CardBehavior
 {
     public override void CastCard(Node node)
     {
-        targetMonster.cardModel.attackPower += card.effectData;
+        CardEffectFunction.IncreaseAttack(targetMonster, card.effectData);
         targetMonster.cardModel.rank += 1;
 
         targetMonster.UpdateMonster();
@@ -97,5 +90,28 @@ public class SimpleSlimeSummonCardBehavior : CardBehavior
         MonsterCard Slime = (MonsterCard)Card.CloneCard(CardDataModel.Instance.GetCard(card.effectData));
 
         BattleManager.Instance.InstaniateMontser(node, Team.Player, Slime);
+    }
+}
+
+public class SummonBlackSlimeCardBehavior: CardBehavior
+{
+    public override void CastCard(Node node)
+    {
+        for (int i = 0; i < 3; i++)
+        {
+            MonsterCard blackSlime = (MonsterCard)Card.CloneCard(CardDataModel.Instance.GetCard(card.effectData));
+
+            BattleManager.Instance.InstaniateMontser(GridManager.Instance.GetFreeNode(2, 3, true), Team.Player, blackSlime);
+        }
+    }
+}
+
+public class DemonContractCardBehavior: CardBehavior
+{
+    public override void CastCard(Node node)
+    {
+        targetMonster.UnitDie(null, true);
+        PlayerCostManager.Instance.IncreaseCost(card.effectData);
+        InGameStateManager.Instance.DrawCards(card.effectData * 2);
     }
 }

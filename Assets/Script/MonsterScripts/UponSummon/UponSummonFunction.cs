@@ -77,10 +77,7 @@ public class UponSummonFunction : MonoBehaviour
     // 抽牌
     public static void BabyWolfUponSummon(BaseEntity entity)
     {
-        for (int i = 0; i < entity.cardModel.effectData; i++)
-        {
-            InGameStateManager.Instance.DrawOneCard();
-        }
+        InGameStateManager.Instance.DrawCards(entity.cardModel.effectData);
 
         if (recordEnabled)
         {

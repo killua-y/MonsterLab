@@ -80,10 +80,7 @@ public class InGameStateManager : Manager<InGameStateManager>
         PreparePhase = true;
 
         //5张抽牌, 将它们可视化
-        for (int i = 0; i < 5; i++)
-        {
-            DrawOneCard();
-        }
+        DrawCards(5);
 
         OnPreparePhaseStart();
     }
@@ -156,6 +153,15 @@ public class InGameStateManager : Manager<InGameStateManager>
         }
 
         UpdatePileText();
+    }
+
+    // 抽一张牌
+    public void DrawCards(int amount)
+    {
+        for (int i = 0; i < amount; i++)
+        {
+            DrawOneCard();
+        }
     }
 
     // 弃一张牌

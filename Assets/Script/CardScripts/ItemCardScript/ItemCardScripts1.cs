@@ -8,7 +8,6 @@ public class DoubleAttackCardBehavior : CardBehavior
     public override void CastCard(Node node)
     {
         targetMonster.cardModel.attackPower *= card.effectData;
-
         targetMonster.UpdateMonster();
     }
 }
@@ -18,9 +17,16 @@ public class IncreaseAttackCardBehavior : CardBehavior
 {
     public override void CastCard(Node node)
     {
-        targetMonster.cardModel.attackPower += card.effectData;
+        CardEffectFunction.IncreaseAttack(targetMonster, card.effectData);
+    }
+}
 
-        targetMonster.UpdateMonster();
+// 增加血量
+public class VineArmorCardBehavior: CardBehavior
+{
+    public override void CastCard(Node node)
+    {
+        CardEffectFunction.IncreaseHealth(targetMonster, card.effectData);
     }
 }
 
@@ -35,12 +41,12 @@ public class IncreaseHealthOnDeathCardBehavior : CardBehavior
         if (targetMonster.GetComponent<IncreaseHealthOnDeathMonsterBehavior>() == null)
         {
             Card newCard = Card.CloneCard(this.card);
-            targetMonster.gameObject.AddComponent<IncreaseHealthOnDeathMonsterBehavior>().CardModel = newCard;
+            targetMonster.gameObject.AddComponent<IncreaseHealthOnDeathMonsterBehavior>().cardModel = newCard;
         }
         // 如果对象已经有了
         else
         {
-            targetMonster.GetComponent<IncreaseHealthOnDeathMonsterBehavior>().CardModel.effectData += card.effectData;
+            targetMonster.GetComponent<IncreaseHealthOnDeathMonsterBehavior>().cardModel.effectData += card.effectData;
         }
 
         // 如果需要加入到卡牌附加说明
@@ -50,7 +56,7 @@ public class IncreaseHealthOnDeathCardBehavior : CardBehavior
 public class IncreaseHealthOnDeathMonsterBehavior : MonoBehaviour
 {
     private BaseEntity baseEntity;
-    public Card CardModel;
+    public Card cardModel;
 
     private void Start()
     {
@@ -63,8 +69,7 @@ public class IncreaseHealthOnDeathMonsterBehavior : MonoBehaviour
 
     private void OnDeath()
     {
-        baseEntity.cardModel.healthPoint += CardModel.effectData;
-        baseEntity.UpdateMonster();
+        CardEffectFunction.IncreaseHealth(baseEntity, cardModel.effectData);
     }
 
     private void OnDestroy()
@@ -119,22 +124,23 @@ public class WarriorSoulMonsterBehaiovr : MonoBehaviour
     public Card cardModel;
     private bool active = false;
 
-    private void Start()
-    {
-        baseEntity = this.gameObject.GetComponent<BaseEntity>();
-
-        if (baseEntity == null)
-        {
-            Debug.Log("Equped baseEntity is null");
-        }
-    }
-
     public void SetUp(Card _card)
     {
         cardModel = _card;
         InGameStateManager.Instance.OnBattlePhaseStart += OnBattlePhaseStart;
         InGameStateManager.Instance.OnBattlePhaseEnd += OnBattlePhaseEnd;
         BattleManager.Instance.OnUnitDied += OnUnitDied;
+
+        baseEntity = this.gameObject.GetComponent<BaseEntity>();
+
+        if (baseEntity == null)
+        {
+            Debug.Log("Equped baseEntity is null");
+        }
+
+        // 将攻击距离变为1格
+        baseEntity.range = 1.5f;
+        baseEntity.cardModel.attackRange = 1.5f;
     }
 
     void OnUnitDied(BaseEntity baseEntity)
@@ -151,9 +157,8 @@ public class WarriorSoulMonsterBehaiovr : MonoBehaviour
     {
         if (active)
         {
-            this.baseEntity.cardModel.attackPower -= cardModel.effectData;
-            this.baseEntity.cardModel.healthPoint -= (cardModel.effectData * 10);
-            baseEntity.UpdateMonster();
+            CardEffectFunction.IncreaseAttack(baseEntity, -cardModel.effectData);
+            CardEffectFunction.IncreaseHealth(baseEntity, -cardModel.effectData * 10);
             active = false;
         }
     }
@@ -164,12 +169,18 @@ public class WarriorSoulMonsterBehaiovr : MonoBehaviour
         {
             if (BattleManager.Instance.GetMyTeamEntities(baseEntity.myTeam).Count == 1)
             {
-                this.baseEntity.cardModel.attackPower += cardModel.effectData;
-                this.baseEntity.cardModel.healthPoint += (cardModel.effectData * 10);
-                //回复全部血量
-                baseEntity.UpdateMonster();
+                CardEffectFunction.IncreaseAttack(baseEntity, cardModel.effectData);
+                CardEffectFunction.IncreaseHealth(baseEntity, cardModel.effectData * 10);
                 active = true;
             }
         }
     }
+
+    private void OnDestroy()
+    {
+        InGameStateManager.Instance.OnBattlePhaseStart -= OnBattlePhaseStart;
+        InGameStateManager.Instance.OnBattlePhaseEnd -= OnBattlePhaseEnd;
+        BattleManager.Instance.OnUnitDied -= OnUnitDied;
+    }
 }
+

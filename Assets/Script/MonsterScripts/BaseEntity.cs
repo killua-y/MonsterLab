@@ -17,7 +17,7 @@ public class BaseEntity : MonoBehaviour
     private Transform attackOragn;
     public int currentHealth;
     [Range(1.5f, 10)]
-    protected float range = 1.5f;
+    public float range = 1.5f;
     public float attackSpeed = 1f; //攻击间隔
     public float attackPreparation = 0.5f; //攻击前摇
     public float attackRecover = 0.5f; //攻击后摇
@@ -254,7 +254,7 @@ public class BaseEntity : MonoBehaviour
         currentNode.currentEntity = this;
     }
 
-    // 更新怪兽的属性，不要在战斗中call
+    // 更新怪兽的属性，会回复全部血量
     public void UpdateMonster(MonsterCard card = null)
     {
         if (card != null)
@@ -263,6 +263,17 @@ public class BaseEntity : MonoBehaviour
         }
 
         currentHealth = cardModel.healthPoint;
+        monsterUI.UpdateUI(cardModel);
+    }
+
+    // 不回复全部血量，更新怪兽属性
+    public void OnlyUpdateMonsterUI(MonsterCard card = null)
+    {
+        if (card != null)
+        {
+            cardModel = card;
+        }
+
         monsterUI.UpdateUI(cardModel);
     }
 
