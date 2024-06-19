@@ -9,7 +9,7 @@ public class GameSetting : Manager<GameSetting>
 {
     public static System.Random cardRewardRand;
     public static System.Random DNARewardRand;
-    public static System.Random shuffleCardRand;
+    public static System.Random InCombatRand;
     public static System.Random BoxLayoutRand;
     private int seed;
 
@@ -44,7 +44,7 @@ public class GameSetting : Manager<GameSetting>
     {
         cardRewardRand = new System.Random(seed);
         DNARewardRand = new System.Random(seed);
-        shuffleCardRand = new System.Random(seed);
+        InCombatRand = new System.Random(seed);
         BoxLayoutRand = new System.Random(seed);
     }
 

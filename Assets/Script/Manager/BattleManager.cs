@@ -59,7 +59,14 @@ public class BattleManager : Manager<BattleManager>
         }
         else
         {
-            modelPath = "MonsterPrefab/Slime";
+            if (team == Team.Player)
+            {
+                modelPath = "MonsterPrefab/NormalWolf";
+            }
+            else
+            {
+                modelPath = "MonsterPrefab/Slime";
+            }
         }
 
         GameObject monsterPrefab = Resources.Load<GameObject>(modelPath);
@@ -67,13 +74,13 @@ public class BattleManager : Manager<BattleManager>
         // 加载怪兽script
         // 如果没有script地址就默认安排
         string scriptPath = "";
-        if (monsterCard.scriptLocation != "")
+        if ((monsterCard.scriptLocation == "") || (monsterCard.scriptLocation == "none"))
         {
-            scriptPath = monsterCard.scriptLocation;
+            scriptPath = "BaseEntity";
         }
         else
         {
-            scriptPath = "BaseEntity";
+            scriptPath = monsterCard.scriptLocation;
         }
 
         GameObject newMonster;
@@ -115,6 +122,14 @@ public class BattleManager : Manager<BattleManager>
             return enemyEntities;
         else
             return playerEntities;
+    }
+
+    public List<BaseEntity> GetMyTeamEntities(Team myteam)
+    {
+        if (myteam == Team.Player)
+            return playerEntities;
+        else
+            return enemyEntities;
     }
 
     public void UnitDead(BaseEntity entity)

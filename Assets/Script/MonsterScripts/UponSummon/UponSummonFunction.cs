@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using static Card;
 
@@ -58,7 +59,7 @@ public class UponSummonFunction : MonoBehaviour
         {
             MonsterCard newMonsterCard = (MonsterCard)Card.CloneCard(entity.cardModel);
             // 先设置为通常怪兽避免触发战吼
-            newMonsterCard.scriptLocation = "";
+            newMonsterCard.scriptLocation = "none";
             BattleManager.Instance.InstaniateMontser(node, entity.myTeam, newMonsterCard);
 
             // 再设置回去
@@ -89,7 +90,7 @@ public class UponSummonFunction : MonoBehaviour
     }
 
 
-    // 对所有敌方造成伤害
+    // 对敌方最高血单位造成伤害
     public static void FireWolfUponSummon(BaseEntity entity)
     {
         List<BaseEntity> enemyList = BattleManager.Instance.GetEntitiesAgainst(entity.myTeam);
@@ -124,9 +125,36 @@ public class UponSummonFunction : MonoBehaviour
     // 获得能量
     public static void GainEnergyUponSummon(BaseEntity entity)
     {
-        Debug.Log("get here");
         PlayerCostManager.Instance.IncreaseCost(entity.cardModel.effectData);
     }
 
+    // 获得随机0费item卡
+    public static void Gain0CostItemCardUponSummon(BaseEntity entity)
+    {
+        List<Card> cards = CardDataModel.Instance.GetPlayerDeck();
+        bool containsItem = cards.Any(Card => Card is ItemCard);
+        if (containsItem == true)
+        {
+            List<Card> itemCards = new List<Card>();
+            foreach (Card card in cards)
+            {
+                if (card is ItemCard)
+                {
+                    itemCards.Add(card);
+                }
+            }
+            Card itemCard = Card.CloneCard(HelperFunction.GetRandomItem(itemCards, GameSetting.InCombatRand));
+            InGameStateManager.Instance.AddToHand(itemCard);
+        }
+        else
+        {
+            Debug.Log("Player does not have item card");
+        }
 
+        if (recordEnabled)
+        {
+            AllUponSummonFunctionsCalled.Add(Gain0CostItemCardUponSummon);
+            AllEffectData.Add(entity.cardModel.effectData);
+        }
+    }
 }

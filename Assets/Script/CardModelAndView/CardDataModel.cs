@@ -105,13 +105,9 @@ public class CardDataModel : MonoBehaviour
             else
             {
                 Card newCard = HelperFunction.LoadCard(rowArray, keyWords);
-                if (newCard != null)
-                {
-                    cardList.Add(newCard);
-                }
+                cardList.Add(newCard);
             }
         }
-
     }
 
     public void LoadDNAList()
@@ -277,8 +273,6 @@ public class CardDataModel : MonoBehaviour
                 Debug.Log("Player cvs data error, the first string is : " + rowArray[0]);
             }
         }
-        //Debug.Log("Player data loaded. Path: " + path);
-        //Debug.Log("load data: " + string.Join("\n", dataArray));
     }
 
     // 保存玩家钱/卡牌/DNA数据

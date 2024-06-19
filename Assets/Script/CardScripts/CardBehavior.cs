@@ -131,8 +131,6 @@ public class CardBehavior : MonoBehaviour
 
     public virtual void CastComplete(Node node)
     {
-        IndividualCastComplete(node);
-
         // 消耗费用
         PlayerCostManager.Instance.DecreaseCost(card.cost);
 
@@ -177,11 +175,5 @@ public class CardBehavior : MonoBehaviour
                 Destroy(this.gameObject);
             }
         }
-    }
-
-    // 有些卡牌会存在特殊的释放结束代价
-    public virtual void IndividualCastComplete(Node node)
-    {
-
     }
 }

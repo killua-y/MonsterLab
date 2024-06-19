@@ -48,6 +48,18 @@ public class HelperFunction : MonoBehaviour
         }
     }
 
+    // return一个随机单位，不会把list重洗
+    public static T GetRandomItem<T>(List<T> list, System.Random rand)
+    {
+        if (list == null || list.Count == 0)
+        {
+            throw new ArgumentException("The list is null or empty.");
+        }
+
+        int randomIndex = rand.Next(list.Count);
+        return list[randomIndex];
+    }
+
     public static Card LoadCard(string[] rowArray, List<string> keywords)
     {
         Card resultCard = null;
@@ -92,8 +104,8 @@ public class HelperFunction : MonoBehaviour
             string scriptLocation = rowArray[9];
             string imageLocation = rowArray[10];
 
-            resultCard = new SpellCard(id, cardName, color, cardRarity,
-                cost, castType, effectData, effectText, scriptLocation, imageLocation);
+            resultCard = new SpellCard(id, cardName, color, cardRarity, cost, castType, effectData,
+                effectText, scriptLocation, imageLocation);
 
             //Debug.Log("Load magic card: " + name);
         }
@@ -110,8 +122,8 @@ public class HelperFunction : MonoBehaviour
             string scriptLocation = rowArray[9];
             string imageLocation = rowArray[10];
 
-            resultCard = new ItemCard(id, cardName, color, cardRarity,
-                cost, castType, effectData, effectText, scriptLocation, imageLocation);
+            resultCard = new ItemCard(id, cardName, color, cardRarity, cost, castType, effectData,
+                effectText, scriptLocation, imageLocation);
 
             //Debug.Log("Load item card: " + name);
         }

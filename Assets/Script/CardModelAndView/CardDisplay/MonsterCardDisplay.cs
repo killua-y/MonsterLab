@@ -45,7 +45,9 @@ public class MonsterCardDisplay : CardDisplay
 
         attack.text = Convert.ToString(cardModel.attackPower);
         health.text = Convert.ToString(cardModel.healthPoint);
-        typeText.text = cardModel.type.ToString();
+        // 先不显示type
+        //typeText.text = cardModel.type.ToString();
+        typeText.text = "";
         rangeText.text = "range: " + (int)cardModel.attackRange;
 
         foreach (Transform child in rankParent)

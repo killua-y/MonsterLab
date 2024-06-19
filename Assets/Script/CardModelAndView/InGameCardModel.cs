@@ -34,7 +34,7 @@ public class InGameCardModel : MonoBehaviour
             drawPileList.Add(newCard);
         }
 
-        HelperFunction.Shuffle(drawPileList, GameSetting.shuffleCardRand);
+        HelperFunction.Shuffle(drawPileList, GameSetting.InCombatRand);
 
         foreach (Card card in CardDataModel.Instance.GetExtraDeck())
         {
@@ -95,7 +95,7 @@ public class InGameCardModel : MonoBehaviour
     public void ShuffleDeck()
     {
         // Shuffle 弃牌堆
-        HelperFunction.Shuffle(discardPileList, GameSetting.shuffleCardRand);
+        HelperFunction.Shuffle(discardPileList, GameSetting.InCombatRand);
 
         // 将卡牌加入抽牌堆，并清空弃牌堆
         drawPileList.AddRange(discardPileList);

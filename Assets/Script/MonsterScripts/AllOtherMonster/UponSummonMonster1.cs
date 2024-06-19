@@ -20,16 +20,7 @@ public class BabyWolfEntity : BaseEntity
     }
 }
 
-// 能量
-public class GainEnergyWolfEntity : BaseEntity
-{
-    public override void UponSummon()
-    {
-        UponSummonFunction.GainEnergyUponSummon(this);
-    }
-}
-
-// aoe打10
+// 打100
 public class FireWolfEntity : BaseEntity
 {
     public override void UponSummon()
@@ -44,5 +35,14 @@ public class ShadowWolfEntity : BaseEntity
     public override void UponSummon()
     {
         UponSummonFunction.ShadowWolfUponSummon(this);
+    }
+}
+
+// 获得0费装备卡狼
+public class ZeroCostItemWolfEntity : BaseEntity
+{
+    public override void UponSummon()
+    {
+        UponSummonFunction.Gain0CostItemCardUponSummon(this);
     }
 }

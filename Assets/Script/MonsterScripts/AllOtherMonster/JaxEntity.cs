@@ -16,7 +16,6 @@ public class JaxEntity : BaseEntity
         if (targetMonster == this)
         {
             cardBehavior.CastCard(this.currentNode);
-            cardBehavior.IndividualCastComplete(this.currentNode);
         }
     }
 

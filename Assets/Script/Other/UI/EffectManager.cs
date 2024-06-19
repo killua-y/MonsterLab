@@ -24,7 +24,6 @@ public class EffectManager : MonoBehaviour
 
     public void GenerateDamageText(Vector2 position, int amount)
     {
-        Debug.Log("Position is : " + position);
         // Convert world position to screen position
         Vector2 screenPosition = Camera.main.WorldToScreenPoint(position);
 
