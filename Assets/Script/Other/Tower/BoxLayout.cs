@@ -104,6 +104,7 @@ public class BoxLayout : MonoBehaviour
             }
             else if (box.row == 3 && box.column == 0)
             {
+                box.SetupBox(BoxType.CannotGetTo);
                 continue;
             }
 

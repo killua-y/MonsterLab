@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,6 +10,7 @@ public class ActsManager : Manager<ActsManager>
     public static int currentLayer = 1;
     public static EnemyType currentEnemyType;
     public static string currentEnemy = "AcidSlimeEnermy";
+    public Action<int, int> OnPlayerMove;
 
     public GameObject MapCanvas;
 
@@ -41,7 +43,7 @@ public class ActsManager : Manager<ActsManager>
 
     public void ActivateAct(BoxType _boxType)
     {
-        //_boxType = BoxType.Merchant;
+        _boxType = BoxType.Merchant;
         switch (_boxType)
         {
             case BoxType.NormalFight:

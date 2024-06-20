@@ -4,6 +4,8 @@ using UnityEngine;
 
 public enum BoxType
 {
+    CannotGetTo,
+    Passed,
     NormalFight,
     EliteFight,
     BossFight,

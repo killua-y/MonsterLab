@@ -33,6 +33,11 @@ public class ShopManager : Manager<ShopManager>
         UpdateShopCostView();
     }
 
+    public void CloseShop()
+    {
+        ChangePosition();
+    }
+
     void ChangePosition()
     {
         if (isOpen)
