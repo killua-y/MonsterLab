@@ -8,10 +8,10 @@ public class BloodSacrificeDNABehavior : DNABehavior
     // Start is called before the first frame update
     void Start()
     {
-        InGameStateManager.Instance.OnGameStart += OnGameStart;
+        InGameStateManager.Instance.OnCombatStart += OnCombatStart;
     }
 
-    private void OnGameStart()
+    private void OnCombatStart()
     {
         List<MonsterCard> cards = new List<MonsterCard>();
 

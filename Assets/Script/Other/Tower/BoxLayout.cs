@@ -8,11 +8,23 @@ public class BoxLayout : MonoBehaviour
     public float spacing = 1.0f;
     public int number = 0; // Public variable to determine how many objects to instantiate
     public GameObject prefab; // Prefab to instantiate
+    private PlayerBehavior player;
 
     private List<TowerBoxBehavior> objectsToArrange = new List<TowerBoxBehavior>(); // List to hold the child objects
 
     void Start()
     {
+        player = GameObject.FindWithTag("Player").GetComponent<PlayerBehavior>();
+        EnterNewLayer();
+    }
+
+    void EnterNewLayer()
+    {
+        foreach (TowerBoxBehavior towerbox in objectsToArrange)
+        {
+            Destroy(towerbox.gameObject);
+        }
+
         // Instantiate new GameObjects if number is not zero
         if (number != 0)
         {
@@ -33,6 +45,9 @@ public class BoxLayout : MonoBehaviour
         {
             Debug.LogWarning("No child GameObjects found to arrange.");
         }
+
+        // 移动玩家位置到（3，0）
+        player.transform.position = objectsToArrange.Find(obj => obj.row == 3 && obj.column == 0).transform.position;
     }
 
     void ArrangeGrid()

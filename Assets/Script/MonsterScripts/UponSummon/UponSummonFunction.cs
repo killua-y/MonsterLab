@@ -14,10 +14,10 @@ public class UponSummonFunction : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        InGameStateManager.Instance.OnGameStart += OnGameStart;
+        InGameStateManager.Instance.OnCombatStart += OnCombatStart;
     }
 
-    private void OnGameStart()
+    private void OnCombatStart()
     {
         AllUponSummonFunctionsCalled = new List<System.Action<BaseEntity>>();
         AllEffectData = new List<int>();

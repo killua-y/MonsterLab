@@ -12,23 +12,6 @@ public class TowerBoxBehavior : MonoBehaviour, IPointerDownHandler
     public int column;
     private PlayerBehavior player;
 
-    private void Awake()
-    {
-        
-    }
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     public void SetupBox(BoxType _boxType)
     {
         boxType = _boxType;
@@ -77,7 +60,7 @@ public class TowerBoxBehavior : MonoBehaviour, IPointerDownHandler
 
     public void OnPointerDown(PointerEventData eventData)
     {
-        if (InGameStateManager.inGame)
+        if (InGameStateManager.inCombat)
         {
             return;
         }

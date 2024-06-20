@@ -64,7 +64,7 @@ public class DeckManage : Manager<DeckManage>
 
     public void ChangeDeckFromMainToExtra(Card card, bool fromMainToExtra, GameObject cardObject)
     {
-        if (InGameStateManager.inGame)
+        if (InGameStateManager.inCombat)
         {
             return;
         }

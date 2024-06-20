@@ -11,7 +11,6 @@ public class ActsManager : Manager<ActsManager>
     public static string currentEnemy = "AcidSlimeEnermy";
 
     public GameObject MapCanvas;
-    public GameObject EventCanvas;
 
     private List<Enemy> allEnemyList = new List<Enemy>();
 
@@ -42,13 +41,14 @@ public class ActsManager : Manager<ActsManager>
 
     public void ActivateAct(BoxType _boxType)
     {
+        //_boxType = BoxType.Merchant;
         switch (_boxType)
         {
             case BoxType.NormalFight:
                 currentEnemyType = EnemyType.Normal;
                 currentEnemy = FindEnemy(currentLayer, EnemyType.Normal).scriptLocation;
 
-                InGameStateManager.Instance.GameStart();
+                InGameStateManager.Instance.CombatStart();
                 MapCanvas.SetActive(false);
                 break;
 
@@ -56,7 +56,7 @@ public class ActsManager : Manager<ActsManager>
                 currentEnemyType = EnemyType.Elite;
                 currentEnemy = FindEnemy(currentLayer, EnemyType.Elite).scriptLocation;
 
-                InGameStateManager.Instance.GameStart();
+                InGameStateManager.Instance.CombatStart();
                 MapCanvas.SetActive(false);
                 break;
 
@@ -64,7 +64,7 @@ public class ActsManager : Manager<ActsManager>
                 currentEnemyType = EnemyType.Boss;
                 currentEnemy = FindEnemy(currentLayer, EnemyType.Boss).scriptLocation;
 
-                InGameStateManager.Instance.GameStart();
+                InGameStateManager.Instance.CombatStart();
                 MapCanvas.SetActive(false);
                 break;
 
@@ -73,7 +73,7 @@ public class ActsManager : Manager<ActsManager>
                 break;
 
             case BoxType.Merchant:
-                CanvasManager.Instance.OpenShopCanvas();
+                ShopManager.Instance.GenerateShop();
                 break;
 
             case BoxType.Treasure:

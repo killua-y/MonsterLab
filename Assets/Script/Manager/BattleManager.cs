@@ -23,7 +23,7 @@ public class BattleManager : Manager<BattleManager>
     {
         base.Awake();
         InGameStateManager.Instance.OnBattlePhaseStart += OnBattleTurnStart;
-        InGameStateManager.Instance.OnGameEnd += OnGameEnd;
+        InGameStateManager.Instance.OnCombatEnd += OnCombatEnd;
     }
 
     public int ConvertRowColumnToIndex(int row, int column)
@@ -203,7 +203,7 @@ public class BattleManager : Manager<BattleManager>
         }
     }
 
-    public void OnGameEnd()
+    public void OnCombatEnd()
     {
         foreach (Transform child in playerParent)
         {

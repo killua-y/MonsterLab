@@ -12,7 +12,6 @@ public class CanvasManager : MonoBehaviour
     [Header("All canvas")]
     public Canvas HighPriorityCanvas;
     public Canvas MapCanvas;
-    public Canvas ShopCanvas;
 
     // 用于holding dna preview
     [Header("DNA preview")]
@@ -39,7 +38,7 @@ public class CanvasManager : MonoBehaviour
 
     private void Start()
     {
-        InGameStateManager.Instance.OnGameEnd += OnGameEnd;
+        InGameStateManager.Instance.OnCombatEnd += OnCombatEnd;
     }
 
     void Update()
@@ -92,7 +91,7 @@ public class CanvasManager : MonoBehaviour
 
     private void HideAllOtherPanel()
     {
-        if (InGameStateManager.inGame)
+        if (InGameStateManager.inCombat)
         {
             if (extraDeck.gameObject.activeSelf)
             {
@@ -113,7 +112,7 @@ public class CanvasManager : MonoBehaviour
         }
     }
 
-    private void OnGameEnd()
+    private void OnCombatEnd()
     {
         SetMapCanvasActive(true);
     }
@@ -121,12 +120,6 @@ public class CanvasManager : MonoBehaviour
     public void OpenDeck()
     {
         DeckManage.Instance.OpenDeck();
-    }
-
-    public void OpenShopCanvas()
-    {
-        ShopCanvas.gameObject.SetActive(true);
-        ShopManager.Instance.GenerateShop();
     }
 
     public void GenerateDNAPreview(string Name, string description)

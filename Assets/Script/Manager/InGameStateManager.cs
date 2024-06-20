@@ -9,7 +9,7 @@ using UnityEngine;
 public class InGameStateManager : Manager<InGameStateManager>
 {
     public static bool gamePased = false;
-    public static bool inGame = false;
+    public static bool inCombat = false;
     public static bool PreparePhase = false;
     public static bool BattelPhase = false;
 
@@ -22,12 +22,12 @@ public class InGameStateManager : Manager<InGameStateManager>
     public Transform discardPileParent;
     public Transform discardPileParentContent;
 
-    public Action OnGameStart;
+    public Action OnCombatStart;
     public Action OnPreparePhaseStart;
     public Action OnPreparePhaseEnd;
     public Action OnBattlePhaseStart;
     public Action OnBattlePhaseEnd;
-    public Action OnGameEnd;
+    public Action OnCombatEnd;
 
     public Action<CardBehavior, BaseEntity> OnSpellCardPlayed;
     public Action<CardBehavior, BaseEntity> OnItemCardPlayed;
@@ -45,12 +45,12 @@ public class InGameStateManager : Manager<InGameStateManager>
     }
 
     // 当战斗开始的时候，初始化卡组内的卡牌
-    public void GameStart()
+    public void CombatStart()
     {
-        inGame = true;
+        inCombat = true;
         CardModel.InitialzeDeck();
 
-        OnGameStart?.Invoke(); // Safe way to invoke the delegate
+        OnCombatStart?.Invoke(); // Safe way to invoke the delegate
 
         InitizeExtraDeck();
         UpdatePileText();
@@ -58,10 +58,10 @@ public class InGameStateManager : Manager<InGameStateManager>
         Invoke("PreparePhaseStart", 0);
     }
 
-    // 当战斗开始的时候，初始化卡组内的卡牌
-    public void GameEnd(int remainningTurn)
+    // 当战斗结束的时候，删除手牌
+    public void CombatEnd(int remainningTurn)
     {
-        inGame = false;
+        inCombat = false;
 
         //将手牌中的卡片删除
         foreach (Transform child in hand)
@@ -71,7 +71,7 @@ public class InGameStateManager : Manager<InGameStateManager>
 
         RewardManager.Instance.GenerateReward(remainningTurn);
 
-        OnGameEnd?.Invoke(); // Safe way to invoke the delegate
+        OnCombatEnd?.Invoke(); // Safe way to invoke the delegate
     }
 
     // 回合开始
@@ -121,7 +121,7 @@ public class InGameStateManager : Manager<InGameStateManager>
 
         OnBattlePhaseEnd();
 
-        if (inGame)
+        if (inCombat)
         {
             PreparePhaseStart();
         }

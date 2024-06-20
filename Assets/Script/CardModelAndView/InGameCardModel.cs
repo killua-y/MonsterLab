@@ -22,7 +22,7 @@ public class InGameCardModel : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        InGameStateManager.Instance.OnGameEnd += OnGameEnd;
+        InGameStateManager.Instance.OnCombatEnd += OnCombatEnd;
     }
 
     // 加载局内卡牌, call CardDataModel里的InitializeDeck()，对输出的每张卡进行clone
@@ -150,7 +150,7 @@ public class InGameCardModel : MonoBehaviour
         handList.Add(card);
     }
 
-    private void OnGameEnd()
+    private void OnCombatEnd()
     {
         //清空列表
         ClearCardList(handList);

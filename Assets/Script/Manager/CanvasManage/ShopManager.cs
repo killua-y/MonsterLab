@@ -9,9 +9,6 @@ public class ShopManager : Manager<ShopManager>
     public Transform CardHolder;
     public Transform DNAHolder;
 
-    public GameObject AllDeck;
-    public Transform AllDeckContent;
-
     public TextMeshProUGUI refreshCostText;
     public TextMeshProUGUI deleteCostText;
 
@@ -21,8 +18,12 @@ public class ShopManager : Manager<ShopManager>
     private List<Card> cardList;
     private List<DNA> dnaList;
 
+    private bool isOpen = false;
+
     public void GenerateShop()
     {
+        ChangePosition();
+
         refreshCost = 0;
         //RefreshDNA();
         RefreshShopCard();
@@ -30,6 +31,41 @@ public class ShopManager : Manager<ShopManager>
         deleteCost = 100;
 
         UpdateShopCostView();
+    }
+
+    void ChangePosition()
+    {
+        if (isOpen)
+        {
+            StartCoroutine(SmoothMoveCoroutine(0, 1080));
+            isOpen = false;
+        }
+        else
+        {
+            StartCoroutine(SmoothMoveCoroutine(1080, 0));
+            isOpen = true;
+        }
+    }
+
+    private IEnumerator SmoothMoveCoroutine(float startY, float endY)
+    {
+        float elapsedTime = 0;
+        float duration = 0.2f;
+        Vector3 startPosition = transform.localPosition;
+        Vector3 targetPosition = new Vector3(startPosition.x, endY, startPosition.z);
+
+        while (elapsedTime < duration)
+        {
+            // Calculate the current position using Lerp
+            float newY = Mathf.Lerp(startY, endY, elapsedTime / duration);
+            transform.localPosition = new Vector3(startPosition.x, newY, startPosition.z);
+
+            elapsedTime += Time.deltaTime;
+            yield return null; // Wait for the next frame
+        }
+
+        // Ensure the final position is set
+        transform.localPosition = targetPosition;
     }
 
     public void RefreshShopCard()

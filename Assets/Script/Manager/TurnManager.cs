@@ -24,7 +24,7 @@ public class TurnManager : Manager<TurnManager>
     // Start is called before the first frame update
     void Start()
     {
-        InGameStateManager.Instance.OnGameStart += OnGameStart;
+        InGameStateManager.Instance.OnCombatStart += OnCombatStart;
         InGameStateManager.Instance.OnPreparePhaseStart += OnPreparePhaseStart;
         InGameStateManager.Instance.OnBattlePhaseEnd += OnBattlePhaseEnd;
 
@@ -32,7 +32,7 @@ public class TurnManager : Manager<TurnManager>
         monsterList = CardDataModel.Instance.GetEnemyMonster();
     }
 
-    void OnGameStart()
+    void OnCombatStart()
     {
 
         // 加载当前战斗敌人
@@ -51,7 +51,7 @@ public class TurnManager : Manager<TurnManager>
         int remainningTurn = finalTurn - currentTurn;
         EnemyBehavior enemy = this.GetComponent<EnemyBehavior>();
         Destroy(enemy);
-        InGameStateManager.Instance.GameEnd(remainningTurn);
+        InGameStateManager.Instance.CombatEnd(remainningTurn);
     }
 
     private void LoadEnemy(String enemyScriptLocatiom)
