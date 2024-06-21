@@ -11,21 +11,21 @@ public class PlayerStatesManager : Manager<PlayerStatesManager>
     public static int playerHealthPoint = 3;
     public static int maxUnit = 5;
 
-    private List<DNA> playerDNAList = new List<DNA>();
-
     public TextMeshProUGUI playerHealthText;
     public TextMeshProUGUI playerGoldText;
     public Transform DNAParent;
     public GameObject DNAPrefab;
 
-    // Start is called before the first frame update
-    void Start()
+    public void LoadData(PlayerData playerData)
     {
-        playerDNAList = CardDataModel.Instance.GetPlayerDNA();
-        Gold = CardDataModel.Instance.totalCoins;
+        Gold = playerData.Gold;
+        maxCost = playerData.MaxCost;
+        playerHealthPoint = playerData.PlayerHealth;
+        maxUnit = playerData.MaxUnit;
+        List<DNA> playerDNAData = playerData.PlayerDNA;
 
         // 根据玩家已经有的dna来重新生成
-        foreach (DNA dna in playerDNAList)
+        foreach (DNA dna in playerDNAData)
         {
             GameObject newDNA = Instantiate(DNAPrefab, DNAParent);
             newDNA.AddComponent(Type.GetType(dna.scriptLocation));
@@ -34,11 +34,6 @@ public class PlayerStatesManager : Manager<PlayerStatesManager>
 
         playerHealthText.text = "Player Health: " + playerHealthPoint;
         playerGoldText.text = "Gold: " + Gold;
-    }
-
-    public void LoadData()
-    {
-
     }
 
     // 新获取dna

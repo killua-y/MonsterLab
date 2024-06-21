@@ -1,6 +1,7 @@
 
 using System.Collections.Generic;
 
+[System.Serializable]
 public class Card
 {
     // 卡牌编号
@@ -59,6 +60,7 @@ public class Card
     }
 
     // 怪兽卡类
+    [System.Serializable]
     public class MonsterCard : Card
     {
         public int rank;
@@ -117,6 +119,7 @@ public class Card
     }
 
     // 法术卡类 继承自卡牌类
+    [System.Serializable]
     public class SpellCard : Card
     {
         public SpellCard(int _id, string _cardName, CardColor _color, CardRarity _cardRarity,
@@ -132,6 +135,7 @@ public class Card
     }
 
     // 装备卡类，继承自卡牌类
+    [System.Serializable]
     public class ItemCard : Card
     {
         public bool isSpecial;

@@ -13,6 +13,7 @@ public class PausedMenuBehavior : MonoBehaviour
 
     public void BackToMainMenu()
     {
+        SaveAndLoadManager.Instance.SaveData();
         SceneManager.LoadScene("MainMenu");
     }
 

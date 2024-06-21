@@ -20,6 +20,11 @@ public class CardDisplayView : MonoBehaviour
     {
         GameObject newCard = null;
 
+        if (_card == null)
+        {
+            Debug.Log("card is null");
+        }
+
         if (_card is MonsterCard)
         {
             newCard = GameObject.Instantiate(MonsterCardModel, _parent);

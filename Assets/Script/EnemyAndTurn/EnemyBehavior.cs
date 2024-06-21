@@ -60,6 +60,7 @@ public class EnemyBehavior : MonoBehaviour
     }
 }
 
+[System.Serializable]
 public class Enemy
 {
     public string name;

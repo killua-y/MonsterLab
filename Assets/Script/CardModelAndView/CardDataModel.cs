@@ -20,7 +20,7 @@ public class CardDataModel : MonoBehaviour
     //储存玩家卡牌数据的list
     private List<Card> playerExtraDeckData = new List<Card>();
     private List<Card> playerCardData = new List<Card>();
-    private int[] playerDNAData; // 储存玩家DNA数据的array
+    private List<DNA> playerDNAData = new List<DNA>(); // 储存玩家DNA数据的array
     public int totalCoins;
 
     // 怪兽链表
@@ -44,11 +44,22 @@ public class CardDataModel : MonoBehaviour
         LoadDNAList();
     }
 
-    public void LoadNewGame()
+    public void LoadData(PlayerData playerData)
     {
-        LoadPlayerData();
-        File.WriteAllLines(Application.dataPath + textPlayerDataPath, warriorCard.text.Split('\n'));
-        Debug.Log("reset player deck");
+        if (playerData.MainDeckMonster != null)
+        {
+            playerCardData.AddRange(playerData.MainDeckMonster);
+            playerCardData.AddRange(playerData.MainDeckSpell);
+            playerCardData.AddRange(playerData.MainDeckItem);
+            playerExtraDeckData.AddRange(playerData.ExtraDeckMonster);
+            playerExtraDeckData.AddRange(playerData.ExtraDeckSpell);
+            playerExtraDeckData.AddRange(playerData.ExtraDeckItem);
+            playerDNAData = playerData.PlayerDNA;
+        }
+        else
+        {
+            Debug.Log("New game, reset player deck");
+        }    
     }
 
     private void LoadKeyWordList()
@@ -76,7 +87,7 @@ public class CardDataModel : MonoBehaviour
     }
 
     // 加载所有卡牌数据
-    private void LoadCardList()
+    public void LoadCardList()
     {
         //Load卡片
         string path = Application.dataPath + textCardDataPath;
@@ -202,37 +213,27 @@ public class CardDataModel : MonoBehaviour
 
     public void ObtainDNA(int _id)
     {
-        if (playerDNAData[_id] >= 1)
+        if (playerDNAData.Contains(DNAList[_id]))
         {
             Debug.Log("Error: acquire DNA that already have");
         }
 
         // 玩家数据中增加该DNA
-        playerDNAData[_id] += 1;
+        playerDNAData.Add(DNAList[_id]);
     }
 
     // 加载玩家卡组数据
-    public void LoadPlayerData()
+    public void LoadDefaultCard()
     {
         string path = Application.dataPath + textPlayerDataPath;
         string[] dataArray = File.ReadAllLines(path);
 
-        playerDNAData = new int[DNAList.Count];
-
         foreach (var row in dataArray)
         {
             string[] rowArray = row.Split(',');
-            if (rowArray[0] == "#")
+            if (rowArray[0] == "")
             {
                 continue;
-            }
-            else if (rowArray[0] == "")
-            {
-                continue;
-            }
-            else if (rowArray[0] == "coins")
-            {
-                totalCoins = int.Parse(rowArray[1]);
             }
             else if (rowArray[0] == "card")
             {
@@ -242,12 +243,6 @@ public class CardDataModel : MonoBehaviour
                 {
                     playerCardData.Add(Card.CloneCard(cardList[id]));
                 }
-            }
-            else if (rowArray[0] == "DNA")
-            {
-                int id = int.Parse(rowArray[1]);
-                int num = int.Parse(rowArray[2]);
-                playerDNAData[id] = num;
             }
             else if (rowArray[0] == "extraDeck")
             {
@@ -259,29 +254,21 @@ public class CardDataModel : MonoBehaviour
                 }
                 //Debug.Log("Load extra deck card with id : " + id + " num: " + num);
             }
+            else if (rowArray[0] == "DNA")
+            {
+                int id = int.Parse(rowArray[1]);
+                int num = int.Parse(rowArray[2]);
+
+                if (num >= 1)
+                {
+                    playerDNAData.Add(DNAList[id]);
+                }
+            }
             else
             {
                 Debug.Log("Player cvs data error, the first string is : " + rowArray[0]);
             }
         }
-    }
-
-    // 保存玩家钱/卡牌/DNA数据
-    public void SavePlayerData()
-    {
-        List<string> datas = new List<string>();
-        string path = Application.dataPath + textPlayerDataPath;
-        datas.Add("coins," + totalCoins.ToString());
-
-        for (int i = 0; i < playerDNAData.Length; i++)
-        {
-            if (playerDNAData[i] != 0)
-            {
-                datas.Add("NDA," + i.ToString() + "," + playerDNAData[i].ToString());
-            }
-        }
-
-        File.WriteAllLines(path, datas);
     }
 
     // 加载局内卡组
@@ -308,19 +295,7 @@ public class CardDataModel : MonoBehaviour
     // 加载玩家DNA
     public List<DNA> GetPlayerDNA()
     {
-        List<DNA> playerDNAList = new List<DNA>();
-
-        for (int index = 0; index < playerDNAData.Length; index++)
-        {
-            int quantity = playerDNAData[index];
-
-            if (quantity >= 1)
-            {
-                playerDNAList.Add(DNAList[index]);
-            }
-        }
-
-        return playerDNAList;
+        return playerDNAData;
     }
 
     // Helper，其他function会call来获取卡组数据
@@ -380,20 +355,5 @@ public class CardDataModel : MonoBehaviour
                 Debug.Log("Bad bug");
             }
         }
-    }
-
-    public void LoadData()
-    {
-        string jsonString = JsonUtility.ToJson(playerExtraDeckData);
-        playerExtraDeckData = JsonUtility.FromJson<List<Card>>(jsonString);
-    }
-
-    public void SaveData()
-    {
-        // Serialize the list to JSON
-        string jsonString = JsonUtility.ToJson(playerExtraDeckData);
-
-        // Write the JSON string to a file
-        File.WriteAllText("playerCards.json", jsonString);
     }
 }

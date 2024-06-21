@@ -62,6 +62,7 @@ public class Scaling : MonoBehaviour, IPointerExitHandler, IPointerEnterHandler
 
     private IEnumerator ScaleTo(Vector3 targetScale)
     {
+        Debug.Log("scale to " + targetScale);
         Vector3 startScale = transform.localScale;
         float time = 0;
 

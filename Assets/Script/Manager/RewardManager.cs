@@ -23,8 +23,8 @@ public class RewardManager : Manager<RewardManager>
     // Start is called before the first frame update
     void Start()
     {
-        InitializeCardRewardList();
-        InitializeDNARewardList();
+        Invoke("InitializeCardRewardList", 0);
+        Invoke("InitializeDNARewardList", 0);
     }
 
     private void InitializeCardRewardList()
