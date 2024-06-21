@@ -10,8 +10,6 @@ public class DNABehavior : MonoBehaviour
     {
         DNAModel = _DNAModel;
         this.gameObject.GetComponent<DNAUI>().SetUp(_DNAModel);
-
-        OnAcquire();
     }
 
     public virtual void OnAcquire()

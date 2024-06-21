@@ -103,7 +103,12 @@ public class TowerBoxBehavior : MonoBehaviour, IPointerDownHandler, IPointerExit
             if ((this.row > _row) || (this.column < _column))
             {
                 ActsManager.Instance.OnPlayerMove -= OnPlayerMove;
-                Destroy(this.gameObject);
+                this.boxType = BoxType.CannotGetTo;
+
+                // 将无法到达的格子设置为透明
+                Color color = this.GetComponent<Image>().color;
+                color.a = 0.4f;
+                this.GetComponent<Image>().color = color;
             }
         }
     }

@@ -36,6 +36,11 @@ public class PlayerStatesManager : Manager<PlayerStatesManager>
         playerGoldText.text = "Gold: " + Gold;
     }
 
+    public void LoadData()
+    {
+
+    }
+
     // 新获取dna
     public void AcquireDNA(DNA DNAModel)
     {
@@ -43,6 +48,8 @@ public class PlayerStatesManager : Manager<PlayerStatesManager>
         GameObject newDNA = Instantiate(DNAPrefab, DNAParent);
         newDNA.AddComponent(Type.GetType(DNAModel.scriptLocation));
         newDNA.GetComponent<DNABehavior>().SetUp(DNAModel);
+        newDNA.GetComponent<DNABehavior>().OnAcquire();
+
     }
 
     public void DecreaseHealth(int number)

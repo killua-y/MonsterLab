@@ -5,25 +5,36 @@ using System.Linq;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.IO;
 
-public class GameSetting : Manager<GameSetting>
+public class GameSetting : MonoBehaviour
 {
+    public static GameSetting instance;
+    public int seed;
     public static System.Random cardRewardRand;
     public static System.Random DNARewardRand;
     public static System.Random InCombatRand;
     public static System.Random BoxLayoutRand;
-    private int seed;
 
     public static float scaleFactor;
 
-    private new void Awake()
+    private void Awake()
     {
-        base.Awake();
+        instance = this;
         if (cardRewardRand == null)
         {
-            seed = 2;
-            InitializeRand();
-            AdjustForScreenResolution();
+            NewGame();
         }
+    }
+
+    public void LoadNewGame()
+    {
+
+    }
+
+    private void NewGame()
+    {
+        seed = 2;
+        InitializeRand();
+        AdjustForScreenResolution();
     }
 
     private void AdjustForScreenResolution()
@@ -50,7 +61,7 @@ public class GameSetting : Manager<GameSetting>
 
     // 暂时不用
     // Save the state of the random number generator
-    public void SaveState(string filePath)
+    public void LoadData(string filePath)
     {
         BinaryFormatter bf = new BinaryFormatter();
         FileStream file = File.Create(filePath);
@@ -64,7 +75,7 @@ public class GameSetting : Manager<GameSetting>
     }
 
     // Load the state of the random number generator
-    public void LoadState(string filePath)
+    public void SaveData(string filePath)
     {
         if (File.Exists(filePath))
         {
@@ -82,7 +93,6 @@ public class GameSetting : Manager<GameSetting>
             }
 
             // Re-shuffle lists using the seed
-
         }
         else
         {

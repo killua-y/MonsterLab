@@ -14,8 +14,6 @@ public class CardDataModel : MonoBehaviour
     private string textDNADataPath = "/Datas/cardsdata - DNA.csv"; // DNA数据text文件
     private string textPlayerDataPath = "/Datas/playerdata.csv"; // 玩家的卡牌数据存储文件
 
-    public static bool NewGame = true;
-
     private List<Card> cardList = new List<Card>(); // 存储卡牌数据的链表
     private List<DNA> DNAList = new List<DNA>(); // 存储DNA数据的链表
 
@@ -44,20 +42,13 @@ public class CardDataModel : MonoBehaviour
         LoadCardList();
         LoadEnemyCardList();
         LoadDNAList();
+    }
 
-        if (NewGame)
-        {
-            File.WriteAllLines(Application.dataPath + textPlayerDataPath, warriorCard.text.Split('\n'));
-            Debug.Log("reset player deck");
-            NewGame = false;
-        }
-        else
-        {
-            //Debug.Log("avoid reset deck");
-        }
-
-        // 需要在LoadCardList()之后call
+    public void LoadNewGame()
+    {
         LoadPlayerData();
+        File.WriteAllLines(Application.dataPath + textPlayerDataPath, warriorCard.text.Split('\n'));
+        Debug.Log("reset player deck");
     }
 
     private void LoadKeyWordList()

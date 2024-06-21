@@ -36,7 +36,6 @@ public class DeckManage : Manager<DeckManage>
 
         mainDeck = CardDataModel.Instance.GetMainDeck();
 
-        Debug.Log("mainDeck contain : " + mainDeck.Count);
         foreach (Card card in mainDeck)
         {
             GameObject cardObject = CardDisplayView.Instance.DisPlaySingleCard(card, mainDeckScrollContent);

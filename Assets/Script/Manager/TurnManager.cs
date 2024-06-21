@@ -34,7 +34,6 @@ public class TurnManager : Manager<TurnManager>
 
     void OnCombatStart()
     {
-
         // 加载当前战斗敌人
         LoadEnemy(ActsManager.currentEnemy);
     }
