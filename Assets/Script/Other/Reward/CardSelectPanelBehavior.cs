@@ -6,15 +6,9 @@ using UnityEngine.EventSystems;
 
 public class CardSelectPanelBehavior : MonoBehaviour
 {
-    public static CardSelectPanelBehavior Instance;
     public GameObject panel;
     public Transform DeckContent;
     public List<Card> resultCardList;
-
-    private void Awake()
-    {
-        Instance = this;
-    }
 
     public void SelectCardFromDeck(int amount, Action<List<Card>> callback)
     {
@@ -75,17 +69,25 @@ public class CardSelectOnClick : MonoBehaviour, IPointerClickHandler
 {
     private Card card;
 
+    // 引用的script
+    private CardSelectPanelBehavior cardSelectPanelBehavior;
+
     public void OnPointerClick(PointerEventData eventData)
     {
         if (eventData.button == PointerEventData.InputButton.Left)
         {
-            if (CardSelectPanelBehavior.Instance.resultCardList.Contains(card))
+            if (cardSelectPanelBehavior == null)
             {
-                CardSelectPanelBehavior.Instance.resultCardList.Remove(card);
+                cardSelectPanelBehavior = FindAnyObjectByType<CardSelectPanelBehavior>();
+            }
+
+            if (cardSelectPanelBehavior.resultCardList.Contains(card))
+            {
+                cardSelectPanelBehavior.resultCardList.Remove(card);
             }
             else
             {
-                CardSelectPanelBehavior.Instance.resultCardList.Add(card);
+                cardSelectPanelBehavior.resultCardList.Add(card);
             }
         }
     }

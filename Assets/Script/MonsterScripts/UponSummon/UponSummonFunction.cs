@@ -119,12 +119,6 @@ public class UponSummonFunction : MonoBehaviour
         }
     }
 
-    // 获得能量
-    public static void GainEnergyUponSummon(BaseEntity entity)
-    {
-        PlayerCostManager.Instance.IncreaseCost(entity.cardModel.effectData);
-    }
-
     // 获得随机0费item卡
     public static void Gain0CostItemCardUponSummon(BaseEntity entity)
     {

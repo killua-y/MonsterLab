@@ -8,6 +8,16 @@ public class SaveAndLoadManager : MonoBehaviour
 {
     private string playerDataLocation = "/Datas/InGameData/playerData.json";
 
+    // 引用的script
+    private GameSetting gameSetting;
+    private BoxLayout boxLayout;
+
+    private void Awake()
+    {
+        gameSetting = FindAnyObjectByType<GameSetting>();
+        boxLayout = FindAnyObjectByType<BoxLayout>();
+    }
+
     private void Start()
     {
         string path = Application.dataPath + playerDataLocation;
@@ -27,12 +37,6 @@ public class SaveAndLoadManager : MonoBehaviour
     {
         PlayerData playerData = new PlayerData();
         playerData.Seed = 2;
-        playerData.layer = 1;
-        playerData.PlayerHealth = 3;
-        playerData.Gold = 100;
-        playerData.MaxCost = 10;
-        playerData.MaxUnit = 5;
-        playerData.startCurrentAct = false;
 
         CardDataModel.Instance.LoadDefaultCard();
         playerData.PlayerDNA = CardDataModel.Instance.GetPlayerDNA();
@@ -48,9 +52,11 @@ public class SaveAndLoadManager : MonoBehaviour
             string json = File.ReadAllText(path);
             playerData = JsonUtility.FromJson<PlayerData>(json);
         }
-
-        CardDataModel.Instance.LoadData(playerData);
+        gameSetting.LoadData(playerData);
         PlayerStatesManager.Instance.LoadData(playerData);
+        boxLayout.LoadData(playerData);
+        CardDataModel.Instance.LoadData(playerData);
+        ActsManager.Instance.LoadData(playerData);
     }
 
     public void SaveData()
@@ -59,12 +65,10 @@ public class SaveAndLoadManager : MonoBehaviour
 
         // 从各处script调用playerData里的数据
         playerData.Seed = 2;
-        playerData.layer = 1;
-        playerData.PlayerHealth = PlayerStatesManager.playerHealthPoint;
-        playerData.Gold = PlayerStatesManager.Gold;
-        playerData.MaxCost = PlayerStatesManager.maxCost;
-        playerData.MaxUnit = PlayerStatesManager.maxCost;
-        playerData.startCurrentAct = false;
+        playerData.randomState = gameSetting.SaveData();
+        playerData.playerStates = PlayerStatesManager.Instance.SaveData();
+        playerData.currentLayerBox = boxLayout.SaveData();
+        playerData.nextAct = ActsManager.Instance.SaveData();
 
         foreach (Card card in CardDataModel.Instance.GetMainDeck())
         {
@@ -119,12 +123,10 @@ public class PlayerData
 {
     public int Seed;
     public RandomState randomState;
-    public int layer;
-    public int PlayerHealth;
-    public int Gold;
-    public int MaxCost;
-    public int MaxUnit;
-    public bool startCurrentAct;
+
+    public PlayerStates playerStates;
+
+    public List<TowerBox> currentLayerBox;
 
     public List<MonsterCard> MainDeckMonster = new List<MonsterCard>();
     public List<SpellCard> MainDeckSpell = new List<SpellCard>();
@@ -135,6 +137,27 @@ public class PlayerData
     public List<ItemCard> ExtraDeckItem = new List<ItemCard>();
 
     public List<DNA> PlayerDNA;
+
+    public NextAct nextAct;
+}
+
+[System.Serializable]
+public class PlayerStates
+{
+    public int row;
+    public int column;
+    public int PlayerHealth;
+    public int Gold;
+    public int MaxCost;
+    public int MaxUnit;
+}
+
+[System.Serializable]
+public class NextAct
+{
+    public int layer;
+    public bool startCurrentAct;
+    public int generateCombatReward;
     public List<Enemy> EnemiesEncountered;
     public List<string> EventEncountered;
 }

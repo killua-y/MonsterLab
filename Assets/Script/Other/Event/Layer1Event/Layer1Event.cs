@@ -25,7 +25,7 @@ public class GoldForDeleteOneCardEvent : EventBehavior
 
     private void Option1()
     {
-        CardSelectPanelBehavior.Instance.SelectCardFromDeck(DeleteCardHelper);
+        FindAnyObjectByType<CardSelectPanelBehavior>().SelectCardFromDeck(DeleteCardHelper);
     }
 
     private void DeleteCardHelper(Card card)

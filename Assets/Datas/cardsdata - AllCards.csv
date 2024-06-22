@@ -27,7 +27,7 @@ s,22,Level Up,red,normal,1,PlayerMonster,5,Increase rank by 1 and apply 5 attack
 s,23,Simple Clone,red,rare,1,PlayerMonster,0,Select one of your monsters on the field. Create a 1 attack power 1 health point copy. And add it to your hand.,SimpleCloneCardBehavior,SpellCardPicture/simpleclone,,,,,,,,,,
 s,24,Simple Slime Summon,red,normal,0,PlayerEmptyTile,14,Summon one 1/1 slime.,SimpleSlimeSummonCardBehavior,MonsterCardPicture/slime,,,,,,,,,,
 i,25,King Sword,red,legend,2,PlayerMonster,2,Double attrack power,DoubleAttackCardBehavior,SpellCardPicture/kingsword,,,,,,,,,,
-i,26,Phoenix Feather,red,rare,2,PlayerMonster,20,The equipped monster gains 20 maximum health each time it dies.,IncreaseHealthOnDeathCardBehavior,SpellCardPicture/phoenixfeather,,,,,,,,,,
+i,26,Phoenix Feather,red,rare,2,PlayerMonster,20,Upon Death: Gains 20 maximum health.,IncreaseHealthOnDeathCardBehavior,SpellCardPicture/phoenixfeather,,,,,,,,,,
 i,27,Heavy Shackles,red,normal,1,EnemyMonster,10,Choose an enemy monster. It's attack power reduced by 10 (Cannot less than 1),ReduceAttackCardBehavior,SpellCardPicture/shackles,,,,,,,,,,
 i,28,Warrior Soul,red,rare,1,PlayerMonster,20,The equipped monster's attack range becomes 1. When only the equipped monster is present on the field. It recovers all health. Increases attack power by 20 and maximum health by 200. This effect lasts until the end of the battle.,WarriorSoulCardBehaiovr,SpellCardPicture/warriorsoul,,,,,,,,,,
 s,29,Slime Explosion,red,rare,3,None,15,Summon three 2/100 slime.,SummonBlackSlimeCardBehavior,MonsterCardPicture/BlackSlime,,,,,,,,,,

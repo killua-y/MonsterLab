@@ -11,13 +11,14 @@ public class TowerBoxBehavior : MonoBehaviour, IPointerDownHandler, IPointerExit
     public BoxType boxType;
     public int row;
     public int column;
+    public bool isPassed;
     private PlayerBehavior player;
 
     private Coroutine scalingCoroutine;
     private float zoomScale = 1.3f;
     private float duration = 0.05f; // Duration of the scaling effect
 
-    public void SetupBox(BoxType _boxType)
+    public void SetupBox(BoxType _boxType, bool _isPassed = false)
     {
         if (player == null)
         {
@@ -25,6 +26,7 @@ public class TowerBoxBehavior : MonoBehaviour, IPointerDownHandler, IPointerExit
         }
 
         boxType = _boxType;
+        isPassed = _isPassed;
         string imageLocation = "";
         switch (_boxType)
         {
@@ -45,6 +47,9 @@ public class TowerBoxBehavior : MonoBehaviour, IPointerDownHandler, IPointerExit
                 break;
             case BoxType.Treasure:
                 imageLocation = "UI/TowerBoxIcon/treasure";
+                break;
+            case BoxType.Start:
+                imageLocation = "";
                 break;
         }
 
@@ -89,23 +94,22 @@ public class TowerBoxBehavior : MonoBehaviour, IPointerDownHandler, IPointerExit
         }
     }
 
-    private void ActivateAct()
+    public void ActivateAct()
     {
         ActsManager.Instance.ActivateAct(boxType);
-        this.boxType = BoxType.Passed;
+        isPassed = true;
         ActsManager.Instance.OnPlayerMove?.Invoke(this.row, this.column);
     }
 
-    private void OnPlayerMove(int _row, int _column)
+    public void OnPlayerMove(int _row, int _column)
     {
-        if (boxType != BoxType.Passed)
+        if ((this.row > _row) || (this.column < _column))
         {
-            if ((this.row > _row) || (this.column < _column))
-            {
-                ActsManager.Instance.OnPlayerMove -= OnPlayerMove;
-                this.boxType = BoxType.CannotGetTo;
+            ActsManager.Instance.OnPlayerMove -= OnPlayerMove;
 
-                // 将无法到达的格子设置为透明
+            // 将无法到达的格子设置为透明
+            if (!isPassed)
+            {
                 Color color = this.GetComponent<Image>().color;
                 color.a = 0.4f;
                 this.GetComponent<Image>().color = color;

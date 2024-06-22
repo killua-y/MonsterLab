@@ -8,6 +8,8 @@ public class ActsManager : Singleton<ActsManager>
 {
     // 涉及玩家存档
     public static int currentLayer = 1;
+    private bool startCurrentAct;
+    private int generateCombatReward;
     public static EnemyType currentEnemyType;
     public static string currentEnemy = "AcidSlimeEnermy";
     public Action<int, int> OnPlayerMove;
@@ -19,13 +21,64 @@ public class ActsManager : Singleton<ActsManager>
     // 引用的script
     private ShopManager shopManager;
     private EventManager eventManager;
+    private PlayerBehavior playerBehavior;
+    private BoxLayout boxLayout;
+    private SaveAndLoadManager saveAndLoadManager;
 
     // Start is called before the first frame update
-    void Start()
+    protected override void Awake()
     {
-        LoadEnermyList();
+        base.Awake();
         shopManager = FindAnyObjectByType<ShopManager>();
         eventManager = FindAnyObjectByType<EventManager>();
+        playerBehavior = FindAnyObjectByType<PlayerBehavior>();
+        boxLayout = FindAnyObjectByType<BoxLayout>();
+        saveAndLoadManager = FindAnyObjectByType<SaveAndLoadManager>();
+    }
+
+    public void LoadData(PlayerData playerData)
+    {
+        StartCoroutine(LoadDataHelper(playerData));
+    }
+
+    IEnumerator LoadDataHelper(PlayerData playerData)
+    {
+        LoadEnermyList();
+        if (playerData.playerStates == null)
+        {
+            TowerBoxBehavior currentBox = boxLayout.FindBox(playerBehavior.row, playerBehavior.column);
+            playerBehavior.transform.position = currentBox.transform.position;
+        }
+        else
+        {
+            TowerBoxBehavior currentBox = boxLayout.FindBox(playerBehavior.row, playerBehavior.column);
+            playerBehavior.transform.position = currentBox.transform.position;
+            if (playerData.nextAct.startCurrentAct)
+            {
+                yield return null;
+                currentBox.ActivateAct();
+            }
+            else if (playerData.nextAct.generateCombatReward >= 0)
+            {
+                yield return null;
+                generateCombatReward = playerData.nextAct.generateCombatReward;
+                RewardManager.Instance.GenerateReward(generateCombatReward);
+            }
+            else
+            {
+                Debug.Log("Do nothing");
+            }
+        }
+    }
+
+    public NextAct SaveData()
+    {
+        return new NextAct
+        {
+            layer = currentLayer,
+            startCurrentAct = startCurrentAct,
+            generateCombatReward = generateCombatReward
+        };
     }
 
     private void LoadEnermyList()
@@ -49,6 +102,8 @@ public class ActsManager : Singleton<ActsManager>
 
     public void ActivateAct(BoxType _boxType)
     {
+        startCurrentAct = true;
+        saveAndLoadManager.SaveData();
         //_boxType = BoxType.Merchant;
         switch (_boxType)
         {
@@ -93,8 +148,18 @@ public class ActsManager : Singleton<ActsManager>
         }
     }
 
-    public void LeaveEvent()
+    public void OnCombatEnd(int remainningTurns)
     {
+        startCurrentAct = false;
+        generateCombatReward = remainningTurns;
+        saveAndLoadManager.SaveData();
+        RewardManager.Instance.GenerateReward(remainningTurns);
+    }
 
+    public void LeaveScene()
+    {
+        startCurrentAct = false;
+        generateCombatReward = -1;
+        saveAndLoadManager.SaveData();
     }
 }

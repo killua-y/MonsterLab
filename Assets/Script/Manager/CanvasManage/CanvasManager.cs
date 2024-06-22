@@ -4,10 +4,8 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class CanvasManager : MonoBehaviour
+public class CanvasManager : Singleton<CanvasManager>
 {
-    public static CanvasManager Instance;
-
     // 所有canvas
     [Header("All canvas")]
     public Canvas HighPriorityCanvas;
@@ -30,11 +28,6 @@ public class CanvasManager : MonoBehaviour
     public Transform extraDeck;
     public Transform drawPileParent;
     public Transform discardPileParent;
-
-    private void Awake()
-    {
-        Instance = this;
-    }
 
     private void Start()
     {

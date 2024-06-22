@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
-public class PlayerCostManager : Singleton<PlayerCostManager>
+public class PlayerCostManager : MonoBehaviour
 {
     public TextMeshProUGUI costText;
+    public int currentCost;
 
-    private int currentCost;
     // Start is called before the first frame update
     void Start()
     {
@@ -17,11 +17,6 @@ public class PlayerCostManager : Singleton<PlayerCostManager>
     private void UpdateCostText()
     {
         costText.text = currentCost + "/" + PlayerStatesManager.maxCost;
-    }
-
-    public int GetRemainingCost()
-    {
-        return currentCost;
     }
 
     public void IncreaseCost(int _cost)

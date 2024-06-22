@@ -49,8 +49,8 @@ public class IncreaseHealthOnDeathCardBehavior : CardBehavior
             targetMonster.GetComponent<IncreaseHealthOnDeathMonsterBehavior>().cardModel.effectData += card.effectData;
         }
 
-        // 如果需要加入到卡牌附加说明
-        targetMonster.cardModel.equippedCard.Add(card);
+        // 如果需要加入到卡牌说明
+        RecordCast(targetMonster);
     }
 }
 public class IncreaseHealthOnDeathMonsterBehavior : MonoBehaviour
@@ -114,8 +114,8 @@ public class WarriorSoulCardBehaiovr : CardBehavior
             targetMonster.GetComponent<WarriorSoulMonsterBehaiovr>().cardModel.effectData += card.effectData;
         }
 
-        // 如果需要加入到卡牌附加说明
-        targetMonster.cardModel.equippedCard.Add(card);
+        // 如果需要加入到卡牌说明
+        RecordCast(targetMonster);
     }
 }
 public class WarriorSoulMonsterBehaiovr : MonoBehaviour

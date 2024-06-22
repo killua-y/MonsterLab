@@ -1,16 +1,9 @@
-using System.Collections;
-using System.Collections.Generic;
 using events;
 using UnityEngine;
-using UnityEngine.EventSystems;
 
-public class CardOnPlay : Singleton<CardOnPlay>
+public class CardOnPlay : MonoBehaviour
 {
     public CardContainer container;
-
-    private void Start()
-    {
-    }
 
     public void OnCardPlayed(CardPlayed evt)
     {

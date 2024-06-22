@@ -10,17 +10,56 @@ public class BoxLayout : MonoBehaviour
     public GameObject prefab; // Prefab to instantiate
     private PlayerBehavior player;
 
-    private List<TowerBoxBehavior> objectsToArrange = new List<TowerBoxBehavior>(); // List to hold the child objects
+    public List<TowerBoxBehavior> currentLayerBox = new List<TowerBoxBehavior>(); // List to hold the child objects
 
-    void Start()
+    void Awake()
     {
         player = FindAnyObjectByType<PlayerBehavior>();
-        EnterNewLayer();
+    }
+
+    public void LoadData(PlayerData playerData)
+    {
+        if (playerData.currentLayerBox == null)
+        {
+            EnterNewLayer();
+        }
+        else
+        {
+            foreach (TowerBox towerBox in playerData.currentLayerBox)
+            {
+                GameObject newTowerBox = Instantiate(prefab, transform);
+                newTowerBox.transform.position = towerBox.position;
+                TowerBoxBehavior newBox = newTowerBox.GetComponent<TowerBoxBehavior>();
+                newBox.row = towerBox.row;
+                newBox.column = towerBox.column;
+                newBox.SetupBox(towerBox.boxType, towerBox.isPassed);
+                newBox.OnPlayerMove(player.row, player.column);
+
+                currentLayerBox.Add(newBox);
+            }
+        }
+    }
+
+    public List<TowerBox> SaveData()
+    {
+        List<TowerBox> towerBoxes = new List<TowerBox>();
+        foreach (TowerBoxBehavior towerBoxBehavior in currentLayerBox)
+        {
+            TowerBox newTowerBox = new TowerBox();
+            newTowerBox.isPassed = towerBoxBehavior.isPassed;
+            newTowerBox.row = towerBoxBehavior.row;
+            newTowerBox.column = towerBoxBehavior.column;
+            newTowerBox.boxType = towerBoxBehavior.boxType;
+            newTowerBox.position = towerBoxBehavior.transform.position;
+
+            towerBoxes.Add(newTowerBox);
+        }
+        return towerBoxes;
     }
 
     void EnterNewLayer()
     {
-        foreach (TowerBoxBehavior towerbox in objectsToArrange)
+        foreach (TowerBoxBehavior towerbox in currentLayerBox)
         {
             Destroy(towerbox.gameObject);
         }
@@ -28,26 +67,26 @@ public class BoxLayout : MonoBehaviour
         // Instantiate new GameObjects if number is not zero
         if (number != 0)
         {
-            for (int i = objectsToArrange.Count; i < number; i++)
+            for (int i = currentLayerBox.Count; i < number; i++)
             {
                 GameObject newObject = Instantiate(prefab, transform);
                 TowerBoxBehavior newBox = newObject.GetComponent<TowerBoxBehavior>();
-                objectsToArrange.Add(newBox);
+                currentLayerBox.Add(newBox);
             }
         }
 
-        if (objectsToArrange.Count > 0)
+        if (currentLayerBox.Count > 0)
         {
             ArrangeGrid();
-            GenerateBoxType(objectsToArrange);
+            GenerateBoxType(currentLayerBox);
         }
         else
         {
             Debug.LogWarning("No child GameObjects found to arrange.");
         }
 
-        // 移动玩家位置到（3，0）
-        player.transform.position = objectsToArrange.Find(obj => obj.row == 3 && obj.column == 0).transform.position;
+        // 移动玩家位置到(3，0)
+        player.transform.position = currentLayerBox.Find(obj => obj.row == 3 && obj.column == 0).transform.position;
     }
 
     void ArrangeGrid()
@@ -61,15 +100,15 @@ public class BoxLayout : MonoBehaviour
             for (int j = 0; j < columns; j++)
             {
                 int index = i * columns + j;
-                if (index < objectsToArrange.Count)
+                if (index < currentLayerBox.Count)
                 {
                     // Calculate the position
                     Vector3 position = new Vector3(j * spacing - xOffset, -i * spacing + yOffset, 0);
                     // Move the object to the calculated position
-                    objectsToArrange[index].transform.localPosition = position;
+                    currentLayerBox[index].transform.localPosition = position;
 
                     // Assign row and column to the TowerBoxBehavior component
-                    TowerBoxBehavior towerBox = objectsToArrange[index].GetComponent<TowerBoxBehavior>();
+                    TowerBoxBehavior towerBox = currentLayerBox[index].GetComponent<TowerBoxBehavior>();
                     if (towerBox != null)
                     {
                         towerBox.row = i;
@@ -77,7 +116,7 @@ public class BoxLayout : MonoBehaviour
                     }
                     else
                     {
-                        Debug.LogWarning("TowerBoxBehavior component not found on " + objectsToArrange[index].name);
+                        Debug.LogWarning("TowerBoxBehavior component not found on " + currentLayerBox[index].name);
                     }
                 }
                 else
@@ -92,7 +131,6 @@ public class BoxLayout : MonoBehaviour
     void GenerateBoxType(List<TowerBoxBehavior> allBox)
     {
         List<TowerBoxBehavior> validBoxes = new List<TowerBoxBehavior>();
-        List<TowerBoxBehavior> remaingBoxes = new List<TowerBoxBehavior>();
 
         // Exclude specific boxes
         foreach (var box in allBox)
@@ -104,7 +142,7 @@ public class BoxLayout : MonoBehaviour
             }
             else if (box.row == 3 && box.column == 0)
             {
-                box.SetupBox(BoxType.CannotGetTo);
+                box.SetupBox(BoxType.Start);
                 continue;
             }
 
@@ -149,9 +187,9 @@ public class BoxLayout : MonoBehaviour
         }
     }
 
-    private TowerBoxBehavior FindBox(int row, int column)
+    public TowerBoxBehavior FindBox(int row, int column)
     {
-        foreach (var box in objectsToArrange)
+        foreach (var box in currentLayerBox)
         {
             if ((box.row == row) && (box.column == column))
             {
@@ -193,4 +231,14 @@ public class BoxLayout : MonoBehaviour
         HelperFunction.Shuffle(selectedBoxes, GameSetting.BoxLayoutRand);
         return selectedBoxes;
     }
+}
+
+[System.Serializable]
+public class TowerBox
+{
+    public bool isPassed;
+    public int row;
+    public int column;
+    public BoxType boxType;
+    public Vector2 position;
 }

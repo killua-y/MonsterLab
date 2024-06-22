@@ -56,8 +56,8 @@ public class MagneticGrabberCardBehavior : CardBehavior
     {
         targetMonster.gameObject.AddComponent<DragMonster>();
 
-        // 如果需要加入到卡牌附加说明
-        targetMonster.cardModel.equippedCard.Add(card);
+        // 如果需要加入到卡牌说明
+        RecordCast(targetMonster);
     }
 }
 
@@ -111,7 +111,7 @@ public class DemonContractCardBehavior: CardBehavior
     public override void CastCard(Node node)
     {
         targetMonster.UnitDie(null, true);
-        PlayerCostManager.Instance.IncreaseCost(card.effectData);
+        FindAnyObjectByType<PlayerCostManager>().IncreaseCost(card.effectData);
         InGameStateManager.Instance.DrawCards(card.effectData * 2);
     }
 }

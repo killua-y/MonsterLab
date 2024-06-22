@@ -23,8 +23,8 @@ public class RewardManager : Singleton<RewardManager>
     // Start is called before the first frame update
     void Start()
     {
-        Invoke("InitializeCardRewardList", 0);
-        Invoke("InitializeDNARewardList", 0);
+        InitializeCardRewardList();
+        InitializeDNARewardList();
     }
 
     private void InitializeCardRewardList()
@@ -118,6 +118,7 @@ public class RewardManager : Singleton<RewardManager>
             Destroy(child.gameObject);
         }
         rewardCanvas.gameObject.SetActive(false);
+        ActsManager.Instance.LeaveScene();
     }
 
     public void GenerateReward(int remainningTurn)

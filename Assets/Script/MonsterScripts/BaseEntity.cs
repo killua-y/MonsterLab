@@ -92,8 +92,10 @@ public class BaseEntity : MonoBehaviour
         // 重新施加记录下的装备
         if (monsterCard.equippedCard.Count > 0)
         {
+            List<Card> equippedCards = monsterCard.equippedCard;
+            monsterCard.equippedCard = new List<Card>();
             Debug.Log("Start recast equipedCard");
-            foreach (Card card in monsterCard.equippedCard)
+            foreach (Card card in equippedCards)
             {
                 System.Type scriptType = System.Type.GetType(card.scriptLocation);
 
@@ -298,7 +300,7 @@ public class BaseEntity : MonoBehaviour
             // 复活，重新把自己添加回索敌list
             if (dead)
             {
-                Debug.Log("Card " + cardModel.cardName + " respond");
+                //Debug.Log("Card " + cardModel.cardName + " respond");
                 dead = false;
                 BattleManager.Instance.AddToTeam(this);
             }

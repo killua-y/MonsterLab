@@ -69,9 +69,9 @@ public class InGameStateManager : Singleton<InGameStateManager>
             GameObject.Destroy(child.gameObject);
         }
 
-        RewardManager.Instance.GenerateReward(remainningTurn);
-
         OnCombatEnd?.Invoke(); // Safe way to invoke the delegate
+
+        ActsManager.Instance.OnCombatEnd(remainningTurn);
     }
 
     // 回合开始

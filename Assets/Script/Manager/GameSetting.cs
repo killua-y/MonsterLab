@@ -7,7 +7,6 @@ using System.IO;
 
 public class GameSetting : MonoBehaviour
 {
-    public int seed;
     public static System.Random cardRewardRand;
     public static System.Random DNARewardRand;
     public static System.Random InCombatRand;
@@ -17,21 +16,6 @@ public class GameSetting : MonoBehaviour
 
     protected void Awake()
     {
-        if (cardRewardRand == null)
-        {
-            NewGame();
-        }
-    }
-
-    public void LoadNewGame()
-    {
-
-    }
-
-    private void NewGame()
-    {
-        seed = 2;
-        InitializeRand();
         AdjustForScreenResolution();
     }
 
@@ -49,53 +33,51 @@ public class GameSetting : MonoBehaviour
         scaleFactor = (widthScale + heightScale) / 2;
     }
 
-    public void InitializeRand()
-    {
-        cardRewardRand = new System.Random(seed);
-        DNARewardRand = new System.Random(seed);
-        InCombatRand = new System.Random(seed);
-        BoxLayoutRand = new System.Random(seed);
-    }
-
-    // 暂时不用
     // Save the state of the random number generator
-    public void LoadData(string filePath)
+    public void LoadData(PlayerData playerData)
     {
-        BinaryFormatter bf = new BinaryFormatter();
-        FileStream file = File.Create(filePath);
-
-        RandomState state = new RandomState();
-        state.Seed = seed;
-        state.NextValue = cardRewardRand.Next();
-
-        bf.Serialize(file, state);
-        file.Close();
-    }
-
-    // Load the state of the random number generator
-    public void SaveData(string filePath)
-    {
-        if (File.Exists(filePath))
+        int seed = playerData.Seed;
+        if ((playerData.randomState == null) || (true))
         {
-            BinaryFormatter bf = new BinaryFormatter();
-            FileStream file = File.Open(filePath, FileMode.Open);
-
-            RandomState state = (RandomState)bf.Deserialize(file);
-            file.Close();
-
-            seed = state.Seed;
             cardRewardRand = new System.Random(seed);
-            for (int i = 0; i < state.NextValue; i++)
-            {
-                cardRewardRand.Next();
-            }
-
-            // Re-shuffle lists using the seed
+            DNARewardRand = new System.Random(seed);
+            InCombatRand = new System.Random(seed);
+            BoxLayoutRand = new System.Random(seed);
         }
         else
         {
-            Debug.LogError("Save file not found");
+            cardRewardRand = InitializeRandom(seed, playerData.randomState.cardRewardRandNextValue);
+            DNARewardRand = InitializeRandom(seed, playerData.randomState.DNARewardRandNextValue);
+            InCombatRand = InitializeRandom(seed, playerData.randomState.InCombatRandNextValue);
+            BoxLayoutRand = InitializeRandom(seed, playerData.randomState.BoxLayoutRandNextValue);
         }
+    }
+
+    private System.Random InitializeRandom(int seed, int nextValue)
+    {
+        System.Random rand = new System.Random(seed);
+        for (int i = 0; i < nextValue; i++)
+        {
+            rand.Next(); // Advance the random number generator to the correct state
+        }
+        return rand;
+    }
+
+    // Load the state of the random number generator
+    public RandomState SaveData()
+    {
+        return new RandomState
+        {
+            cardRewardRandNextValue = GetNextValue(cardRewardRand),
+            DNARewardRandNextValue = GetNextValue(DNARewardRand),
+            InCombatRandNextValue = GetNextValue(InCombatRand),
+            BoxLayoutRandNextValue = GetNextValue(BoxLayoutRand)
+        };
+    }
+
+    private int GetNextValue(System.Random rand)
+    {
+        return rand.Next(); // Generate and return the next random value
     }
 }
 
@@ -103,6 +85,8 @@ public class GameSetting : MonoBehaviour
 [System.Serializable]
 public class RandomState
 {
-    public int Seed;
-    public int NextValue;
+    public int cardRewardRandNextValue;
+    public int DNARewardRandNextValue;
+    public int InCombatRandNextValue;
+    public int BoxLayoutRandNextValue;
 }

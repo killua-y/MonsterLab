@@ -20,6 +20,14 @@ public class ShopManager : MonoBehaviour
 
     private bool isOpen = false;
 
+    // 引用的script
+    private CardSelectPanelBehavior cardSelectPanelBehavior;
+
+    private void Start()
+    {
+        cardSelectPanelBehavior = FindAnyObjectByType<CardSelectPanelBehavior>();
+    }
+
     public void GenerateShop()
     {
         ChangePosition();
@@ -185,7 +193,7 @@ public class ShopManager : MonoBehaviour
             CardHolder.gameObject.SetActive(false);
             PlayerStatesManager.Instance.DecreaseGold(deleteCost);
             deleteCost += 50;
-            CardSelectPanelBehavior.Instance.SelectCardFromDeck(DeleteCardHelper);
+            cardSelectPanelBehavior.SelectCardFromDeck(DeleteCardHelper);
         }
     }
 

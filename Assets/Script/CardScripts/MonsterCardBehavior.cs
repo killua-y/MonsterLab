@@ -21,7 +21,7 @@ public class MonsterCardBehavior : CardBehavior
         targetNode = node;
 
         // 查看费用是否合理
-        if (PlayerCostManager.Instance.GetRemainingCost() < monsterCard.cost)
+        if (playerCostManager.currentCost < monsterCard.cost)
         {
             return;
         }

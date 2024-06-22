@@ -5,18 +5,12 @@ using UnityEngine.EventSystems;
 
 public class RewardCardSelectBehavior : MonoBehaviour
 {
-    public static RewardCardSelectBehavior Instance;
+    public GameObject RewardCardSelectObject;
     public Transform CardHolder;
-
-    private void Awake()
-    {
-        Instance = this;
-        this.gameObject.SetActive(false);
-    }
 
     public void AddCard(List<Card> cards, GameObject reawrdParent)
     {
-        this.gameObject.SetActive(true);
+        RewardCardSelectObject.SetActive(true);
 
         foreach (Transform child in CardHolder)
         {
@@ -34,7 +28,7 @@ public class RewardCardSelectBehavior : MonoBehaviour
 
     public void FinishCardSelect()
     {
-        this.gameObject.SetActive(false);
+        RewardCardSelectObject.SetActive(false);
     }
 }
 
@@ -47,7 +41,7 @@ public class RewardCardOnClick : MonoBehaviour, IPointerClickHandler
     {
         CardDataModel cardDataModel = FindObjectOfType<CardDataModel>();
         cardDataModel.ObtainCard(card);
-        RewardCardSelectBehavior.Instance.FinishCardSelect();
+        FindAnyObjectByType<RewardCardSelectBehavior>().FinishCardSelect();
         Destroy(rewardParent);
     }
 

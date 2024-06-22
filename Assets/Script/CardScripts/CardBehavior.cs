@@ -18,6 +18,14 @@ public class CardBehavior : MonoBehaviour
     protected bool IsDragging = false;
     protected Tile previousTile = null;
 
+    // 引用的script
+    protected PlayerCostManager playerCostManager;
+
+    private void Start()
+    {
+        playerCostManager = FindAnyObjectByType<PlayerCostManager>();
+    }
+
     // Update is called once per frame
     void Update()
     {
@@ -94,7 +102,7 @@ public class CardBehavior : MonoBehaviour
     public virtual void CheckLegality(Node node)
     {
         // 查看费用是否合理
-        if (PlayerCostManager.Instance.GetRemainingCost() < card.cost)
+        if (playerCostManager.currentCost < card.cost)
         {
             return;
         }
@@ -132,7 +140,7 @@ public class CardBehavior : MonoBehaviour
     public virtual void CastComplete(Node node)
     {
         // 消耗费用
-        PlayerCostManager.Instance.DecreaseCost(card.cost);
+        playerCostManager.DecreaseCost(card.cost);
 
         // 广播释放魔法/装备这个动作
         if (card is SpellCard)
@@ -175,5 +183,23 @@ public class CardBehavior : MonoBehaviour
                 Destroy(this.gameObject);
             }
         }
+    }
+
+    public virtual void RecordCast(BaseEntity baseEntity)
+    {
+        baseEntity.cardModel.equippedCard.Add(card);
+
+        // 如果装备卡中有关键词则添加到怪兽卡上
+        if (card.keyWords.Count != 0)
+        {
+            foreach (string keyword in card.keyWords)
+            {
+                if (!baseEntity.cardModel.keyWords.Contains(keyword))
+                {
+                    baseEntity.cardModel.keyWords.Add(keyword);
+                }
+            }
+        }
+
     }
 }
