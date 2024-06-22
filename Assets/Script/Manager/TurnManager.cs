@@ -5,7 +5,7 @@ using TMPro;
 using UnityEngine;
 using static Card;
 
-public class TurnManager : Singleton<TurnManager>
+public class TurnManager : MonoBehaviour
 {
     // 卡牌管理区
     public GameObject turnParent;
@@ -15,7 +15,6 @@ public class TurnManager : Singleton<TurnManager>
     public bool isFinalWaive;
     private int currentTurn;
     private int finalTurn;
-    public List<MonsterCard> monsterList = new List<MonsterCard>();
     private List<int> MonsterSummonTurn;
     private List<TurnUnitBehavior> allTurns;
 
@@ -27,9 +26,6 @@ public class TurnManager : Singleton<TurnManager>
         InGameStateManager.Instance.OnCombatStart += OnCombatStart;
         InGameStateManager.Instance.OnPreparePhaseStart += OnPreparePhaseStart;
         InGameStateManager.Instance.OnBattlePhaseEnd += OnBattlePhaseEnd;
-
-        // 加载所有怪兽数据
-        monsterList = CardDataModel.Instance.GetEnemyMonster();
     }
 
     void OnCombatStart()
@@ -66,7 +62,7 @@ public class TurnManager : Singleton<TurnManager>
         enemy.LoadEnemy();
 
         currentTurn = 0;
-        finalTurn = enemy.GetMaxTurn();
+        finalTurn = enemy.MaxTurn;
         MonsterSummonTurn = new List<int>();
         MonsterSummonTurn = enemy.GetTurnList();
         SetUpTurnUI();

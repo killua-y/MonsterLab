@@ -5,7 +5,7 @@ using static Card;
 
 public class ArcherEnemy : EnemyBehavior
 {
-    protected new int MaxTurn = 4;
+    public override int MaxTurn { get; set; } = 4;
 
     // 该敌人拥有的怪兽
     private MonsterCard Archer;
@@ -13,8 +13,8 @@ public class ArcherEnemy : EnemyBehavior
 
     public override void LoadEnemy()
     {
-        Archer = TurnManager.Instance.monsterList[4];
-        BlackSlime = TurnManager.Instance.monsterList[2];
+        Archer = CardDataModel.Instance.GetEnemyCard(4);
+        BlackSlime = CardDataModel.Instance.GetEnemyCard(2);
 
         // 该在哪几个回合召唤怪兽
         MonsterSummonTurn.Add(0);
@@ -41,7 +41,7 @@ public class ArcherEnemy : EnemyBehavior
 
 public class BombCarrierEnemy : EnemyBehavior
 {
-    protected new int MaxTurn = 4;
+    public override int MaxTurn { get; set; } = 4;
 
     // 该敌人拥有的怪兽
     private MonsterCard BombCarrier;
@@ -49,8 +49,8 @@ public class BombCarrierEnemy : EnemyBehavior
 
     public override void LoadEnemy()
     {
-        BombCarrier = TurnManager.Instance.monsterList[5];
-        Slave = TurnManager.Instance.monsterList[7];
+        BombCarrier = CardDataModel.Instance.GetEnemyCard(5);
+        Slave = CardDataModel.Instance.GetEnemyCard(7);
 
         // 该在哪几个回合召唤怪兽
         MonsterSummonTurn.Add(0);

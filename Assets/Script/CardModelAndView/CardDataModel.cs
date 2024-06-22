@@ -6,8 +6,6 @@ using static Card;
 
 public class CardDataModel : Singleton<CardDataModel>
 {
-    public TextAsset warriorCard; // 战士的默认卡组
-
     private string textCardDataPath = "/Datas/cardsdata - AllCards.csv"; // 卡牌数据txt文件
     private string textDNADataPath = "/Datas/cardsdata - DNA.csv"; // DNA数据text文件
     private string textPlayerDataPath = "/Datas/playerdata.csv"; // 玩家的卡牌数据存储文件
@@ -19,7 +17,6 @@ public class CardDataModel : Singleton<CardDataModel>
     private List<Card> playerExtraDeckData = new List<Card>();
     private List<Card> playerCardData = new List<Card>();
     private List<DNA> playerDNAData = new List<DNA>(); // 储存玩家DNA数据的array
-    public int totalCoins;
 
     // 怪兽链表
     public TextAsset enemyTextCardData; // 地方怪兽卡牌数据txt文件
@@ -322,7 +319,7 @@ public class CardDataModel : Singleton<CardDataModel>
     }
 
     // 输出需要的卡牌信息
-    public Card GetEnemyCard(int index)
+    public MonsterCard GetEnemyCard(int index)
     {
         return enemyCardList[index];
     }

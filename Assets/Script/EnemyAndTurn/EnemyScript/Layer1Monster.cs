@@ -65,7 +65,7 @@ public class BombMonsterGeneratorEntity : BaseEntity
     private void SummonChild()
     {
         // 召唤一只自爆怪兽
-        MonsterCard boomer = (MonsterCard)TurnManager.Instance.monsterList[5];
+        MonsterCard boomer = CardDataModel.Instance.GetEnemyCard(5);
         EnemyBehavior.SummonEnenmy(this.currentNode.rowIndex, this.currentNode.columnIndex, boomer);
     }
 }
@@ -83,7 +83,7 @@ public class MotherSlimeEntity: BaseEntity
     private void SummonChild()
     {
         // 召唤一只史莱姆
-        MonsterCard AcidSlime = (MonsterCard)TurnManager.Instance.monsterList[1];
+        MonsterCard AcidSlime = CardDataModel.Instance.GetEnemyCard(1);
         EnemyBehavior.SummonEnenmy(2, 7, AcidSlime);
     }
 }
