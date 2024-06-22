@@ -13,7 +13,8 @@ public class PausedMenuBehavior : MonoBehaviour
 
     public void BackToMainMenu()
     {
-        SaveAndLoadManager.Instance.SaveData();
+        Time.timeScale = 1;
+        FindAnyObjectByType<SaveAndLoadManager>().SaveData();
         SceneManager.LoadScene("MainMenu");
     }
 

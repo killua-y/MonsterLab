@@ -4,7 +4,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class ShopManager : Manager<ShopManager>
+public class ShopManager : MonoBehaviour
 {
     public Transform CardHolder;
     public Transform DNAHolder;
@@ -263,7 +263,7 @@ public class ShopCardBuyOnClick : MonoBehaviour, IPointerClickHandler
     {
         if (eventData.button == PointerEventData.InputButton.Left)
         {
-            ShopManager.Instance.BuyCard(card, price, this.gameObject);
+            FindAnyObjectByType<ShopManager>().BuyCard(card, price, this.gameObject);
         }
     }
 }
@@ -283,7 +283,7 @@ public class ShopDNAOnClick : MonoBehaviour, IPointerClickHandler
     {
         if (eventData.button == PointerEventData.InputButton.Left)
         {
-            ShopManager.Instance.BuyDNA(index, price, this.gameObject);
+            FindAnyObjectByType<ShopManager>().BuyDNA(index, price, this.gameObject);
         }
     }
 }

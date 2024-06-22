@@ -6,7 +6,7 @@ using TMPro;
 using UnityEngine;
 
 
-public class InGameStateManager : Manager<InGameStateManager>
+public class InGameStateManager : Singleton<InGameStateManager>
 {
     public static bool gamePased = false;
     public static bool inCombat = false;
@@ -38,7 +38,7 @@ public class InGameStateManager : Manager<InGameStateManager>
     public TextMeshProUGUI DiscardPileText;
     // Start is called before the first frame update
 
-    new void Awake()
+    protected override void Awake()
     {
         base.Awake();
         CardModel = FindObjectOfType<InGameCardModel>();

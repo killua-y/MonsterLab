@@ -4,10 +4,8 @@ using UnityEngine;
 using System.IO;
 using static Card;
 
-public class CardDataModel : MonoBehaviour
+public class CardDataModel : Singleton<CardDataModel>
 {
-    public static CardDataModel Instance;
-
     public TextAsset warriorCard; // 战士的默认卡组
 
     private string textCardDataPath = "/Datas/cardsdata - AllCards.csv"; // 卡牌数据txt文件
@@ -34,9 +32,9 @@ public class CardDataModel : MonoBehaviour
     public List<string> keyWordsDefinition = new List<string>();
 
     // Start is called before the first frame update
-    void Awake()
+    protected override void Awake()
     {
-        Instance = this;
+        base.Awake();
 
         LoadKeyWordList();
         LoadCardList();

@@ -5,7 +5,7 @@ using TMPro;
 using UnityEngine;
 using static Card;
 
-public class TurnManager : Manager<TurnManager>
+public class TurnManager : Singleton<TurnManager>
 {
     // 卡牌管理区
     public GameObject turnParent;

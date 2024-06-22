@@ -4,7 +4,7 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
-public class GridManager : Manager<GridManager>
+public class GridManager : Singleton<GridManager>
 {
     public GameObject GridMap;
 
@@ -12,7 +12,7 @@ public class GridManager : Manager<GridManager>
 
     List<Tile> allTiles = new List<Tile>();
 
-    protected new void Awake()
+    protected override void Awake()
     {
         base.Awake();
         allTiles = GridMap.GetComponentsInChildren<Tile>().ToList();

@@ -30,7 +30,6 @@ public class EventBehavior : MonoBehaviour
 
     public virtual void SetUp()
     {
-        Debug.Log("SetUp");
         eventCanvasBehavior = this.gameObject.GetComponent<EventManager>();
         if (eventCanvasBehavior == null)
         {

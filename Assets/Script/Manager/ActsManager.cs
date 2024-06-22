@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class ActsManager : Manager<ActsManager>
+public class ActsManager : Singleton<ActsManager>
 {
     // 涉及玩家存档
     public static int currentLayer = 1;
@@ -16,10 +16,16 @@ public class ActsManager : Manager<ActsManager>
 
     private List<Enemy> allEnemyList = new List<Enemy>();
 
+    // 引用的script
+    private ShopManager shopManager;
+    private EventManager eventManager;
+
     // Start is called before the first frame update
     void Start()
     {
         LoadEnermyList();
+        shopManager = FindAnyObjectByType<ShopManager>();
+        eventManager = FindAnyObjectByType<EventManager>();
     }
 
     private void LoadEnermyList()
@@ -71,11 +77,11 @@ public class ActsManager : Manager<ActsManager>
                 break;
 
             case BoxType.Events:
-                EventManager.instance.LoadEvent(currentLayer);
+                eventManager.LoadEvent(currentLayer);
                 break;
 
             case BoxType.Merchant:
-                ShopManager.Instance.GenerateShop();
+                shopManager.GenerateShop();
                 break;
 
             case BoxType.Treasure:

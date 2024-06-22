@@ -14,7 +14,7 @@ public class BoxLayout : MonoBehaviour
 
     void Start()
     {
-        player = GameObject.FindWithTag("Player").GetComponent<PlayerBehavior>();
+        player = FindAnyObjectByType<PlayerBehavior>();
         EnterNewLayer();
     }
 

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
-public class PlayerCostManager : Manager<PlayerCostManager>
+public class PlayerCostManager : Singleton<PlayerCostManager>
 {
     public TextMeshProUGUI costText;
 

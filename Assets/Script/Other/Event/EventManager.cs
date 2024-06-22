@@ -7,7 +7,6 @@ using UnityEngine.UI;
 
 public class EventManager : MonoBehaviour
 {
-    public static EventManager instance;
     public Transform buttonParent;
     public TextMeshProUGUI eventText;
     public Image eventImage;
@@ -20,11 +19,6 @@ public class EventManager : MonoBehaviour
         "SelectOneCardEvent",
         "GainGoldEvent"
     };
-
-    private void Awake()
-    {
-        instance = this;
-    }
 
     public void ChangePosition()
     {

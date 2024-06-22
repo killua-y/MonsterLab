@@ -7,7 +7,6 @@ using System.IO;
 
 public class GameSetting : MonoBehaviour
 {
-    public static GameSetting instance;
     public int seed;
     public static System.Random cardRewardRand;
     public static System.Random DNARewardRand;
@@ -16,9 +15,8 @@ public class GameSetting : MonoBehaviour
 
     public static float scaleFactor;
 
-    private void Awake()
+    protected void Awake()
     {
-        instance = this;
         if (cardRewardRand == null)
         {
             NewGame();

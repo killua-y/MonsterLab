@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class DeckManage : Manager<DeckManage>
+public class DeckManage : Singleton<DeckManage>
 {
     [Header("Main deck Extra Deck")]
     public Transform Deck;

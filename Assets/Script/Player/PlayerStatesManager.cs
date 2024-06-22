@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
-public class PlayerStatesManager : Manager<PlayerStatesManager>
+public class PlayerStatesManager : Singleton<PlayerStatesManager>
 {
     public static int Gold = 0;
     public static int maxCost = 10;

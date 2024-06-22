@@ -6,13 +6,7 @@ using static Card;
 
 public class SaveAndLoadManager : MonoBehaviour
 {
-    public static SaveAndLoadManager Instance;
     private string playerDataLocation = "/Datas/InGameData/playerData.json";
-
-    private void Awake()
-    {
-        Instance = this;
-    }
 
     private void Start()
     {

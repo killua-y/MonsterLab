@@ -5,7 +5,7 @@ using TMPro;
 using UnityEngine;
 using static Card;
 
-public class BattleManager : Manager<BattleManager>
+public class BattleManager : Singleton<BattleManager>
 {
     public Transform playerParent;
     public Transform enemyParent;
@@ -21,7 +21,6 @@ public class BattleManager : Manager<BattleManager>
     // Start is called before the first frame update
     void Start()
     {
-        base.Awake();
         InGameStateManager.Instance.OnBattlePhaseStart += OnBattleTurnStart;
         InGameStateManager.Instance.OnCombatEnd += OnCombatEnd;
     }

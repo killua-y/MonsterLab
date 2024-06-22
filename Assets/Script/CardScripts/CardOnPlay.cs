@@ -4,7 +4,7 @@ using events;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class CardOnPlay : Manager<CardOnPlay>
+public class CardOnPlay : Singleton<CardOnPlay>
 {
     public CardContainer container;
 

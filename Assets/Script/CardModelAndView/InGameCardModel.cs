@@ -2,9 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class InGameCardModel : MonoBehaviour
+public class InGameCardModel : Singleton<InGameCardModel>
 {
-    public static InGameCardModel Instance;
     // 卡牌管理区
     public GameObject cardDataManager;
 
@@ -13,11 +12,6 @@ public class InGameCardModel : MonoBehaviour
     private List<Card> drawPileList = new List<Card>(); // 局内抽堆数据的链表
     private List<Card> discardPileList = new List<Card>(); // 局内弃牌堆数据的链表
     private List<Card> extraDeckPileList = new List<Card>(); // 局内弃牌堆数据的链表
-
-    private void Awake()
-    {
-        Instance = this;
-    }
 
     // Start is called before the first frame update
     void Start()

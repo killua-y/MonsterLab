@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using static Card;
 
-public class RewardManager : Manager<RewardManager>
+public class RewardManager : Singleton<RewardManager>
 {
     public GameObject rewardCanvas;
     public GameObject rewardPanel;
