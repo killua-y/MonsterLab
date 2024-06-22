@@ -123,21 +123,21 @@ public class RewardManager : Singleton<RewardManager>
 
     public void GenerateReward(int remainningTurn)
     {
-        EnemyType enemyType = ActsManager.currentEnemyType;
+        BoxType enemyType = ActsManager.currentBoxType;
 
         switch (enemyType)
         {
-            case EnemyType.Normal:
+            case BoxType.NormalFight:
                 GenerateGoldReward(remainningTurn);
                 GenerateReward(1, 0);
                 break;
 
-            case EnemyType.Elite:
+            case BoxType.EliteFight:
                 GenerateGoldReward(remainningTurn);
                 GenerateReward(1, 1);
                 break;
 
-            case EnemyType.Boss:
+            case BoxType.BossFight:
                 GenerateGoldReward(remainningTurn);
                 GenerateReward(1, 0);
                 GenerateCardReward(CardRarity.Legend);

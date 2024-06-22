@@ -3,14 +3,14 @@ using UnityEngine;
 
 public class BoxLayout : MonoBehaviour
 {
-    private int rows = 4;
-    private int columns = 5;
-    public float spacing = 1.0f;
-    public int number = 0; // Public variable to determine how many objects to instantiate
+    [SerializeField] private int rows = 4;
+    [SerializeField] private int columns = 5;
+    [SerializeField] private float spacing = 1.0f;
+    [SerializeField] private int number = 20; // Public variable to determine how many objects to instantiate
     public GameObject prefab; // Prefab to instantiate
     private PlayerBehavior player;
 
-    public List<TowerBoxBehavior> currentLayerBox = new List<TowerBoxBehavior>(); // List to hold the child objects
+    public List<TowerBoxBehavior> currentLayerBox; // List to hold the child objects
 
     void Awake()
     {
@@ -57,19 +57,25 @@ public class BoxLayout : MonoBehaviour
         return towerBoxes;
     }
 
-    void EnterNewLayer()
+    public void EnterNewLayer()
     {
-        foreach (TowerBoxBehavior towerbox in currentLayerBox)
+        if (currentLayerBox != null)
         {
-            Destroy(towerbox.gameObject);
+            foreach (TowerBoxBehavior towerbox in currentLayerBox)
+            {
+                Destroy(towerbox.gameObject);
+            }
         }
+
+        currentLayerBox = new List<TowerBoxBehavior>();
 
         // Instantiate new GameObjects if number is not zero
         if (number != 0)
         {
-            for (int i = currentLayerBox.Count; i < number; i++)
+            for (int i = 0; i < number; i++)
             {
                 GameObject newObject = Instantiate(prefab, transform);
+                Debug.Log("Instaniate prefab");
                 TowerBoxBehavior newBox = newObject.GetComponent<TowerBoxBehavior>();
                 currentLayerBox.Add(newBox);
             }
@@ -86,7 +92,10 @@ public class BoxLayout : MonoBehaviour
         }
 
         // 移动玩家位置到(3，0)
-        player.transform.position = currentLayerBox.Find(obj => obj.row == 3 && obj.column == 0).transform.position;
+        player.transform.position = FindBox(3, 0).transform.position;
+        player.row = 3;
+        player.column = 0;
+
     }
 
     void ArrangeGrid()

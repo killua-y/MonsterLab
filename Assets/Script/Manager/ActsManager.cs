@@ -10,7 +10,7 @@ public class ActsManager : Singleton<ActsManager>
     public static int currentLayer = 1;
     private bool startCurrentAct;
     private int generateCombatReward;
-    public static EnemyType currentEnemyType;
+    public static BoxType currentBoxType;
     public static string currentEnemy = "AcidSlimeEnermy";
     public Action<int, int> OnPlayerMove;
 
@@ -62,6 +62,7 @@ public class ActsManager : Singleton<ActsManager>
             {
                 yield return null;
                 generateCombatReward = playerData.nextAct.generateCombatReward;
+                currentBoxType = currentBox.boxType;
                 RewardManager.Instance.GenerateReward(generateCombatReward);
             }
             else
@@ -108,7 +109,7 @@ public class ActsManager : Singleton<ActsManager>
         switch (_boxType)
         {
             case BoxType.NormalFight:
-                currentEnemyType = EnemyType.Normal;
+                currentBoxType = _boxType;
                 currentEnemy = FindEnemy(currentLayer, EnemyType.Normal).scriptLocation;
 
                 InGameStateManager.Instance.CombatStart();
@@ -116,7 +117,7 @@ public class ActsManager : Singleton<ActsManager>
                 break;
 
             case BoxType.EliteFight:
-                currentEnemyType = EnemyType.Elite;
+                currentBoxType = _boxType;
                 currentEnemy = FindEnemy(currentLayer, EnemyType.Elite).scriptLocation;
 
                 InGameStateManager.Instance.CombatStart();
@@ -124,7 +125,7 @@ public class ActsManager : Singleton<ActsManager>
                 break;
 
             case BoxType.BossFight:
-                currentEnemyType = EnemyType.Boss;
+                currentBoxType = _boxType;
                 currentEnemy = FindEnemy(currentLayer, EnemyType.Boss).scriptLocation;
 
                 InGameStateManager.Instance.CombatStart();
@@ -160,6 +161,14 @@ public class ActsManager : Singleton<ActsManager>
     {
         startCurrentAct = false;
         generateCombatReward = -1;
+
+        TowerBoxBehavior currentBox = boxLayout.FindBox(playerBehavior.row, playerBehavior.column);
+
+        if (currentBox.boxType == BoxType.BossFight)
+        {
+            boxLayout.EnterNewLayer();
+        }
+
         saveAndLoadManager.SaveData();
     }
 }
