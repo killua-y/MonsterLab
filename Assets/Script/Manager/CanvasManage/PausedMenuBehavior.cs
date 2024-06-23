@@ -14,9 +14,8 @@ public class PausedMenuBehavior : MonoBehaviour
 
     public void BackToMainMenu()
     {
-        Time.timeScale = 1;
         SceneManager.LoadScene("MainMenu");
-        InGameStateManager.gamePased = false;
+        Invoke("ReturnHelper", 0);
     }
 
     public void ReturnToGame()
@@ -25,4 +24,11 @@ public class PausedMenuBehavior : MonoBehaviour
         Time.timeScale = 1;
         InGameStateManager.gamePased = false;
     }
+
+    void ReturnHelper()
+    {
+        InGameStateManager.gamePased = false;
+        Time.timeScale = 1;
+    }
+
 }

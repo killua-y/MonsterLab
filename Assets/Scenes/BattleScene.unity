@@ -7186,7 +7186,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 769928281}
         m_TargetAssemblyTypeName: CanvasManager, Assembly-CSharp
         m_MethodName: OpenMap
         m_Mode: 1
@@ -13880,7 +13880,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 769928281}
         m_TargetAssemblyTypeName: CanvasManager, Assembly-CSharp
         m_MethodName: OpenDeck
         m_Mode: 1

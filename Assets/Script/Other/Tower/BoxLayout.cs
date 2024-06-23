@@ -75,7 +75,6 @@ public class BoxLayout : MonoBehaviour
             for (int i = 0; i < number; i++)
             {
                 GameObject newObject = Instantiate(prefab, transform);
-                Debug.Log("Instaniate prefab");
                 TowerBoxBehavior newBox = newObject.GetComponent<TowerBoxBehavior>();
                 currentLayerBox.Add(newBox);
             }

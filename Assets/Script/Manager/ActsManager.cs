@@ -164,8 +164,16 @@ public class ActsManager : Singleton<ActsManager>
 
         TowerBoxBehavior currentBox = boxLayout.FindBox(playerBehavior.row, playerBehavior.column);
 
+        // 当进入下一层
         if (currentBox.boxType == BoxType.BossFight)
         {
+            if (currentLayer >= 3)
+            {
+                Debug.Log("GameOver, You Win");
+            }
+
+            currentLayer += 1;
+
             boxLayout.EnterNewLayer();
         }
 
