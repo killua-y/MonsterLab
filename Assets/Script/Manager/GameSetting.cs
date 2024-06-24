@@ -7,11 +7,11 @@ using System.IO;
 
 public class GameSetting : MonoBehaviour
 {
-    public static System.Random cardRewardRand;
-    public static System.Random CurrentActRand;
-
     public static float scaleFactor;
-
+    // 用于卡牌获取序列
+    public static System.Random cardRewardRand;
+    // 用于战斗内随机数，以及商店随机数
+    public static System.Random CurrentActRand;
     // 用于生成敌人顺序，事件顺序，DNA顺序
     public static System.Random randForInitialize;
 

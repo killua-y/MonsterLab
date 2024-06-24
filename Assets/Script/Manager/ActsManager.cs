@@ -25,6 +25,7 @@ public class ActsManager : Singleton<ActsManager>
     private PlayerBehavior playerBehavior;
     private MapLayout mapLayout;
     private SaveAndLoadManager saveAndLoadManager;
+    private GameSetting gameSetting;
 
     // Start is called before the first frame update
     protected override void Awake()
@@ -35,6 +36,7 @@ public class ActsManager : Singleton<ActsManager>
         playerBehavior = FindAnyObjectByType<PlayerBehavior>();
         mapLayout = FindAnyObjectByType<MapLayout>();
         saveAndLoadManager = FindAnyObjectByType<SaveAndLoadManager>();
+        gameSetting = FindAnyObjectByType<GameSetting>();
     }
 
     public void LoadData(PlayerData playerData)
@@ -117,7 +119,10 @@ public class ActsManager : Singleton<ActsManager>
         step += 1;
         startCurrentAct = true;
         saveAndLoadManager.SaveData();
+
         //_boxType = BoxType.Merchant;
+        // 生成战斗需要的random
+        gameSetting.GenerateNewStepRand();
         switch (_boxType)
         {
             case BoxType.NormalFight:

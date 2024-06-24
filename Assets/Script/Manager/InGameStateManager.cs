@@ -38,7 +38,6 @@ public class InGameStateManager : Singleton<InGameStateManager>
     public TextMeshProUGUI DiscardPileText;
 
     // private
-    private GameSetting gameSetting;
 
     protected override void Awake()
     {
@@ -54,9 +53,6 @@ public class InGameStateManager : Singleton<InGameStateManager>
     public void CombatStart()
     {
         inCombat = true;
-
-        // 生成当前战斗需要的random
-        gameSetting.GenerateNewStepRand();
 
         CardModel.InitialzeDeck();
 

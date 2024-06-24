@@ -18,6 +18,7 @@ public class MapLayout : MonoBehaviour
     void Awake()
     {
         player = FindAnyObjectByType<PlayerBehavior>();
+        gameSetting = FindAnyObjectByType<GameSetting>();
     }
 
     public void LoadData(PlayerData playerData)
