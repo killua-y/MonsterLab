@@ -28,7 +28,7 @@ public class InGameCardModel : Singleton<InGameCardModel>
             drawPileList.Add(newCard);
         }
 
-        HelperFunction.Shuffle(drawPileList, GameSetting.InCombatRand);
+        HelperFunction.Shuffle(drawPileList, GameSetting.CurrentActRand);
 
         foreach (Card card in CardDataModel.Instance.GetExtraDeck())
         {
@@ -89,7 +89,7 @@ public class InGameCardModel : Singleton<InGameCardModel>
     public void ShuffleDeck()
     {
         // Shuffle 弃牌堆
-        HelperFunction.Shuffle(discardPileList, GameSetting.InCombatRand);
+        HelperFunction.Shuffle(discardPileList, GameSetting.CurrentActRand);
 
         // 将卡牌加入抽牌堆，并清空弃牌堆
         drawPileList.AddRange(discardPileList);

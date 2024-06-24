@@ -134,7 +134,7 @@ public class UponSummonFunction : MonoBehaviour
                     itemCards.Add(card);
                 }
             }
-            Card itemCard = Card.CloneCard(HelperFunction.GetRandomItem(itemCards, GameSetting.InCombatRand));
+            Card itemCard = Card.CloneCard(HelperFunction.GetRandomItem(itemCards, GameSetting.CurrentActRand));
             InGameStateManager.Instance.AddToHand(itemCard);
         }
         else

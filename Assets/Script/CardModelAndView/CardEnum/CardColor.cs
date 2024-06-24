@@ -4,8 +4,9 @@ using UnityEngine;
 
 public enum CardColor
 {
-    None,
+    Base,
     Start,
+    None,
     Red,
     Blue,
     Black

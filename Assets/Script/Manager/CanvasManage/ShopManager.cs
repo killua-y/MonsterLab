@@ -115,12 +115,12 @@ public class ShopManager : MonoBehaviour
 
     public void RefreshDNA()
     {
-        dnaList = new List<DNA>();
-        for (int i = 0; i < 3; i++)
-        {
-            DNA dna = RewardManager.Instance.GetNextDNA();
-            dnaList.Add(dna);
-        }
+        //dnaList = new List<DNA>();
+        //for (int i = 0; i < 3; i++)
+        //{
+        //    DNA dna = RewardManager.Instance.GetNextDNA();
+        //    dnaList.Add(dna);
+        //}
 
         UpdateShopDNAView();
     }
@@ -141,13 +141,13 @@ public class ShopManager : MonoBehaviour
             switch (card.cardRarity)
             {
                 case CardRarity.Normal:
-                    price = GameSetting.InCombatRand.Next(50, 101);
+                    price = GameSetting.CurrentActRand.Next(50, 101);
                     break;
                 case CardRarity.Rare:
-                    price = GameSetting.InCombatRand.Next(100, 151);
+                    price = GameSetting.CurrentActRand.Next(100, 151);
                     break;
                 case CardRarity.Legend:
-                    price = GameSetting.InCombatRand.Next(150, 201);
+                    price = GameSetting.CurrentActRand.Next(150, 201);
                     break;
                 default:
                     break;

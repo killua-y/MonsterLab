@@ -10,7 +10,6 @@ public class AcidSlimeEnemy : EnemyBehavior
     // 该敌人拥有的怪兽
     private MonsterCard Slime;
     private MonsterCard AcidSlime;
-    private MonsterCard test;
 
     public override void LoadEnemy()
     {
@@ -70,3 +69,34 @@ public class BlackSlimeEnemy : EnemyBehavior
 }
 
 
+public class SpliteSlimeEnemy : EnemyBehavior
+{
+    public override int MaxTurn { get; set; } = 3;
+
+    // 该敌人拥有的怪兽
+    private MonsterCard BlackSlime;
+    private MonsterCard FireSlime;
+
+    public override void LoadEnemy()
+    {
+        BlackSlime = CardDataModel.Instance.GetEnemyCard(2);
+        FireSlime = CardDataModel.Instance.GetEnemyCard(3);
+
+        // 该在哪几个回合召唤怪兽
+        MonsterSummonTurn.Add(0);
+    }
+
+    // 根据当前回合召唤怪兽
+    public override void SummonEnemy()
+    {
+        if (index == 0)
+        {
+            SummonEnenmy(3, 5, BlackSlime);
+            SummonEnenmy(1, 4, FireSlime);
+            SummonEnenmy(2, 5, FireSlime);
+            SummonEnenmy(3, 5, FireSlime);
+        }
+
+        base.SummonEnemy();
+    }
+}

@@ -10,12 +10,12 @@ public class SaveAndLoadManager : MonoBehaviour
 
     // 引用的script
     private GameSetting gameSetting;
-    private BoxLayout boxLayout;
+    private MapLayout mapLayout;
 
     private void Awake()
     {
         gameSetting = FindAnyObjectByType<GameSetting>();
-        boxLayout = FindAnyObjectByType<BoxLayout>();
+        mapLayout = FindAnyObjectByType<MapLayout>();
     }
 
     private void Start()
@@ -25,10 +25,12 @@ public class SaveAndLoadManager : MonoBehaviour
         // Check if the file exists
         if (File.Exists(path))
         {
+            Debug.Log("Continue Game");
             LoadData();
         }
         else
         {
+            Debug.Log("New Game");
             LoadNewGame();
         }
     }
@@ -52,10 +54,18 @@ public class SaveAndLoadManager : MonoBehaviour
             string json = File.ReadAllText(path);
             playerData = JsonUtility.FromJson<PlayerData>(json);
         }
+
+        // 该顺序无法变化
+        // 不需要其他script的loadData
         gameSetting.LoadData(playerData);
         PlayerStatesManager.Instance.LoadData(playerData);
-        boxLayout.LoadData(playerData);
         CardDataModel.Instance.LoadData(playerData);
+
+        // 从这里开始是需要其他script的loadData
+        mapLayout.LoadData(playerData);
+        RewardManager.Instance.LoadData();
+
+        // acts永远最后call
         ActsManager.Instance.LoadData(playerData);
     }
 
@@ -67,7 +77,7 @@ public class SaveAndLoadManager : MonoBehaviour
         playerData.Seed = 2;
         playerData.randomState = gameSetting.SaveData();
         playerData.playerStates = PlayerStatesManager.Instance.SaveData();
-        playerData.currentLayerBox = boxLayout.SaveData();
+        playerData.currentLayerBox = mapLayout.SaveData();
         playerData.nextAct = ActsManager.Instance.SaveData();
 
         foreach (Card card in CardDataModel.Instance.GetMainDeck())
@@ -156,6 +166,7 @@ public class PlayerStates
 public class NextAct
 {
     public int layer;
+    public int step;
     public bool startCurrentAct;
     public int generateCombatReward;
     public List<Enemy> EnemiesEncountered;

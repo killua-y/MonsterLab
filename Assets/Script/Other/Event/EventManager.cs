@@ -61,7 +61,6 @@ public class EventManager : MonoBehaviour
 
         if (layerNumber == 1)
         {
-            HelperFunction.Shuffle(layer1Event, GameSetting.BoxLayoutRand);
             this.gameObject.AddComponent(Type.GetType(layer1Event[0]));
             EventBehavior newEvent = this.gameObject.GetComponent<EventBehavior>();
             newEvent.SetUp();

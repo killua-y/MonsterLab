@@ -7,7 +7,8 @@ using UnityEngine.SceneManagement;
 public class ActsManager : Singleton<ActsManager>
 {
     // 涉及玩家存档
-    public static int currentLayer = 1;
+    public static int currentLayer;
+    public static int step;
     private bool startCurrentAct;
     private int generateCombatReward;
     public static BoxType currentBoxType;
@@ -22,7 +23,7 @@ public class ActsManager : Singleton<ActsManager>
     private ShopManager shopManager;
     private EventManager eventManager;
     private PlayerBehavior playerBehavior;
-    private BoxLayout boxLayout;
+    private MapLayout mapLayout;
     private SaveAndLoadManager saveAndLoadManager;
 
     // Start is called before the first frame update
@@ -32,7 +33,7 @@ public class ActsManager : Singleton<ActsManager>
         shopManager = FindAnyObjectByType<ShopManager>();
         eventManager = FindAnyObjectByType<EventManager>();
         playerBehavior = FindAnyObjectByType<PlayerBehavior>();
-        boxLayout = FindAnyObjectByType<BoxLayout>();
+        mapLayout = FindAnyObjectByType<MapLayout>();
         saveAndLoadManager = FindAnyObjectByType<SaveAndLoadManager>();
     }
 
@@ -43,15 +44,19 @@ public class ActsManager : Singleton<ActsManager>
 
     IEnumerator LoadDataHelper(PlayerData playerData)
     {
-        LoadEnermyList();
-        if (playerData.playerStates == null)
+        LoadEnermyAndEventList(playerData);
+        if (playerData.nextAct == null)
         {
-            TowerBoxBehavior currentBox = boxLayout.FindBox(playerBehavior.row, playerBehavior.column);
+            currentLayer = 1;
+            step = 0;
+            TowerBoxBehavior currentBox = mapLayout.FindBox(playerBehavior.row, playerBehavior.column);
             playerBehavior.transform.position = currentBox.transform.position;
         }
         else
         {
-            TowerBoxBehavior currentBox = boxLayout.FindBox(playerBehavior.row, playerBehavior.column);
+            currentLayer = playerData.nextAct.layer;
+            step = playerData.nextAct.step;
+            TowerBoxBehavior currentBox = mapLayout.FindBox(playerBehavior.row, playerBehavior.column);
             playerBehavior.transform.position = currentBox.transform.position;
             if (playerData.nextAct.startCurrentAct)
             {
@@ -82,9 +87,15 @@ public class ActsManager : Singleton<ActsManager>
         };
     }
 
-    private void LoadEnermyList()
+    private void LoadEnermyAndEventList(PlayerData playerData)
     {
         allEnemyList = CardDataModel.Instance.enemyList;
+        HelperFunction.Shuffle(allEnemyList, GameSetting.randForInitialize);
+
+        if (playerData.nextAct != null)
+        {
+
+        }
     }
 
     private Enemy FindEnemy(int _layer, EnemyType _enemyType)
@@ -103,6 +114,7 @@ public class ActsManager : Singleton<ActsManager>
 
     public void ActivateAct(BoxType _boxType)
     {
+        step += 1;
         startCurrentAct = true;
         saveAndLoadManager.SaveData();
         //_boxType = BoxType.Merchant;
@@ -141,7 +153,7 @@ public class ActsManager : Singleton<ActsManager>
                 break;
 
             case BoxType.Treasure:
-                RewardManager.Instance.GenerateReward(0, 1);
+                RewardManager.Instance.GenerateDNAReward(CardRarity.Rare);
                 break;
 
             default:
@@ -162,7 +174,7 @@ public class ActsManager : Singleton<ActsManager>
         startCurrentAct = false;
         generateCombatReward = -1;
 
-        TowerBoxBehavior currentBox = boxLayout.FindBox(playerBehavior.row, playerBehavior.column);
+        TowerBoxBehavior currentBox = mapLayout.FindBox(playerBehavior.row, playerBehavior.column);
 
         // 当进入下一层
         if (currentBox.boxType == BoxType.BossFight)
@@ -173,8 +185,9 @@ public class ActsManager : Singleton<ActsManager>
             }
 
             currentLayer += 1;
+            step = 0;
 
-            boxLayout.EnterNewLayer();
+            mapLayout.EnterNewLayer();
         }
 
         saveAndLoadManager.SaveData();

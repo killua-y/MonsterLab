@@ -25,7 +25,6 @@ public class MainMenuBehavior : MonoBehaviour
             File.Delete(path);
             path = path + ".meta";
             File.Delete(path);
-            Debug.Log("File deleted at: " + path);
         }
 
         SceneManager.LoadScene("BattleScene");

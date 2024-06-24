@@ -71,7 +71,7 @@ public class SelectOneCardEvent : EventBehavior
 
     private void Option1()
     {
-        RewardManager.Instance.GenerateReward(1, 0);
+        RewardManager.Instance.GenerateCardReward(1);
         Leave();
     }
 }

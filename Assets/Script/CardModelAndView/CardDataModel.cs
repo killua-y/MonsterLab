@@ -54,7 +54,7 @@ public class CardDataModel : Singleton<CardDataModel>
         else
         {
             Debug.Log("New game, reset player deck");
-        }    
+        }
     }
 
     private void LoadKeyWordList()

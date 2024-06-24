@@ -8,10 +8,10 @@ using UnityEngine;
 
 public class InGameStateManager : Singleton<InGameStateManager>
 {
-    public static bool gamePased = false;
-    public static bool inCombat = false;
-    public static bool PreparePhase = false;
-    public static bool BattelPhase = false;
+    public static bool gamePased;
+    public static bool inCombat;
+    public static bool PreparePhase;
+    public static bool BattelPhase;
 
     [Header("CardHolder")]
     [SerializeField]
@@ -36,11 +36,17 @@ public class InGameStateManager : Singleton<InGameStateManager>
 
     public TextMeshProUGUI DrawPileText;
     public TextMeshProUGUI DiscardPileText;
-    // Start is called before the first frame update
+
+    // private
+    private GameSetting gameSetting;
 
     protected override void Awake()
     {
         base.Awake();
+        gamePased = false;
+        inCombat = false;
+        PreparePhase = false;
+        BattelPhase = false;
         CardModel = FindObjectOfType<InGameCardModel>();
     }
 
@@ -48,6 +54,10 @@ public class InGameStateManager : Singleton<InGameStateManager>
     public void CombatStart()
     {
         inCombat = true;
+
+        // 生成当前战斗需要的random
+        gameSetting.GenerateNewStepRand();
+
         CardModel.InitialzeDeck();
 
         OnCombatStart?.Invoke(); // Safe way to invoke the delegate

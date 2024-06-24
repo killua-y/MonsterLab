@@ -1,16 +1,19 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BoxLayout : MonoBehaviour
+public class MapLayout : MonoBehaviour
 {
-    [SerializeField] private int rows = 4;
-    [SerializeField] private int columns = 5;
-    [SerializeField] private float spacing = 1.0f;
-    [SerializeField] private int number = 20; // Public variable to determine how many objects to instantiate
+    private int rows = 4;
+    private int columns = 5;
+    private float spacing = 150f;
+    private int number = 20; // Public variable to determine how many objects to instantiate
     public GameObject prefab; // Prefab to instantiate
     private PlayerBehavior player;
 
     public List<TowerBoxBehavior> currentLayerBox; // List to hold the child objects
+
+    private System.Random mapRand;
+    private GameSetting gameSetting;
 
     void Awake()
     {
@@ -21,7 +24,7 @@ public class BoxLayout : MonoBehaviour
     {
         if (playerData.currentLayerBox == null)
         {
-            EnterNewLayer();
+            EnterNewLayer(true);
         }
         else
         {
@@ -57,8 +60,21 @@ public class BoxLayout : MonoBehaviour
         return towerBoxes;
     }
 
-    public void EnterNewLayer()
+    public void EnterNewLayer(bool newGame = false)
     {
+        int currentLayer;
+
+        if (newGame)
+        {
+            currentLayer = 1;
+        }
+        else
+        {
+            currentLayer = ActsManager.currentLayer;
+        }
+
+        mapRand = gameSetting.GenerateNewRand(currentLayer);
+
         if (currentLayerBox != null)
         {
             foreach (TowerBoxBehavior towerbox in currentLayerBox)
@@ -186,7 +202,7 @@ public class BoxLayout : MonoBehaviour
             BoxType.Events, BoxType.Events, BoxType.Events, BoxType.Events, BoxType.Events, BoxType.Events,
         };
 
-        HelperFunction.Shuffle(validBoxes, GameSetting.BoxLayoutRand);
+        HelperFunction.Shuffle(validBoxes, mapRand);
 
         // Assign the box types to the valid boxes
         for (int i = 0; i < validBoxes.Count; i++)
@@ -231,12 +247,12 @@ public class BoxLayout : MonoBehaviour
                 break;
             }
 
-            int randomIndex = GameSetting.BoxLayoutRand.Next(0, rangeBoxes.Count);
+            int randomIndex = mapRand.Next(0, rangeBoxes.Count);
             selectedBoxes.Add(rangeBoxes[randomIndex]);
             rangeBoxes.RemoveAt(randomIndex);
         }
 
-        HelperFunction.Shuffle(selectedBoxes, GameSetting.BoxLayoutRand);
+        HelperFunction.Shuffle(selectedBoxes, mapRand);
         return selectedBoxes;
     }
 }
