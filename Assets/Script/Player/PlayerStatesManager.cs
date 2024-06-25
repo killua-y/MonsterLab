@@ -11,7 +11,8 @@ public class PlayerStatesManager : Singleton<PlayerStatesManager>
     public static int playerHealthPoint;
     public static int maxUnit;
 
-    public TextMeshProUGUI playerHealthText;
+    public Transform heartParent;
+    public GameObject heartIcon;
     public TextMeshProUGUI playerGoldText;
     public Transform DNAParent;
     public GameObject DNAPrefab;
@@ -56,8 +57,8 @@ public class PlayerStatesManager : Singleton<PlayerStatesManager>
             newDNA.GetComponent<DNABehavior>().SetUp(dna);
         }
 
-        playerHealthText.text = "Player Health: " + playerHealthPoint;
-        playerGoldText.text = "Gold: " + Gold;
+        UpdateHealthUI(playerHealthPoint);
+        playerGoldText.text = Gold.ToString() ;
     }
 
     public PlayerStates SaveData()
@@ -71,7 +72,7 @@ public class PlayerStatesManager : Singleton<PlayerStatesManager>
             MaxCost = maxCost,
             MaxUnit = maxUnit,
         };
-}
+    }
 
 
     // 新获取dna
@@ -88,24 +89,38 @@ public class PlayerStatesManager : Singleton<PlayerStatesManager>
     public void DecreaseHealth(int number)
     {
         playerHealthPoint -= number;
-        playerHealthText.text = "Player Health: " + playerHealthPoint;
+        UpdateHealthUI(playerHealthPoint);
     }
 
     public void IncreaseHealth(int number)
     {
         playerHealthPoint += number;
-        playerHealthText.text = "Player Health: " + playerHealthPoint;
+        UpdateHealthUI(playerHealthPoint);
     }
+
+    void UpdateHealthUI(int currentHealth)
+    {
+        foreach(Transform child in heartParent)
+        {
+            Destroy(child.gameObject);
+        }
+
+        for (int i = 0; i < currentHealth; i++)
+        {
+            Instantiate(heartIcon, heartParent);
+        }
+    }
+
 
     public void IncreaseGold(int number)
     {
         Gold += number;
-        playerGoldText.text = "Gold: " + Gold;
+        playerGoldText.text = Gold.ToString();
     }
 
     public void DecreaseGold(int number)
     {
         Gold -= number;
-        playerGoldText.text = "Gold: " + Gold;
+        playerGoldText.text = Gold.ToString();
     }
 }

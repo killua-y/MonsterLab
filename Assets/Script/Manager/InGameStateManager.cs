@@ -101,13 +101,7 @@ public class InGameStateManager : Singleton<InGameStateManager>
 
         PreparePhase = false;
 
-        CardModel.DisCardAllCard();
-
-        //将手牌中的卡片删除
-        foreach (Transform child in hand)
-        {
-            GameObject.Destroy(child.gameObject);
-        }
+        DisCardAllCard();
 
         OnPreparePhaseEnd();
 

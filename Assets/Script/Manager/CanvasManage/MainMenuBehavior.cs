@@ -6,9 +6,10 @@ using UnityEngine.SceneManagement;
 
 public class MainMenuBehavior : MonoBehaviour
 {
-    private string playerDataLocation = "/Datas/InGameData/playerData.json";
-
+    public static int seed;
     public static CardColor character = CardColor.Red;
+
+    private string playerDataLocation = "/Datas/InGameData/playerData.json";
 
     public void StartGame()
     {
