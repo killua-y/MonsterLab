@@ -14,9 +14,19 @@ public class DamageCalculate : MonoBehaviour
     private Dictionary<BaseEntity, DamageSliderBehavior> takeDamageSliders;
     private int maxTakeDamage;
 
-    private bool isOpen = true;
+    private bool isOpen;
+    private float closePosition;
+    private float openPosition;
     // Start is called before the first frame update
-    void Start()
+
+    private void Awake()
+    {
+        isOpen = false;
+        closePosition = transform.localPosition.x;
+        openPosition = 965f;
+    }
+
+    private void Start()
     {
         InGameStateManager.Instance.OnBattlePhaseStart += OnBattlePhaseStart;
         InGameStateManager.Instance.OnPreparePhaseStart += OnPreparePhaseStart;
@@ -70,8 +80,8 @@ public class DamageCalculate : MonoBehaviour
 
     void UpdateOrder()
     {
-        dealDamageBoard.GetComponent<DamageBoarderBehavior>().SetLayoutVertical();
-        takeDamageBoard.GetComponent<DamageBoarderBehavior>().SetLayoutVertical();
+        dealDamageBoard.GetComponent<DamageBoarderBehavior>().UpdateLayout();
+        takeDamageBoard.GetComponent<DamageBoarderBehavior>().UpdateLayout();
     }
 
     void OnBattlePhaseStart()
@@ -98,6 +108,11 @@ public class DamageCalculate : MonoBehaviour
             takeDamageSlider.UpdateSmallIcon(baseEntity.cardModel);
             takeDamageSliders.Add(baseEntity, takeDamageSlider);
         }
+
+        if (!isOpen)
+        {
+            ChangePosition();
+        }
     }
 
     void OnPreparePhaseStart()
@@ -112,12 +127,12 @@ public class DamageCalculate : MonoBehaviour
     {
         if (isOpen)
         {
-            StartCoroutine(SmoothMoveCoroutine(956, 1160));
+            StartCoroutine(SmoothMoveCoroutine(openPosition, closePosition));
             isOpen = false;
         }
         else
         {
-            StartCoroutine(SmoothMoveCoroutine(1160, 956));
+            StartCoroutine(SmoothMoveCoroutine(closePosition, openPosition));
             isOpen = true;
         }
     }

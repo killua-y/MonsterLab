@@ -18,6 +18,8 @@ public class ActsManager : Singleton<ActsManager>
     public GameObject MapCanvas;
 
     private List<Enemy> allEnemyList = new List<Enemy>();
+    private List<Enemy> enemiesEncountered = new List<Enemy>();
+    private List<string> eventEncountered = new List<string>();
 
     // 引用的script
     private ShopManager shopManager;
@@ -74,7 +76,7 @@ public class ActsManager : Singleton<ActsManager>
             }
             else
             {
-                Debug.Log("Do nothing");
+                Debug.Log("No Act, Do nothing");
             }
         }
     }
@@ -96,7 +98,9 @@ public class ActsManager : Singleton<ActsManager>
 
         if (playerData.nextAct != null)
         {
-
+            // 移除所有已经遇到过的敌人
+            enemiesEncountered = playerData.nextAct.EnemiesEncountered;
+            allEnemyList.RemoveAll(enemyB => enemiesEncountered.Exists(enemyA => enemyA.name == enemyB.name));
         }
     }
 
@@ -123,11 +127,14 @@ public class ActsManager : Singleton<ActsManager>
         //_boxType = BoxType.Merchant;
         // 生成战斗需要的random
         gameSetting.GenerateNewStepRand();
+        Enemy newEnemy;
         switch (_boxType)
         {
             case BoxType.NormalFight:
                 currentBoxType = _boxType;
-                currentEnemy = FindEnemy(currentLayer, EnemyType.Normal).scriptLocation;
+                newEnemy = FindEnemy(currentLayer, EnemyType.Normal);
+                currentEnemy = newEnemy.scriptLocation;
+                enemiesEncountered.Add(newEnemy);
 
                 InGameStateManager.Instance.CombatStart();
                 MapCanvas.SetActive(false);
@@ -135,7 +142,9 @@ public class ActsManager : Singleton<ActsManager>
 
             case BoxType.EliteFight:
                 currentBoxType = _boxType;
-                currentEnemy = FindEnemy(currentLayer, EnemyType.Elite).scriptLocation;
+                newEnemy = FindEnemy(currentLayer, EnemyType.Elite);
+                currentEnemy = newEnemy.scriptLocation;
+                enemiesEncountered.Add(newEnemy);
 
                 InGameStateManager.Instance.CombatStart();
                 MapCanvas.SetActive(false);
@@ -143,7 +152,9 @@ public class ActsManager : Singleton<ActsManager>
 
             case BoxType.BossFight:
                 currentBoxType = _boxType;
-                currentEnemy = FindEnemy(currentLayer, EnemyType.Boss).scriptLocation;
+                newEnemy = FindEnemy(currentLayer, EnemyType.Boss);
+                currentEnemy = newEnemy.scriptLocation;
+                enemiesEncountered.Add(newEnemy);
 
                 InGameStateManager.Instance.CombatStart();
                 MapCanvas.SetActive(false);

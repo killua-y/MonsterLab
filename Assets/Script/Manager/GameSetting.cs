@@ -97,7 +97,6 @@ public class GameSetting : MonoBehaviour
     public System.Random GenerateNewRand(int index)
     {
         // 123分别为123层的地图rand
-        // 
         System.Random rand = new System.Random(seed);
         System.Random resultRand;
         int randIndex = 0;
