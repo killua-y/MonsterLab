@@ -16,8 +16,9 @@ public class EventManager : MonoBehaviour
 
     private List<string> layer1Event = new List<string>()
     {
+        "DeleteOneCardEvent",
         "SelectOneCardEvent",
-        "GainGoldEvent"
+        "GainGoldEvent",
     };
 
     public void ChangePosition()
@@ -57,7 +58,14 @@ public class EventManager : MonoBehaviour
 
     public void LoadEvent(int layerNumber)
     {
-        ChangePosition();
+        if (!isOpen)
+        {
+            ChangePosition();
+        }
+        else
+        {
+            Debug.Log("Trying to start new event while current event is still open");
+        }
 
         if (layerNumber == 1)
         {

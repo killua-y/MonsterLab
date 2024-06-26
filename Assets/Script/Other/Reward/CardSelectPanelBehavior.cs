@@ -10,13 +10,24 @@ public class CardSelectPanelBehavior : MonoBehaviour
     public Transform DeckContent;
     public List<Card> resultCardList;
 
+    // 从所有卡中选择n张卡
     public void SelectCardFromDeck(int amount, Action<List<Card>> callback)
     {
+        OpenPlayerDeck();
         StartCoroutine(SelectCard(amount, callback));
     }
 
+    // 从指定的卡中选择一张卡
+    public void SelectCardFromDeck(List<Card> cards, int amount, Action<List<Card>> callback)
+    {
+        OpenGivenDeck(cards);
+        StartCoroutine(SelectCard(amount, callback));
+    }
+
+    // 从所有卡中选择一张卡
     public void SelectCardFromDeck(Action<Card> callback)
     {
+        OpenPlayerDeck();
         StartCoroutine(SelectCard(1, cards => callback(cards[0])));
     }
 
@@ -24,7 +35,6 @@ public class CardSelectPanelBehavior : MonoBehaviour
     {
         resultCardList = new List<Card>();
 
-        OpenPlayerDeck();
         while (resultCardList.Count < amount)
         {
             if (Input.GetMouseButtonDown(1)) // Check for mouse click
@@ -38,10 +48,27 @@ public class CardSelectPanelBehavior : MonoBehaviour
         callback(resultCardList);
     }
 
+    // 打开玩家的卡组
     public void OpenPlayerDeck()
     {
-        List<Card> cardList = new List<Card>();
+        List<Card> cardList;
         cardList = CardDataModel.Instance.GetPlayerDeck();
+
+        foreach (Card card in cardList)
+        {
+            GameObject newCard = CardDisplayView.Instance.DisPlaySingleCard(card, DeckContent);
+            newCard.AddComponent<Scaling>();
+            newCard.AddComponent<CardSelectOnClick>().SetUp(card);
+        }
+
+        panel.SetActive(true);
+    }
+
+    // 打开pass in的卡组
+    public void OpenGivenDeck(List<Card> cards)
+    {
+        List<Card> cardList;
+        cardList = cards;
 
         foreach (Card card in cardList)
         {
