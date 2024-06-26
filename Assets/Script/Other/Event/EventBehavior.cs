@@ -8,10 +8,10 @@ using UnityEngine.UI;
 public class EventBehavior : MonoBehaviour
 {
     // 从0开始数
-    protected virtual List<string> optionsText { get; set; } = new List<string>();
-    protected virtual List<string> eventText { get; set; } = new List<string>();
-    protected virtual string eventImageLocation { get; set; } = "";
-    protected List<Action> optionsAction;
+    protected virtual string startSceneImageLocation { get; set; } = "";
+    protected virtual string startSceneEventText { get; set; } = "Event Text";
+    protected virtual List<string> startSceneOptionsText { get; set; } = new List<string>();
+    protected List<Action> startSceneOptionsAction;
 
     protected EventManager eventCanvasBehavior;
     protected GameObject optionButtonPrefab;
@@ -32,7 +32,7 @@ public class EventBehavior : MonoBehaviour
         bindAction();
 
         // 生成按钮
-        SetUpEventScene(eventImageLocation, eventText[0], optionsText, optionsAction);
+        SetUpEventScene(startSceneImageLocation, startSceneEventText, startSceneOptionsText, startSceneOptionsAction);
     }
 
     protected void SetUpEventScene(string _imageLocation, string _eventText, List<string> _optionsText, List<Action> _optionsAction)
@@ -71,19 +71,43 @@ public class EventBehavior : MonoBehaviour
         }
     }
 
+    protected void SetUpLeaveEventScene(string _imageLocation, string _eventText)
+    {
+        // 生成图片
+        eventCanvasBehavior.eventImage.sprite = Resources.Load<Sprite>(_imageLocation);
+
+        // 修改text
+        eventCanvasBehavior.eventText.text = _eventText;
+
+        // 清除多余按钮
+        foreach (Transform child in buttonParent)
+        {
+            Destroy(child.gameObject);
+        }
+
+        // 离开生成按钮
+        GameObject buttonObject = Instantiate(optionButtonPrefab, buttonParent);
+        Button optionButton = buttonObject.GetComponent<Button>();
+        TextMeshProUGUI buttonText = buttonObject.GetComponentInChildren<TextMeshProUGUI>();
+
+        buttonText.text = "Leave";
+        optionButton.onClick.AddListener(LeaveEvent);
+    }
+
     protected virtual void bindAction()
     {
 
     }
 
-    protected void CloseEvent()
+    protected void CloseEventPanel()
     {
         eventCanvasBehavior.ChangePosition();
         Destroy(this);
     }
 
-    protected void LeaveScene()
+    protected void LeaveEvent()
     {
+        CloseEventPanel();
         ActsManager.Instance.LeaveScene();
     }
 

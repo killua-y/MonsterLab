@@ -32,7 +32,7 @@ public class InGameStateManager : Singleton<InGameStateManager>
     public Action<CardBehavior, BaseEntity> OnSpellCardPlayed;
     public Action<CardBehavior, BaseEntity> OnItemCardPlayed;
 
-    private InGameCardModel CardModel;
+    private InGameCardModel inGameCardModel;
 
     public TextMeshProUGUI DrawPileText;
     public TextMeshProUGUI DiscardPileText;
@@ -46,7 +46,7 @@ public class InGameStateManager : Singleton<InGameStateManager>
         inCombat = false;
         PreparePhase = false;
         BattelPhase = false;
-        CardModel = FindObjectOfType<InGameCardModel>();
+        inGameCardModel = FindAnyObjectByType<InGameCardModel>();
     }
 
     // 当战斗开始的时候，初始化卡组内的卡牌
@@ -54,7 +54,7 @@ public class InGameStateManager : Singleton<InGameStateManager>
     {
         inCombat = true;
 
-        CardModel.InitialzeDeck();
+        inGameCardModel.InitialzeDeck();
 
         OnCombatStart?.Invoke(); // Safe way to invoke the delegate
 
@@ -129,7 +129,7 @@ public class InGameStateManager : Singleton<InGameStateManager>
 
     public void DisCardAllCard()
     {
-        CardModel.DisCardAllCard();
+        inGameCardModel.DisCardAllCard();
 
         //将手牌中的卡片删除
         foreach (Transform child in hand)
@@ -144,7 +144,7 @@ public class InGameStateManager : Singleton<InGameStateManager>
     public void DrawOneCard()
     {
         //1张抽牌
-        Card newCard = CardModel.DrawCard();
+        Card newCard = inGameCardModel.DrawCard();
 
         // 如果确实抽到了牌，那么将它可视化
         if (newCard != null)
@@ -167,21 +167,21 @@ public class InGameStateManager : Singleton<InGameStateManager>
     // 弃一张牌
     public void DiscardOneCard(Card _card)
     {
-        CardModel.DiscardCard(_card);
+        inGameCardModel.DiscardCard(_card);
         UpdatePileText();
     }
 
     // 消耗一张牌
     public void ExhaustOneCard(Card _card)
     {
-        CardModel.ExhaustOneCard(_card);
+        inGameCardModel.ExhaustOneCard(_card);
         UpdatePileText();
     }
 
     public void UpdatePileText()
     {
-        DrawPileText.text = CardModel.GetDrawPileCard().Count + "";
-        DiscardPileText.text = CardModel.GetDiscardPileCard().Count + "";
+        DrawPileText.text = inGameCardModel.GetDrawPileCard().Count + "";
+        DiscardPileText.text = inGameCardModel.GetDiscardPileCard().Count + "";
     }
 
     public void InitizeExtraDeck()
@@ -191,7 +191,7 @@ public class InGameStateManager : Singleton<InGameStateManager>
             Destroy(child.gameObject);
         }
 
-        List<Card> extraDeckPile = CardModel.GetExtraDeckPileCard();
+        List<Card> extraDeckPile = inGameCardModel.GetExtraDeckPileCard();
         foreach (Card card in extraDeckPile)
         {
             GameObject cardObject = CardDisplayView.Instance.DisPlaySingleCard(card, extraDeck);
@@ -205,9 +205,29 @@ public class InGameStateManager : Singleton<InGameStateManager>
     {
         if (card != null)
         {
-            CardModel.AddToHand(card);
+            inGameCardModel.AddToHand(card);
             CardDisplayView.Instance.DisPlaySingleCard(card, hand);
         }
+    }
+
+    // 将一张卡添加抽牌堆
+    public void AddToDrawPile(Card card)
+    {
+        if (card != null)
+        {
+            inGameCardModel.AddToDrawPile(card);
+        }
+        UpdatePileText();
+    }
+
+    // 将一张卡添加抽牌堆
+    public void AddToDiscardPile(Card card)
+    {
+        if (card != null)
+        {
+            inGameCardModel.AddToDiscardPile(card);
+        }
+        UpdatePileText();
     }
 
     public void ShowDarwPile()
@@ -217,7 +237,7 @@ public class InGameStateManager : Singleton<InGameStateManager>
             Destroy(child.gameObject);
         }
 
-        List<Card> drawPileCard = CardModel.GetDrawPileCard();
+        List<Card> drawPileCard = inGameCardModel.GetDrawPileCard();
         drawPileCard.Sort((card1, card2) => card1.id.CompareTo(card2.id));
 
         foreach (Card card in drawPileCard)
@@ -235,7 +255,7 @@ public class InGameStateManager : Singleton<InGameStateManager>
             Destroy(child.gameObject);
         }
 
-        List<Card> discardPileCard = CardModel.GetDiscardPileCard();
+        List<Card> discardPileCard = inGameCardModel.GetDiscardPileCard();
         discardPileCard.Sort((card1, card2) => card1.id.CompareTo(card2.id));
 
         foreach (Card card in discardPileCard)

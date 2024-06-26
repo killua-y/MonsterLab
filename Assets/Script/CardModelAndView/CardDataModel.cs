@@ -172,7 +172,12 @@ public class CardDataModel : Singleton<CardDataModel>
                 int layer = int.Parse(rowArray[3]);
                 EnemyType enemyType = HelperFunction.ConvertToEnum<EnemyType>(rowArray[4]);
                 string scriptLocation = rowArray[5];
-                enemyList.Add(new Enemy(name, layer, enemyType, scriptLocation));
+                bool easy = false;
+                if (rowArray[6] == "TRUE")
+                {
+                    easy = true;
+                }
+                enemyList.Add(new Enemy(name, layer, enemyType, scriptLocation, easy));
             }
             else
             {

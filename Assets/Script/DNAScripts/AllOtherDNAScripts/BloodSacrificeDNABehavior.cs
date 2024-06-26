@@ -5,6 +5,14 @@ using static Card;
 
 public class BloodSacrificeDNABehavior : DNABehavior
 {
+    // private
+    private InGameCardModel inGameCardModel;
+
+    private void Awake()
+    {
+        inGameCardModel = FindAnyObjectByType<InGameCardModel>();
+    }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -15,7 +23,7 @@ public class BloodSacrificeDNABehavior : DNABehavior
     {
         List<MonsterCard> cards = new List<MonsterCard>();
 
-        foreach (Card card in InGameCardModel.Instance.GetDrawPileCard())
+        foreach (Card card in inGameCardModel.GetDrawPileCard())
         {
             if (card is MonsterCard)
             {
@@ -23,7 +31,7 @@ public class BloodSacrificeDNABehavior : DNABehavior
             }
         }
 
-        foreach (Card card in InGameCardModel.Instance.GetExtraDeckPileCard())
+        foreach (Card card in inGameCardModel.GetExtraDeckPileCard())
         {
             if (card is MonsterCard)
             {

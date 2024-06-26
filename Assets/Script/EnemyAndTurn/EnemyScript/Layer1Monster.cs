@@ -50,7 +50,6 @@ public class BombMonsterGeneratorEntity : BaseEntity
 
     public override void Update()
     {
-        // 什么都不做
         // 防御塔型单位, 什么都不做
     }
 

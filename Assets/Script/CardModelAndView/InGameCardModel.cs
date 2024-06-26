@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class InGameCardModel : Singleton<InGameCardModel>
+public class InGameCardModel : MonoBehaviour
 {
     // 卡牌管理区
     public GameObject cardDataManager;
@@ -142,6 +142,20 @@ public class InGameCardModel : Singleton<InGameCardModel>
     public void AddToHand(Card card)
     {
         handList.Add(card);
+    }
+
+    // 将一张卡加入抽牌堆的随机位置
+    public void AddToDrawPile(Card card)
+    {
+        // 生成随机位置
+        int randomIndex = GameSetting.CurrentActRand.Next(0, drawPileList.Count + 1);
+        drawPileList.Insert(randomIndex, card);
+    }
+
+    // 将一张卡加入弃牌堆
+    public void AddToDiscardPile(Card card)
+    {
+        discardPileList.Add(card);
     }
 
     private void OnCombatEnd()

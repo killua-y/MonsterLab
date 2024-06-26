@@ -12,7 +12,7 @@ public class ActsManager : Singleton<ActsManager>
     private bool startCurrentAct;
     private int generateCombatReward;
     public static BoxType currentBoxType;
-    public static string currentEnemy = "AcidSlimeEnermy";
+    public static string currentEnemy;
     public Action<int, int> OnPlayerMove;
 
     public GameObject MapCanvas;
@@ -86,6 +86,7 @@ public class ActsManager : Singleton<ActsManager>
         return new NextAct
         {
             layer = currentLayer,
+            step = step,
             startCurrentAct = startCurrentAct,
             generateCombatReward = generateCombatReward
         };
@@ -107,12 +108,28 @@ public class ActsManager : Singleton<ActsManager>
     private Enemy FindEnemy(int _layer, EnemyType _enemyType)
     {
         Enemy enemyFind = null;
-        for (int i = 0; i < allEnemyList.Count; i++)
+
+        // 为前两步遇到的普通敌人寻找简单的敌人
+        if ((_enemyType == EnemyType.Normal) && (step <= 2))
         {
-            if ((allEnemyList[i].layer == _layer) && (allEnemyList[i].enemyType == _enemyType))
+            for (int i = 0; i < allEnemyList.Count; i++)
             {
-                enemyFind = allEnemyList[i];
-                allEnemyList.RemoveAt(i);
+                if ((allEnemyList[i].layer == _layer) && (allEnemyList[i].enemyType == _enemyType) && allEnemyList[i].easy)
+                {
+                    enemyFind = allEnemyList[i];
+                    allEnemyList.RemoveAt(i);
+                }
+            }
+        }
+        else
+        {
+            for (int i = 0; i < allEnemyList.Count; i++)
+            {
+                if ((allEnemyList[i].layer == _layer) && (allEnemyList[i].enemyType == _enemyType))
+                {
+                    enemyFind = allEnemyList[i];
+                    allEnemyList.RemoveAt(i);
+                }
             }
         }
         return enemyFind;
@@ -120,12 +137,12 @@ public class ActsManager : Singleton<ActsManager>
 
     public void ActivateAct(BoxType _boxType)
     {
-        step += 1;
         startCurrentAct = true;
         saveAndLoadManager.SaveData();
 
         //_boxType = BoxType.Merchant;
         // 生成战斗需要的random
+        step += 1;
         gameSetting.GenerateNewStepRand();
         Enemy newEnemy;
         switch (_boxType)

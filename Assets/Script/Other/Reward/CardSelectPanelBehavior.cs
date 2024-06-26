@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using static Card;
 
 public class CardSelectPanelBehavior : MonoBehaviour
 {
@@ -122,5 +123,80 @@ public class CardSelectOnClick : MonoBehaviour, IPointerClickHandler
     public void SetUp(Card _card)
     {
         card = _card;
+    }
+}
+
+public class CardSelectHelper
+{
+    public static List<Card> GetBaseUnit(List<Card> cards = null)
+    {
+        if (cards == null)
+        {
+            cards = CardDataModel.Instance.GetPlayerDeck();
+        }
+
+        List<Card> result = new List<Card>();
+        foreach (Card card in cards)
+        {
+            if (card.color == CardColor.Base)
+            {
+                result.Add(card);
+            }
+        }
+        return result;
+    }
+
+    public static List<Card> GetItem(List<Card> cards = null)
+    {
+        if (cards == null)
+        {
+            cards = CardDataModel.Instance.GetPlayerDeck();
+        }
+
+        List<Card> result = new List<Card>();
+        foreach (Card card in cards)
+        {
+            if (card is ItemCard)
+            {
+                result.Add(card);
+            }
+        }
+        return result;
+    }
+
+    public static List<Card> GetMonster(List<Card> cards = null)
+    {
+        if (cards == null)
+        {
+            cards = CardDataModel.Instance.GetPlayerDeck();
+        }
+
+        List<Card> result = new List<Card>();
+        foreach (Card card in cards)
+        {
+            if (card is MonsterCard)
+            {
+                result.Add(card);
+            }
+        }
+        return result;
+    }
+
+    public static List<Card> GetSpell(List<Card> cards)
+    {
+        if (cards == null)
+        {
+            cards = CardDataModel.Instance.GetPlayerDeck();
+        }
+
+        List<Card> result = new List<Card>();
+        foreach (Card card in cards)
+        {
+            if (card is SpellCard)
+            {
+                result.Add(card);
+            }
+        }
+        return result;
     }
 }

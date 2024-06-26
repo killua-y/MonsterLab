@@ -50,7 +50,7 @@ public class CardDisplay : MonoBehaviour, IPointerExitHandler, IPointerEnterHand
         Card originalCard;
         if (_card.color == CardColor.Black)
         {
-            originalCard = CardDataModel.Instance.GetEnemyCard(4);
+            originalCard = CardDataModel.Instance.GetEnemyCard(_card.id);
         }
         else
         {

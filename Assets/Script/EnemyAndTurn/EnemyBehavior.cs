@@ -69,14 +69,16 @@ public class Enemy
     public string name;
     public int layer;
     public EnemyType enemyType;
+    public bool easy;
     public string scriptLocation;
 
-    public Enemy(string _name, int _layer, EnemyType _enemyType, string _scriptLocation)
+    public Enemy(string _name, int _layer, EnemyType _enemyType, string _scriptLocation, bool _easy)
     {
         this.name = _name;
         this.layer = _layer;
         this.enemyType = _enemyType;
         this.scriptLocation = _scriptLocation;
+        this.easy = _easy;
     }
 }
 

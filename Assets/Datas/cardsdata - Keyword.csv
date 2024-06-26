@@ -1,8 +1,9 @@
 #,关键词名,关键词描述
-0,Upon Summon,Effect triggers when the monster is summoned.
-1,Upon Death,Effect triggers when the monster is being killed in battle.
-2,Mana,Effect triggers when the monster acuqire enough mana through attack.
+0,Upon Summon,Effect triggers when this monster is summoned.
+1,Upon Death,Effect triggers when this monster is being killed in battle.
+2,Mana,Effect triggers when this monster acuqire enough mana through attack.
 3,Round Start,Effect triggers when the round starts.
 4,Rank,You must kill n friendly unit in order to summon a monster that is Rank n.
 5,Reuse,This card will go to discard pile after cast.
 6,Exhaust,This card will be removed from this battle after cast.
+7,Slay,Effect triggers when opponent monster is being killed in battle.

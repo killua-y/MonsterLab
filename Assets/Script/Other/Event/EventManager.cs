@@ -16,6 +16,7 @@ public class EventManager : MonoBehaviour
 
     private List<string> layer1Event = new List<string>()
     {
+        "DecreaseCostForBase",
         "DeleteOneCardEvent",
         "SelectOneCardEvent",
         "GainGoldEvent",
