@@ -67,8 +67,6 @@ public class BombCarrierFactoryEnemy : EnemyBehavior
             SummonEnenmy(4, 7, BombMonsterGenerator);
             SummonEnenmy(2, 4, Slime);
             SummonEnenmy(2, 4, Slime);
-            SummonEnenmy(2, 4, Slime);
-            SummonEnenmy(2, 4, Slime);
         }
         else if (index == 1)
         {

@@ -99,6 +99,10 @@ public class BattleManager : Singleton<BattleManager>
             newMonster = Instantiate(monsterPrefab, enemyParent);
             newMonster.AddComponent(Type.GetType(scriptPath));
             BaseEntity newEntity = newMonster.GetComponent<BaseEntity>();
+            if (newEntity == null)
+            {
+                Debug.Log("cannot get enemy : " + scriptPath);
+            }
             enemyEntities.Add(newEntity);
             newEntity.Setup(team, node, monsterCard, sacrifices);
             OnUnitSummon?.Invoke(newEntity);

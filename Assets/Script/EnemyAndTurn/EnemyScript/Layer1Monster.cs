@@ -65,7 +65,7 @@ public class BombMonsterGeneratorEntity : BaseEntity
     {
         // 召唤一只自爆怪兽
         MonsterCard boomer = CardDataModel.Instance.GetEnemyCard(5);
-        EnemyBehavior.SummonEnenmy(this.currentNode.rowIndex, this.currentNode.columnIndex, boomer);
+        EnemyBehavior.SummonEnenmy(2, 4, boomer);
     }
 }
 

@@ -6,7 +6,7 @@ e,2,ALotOfSlimeEnemy,1,normal,ALotOfSlimeEnemy,,,,,,,,,,,,,,,
 e,3,BombCarrier,1,normal,BombCarrierEnemy,,,,,,,,,,,,,,,
 e,4,SalveAndSlime,1,normal,SalveAndSlimeEnemy,,,,,,,,,,,,,,,
 e,5,Archer,1,elite,ArcherEnemy,,,,,,,,,,,,,,,
-e,6,BombCarrierFactoryEnemy,1,elite,BombCarrierFactoryEnemy,,,,,,,,,,,,,,,
+e,6,BombCarrierFactory,1,elite,BombCarrierFactoryEnemy,,,,,,,,,,,,,,,
 e,7,MotherSlime,1,boss,MotherSlimeEnemy,,,,,,,,,,,,,,,
 e,8,BleedWolf,2,boss,BleedWolfEnemy,,,,,,,,,,,,,,,
 #,Index,卡名,职业颜色,稀有度,费用,释放类型,数值,技能描述,script位置,图片位置,rank,种族,攻击力,生命值,攻击距离,蓝量,模型位置,skill script位置,小头像位置,附属怪兽
@@ -19,4 +19,4 @@ m,5,Bomb Carrier,black,normal,0,PlayerEmptyTile,200,Upon Death: Deal 200% attack
 m,6,MotherSlime,black,normal,0,PlayerEmptyTile,0,Round Start: Summon one 5/10 acid slime,MotherSlimeEntity,,0,Slime,5,100,1.5,0,,,,MotherSlimeEnemy
 m,7,Slave,black,normal,0,PlayerEmptyTile,0,Normal Enemy,none,,0,None,10,60,1.5,0,,,,BombCarrierEnemy
 m,8,Bleed Wolf,black,Legend,3,PlayerEmptyTile,32,Slay: Add One Bleeding Card In your draw Pile,BleedWolfEntity,,3,Wolf,30,400,1.5,0,,,,BleedWolfEnemy
-m,9,Bomb Carrier Generator,black,rare,0,PlayerEmptyTile,0,Round Start: Summon one Bomb Carrier.,BombCarrierEnemy,,0,None,5,10,1.5,0,,,,BombCarrierEnemy
+m,9,Bomb Carrier Generator,black,rare,0,PlayerEmptyTile,0,Round Start: Summon one Bomb Carrier.,BombMonsterGeneratorEntity,,0,None,0,100,1.5,0,,,,BombCarrierEnemy
