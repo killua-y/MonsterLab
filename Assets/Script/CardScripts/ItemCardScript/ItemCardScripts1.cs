@@ -95,7 +95,7 @@ public class ReduceAttackCardBehavior : CardBehavior
     }
 }
 
-
+// 战士之魂
 public class WarriorSoulCardBehaiovr : CardBehavior
 {
     public override void CastCard(Node node)
@@ -184,3 +184,65 @@ public class WarriorSoulMonsterBehaiovr : MonoBehaviour
     }
 }
 
+// 攻击流血，攻击流血单位回血
+public class WolfFangCardBehavior : CardBehavior
+{
+    public override void CastCard(Node node)
+    {
+        targetMonster = node.currentEntity;
+
+        WolfFangMonsterBehavior wolfFangMonsterBehavior = targetMonster.GetComponent<WolfFangMonsterBehavior>();
+
+        // 如果对象没有被装备
+        if (wolfFangMonsterBehavior == null)
+        {
+            wolfFangMonsterBehavior = targetMonster.gameObject.AddComponent<WolfFangMonsterBehavior>();
+        }
+
+        wolfFangMonsterBehavior.effectData += card.effectData;
+
+        // 如果需要加入到卡牌说明
+        RecordCast(targetMonster);
+    }
+}
+public class WolfFangMonsterBehavior : MonoBehaviour
+{
+    private BaseEntity baseEntity;
+    public int effectData;
+
+    private void Start()
+    {
+        baseEntity = this.gameObject.GetComponent<BaseEntity>();
+
+        if (baseEntity == null)
+        {
+            Debug.Log("equped to null monster");
+        }
+        else
+        {
+            baseEntity.OnStrike += OnStrike;
+        }
+
+        effectData = 0;
+    }
+
+    private void OnStrike(int amount, BaseEntity targetMonster)
+    {
+        BleedingStack bleedingStack = targetMonster.GetComponent<BleedingStack>();
+        if (bleedingStack == null)
+        {
+            targetMonster.gameObject.AddComponent<BleedingStack>();
+        }
+
+        // 施加流血
+        bleedingStack.IncreaseStack(effectData);
+
+        // 回复血量
+        baseEntity.RestoreHealth(bleedingStack.stackAmount);
+    }
+
+    private void OnDestroy()
+    {
+        baseEntity.OnStrike -= OnStrike;
+    }
+}

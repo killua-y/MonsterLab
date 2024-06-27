@@ -33,7 +33,7 @@ public class CardDataModel : Singleton<CardDataModel>
         base.Awake();
 
         LoadKeyWordList();
-        LoadCardList();
+        LoadCardList(textCardDataPath, cardList);
         LoadEnemyCardList();
         LoadDNAList();
     }
@@ -81,10 +81,10 @@ public class CardDataModel : Singleton<CardDataModel>
     }
 
     // 加载所有卡牌数据
-    public void LoadCardList()
+    public void LoadCardList(string dataPath, List<Card> cardList)
     {
         //Load卡片
-        string path = Application.dataPath + textCardDataPath;
+        string path = Application.dataPath + dataPath;
         string[] dataArray = File.ReadAllLines(path);
 
         foreach (var row in dataArray)
@@ -282,13 +282,6 @@ public class CardDataModel : Singleton<CardDataModel>
     public List<DNA> GetPlayerDNA()
     {
         return playerDNAData;
-    }
-
-    // Helper，其他function会call来获取卡组数据
-    public List<MonsterCard> GetEnemyMonster()
-    {
-        // 因为monster在生成时会自动创建新的clone，所以这里不需要输出clone
-        return enemyCardList;
     }
 
     // 输出所有卡牌信息

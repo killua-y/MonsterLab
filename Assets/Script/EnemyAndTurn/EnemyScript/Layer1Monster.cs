@@ -41,6 +41,8 @@ public class BombCarrierEntity : BaseEntity
 
 public class BombMonsterGeneratorEntity : BaseEntity
 {
+    private MonsterCard boomer;
+
     protected override void Start()
     {
         Invoke("SummonChild", 0);
@@ -64,13 +66,19 @@ public class BombMonsterGeneratorEntity : BaseEntity
     private void SummonChild()
     {
         // 召唤一只自爆怪兽
-        MonsterCard boomer = CardDataModel.Instance.GetEnemyCard(5);
+        if (boomer == null)
+        {
+            boomer = CardDataModel.Instance.GetEnemyCard(cardModel.effectData);
+        }
+
         EnemyBehavior.SummonEnenmy(2, 4, boomer);
     }
 }
 
 public class MotherSlimeEntity: BaseEntity
 {
+    private MonsterCard acidSlime;
+
     // 战斗阶段开始
     protected override void OnPreparePhaseStart()
     {
@@ -82,7 +90,11 @@ public class MotherSlimeEntity: BaseEntity
     private void SummonChild()
     {
         // 召唤一只史莱姆
-        MonsterCard AcidSlime = CardDataModel.Instance.GetEnemyCard(1);
-        EnemyBehavior.SummonEnenmy(2, 7, AcidSlime);
+        if (acidSlime == null)
+        {
+            acidSlime = CardDataModel.Instance.GetEnemyCard(cardModel.effectData);
+        }
+
+        EnemyBehavior.SummonEnenmy(2, 7, acidSlime);
     }
 }

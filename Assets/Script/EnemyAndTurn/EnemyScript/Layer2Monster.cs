@@ -11,7 +11,6 @@ public class BleedWolfEntity : BaseEntity
     protected override void Start()
     {
         BattleManager.Instance.OnUnitDied += OnUnitDead;
-        BleedCard = CardDataModel.Instance.GetCard(cardModel.effectData);
 
         base.Start();
     }
@@ -24,6 +23,11 @@ public class BleedWolfEntity : BaseEntity
             // 如果死亡单位是敌方
             if (baseEntity.myTeam != myTeam)
             {
+                if (BleedCard == null)
+                {
+                    BleedCard = CardDataModel.Instance.GetCard(cardModel.effectData);
+                }
+
                 // 往玩家卡组中加入一张裂伤牌
                 InGameStateManager.Instance.AddToDrawPile(Card.CloneCard(BleedCard));
             }

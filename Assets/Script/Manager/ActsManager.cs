@@ -145,6 +145,7 @@ public class ActsManager : Singleton<ActsManager>
             // 移除所有已经遇到过的敌人
             enemiesEncountered = playerData.nextAct.EnemiesEncountered;
             allEnemyList.RemoveAll(enemyB => enemiesEncountered.Exists(enemyA => enemyA.name == enemyB.name));
+            // 移除所有已经遇到过的事件
             eventsEncountered = playerData.nextAct.EventEncountered;
             allEventList.RemoveAll(eventB => eventsEncountered.Exists(eventA => eventA.name == eventB.name));
         }
@@ -164,6 +165,7 @@ public class ActsManager : Singleton<ActsManager>
                 {
                     enemyFind = allEnemyList[i];
                     allEnemyList.RemoveAt(i);
+                    break;
                 }
             }
         }
@@ -175,9 +177,29 @@ public class ActsManager : Singleton<ActsManager>
                 {
                     enemyFind = allEnemyList[i];
                     allEnemyList.RemoveAt(i);
+                    break;
                 }
             }
         }
+
+        // 如果所有普通敌人都被打过了
+        // 那就把这一层的遇到的普通敌人都添加回list
+        // 后期敌人数据库多了可以把这部分删了
+        if (enemyFind == null)
+        {
+            Debug.Log("You have killed all normal enemy this layer");
+            foreach (Enemy enemy in enemiesEncountered)
+            {
+                if ((enemy.enemyType == _enemyType) && (enemy.layer == _layer))
+                {
+                    allEnemyList.Add(enemy);
+                    enemiesEncountered.Remove(enemy);
+                }
+            }
+            HelperFunction.Shuffle(allEnemyList, GameSetting.randForInitialize);
+            enemyFind = FindEnemy(_layer, _enemyType);
+        }
+
         return enemyFind;
     }
 
@@ -192,8 +214,10 @@ public class ActsManager : Singleton<ActsManager>
             {
                 eventFind = allEventList[i];
                 allEventList.RemoveAt(i);
+                break;
             }
         }
+
         return eventFind;
     }
 

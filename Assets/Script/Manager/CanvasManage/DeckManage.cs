@@ -70,8 +70,16 @@ public class DeckManage : Singleton<DeckManage>
 
         if (fromMainToExtra)
         {
-            cardObject.transform.SetParent(extraDeckScollContent);
-            cardObject.GetComponent<DeckManageCardOnClick>().isMainDeck = false;
+            if (CardDataModel.Instance.GetExtraDeck().Count < PlayerStatesManager.extraDeckCapacity)
+            {
+                cardObject.transform.SetParent(extraDeckScollContent);
+                cardObject.GetComponent<DeckManageCardOnClick>().isMainDeck = false;
+            }
+            else
+            {
+                Debug.Log("Extra Deck is full");
+                return;
+            }
         }
         else
         {

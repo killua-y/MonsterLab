@@ -10,6 +10,7 @@ public class PlayerStatesManager : Singleton<PlayerStatesManager>
     public static int maxCost;
     public static int playerHealthPoint;
     public static int maxUnit;
+    public static int extraDeckCapacity;
 
     public Transform heartParent;
     public GameObject heartIcon;
@@ -30,21 +31,23 @@ public class PlayerStatesManager : Singleton<PlayerStatesManager>
     {
         if (playerData.playerStates == null)
         {
+            player.row = 3;
+            player.column = 0;
             Gold = 100;
             maxCost = 10;
             playerHealthPoint = 3;
             maxUnit = 5;
-            player.row = 3;
-            player.column = 0;
+            extraDeckCapacity = 3;
         }
         else
         {
+            player.row = playerData.playerStates.row;
+            player.column = playerData.playerStates.column;
             Gold = playerData.playerStates.Gold;
             maxCost = playerData.playerStates.MaxCost;
             playerHealthPoint = playerData.playerStates.PlayerHealth;
             maxUnit = playerData.playerStates.MaxUnit;
-            player.row = playerData.playerStates.row;
-            player.column = playerData.playerStates.column;
+            extraDeckCapacity = playerData.playerStates.ExtraDeckCapacity;
         }
         
         List<DNA> playerDNAData = playerData.PlayerDNA;

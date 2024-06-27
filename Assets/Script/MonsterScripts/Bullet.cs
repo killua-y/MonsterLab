@@ -14,9 +14,15 @@ public class Bullet : MonoBehaviour
         this.attacker = attacker;
     }
 
+    public void Initialize(BaseEntity target, BaseEntity attacker)
+    {
+        this.target = target;
+        this.attacker = attacker;
+    }
+
     void Update()
     {
-        if (target == null)
+        if ((target == null) || (target.dead))
         {
             Destroy(gameObject);
             return;
@@ -31,8 +37,18 @@ public class Bullet : MonoBehaviour
         {
             if (!target.dead)
             {
-                target.TakeDamage(damage, attacker);
+                if (damage != 0)
+                {
+                    // 有预先传入的伤害
+                    target.TakeDamage(damage, attacker);
+                }
+                else
+                {
+                    // 没有预先传入的伤害，是普通攻击
+                    attacker.Strike(target);
+                }
             }
+
             Destroy(gameObject);
         }
     }

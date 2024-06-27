@@ -64,6 +64,14 @@ public class CardBehavior : MonoBehaviour
                         isValid = (!GridManager.Instance.GetNodeForTile(tileUnder).IsOccupied);
                         break;
 
+                    case CastType.PlayerArea:
+                        isValid = (GridManager.Instance.GetNodeForTile(tileUnder).IsPlayerArea);
+                        break;
+
+                    case CastType.EnemyArea:
+                        isValid = (!GridManager.Instance.GetNodeForTile(tileUnder).IsPlayerArea);
+                        break;
+
                     default:
                         isValid = false;
                         Debug.LogWarning("Unknown CastType");

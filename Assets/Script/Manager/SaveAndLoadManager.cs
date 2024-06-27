@@ -160,6 +160,7 @@ public class PlayerStates
     public int Gold;
     public int MaxCost;
     public int MaxUnit;
+    public int ExtraDeckCapacity;
 }
 
 [System.Serializable]

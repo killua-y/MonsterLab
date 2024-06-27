@@ -87,7 +87,7 @@ public class UponSummonFunction : MonoBehaviour
     }
 
 
-    // 对敌方最高血单位造成伤害
+    // 对敌方最高血单位造成伤害,并施加流血
     public static void FireWolfUponSummon(BaseEntity entity)
     {
         List<BaseEntity> enemyList = BattleManager.Instance.GetEntitiesAgainst(entity.myTeam);
@@ -108,9 +108,16 @@ public class UponSummonFunction : MonoBehaviour
             }
 
             // 造成伤害
-            highestHealthMonster.TakeDamage(entity.cardModel.effectData, entity);
-        }
+            highestHealthMonster.TakeDamage(entity.cardModel.effectData * 10, entity);
 
+            // 施加流血
+            BleedingStack bleedingStack = highestHealthMonster.GetComponent<BleedingStack>();
+            if (bleedingStack == null)
+            {
+                bleedingStack = highestHealthMonster.gameObject.AddComponent<BleedingStack>();
+            }
+            bleedingStack.IncreaseStack(entity.cardModel.effectData);
+        }
 
         if (recordEnabled)
         {

@@ -16,12 +16,14 @@ public class BattleManager : Singleton<BattleManager>
     public Action<BaseEntity> OnUnitDied;
     public Action<BaseEntity> OnUnitSummon;
     public Action<BaseEntity, BaseEntity, int> OnUnitTakingDamage;
+    // 战斗结束前结算效果
+    public Action BeforeBattlePhase;
 
     public TextMeshProUGUI monsterSpaceText;
     // Start is called before the first frame update
     void Start()
     {
-        InGameStateManager.Instance.OnBattlePhaseStart += OnBattleTurnStart;
+        InGameStateManager.Instance.OnBattlePhaseStart += OnBattlePhaseStart;
         InGameStateManager.Instance.OnCombatEnd += OnCombatEnd;
     }
 
@@ -142,13 +144,9 @@ public class BattleManager : Singleton<BattleManager>
 
         OnUnitDied?.Invoke(entity);
 
-        if (playerEntities.Count == 0)
+        if ((playerEntities.Count == 0) || (enemyEntities.Count == 0))
         {
-            Invoke("NewTurn", 2f);
-        }
-        else if (enemyEntities.Count == 0)
-        {
-            Invoke("NewTurn", 2f);
+            StartCoroutine(NewTurn());
         }
     }
 
@@ -158,8 +156,12 @@ public class BattleManager : Singleton<BattleManager>
     }
 
     // helper，用于延迟call一下新回合
-    public void NewTurn()
+    IEnumerator NewTurn()
     {
+        yield return new WaitForSeconds(0.5f);
+        BeforeBattlePhase?.Invoke();
+
+        yield return new WaitForSeconds(1.5f);
         if (InGameStateManager.BattelPhase)
         {
             InGameStateManager.Instance.BattlePhaseEnd();
@@ -194,15 +196,11 @@ public class BattleManager : Singleton<BattleManager>
         monsterSpaceText.text = playerEntities.Count + " / " + PlayerStatesManager.maxUnit;
     }
 
-    public void OnBattleTurnStart()
+    public void OnBattlePhaseStart()
     {
-        if (playerEntities.Count == 0)
+        if ((playerEntities.Count == 0) || (enemyEntities.Count == 0))
         {
-            Invoke("NewTurn", 2f);
-        }
-        else if (enemyEntities.Count == 0)
-        {
-            Invoke("NewTurn", 2f);
+            StartCoroutine(NewTurn());
         }
     }
 

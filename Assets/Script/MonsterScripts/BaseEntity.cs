@@ -45,6 +45,7 @@ public class BaseEntity : MonoBehaviour
     protected float waitBetweenAttack;
     public Action OnDeath;
     public Action OnAttack;
+    public Action<int, BaseEntity> OnStrike;
 
     // 动画
     private Animator animator;
@@ -461,11 +462,11 @@ public class BaseEntity : MonoBehaviour
             GameObject bulletInstance = Instantiate(bullet, transform.position, Quaternion.identity);
             if (bulletInstance.GetComponent<Bullet>() == null)
             {
-                bulletInstance.AddComponent<Bullet>().Initialize(currentTarget, cardModel.attackPower, this);
+                bulletInstance.AddComponent<Bullet>().Initialize(currentTarget, this);
             }
             else
             {
-                bulletInstance.GetComponent<Bullet>().Initialize(currentTarget, cardModel.attackPower, this);
+                bulletInstance.GetComponent<Bullet>().Initialize(currentTarget, this);
             }
 
             // 从攻击器官生成
@@ -491,12 +492,24 @@ public class BaseEntity : MonoBehaviour
         canAttack = true;
     }
 
+    public virtual void Strike(BaseEntity target)
+    {
+        OnStrike?.Invoke(cardModel.attackPower, target);
+        target.TakeDamage(cardModel.attackPower, this);
+    }
+
     protected virtual void Consume(List<BaseEntity> sacrfices)
     {
         foreach(BaseEntity sacrfice in sacrfices)
         {
             sacrfice.UnitDie(null, true);
         }
+    }
+
+    public virtual void RestoreHealth(int amount)
+    {
+        currentHealth += amount;
+        OnlyUpdateMonsterUI();
     }
 
     public virtual void UponSummon()
