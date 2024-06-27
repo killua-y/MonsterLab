@@ -9,7 +9,19 @@ public class MainMenuBehavior : MonoBehaviour
     public static int seed;
     public static CardColor character = CardColor.Red;
 
+    public GameObject continueButton;
+
     private string playerDataLocation = "/Datas/InGameData/playerData.json";
+
+    private void Start()
+    {
+        // 检查是否需要生成继续按钮
+        string path = Application.dataPath + playerDataLocation;
+        if (File.Exists(path))
+        {
+            continueButton.gameObject.SetActive(true);
+        }
+    }
 
     public void StartGame()
     {

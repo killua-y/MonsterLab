@@ -14,14 +14,6 @@ public class EventManager : MonoBehaviour
 
     private bool isOpen = false;
 
-    private List<string> layer1Event = new List<string>()
-    {
-        "DecreaseCostForBase",
-        "DeleteOneCardEvent",
-        "SelectOneCardEvent",
-        "GainGoldEvent",
-    };
-
     public void ChangePosition()
     {
         if (isOpen)
@@ -57,7 +49,7 @@ public class EventManager : MonoBehaviour
         transform.localPosition = targetPosition;
     }
 
-    public void LoadEvent(int layerNumber)
+    public void LoadEvent(string eventScriptLocation)
     {
         if (!isOpen)
         {
@@ -68,11 +60,8 @@ public class EventManager : MonoBehaviour
             Debug.Log("Trying to start new event while current event is still open");
         }
 
-        if (layerNumber == 1)
-        {
-            this.gameObject.AddComponent(Type.GetType(layer1Event[0]));
-            EventBehavior newEvent = this.gameObject.GetComponent<EventBehavior>();
-            newEvent.SetUp();
-        }
+        this.gameObject.AddComponent(Type.GetType(eventScriptLocation));
+        EventBehavior newEvent = this.gameObject.GetComponent<EventBehavior>();
+        newEvent.SetUp();
     }
 }

@@ -8,8 +8,11 @@ using System.IO;
 public class GameSetting : MonoBehaviour
 {
     public static float scaleFactor;
-    // 用于卡牌获取序列
+
+    // 用于卡牌获取序列, 需要存储
     public static System.Random cardRewardRand;
+    public static int cardRewardRandCalls;
+
     // 用于战斗内随机数，以及商店随机数
     public static System.Random CurrentActRand;
     // 用于生成敌人顺序，事件顺序，DNA顺序
@@ -41,20 +44,19 @@ public class GameSetting : MonoBehaviour
     {
         seed = playerData.Seed;
         randForInitialize = new System.Random(seed);
-        if ((playerData.randomState == null) || (true))
+        if (playerData.randomState == null)
         {
             cardRewardRand = new System.Random(seed);
         }
         else
         {
-            cardRewardRand = InitializeRandom(seed, playerData.randomState.cardRewardRandNextValue);
+            cardRewardRand = InitializeRandom(new System.Random(seed), playerData.randomState.cardRewardRandCalls);
         }
     }
 
-    private System.Random InitializeRandom(int seed, int nextValue)
+    private System.Random InitializeRandom(System.Random rand, int calls)
     {
-        System.Random rand = new System.Random(seed);
-        for (int i = 0; i < nextValue; i++)
+        for (int i = 0; i < calls; i++)
         {
             rand.Next(); // Advance the random number generator to the correct state
         }
@@ -66,13 +68,8 @@ public class GameSetting : MonoBehaviour
     {
         return new RandomState
         {
-            cardRewardRandNextValue = GetNextValue(cardRewardRand)
+            cardRewardRandCalls = cardRewardRandCalls
         };
-    }
-
-    private int GetNextValue(System.Random rand)
-    {
-        return rand.Next(); // Generate and return the next random value
     }
 
     public void GenerateNewStepRand()
@@ -124,5 +121,5 @@ public class GameSetting : MonoBehaviour
 [System.Serializable]
 public class RandomState
 {
-    public int cardRewardRandNextValue;
+    public int cardRewardRandCalls;
 }

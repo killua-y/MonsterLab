@@ -19,9 +19,8 @@ public class CardDataModel : Singleton<CardDataModel>
     private List<DNA> playerDNAData = new List<DNA>(); // 储存玩家DNA数据的array
 
     // 怪兽链表
-    public TextAsset enemyTextCardData; // 地方怪兽卡牌数据txt文件
-    public List<Enemy> enemyList = new List<Enemy>(); // 所有敌人的数据
-    private List<MonsterCard> enemyCardList = new List<MonsterCard>(); // 存储地方怪兽卡牌数据的链表
+    public TextAsset enemyTextCardData; // 敌方怪兽卡牌数据txt文件
+    private List<MonsterCard> enemyCardList = new List<MonsterCard>(); // 存储敌方怪兽卡牌数据的链表
 
     // keyword
     private string keyWordsDataPath = "/Datas/cardsdata - Keyword.csv";
@@ -165,19 +164,6 @@ public class CardDataModel : Singleton<CardDataModel>
                 }
 
                 //Debug.Log("Load enemy monster card: " + name);
-            }
-            else if (rowArray[0] == "e")
-            {
-                string name = rowArray[2];
-                int layer = int.Parse(rowArray[3]);
-                EnemyType enemyType = HelperFunction.ConvertToEnum<EnemyType>(rowArray[4]);
-                string scriptLocation = rowArray[5];
-                bool easy = false;
-                if (rowArray[6] == "TRUE")
-                {
-                    easy = true;
-                }
-                enemyList.Add(new Enemy(name, layer, enemyType, scriptLocation, easy));
             }
             else
             {

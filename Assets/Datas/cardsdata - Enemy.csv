@@ -1,14 +1,4 @@
-#,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20
-#,Index,名称,层数,类型,script位置,easy,End,,,,,,,,,,,,,
-e,0,AcidSlime,1,normal,AcidSlimeEnemy,TRUE,,,,,,,,,,,,,,
-e,1,BlackSlime,1,normal,BlackSlimeEnemy,TRUE,,,,,,,,,,,,,,
-e,2,ALotOfSlimeEnemy,1,normal,ALotOfSlimeEnemy,,,,,,,,,,,,,,,
-e,3,BombCarrier,1,normal,BombCarrierEnemy,,,,,,,,,,,,,,,
-e,4,SalveAndSlime,1,normal,SalveAndSlimeEnemy,,,,,,,,,,,,,,,
-e,5,Archer,1,elite,ArcherEnemy,,,,,,,,,,,,,,,
-e,6,BombCarrierFactory,1,elite,BombCarrierFactoryEnemy,,,,,,,,,,,,,,,
-e,7,MotherSlime,1,boss,MotherSlimeEnemy,,,,,,,,,,,,,,,
-e,8,BleedWolf,2,boss,BleedWolfEnemy,,,,,,,,,,,,,,,
+#,1,2,3,4,5,6,7,8,9,10,10,12,13,14,15,16,17,18,19,20
 #,Index,卡名,职业颜色,稀有度,费用,释放类型,数值,技能描述,script位置,图片位置,rank,种族,攻击力,生命值,攻击距离,蓝量,模型位置,skill script位置,小头像位置,附属怪兽
 m,0,Slime,black,normal,0,PlayerEmptyTile,0,Normal Enemy,none,MonsterCardPicture/slime,0,Slime,5,50,1.5,0,,,,AcidSlimeEnemy
 m,1,Acid Slime,black,normal,0,PlayerEmptyTile,0,Normal Enemy,none,MonsterCardPicture/AcidSlime,0,Slime,5,10,5,0,MonsterPrefab/AcidSlime,,,AcidSlimeEnemy + MotherSlimeEnemy

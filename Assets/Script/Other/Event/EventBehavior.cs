@@ -116,3 +116,18 @@ public class EventBehavior : MonoBehaviour
         return true;
     }
 }
+
+[System.Serializable]
+public class QuestionMarkEvent
+{
+    public string name;
+    public int layer;
+    public string scriptLocation;
+
+    public QuestionMarkEvent(string _name, int _layer, string _scriptLocation)
+    {
+        this.name = _name;
+        this.layer = _layer;
+        this.scriptLocation = _scriptLocation;
+    }
+}

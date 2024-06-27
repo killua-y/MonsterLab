@@ -289,6 +289,7 @@ public class RewardManager : Singleton<RewardManager>
     public int GetNextCardID()
     {
         float randomValue = (float)GameSetting.cardRewardRand.NextDouble();
+        GameSetting.cardRewardRandCalls += 1;
 
         if (randomValue < 0.5f)
         {
@@ -315,6 +316,7 @@ public class RewardManager : Singleton<RewardManager>
         }
 
         int index = GameSetting.cardRewardRand.Next(cardList.Count);
+        GameSetting.cardRewardRandCalls += 1;
         return cardList[index].id;
     }
 }

@@ -1,11 +1,15 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class ActsManager : Singleton<ActsManager>
 {
+    // enemy和event数据的存储csv
+    private string textEnemyAndEventDataPath = "/Datas/cardsdata - EventAndEnemy.csv";
+
     // 涉及玩家存档
     public static int currentLayer;
     public static int step;
@@ -19,7 +23,8 @@ public class ActsManager : Singleton<ActsManager>
 
     private List<Enemy> allEnemyList = new List<Enemy>();
     private List<Enemy> enemiesEncountered = new List<Enemy>();
-    private List<string> eventEncountered = new List<string>();
+    private List<QuestionMarkEvent> allEventList = new List<QuestionMarkEvent>();
+    private List<QuestionMarkEvent> eventsEncountered = new List<QuestionMarkEvent>();
 
     // 引用的script
     private ShopManager shopManager;
@@ -88,23 +93,64 @@ public class ActsManager : Singleton<ActsManager>
             layer = currentLayer,
             step = step,
             startCurrentAct = startCurrentAct,
-            generateCombatReward = generateCombatReward
+            generateCombatReward = generateCombatReward,
+            EnemiesEncountered = enemiesEncountered,
+            EventEncountered = eventsEncountered
         };
     }
 
     private void LoadEnermyAndEventList(PlayerData playerData)
     {
-        allEnemyList = CardDataModel.Instance.enemyList;
+        string path = Application.dataPath + textEnemyAndEventDataPath;
+        string[] dataArray = File.ReadAllLines(path);
+        foreach (var row in dataArray)
+        {
+            string[] rowArray = row.Split(',');
+            if (rowArray[0] == "#")
+            {
+                continue;
+            }
+            else if (rowArray[0] == "enemy")
+            {
+                string name = rowArray[2];
+                int layer = int.Parse(rowArray[3]);
+                EnemyType enemyType = HelperFunction.ConvertToEnum<EnemyType>(rowArray[4]);
+                string scriptLocation = rowArray[5];
+                bool easy = false;
+                if (rowArray[6] == "TRUE")
+                {
+                    easy = true;
+                }
+                allEnemyList.Add(new Enemy(name, layer, enemyType, scriptLocation, easy));
+            }
+            else if (rowArray[0] == "event")
+            {
+                string name = rowArray[2];
+                int layer = int.Parse(rowArray[3]);
+                string scriptLocation = rowArray[4];
+
+                allEventList.Add(new QuestionMarkEvent(name, layer, scriptLocation));
+            }
+            else
+            {
+                Debug.Log("Undefined line detected, start with : " + rowArray[0]);
+            }
+        }
+
         HelperFunction.Shuffle(allEnemyList, GameSetting.randForInitialize);
+        HelperFunction.Shuffle(allEventList, GameSetting.randForInitialize);
 
         if (playerData.nextAct != null)
         {
             // 移除所有已经遇到过的敌人
             enemiesEncountered = playerData.nextAct.EnemiesEncountered;
             allEnemyList.RemoveAll(enemyB => enemiesEncountered.Exists(enemyA => enemyA.name == enemyB.name));
+            eventsEncountered = playerData.nextAct.EventEncountered;
+            allEventList.RemoveAll(eventB => eventsEncountered.Exists(eventA => eventA.name == eventB.name));
         }
     }
 
+    // 寻找一个当前layer的enemy
     private Enemy FindEnemy(int _layer, EnemyType _enemyType)
     {
         Enemy enemyFind = null;
@@ -133,6 +179,22 @@ public class ActsManager : Singleton<ActsManager>
             }
         }
         return enemyFind;
+    }
+
+    // 寻找一个当前layer的event
+    private QuestionMarkEvent FindEvent(int _layer)
+    {
+        QuestionMarkEvent eventFind = null;
+
+        for (int i = 0; i < allEventList.Count; i++)
+        {
+            if (allEventList[i].layer == _layer)
+            {
+                eventFind = allEventList[i];
+                allEventList.RemoveAt(i);
+            }
+        }
+        return eventFind;
     }
 
     public void ActivateAct(BoxType _boxType)
@@ -178,7 +240,9 @@ public class ActsManager : Singleton<ActsManager>
                 break;
 
             case BoxType.Events:
-                eventManager.LoadEvent(currentLayer);
+                QuestionMarkEvent currentEvent = FindEvent(currentLayer);
+                eventsEncountered.Add(currentEvent);
+                eventManager.LoadEvent(currentEvent.scriptLocation);
                 break;
 
             case BoxType.Merchant:

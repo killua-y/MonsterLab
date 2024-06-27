@@ -170,5 +170,5 @@ public class NextAct
     public bool startCurrentAct;
     public int generateCombatReward;
     public List<Enemy> EnemiesEncountered;
-    public List<string> EventEncountered;
+    public List<QuestionMarkEvent> EventEncountered;
 }
