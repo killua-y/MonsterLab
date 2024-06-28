@@ -85,6 +85,27 @@ public class InGameCardModel : MonoBehaviour
         return cardDrawed;
     }
 
+    // 抽牌
+    public Card DrawSpecificCard(Card card)
+    {
+        Card cardDrawed = null;
+
+        // 检查抽牌堆是否存在指定卡
+        if (drawPileList.Contains(card))
+        {
+            // 如果有就抽出来
+            handList.Add(card);
+            drawPileList.Remove(card);
+            cardDrawed = card;
+        }
+        else
+        {
+            Debug.Log("Did not find the card to be drawed");
+        }
+
+        return cardDrawed;
+    }
+
     // 重新洗牌
     public void ShuffleDeck()
     {

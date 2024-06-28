@@ -112,7 +112,7 @@ public class BaseEntity : MonoBehaviour
                     // Ensure the script instance implements ICardBehavior
                     if (scriptInstance is CardBehavior cardBehavior)
                     {
-                        cardBehavior.card = card;
+                        cardBehavior.cardModel = card;
                         // Call the CastCard method
                         cardBehavior.CastCard(currentNode);
                     }

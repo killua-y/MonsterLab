@@ -7,3 +7,5 @@
 5,Reuse,This card will go to discard pile after cast.
 6,Exhaust,This card will be removed from this battle after cast.
 7,Slay,Effect triggers when opponent monster is being killed in battle.
+8,Strike,Effect triggers when monster's attack deal damage.
+9,Bleeding,At the end of the battle phase. Deal damage equal to the number of stacks times 2.

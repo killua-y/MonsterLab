@@ -7,7 +7,7 @@ public class DoubleAttackCardBehavior : CardBehavior
 {
     public override void CastCard(Node node)
     {
-        targetMonster.cardModel.attackPower *= card.effectData;
+        targetMonster.cardModel.attackPower *= cardModel.effectData;
         targetMonster.UpdateMonster();
     }
 }
@@ -17,7 +17,7 @@ public class IncreaseAttackCardBehavior : CardBehavior
 {
     public override void CastCard(Node node)
     {
-        CardEffectFunction.IncreaseAttack(targetMonster, card.effectData);
+        CardEffectFunction.IncreaseAttack(targetMonster, cardModel.effectData);
     }
 }
 
@@ -26,7 +26,7 @@ public class VineArmorCardBehavior: CardBehavior
 {
     public override void CastCard(Node node)
     {
-        CardEffectFunction.IncreaseHealth(targetMonster, card.effectData);
+        CardEffectFunction.IncreaseHealth(targetMonster, cardModel.effectData);
     }
 }
 
@@ -40,13 +40,13 @@ public class IncreaseHealthOnDeathCardBehavior : CardBehavior
         // 如果对象没有被装备
         if (targetMonster.GetComponent<IncreaseHealthOnDeathMonsterBehavior>() == null)
         {
-            Card newCard = Card.CloneCard(this.card);
+            Card newCard = Card.CloneCard(this.cardModel);
             targetMonster.gameObject.AddComponent<IncreaseHealthOnDeathMonsterBehavior>().cardModel = newCard;
         }
         // 如果对象已经有了
         else
         {
-            targetMonster.GetComponent<IncreaseHealthOnDeathMonsterBehavior>().cardModel.effectData += card.effectData;
+            targetMonster.GetComponent<IncreaseHealthOnDeathMonsterBehavior>().cardModel.effectData += cardModel.effectData;
         }
 
         // 如果需要加入到卡牌说明
@@ -83,7 +83,7 @@ public class ReduceAttackCardBehavior : CardBehavior
 {
     public override void CastCard(Node node)
     {
-        targetMonster.cardModel.attackPower -= card.effectData;
+        targetMonster.cardModel.attackPower -= cardModel.effectData;
 
         // 攻击力不会小于1
         if (targetMonster.cardModel.attackPower <= 0)
@@ -105,13 +105,13 @@ public class WarriorSoulCardBehaiovr : CardBehavior
         // 如果对象没有被装备
         if (targetMonster.GetComponent<WarriorSoulCardBehaiovr>() == null)
         {
-            Card newCard = Card.CloneCard(this.card);
+            Card newCard = Card.CloneCard(this.cardModel);
             targetMonster.gameObject.AddComponent<WarriorSoulMonsterBehaiovr>().SetUp(newCard);
         }
         // 如果对象已经被装备
         else
         {
-            targetMonster.GetComponent<WarriorSoulMonsterBehaiovr>().cardModel.effectData += card.effectData;
+            targetMonster.GetComponent<WarriorSoulMonsterBehaiovr>().cardModel.effectData += cardModel.effectData;
         }
 
         // 如果需要加入到卡牌说明
@@ -199,7 +199,7 @@ public class WolfFangCardBehavior : CardBehavior
             wolfFangMonsterBehavior = targetMonster.gameObject.AddComponent<WolfFangMonsterBehavior>();
         }
 
-        wolfFangMonsterBehavior.effectData += card.effectData;
+        wolfFangMonsterBehavior.effectData += cardModel.effectData;
 
         // 如果需要加入到卡牌说明
         RecordCast(targetMonster);
@@ -260,7 +260,7 @@ public class BleedingArmorCardBehavior : CardBehavior
             wolfFangMonsterBehavior = targetMonster.gameObject.AddComponent<BleedingArmorMonsterBehavior>();
         }
 
-        wolfFangMonsterBehavior.effectData += card.effectData;
+        wolfFangMonsterBehavior.effectData += cardModel.effectData;
 
         // 如果需要加入到卡牌说明
         RecordCast(targetMonster);
@@ -300,13 +300,20 @@ public class BleedingArmorMonsterBehavior : MonoBehaviour
 
         // 施加流血
         bleedingStack.IncreaseStack(effectData);
-
-        // 回复血量
-        baseEntity.RestoreHealth(bleedingStack.stackAmount);
     }
 
     private void OnDestroy()
     {
         baseEntity.OnTakingDamage -= OnTakingDamage;
+    }
+}
+
+// 根据星级增加攻击力
+public class UnlockPotentialardBehavior: CardBehavior
+{
+    public override void CastCard(Node node)
+    {
+        int increaseAmount = cardModel.effectData * targetMonster.cardModel.rank;
+        CardEffectFunction.IncreaseAttack(targetMonster, increaseAmount);
     }
 }

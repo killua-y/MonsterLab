@@ -10,13 +10,13 @@ public class MonsterCardBehavior : CardBehavior
 
     public override void CheckLegality(Node node)
     {
-        if (card is not MonsterCard)
+        if (cardModel is not MonsterCard)
         {
             Debug.Log("Worng card model");
             return;
         }
 
-        monsterCard = (MonsterCard)card;
+        monsterCard = (MonsterCard)cardModel;
 
         targetNode = node;
 

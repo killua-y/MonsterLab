@@ -10,7 +10,7 @@ public class CardBehavior : MonoBehaviour
     public CastType castType;
     public bool isValid = true;
 
-    public Card card;
+    public Card cardModel;
 
     protected Node targetNode;
     protected BaseEntity targetMonster;
@@ -32,6 +32,7 @@ public class CardBehavior : MonoBehaviour
         if (IsDragging)
         {
             Tile tileUnder = HelperFunction.GetTileUnder();
+
             if (tileUnder != null)
             {
                 // 根据自己卡片的释放类型决定下方格子是否合法
@@ -78,26 +79,32 @@ public class CardBehavior : MonoBehaviour
                         break;
                 }
 
-                tileUnder.SetHighlight(true, isValid);
-
-                if (previousTile != null && tileUnder != previousTile)
+                if (tileUnder != previousTile)
                 {
                     //We are over a different tile.
-                    previousTile.SetHighlight(false, false);
+                    SetHighlight(tileUnder);
                 }
-
-                previousTile = tileUnder;
             }
         }
     }
 
+    protected virtual void SetHighlight(Tile tileUnder)
+    {
+        if (previousTile != null)
+        {
+            previousTile.SetHighlight(false, false);
+        }
+        tileUnder.SetHighlight(true, isValid);
+        previousTile = tileUnder;
+    }
+
     public virtual void InitializeCard(Card _card)
     {
-        card = _card;
-        castType = card.castType;
+        cardModel = _card;
+        castType = cardModel.castType;
 
         // 设置卡牌释放类型
-        if (card.castType == CastType.None)
+        if (cardModel.castType == CastType.None)
         {
             targetCard = false;
         }
@@ -110,7 +117,7 @@ public class CardBehavior : MonoBehaviour
     public virtual void CheckLegality(Node node)
     {
         // 查看费用是否合理
-        if (playerCostManager.currentCost < card.cost)
+        if (playerCostManager.currentCost < cardModel.cost)
         {
             return;
         }
@@ -142,52 +149,52 @@ public class CardBehavior : MonoBehaviour
 
     public virtual void CastCard(Node node)
     {
-        Debug.Log("Please attach correspond card behavior srcipt to this card: " + card.cardName);
+        Debug.Log("No thing happened for card : " + cardModel.cardName);
     }
 
     public virtual void CastComplete(Node node)
     {
         // 消耗费用
-        playerCostManager.DecreaseCost(card.cost);
+        playerCostManager.DecreaseCost(cardModel.cost);
 
         // 广播释放魔法/装备这个动作
-        if (card is SpellCard)
+        if (cardModel is SpellCard)
         {
             InGameStateManager.Instance.SpellCardPlayed(this, targetMonster);
         }
-        else if (card is ItemCard)
+        else if (cardModel is ItemCard)
         {
             InGameStateManager.Instance.ItemCardPlayed(this, targetMonster);
         }
 
         // 判断卡牌是丢弃还是消耗
-        if (card is SpellCard)
+        if (cardModel is SpellCard)
         {
-            if (card.keyWords.Contains("Exhaust"))
+            if (cardModel.keyWords.Contains("Exhaust"))
             {
                 // 消耗
-                InGameStateManager.Instance.ExhaustOneCard(card);
+                InGameStateManager.Instance.ExhaustOneCard(cardModel);
                 Destroy(this.gameObject);
             }
             else
             {
                 // 丢弃
-                InGameStateManager.Instance.DiscardOneCard(card);
+                InGameStateManager.Instance.DiscardOneCard(cardModel);
                 Destroy(this.gameObject);
             }
         }
         else
         {
-            if (card.keyWords.Contains("Reuse"))
+            if (cardModel.keyWords.Contains("Reuse"))
             {
                 // 丢弃
-                InGameStateManager.Instance.DiscardOneCard(card);
+                InGameStateManager.Instance.DiscardOneCard(cardModel);
                 Destroy(this.gameObject);
             }
             else
             {
                 // 消耗
-                InGameStateManager.Instance.ExhaustOneCard(card);
+                InGameStateManager.Instance.ExhaustOneCard(cardModel);
                 Destroy(this.gameObject);
             }
         }
@@ -195,12 +202,12 @@ public class CardBehavior : MonoBehaviour
 
     public virtual void RecordCast(BaseEntity baseEntity)
     {
-        baseEntity.cardModel.equippedCard.Add(card);
+        baseEntity.cardModel.equippedCard.Add(cardModel);
 
         // 如果装备卡中有关键词则添加到怪兽卡上
-        if (card.keyWords.Count != 0)
+        if (cardModel.keyWords.Count != 0)
         {
-            foreach (string keyword in card.keyWords)
+            foreach (string keyword in cardModel.keyWords)
             {
                 if (!baseEntity.cardModel.keyWords.Contains(keyword))
                 {

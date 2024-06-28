@@ -164,6 +164,25 @@ public class InGameStateManager : Singleton<InGameStateManager>
         }
     }
 
+    // 抽一张指定的牌
+    public void DrawSpecificCard(Card card)
+    {
+        //1张抽牌
+        Card newCard = inGameCardModel.DrawSpecificCard(card);
+
+        // 如果确实抽到了牌，那么将它可视化
+        if (newCard != null)
+        {
+            CardDisplayView.Instance.DisPlaySingleCard(newCard, hand);
+        }
+        else
+        {
+            Debug.Log("Did not find the card " + card.cardName + " in draw pile");
+        }
+
+        UpdatePileText();
+    }
+
     // 弃一张牌
     public void DiscardOneCard(Card _card)
     {
@@ -237,7 +256,11 @@ public class InGameStateManager : Singleton<InGameStateManager>
             Destroy(child.gameObject);
         }
 
-        List<Card> drawPileCard = inGameCardModel.GetDrawPileCard();
+        List<Card> drawPileCard = new List<Card>();
+        foreach (Card card in inGameCardModel.GetDrawPileCard())
+        {
+            drawPileCard.Add(card);
+        }
         drawPileCard.Sort((card1, card2) => card1.id.CompareTo(card2.id));
 
         foreach (Card card in drawPileCard)
@@ -255,7 +278,11 @@ public class InGameStateManager : Singleton<InGameStateManager>
             Destroy(child.gameObject);
         }
 
-        List<Card> discardPileCard = inGameCardModel.GetDiscardPileCard();
+        List<Card> discardPileCard = new List<Card>();
+        foreach (Card card in inGameCardModel.GetDiscardPileCard())
+        {
+            discardPileCard.Add(card);
+        }
         discardPileCard.Sort((card1, card2) => card1.id.CompareTo(card2.id));
 
         foreach (Card card in discardPileCard)

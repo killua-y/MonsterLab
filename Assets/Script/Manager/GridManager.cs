@@ -169,6 +169,13 @@ public class GridManager : Singleton<GridManager>
         return null;
     }
 
+    public Tile GetTileForRowAndColumn(int row, int column)
+    {
+        int index = row * 8 + column;
+
+        return allTiles[index];
+    }
+
     public int fromIndex = 0;
     public int toIndex = 0;
 
