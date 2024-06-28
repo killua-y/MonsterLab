@@ -45,6 +45,7 @@ public class BaseEntity : MonoBehaviour
     protected float waitBetweenAttack;
     public Action OnDeath;
     public Action OnAttack;
+    public Action<int, DamageType, BaseEntity> OnTakingDamage;
     public Action<int, BaseEntity> OnStrike;
 
     // 动画
@@ -257,20 +258,8 @@ public class BaseEntity : MonoBehaviour
         currentNode.currentEntity = this;
     }
 
-    // 更新怪兽的属性，会回复全部血量
+    // 更新怪兽的属性UI显示
     public void UpdateMonster(MonsterCard card = null)
-    {
-        if (card != null)
-        {
-            cardModel = card;
-        }
-
-        currentHealth = cardModel.healthPoint;
-        monsterUI.UpdateUI(cardModel);
-    }
-
-    // 不回复全部血量，更新怪兽属性
-    public void OnlyUpdateMonsterUI(MonsterCard card = null)
     {
         if (card != null)
         {
@@ -295,8 +284,7 @@ public class BaseEntity : MonoBehaviour
         // 玩家的怪兽会回复全部生命值
         if (myTeam == Team.Player)
         {
-            currentHealth = cardModel.healthPoint;
-            monsterUI.UpdateHealth(currentHealth);
+            RestoreAllHealth();
 
             // 复活，重新把自己添加回索敌list
             if (dead)
@@ -332,25 +320,23 @@ public class BaseEntity : MonoBehaviour
         }
     }
 
-    public virtual void TakeDamage(int amount, BaseEntity from = null)
+    public virtual void TakeDamage(int amount, DamageType damageType, BaseEntity from = null)
     {
-        if(dead)
+        if (dead)
         {
             Debug.Log("Should not take damage");
             return;
         }
 
         // 播放自己收到伤害的action
-        if (from != null)
+        OnTakingDamage?.Invoke(amount, damageType, from);
+        if (currentHealth < amount)
         {
-            if (currentHealth < amount)
-            {
-                BattleManager.Instance.UnitTakingDamage(from, this, currentHealth);
-            }
-            else
-            {
-                BattleManager.Instance.UnitTakingDamage(from, this, amount);
-            }
+            BattleManager.Instance.UnitTakingDamage(currentHealth, damageType, from, this);
+        }
+        else
+        {
+            BattleManager.Instance.UnitTakingDamage(amount, damageType, from, this);
         }
 
         // 生成伤害text
@@ -495,7 +481,7 @@ public class BaseEntity : MonoBehaviour
     public virtual void Strike(BaseEntity target)
     {
         OnStrike?.Invoke(cardModel.attackPower, target);
-        target.TakeDamage(cardModel.attackPower, this);
+        target.TakeDamage(cardModel.attackPower, DamageType.MonsterAttack, this);
     }
 
     protected virtual void Consume(List<BaseEntity> sacrfices)
@@ -506,10 +492,24 @@ public class BaseEntity : MonoBehaviour
         }
     }
 
+    // 回复血量
     public virtual void RestoreHealth(int amount)
     {
         currentHealth += amount;
-        OnlyUpdateMonsterUI();
+
+        if (currentHealth > cardModel.healthPoint)
+        {
+            currentHealth = cardModel.healthPoint;
+        }
+
+        monsterUI.UpdateHealth(currentHealth);
+    }
+
+    // 回复全部血量
+    public virtual void RestoreAllHealth()
+    {
+        currentHealth = cardModel.healthPoint;
+        monsterUI.UpdateHealth(currentHealth);
     }
 
     public virtual void UponSummon()

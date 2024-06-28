@@ -14,7 +14,7 @@ public class HealthPointDNABehavior : DNABehavior
         if (baseEntity.myTeam == Team.Player)
         {
             baseEntity.cardModel.healthPoint += DNAModel.effectData;
-            baseEntity.UpdateMonster();
+            baseEntity.RestoreHealth(DNAModel.effectData);
         }
     }
 }

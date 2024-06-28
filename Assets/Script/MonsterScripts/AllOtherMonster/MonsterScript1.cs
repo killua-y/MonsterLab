@@ -50,16 +50,16 @@ public class ZeroCostItemWolfEntity : BaseEntity
 // 反伤
 public class ThornWolfEntity : BaseEntity
 {
-    public override void TakeDamage(int amount, BaseEntity from = null)
+    public override void TakeDamage(int amount, DamageType damageType, BaseEntity from = null)
     {
-        if ((dead) || (from == null))
+        if ((dead) || (from == null) || (from.dead))
         {
             return;
         }
 
         // 返还收到的伤害
-        from.TakeDamage(amount, this);
+        from.TakeDamage(amount, DamageType.MonsterSkill, this);
 
-        base.TakeDamage(amount, from);
+        base.TakeDamage(amount, damageType, from);
     }
 }

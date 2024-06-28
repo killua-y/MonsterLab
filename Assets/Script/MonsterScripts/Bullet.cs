@@ -40,7 +40,7 @@ public class Bullet : MonoBehaviour
                 if (damage != 0)
                 {
                     // 有预先传入的伤害
-                    target.TakeDamage(damage, attacker);
+                    target.TakeDamage(damage, DamageType.MonsterSkill, attacker);
                 }
                 else
                 {

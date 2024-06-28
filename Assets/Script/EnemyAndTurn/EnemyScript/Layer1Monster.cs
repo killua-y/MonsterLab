@@ -28,10 +28,11 @@ public class BombCarrierEntity : BaseEntity
 
             float damage = ((float)cardModel.effectData / 100) * cardModel.attackPower;
             int intDamage = (int)damage;
+
             // 对每个敌人造成爆炸伤害
             foreach (BaseEntity e in entitys)
             {
-                e.TakeDamage(intDamage, this);
+                e.TakeDamage(intDamage, DamageType.MonsterSkill, this);
             }
         }
 

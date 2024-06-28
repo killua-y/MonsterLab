@@ -222,8 +222,6 @@ public class WolfFangMonsterBehavior : MonoBehaviour
         {
             baseEntity.OnStrike += OnStrike;
         }
-
-        effectData = 0;
     }
 
     private void OnStrike(int amount, BaseEntity targetMonster)
@@ -231,7 +229,7 @@ public class WolfFangMonsterBehavior : MonoBehaviour
         BleedingStack bleedingStack = targetMonster.GetComponent<BleedingStack>();
         if (bleedingStack == null)
         {
-            targetMonster.gameObject.AddComponent<BleedingStack>();
+            bleedingStack = targetMonster.gameObject.AddComponent<BleedingStack>();
         }
 
         // 施加流血
@@ -244,5 +242,71 @@ public class WolfFangMonsterBehavior : MonoBehaviour
     private void OnDestroy()
     {
         baseEntity.OnStrike -= OnStrike;
+    }
+}
+
+// 受到伤害对攻击者造成流血
+public class BleedingArmorCardBehavior : CardBehavior
+{
+    public override void CastCard(Node node)
+    {
+        targetMonster = node.currentEntity;
+
+        BleedingArmorMonsterBehavior wolfFangMonsterBehavior = targetMonster.GetComponent<BleedingArmorMonsterBehavior>();
+
+        // 如果对象没有被装备
+        if (wolfFangMonsterBehavior == null)
+        {
+            wolfFangMonsterBehavior = targetMonster.gameObject.AddComponent<BleedingArmorMonsterBehavior>();
+        }
+
+        wolfFangMonsterBehavior.effectData += card.effectData;
+
+        // 如果需要加入到卡牌说明
+        RecordCast(targetMonster);
+    }
+}
+public class BleedingArmorMonsterBehavior : MonoBehaviour
+{
+    private BaseEntity baseEntity;
+    public int effectData;
+
+    private void Start()
+    {
+        baseEntity = this.gameObject.GetComponent<BaseEntity>();
+
+        if (baseEntity == null)
+        {
+            Debug.Log("equped to null monster");
+        }
+        else
+        {
+            baseEntity.OnTakingDamage += OnTakingDamage;
+        }
+    }
+
+    private void OnTakingDamage(int amount, DamageType damageType, BaseEntity from)
+    {
+        if (from == null)
+        {
+            return;
+        }
+
+        BleedingStack bleedingStack = from.GetComponent<BleedingStack>();
+        if (bleedingStack == null)
+        {
+            bleedingStack = from.gameObject.AddComponent<BleedingStack>();
+        }
+
+        // 施加流血
+        bleedingStack.IncreaseStack(effectData);
+
+        // 回复血量
+        baseEntity.RestoreHealth(bleedingStack.stackAmount);
+    }
+
+    private void OnDestroy()
+    {
+        baseEntity.OnTakingDamage -= OnTakingDamage;
     }
 }

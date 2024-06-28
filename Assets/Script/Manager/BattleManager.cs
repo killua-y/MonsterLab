@@ -15,7 +15,7 @@ public class BattleManager : Singleton<BattleManager>
 
     public Action<BaseEntity> OnUnitDied;
     public Action<BaseEntity> OnUnitSummon;
-    public Action<BaseEntity, BaseEntity, int> OnUnitTakingDamage;
+    public Action<int, DamageType, BaseEntity, BaseEntity> OnUnitTakingDamage;
     // 战斗结束前结算效果
     public Action BeforeBattlePhase;
 
@@ -150,9 +150,9 @@ public class BattleManager : Singleton<BattleManager>
         }
     }
 
-    public void UnitTakingDamage(BaseEntity from, BaseEntity to, int amount)
+    public void UnitTakingDamage(int amount, DamageType damageType, BaseEntity from, BaseEntity to)
     {
-        OnUnitTakingDamage?.Invoke(from, to, amount);
+        OnUnitTakingDamage?.Invoke(amount, damageType, from, to);
     }
 
     // helper，用于延迟call一下新回合

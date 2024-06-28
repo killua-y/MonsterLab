@@ -33,9 +33,9 @@ public class DamageCalculate : MonoBehaviour
         BattleManager.Instance.OnUnitTakingDamage += OnUnitTakingDamage;
     }
 
-    void OnUnitTakingDamage(BaseEntity from, BaseEntity to, int amount)
+    void OnUnitTakingDamage(int amount, DamageType damageType, BaseEntity from, BaseEntity to)
     {
-        if (!InGameStateManager.BattelPhase)
+        if ((!InGameStateManager.BattelPhase) || (from == null))
         {
             return;
         }

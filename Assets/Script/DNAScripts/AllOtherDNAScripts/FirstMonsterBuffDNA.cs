@@ -20,6 +20,7 @@ public class FirstMonsterBuffDNA : DNABehavior
             {
                 baseEntity.cardModel.attackPower += DNAModel.effectData;
                 baseEntity.cardModel.healthPoint += (DNAModel.effectData * 10);
+                baseEntity.RestoreHealth((DNAModel.effectData * 10));
                 baseEntity.UpdateMonster();
                 isFirst = false;
             }

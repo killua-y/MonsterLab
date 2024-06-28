@@ -108,7 +108,7 @@ public class UponSummonFunction : MonoBehaviour
             }
 
             // 造成伤害
-            highestHealthMonster.TakeDamage(entity.cardModel.effectData * 10, entity);
+            highestHealthMonster.TakeDamage(entity.cardModel.effectData * 10, DamageType.MonsterSkill, entity);
 
             // 施加流血
             BleedingStack bleedingStack = highestHealthMonster.GetComponent<BleedingStack>();

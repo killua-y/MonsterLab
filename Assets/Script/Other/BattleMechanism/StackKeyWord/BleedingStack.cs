@@ -8,7 +8,7 @@ public class BleedingStack : MonoBehaviour
     public int stackAmount;
 
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         equipedMonster = this.GetComponent<BaseEntity>();
 
@@ -29,7 +29,7 @@ public class BleedingStack : MonoBehaviour
     private void BeforeBattlePhase()
     {
         // 施加流血伤害
-        equipedMonster.TakeDamage(stackAmount * 2, null);
+        equipedMonster.TakeDamage(stackAmount * 2, DamageType.Bleeding);
     }
 
     private void OnDestroy()
