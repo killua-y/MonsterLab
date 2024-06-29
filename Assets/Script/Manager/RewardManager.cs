@@ -79,10 +79,18 @@ public class RewardManager : Singleton<RewardManager>
         rareDNA = new List<DNA>();
         legendDNA = new List<DNA>();
 
-        allDNA = CardDataModel.Instance.GetAllDNA();
-        List<DNA> playerDNAList = CardDataModel.Instance.GetPlayerDNA();
+        // 只添加自己职业颜色和白色的DNA
+        foreach (DNA dna in CardDataModel.Instance.GetAllDNA())
+        {
+            if ((dna.NDAColor == CardColor.None) || (dna.NDAColor == MainMenuBehavior.character))
+            {
+                // 添加
+                allDNA.Add(dna);
+            }
+        }
 
         // 将玩家已经拥有的DNA从奖池中移除
+        List<DNA> playerDNAList = CardDataModel.Instance.GetPlayerDNA();
         foreach (DNA playerDNA in playerDNAList)
         {
             allDNA.RemoveAll(dna => dna.id == playerDNA.id);

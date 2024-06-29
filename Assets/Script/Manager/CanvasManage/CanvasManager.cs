@@ -50,7 +50,7 @@ public class CanvasManager : Singleton<CanvasManager>
             RectTransform rectTransform = DNAPreview.GetComponent<RectTransform>();
 
             Vector2 adjustedPosition = mousePosition +
-                new Vector2(rectTransform.rect.width / 2 + 20, -rectTransform.rect.height / 2 - 20);
+                new Vector2(400, -100);
 
             rectTransform.position = adjustedPosition;
         }
