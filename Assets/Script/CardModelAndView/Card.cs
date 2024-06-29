@@ -1,6 +1,7 @@
 
 using System.Collections.Generic;
 
+[System.Serializable]
 public class Card
 {
     // 卡牌编号
@@ -59,6 +60,7 @@ public class Card
     }
 
     // 怪兽卡类
+    [System.Serializable]
     public class MonsterCard : Card
     {
         public int rank;
@@ -117,13 +119,14 @@ public class Card
     }
 
     // 法术卡类 继承自卡牌类
+    [System.Serializable]
     public class SpellCard : Card
     {
         public SpellCard(int _id, string _cardName, CardColor _color, CardRarity _cardRarity,
-        int _cost, CastType _castType, int _effectData, string _effectText, string _cardLocation, string _imageLocation, List<string> _keyWords = null) :
+        int _cost, CastType _castType, int _effectData, string _effectText, string _cardLocation,
+        string _imageLocation, List<string> _keyWords = null) :
             base(_id, _cardName, _color, _cardRarity, _cost, _castType, _effectData, _effectText, _cardLocation, _imageLocation, _keyWords)
         {
-
         }
 
         public SpellCard(SpellCard original) : base(original)
@@ -132,13 +135,16 @@ public class Card
     }
 
     // 装备卡类，继承自卡牌类
+    [System.Serializable]
     public class ItemCard : Card
     {
+        public bool isSpecial;
+
         public ItemCard(int _id, string _cardName, CardColor _color, CardRarity _cardRarity,
-        int _cost, CastType _castType, int _effectData, string _effectText, string _cardLocation, string _imageLocation, List<string> _keyWords = null) :
+        int _cost, CastType _castType, int _effectData, string _effectText, string _cardLocation,
+        string _imageLocation, List<string> _keyWords = null) :
             base(_id, _cardName, _color, _cardRarity, _cost, _castType, _effectData, _effectText, _cardLocation, _imageLocation, _keyWords)
         {
-
         }
 
         public ItemCard(ItemCard original) : base(original)

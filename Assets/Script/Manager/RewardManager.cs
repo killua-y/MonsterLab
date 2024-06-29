@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using static Card;
 
-public class RewardManager : Manager<RewardManager>
+public class RewardManager : Singleton<RewardManager>
 {
     public GameObject rewardCanvas;
     public GameObject rewardPanel;
@@ -15,13 +15,16 @@ public class RewardManager : Manager<RewardManager>
     public List<Card> rareCard = new List<Card>();
     public List<Card> legendCard = new List<Card>();
 
+    //
+    private int cardRewardOptionNumber = 3;
+
     // DNAList
     public List<DNA> allDNA = new List<DNA>();
     public List<DNA> normalDNA = new List<DNA>();
     public List<DNA> rareDNA = new List<DNA>();
     public List<DNA> legendDNA = new List<DNA>();
-    // Start is called before the first frame update
-    void Start()
+
+    public void LoadData()
     {
         InitializeCardRewardList();
         InitializeDNARewardList();
@@ -62,6 +65,10 @@ public class RewardManager : Manager<RewardManager>
                     break;
             }
         }
+
+        HelperFunction.Shuffle(normalCard, GameSetting.randForInitialize);
+        HelperFunction.Shuffle(rareCard, GameSetting.randForInitialize);
+        HelperFunction.Shuffle(legendCard, GameSetting.randForInitialize);
     }
 
     private void InitializeDNARewardList()
@@ -72,10 +79,18 @@ public class RewardManager : Manager<RewardManager>
         rareDNA = new List<DNA>();
         legendDNA = new List<DNA>();
 
-        allDNA = CardDataModel.Instance.GetAllDNA();
-        List<DNA> playerDNAList = CardDataModel.Instance.GetPlayerDNA();
+        // 只添加自己职业颜色和白色的DNA
+        foreach (DNA dna in CardDataModel.Instance.GetAllDNA())
+        {
+            if ((dna.NDAColor == CardColor.None) || (dna.NDAColor == MainMenuBehavior.character))
+            {
+                // 添加
+                allDNA.Add(dna);
+            }
+        }
 
         // 将玩家已经拥有的DNA从奖池中移除
+        List<DNA> playerDNAList = CardDataModel.Instance.GetPlayerDNA();
         foreach (DNA playerDNA in playerDNAList)
         {
             allDNA.RemoveAll(dna => dna.id == playerDNA.id);
@@ -106,9 +121,10 @@ public class RewardManager : Manager<RewardManager>
             }
         }
 
-        HelperFunction.Shuffle(normalDNA, GameSetting.DNARewardRand);
-        HelperFunction.Shuffle(rareDNA, GameSetting.DNARewardRand);
-        HelperFunction.Shuffle(legendDNA, GameSetting.DNARewardRand);
+
+        HelperFunction.Shuffle(normalDNA, GameSetting.randForInitialize);
+        HelperFunction.Shuffle(rareDNA, GameSetting.randForInitialize);
+        HelperFunction.Shuffle(legendDNA, GameSetting.randForInitialize);
     }
 
     public void Finish()
@@ -118,29 +134,31 @@ public class RewardManager : Manager<RewardManager>
             Destroy(child.gameObject);
         }
         rewardCanvas.gameObject.SetActive(false);
+        ActsManager.Instance.LeaveScene();
     }
 
     public void GenerateReward(int remainningTurn)
     {
-        EnemyType enemyType = ActsManager.currentEnemyType;
+        BoxType enemyType = ActsManager.currentBoxType;
 
         switch (enemyType)
         {
-            case EnemyType.Normal:
+            case BoxType.NormalFight:
                 GenerateGoldReward(remainningTurn);
-                GenerateReward(1, 0);
+                GenerateCardReward(1);
                 break;
 
-            case EnemyType.Elite:
+            case BoxType.EliteFight:
                 GenerateGoldReward(remainningTurn);
-                GenerateReward(1, 1);
+                GenerateCardReward(1);
+                GenerateDNAReward(CardRarity.Rare);
                 break;
 
-            case EnemyType.Boss:
+            case BoxType.BossFight:
                 GenerateGoldReward(remainningTurn);
-                GenerateReward(1, 0);
+                GenerateCardReward(1);
                 GenerateCardReward(CardRarity.Legend);
-                GenerateLegendDNAReward();
+                GenerateDNAReward(CardRarity.Legend);
                 break;
 
             default:
@@ -148,61 +166,58 @@ public class RewardManager : Manager<RewardManager>
         }
     }
 
-    public void GenerateReward(int CardReward, int DNAReward)
+    public void GenerateCardReward(int number)
     {
         rewardCanvas.SetActive(true);
 
-        for (int i = 0; i < CardReward; i++)
+        for (int j = 0; j < number; j++)
         {
-            GenerateCardReward(3);
+            List<Card> cards = new List<Card>();
+
+            for (int i = 0; i < cardRewardOptionNumber; i++)
+            {
+                int newCardIndex = GetNextCardID();
+                cards.Add(CardDataModel.Instance.GetCard(newCardIndex));
+            }
+
+            GameObject newReward = Instantiate(Reward, rewardPanel.transform);
+            newReward.AddComponent<CardRewardBehavior>().SetUp(cards);
         }
-
-        for (int i = 0; i < DNAReward; i++)
-        {
-            GenerateDNAReward();
-        }
-    }
-
-    public void GenerateCardReward(int number)
-    {
-        List<Card> cards = new List<Card>();
-
-        for (int i = 0; i < number; i++)
-        {
-            int newCardIndex = GetNextCardID();
-            cards.Add(CardDataModel.Instance.GetCard(newCardIndex));
-        }
-
-        GameObject newReward = Instantiate(Reward, rewardPanel.transform);
-        newReward.AddComponent<CardRewardBehavior>().SetUp(cards);
     }
 
     public void GenerateCardReward(CardRarity cardRarity)
     {
+        rewardCanvas.SetActive(true);
         List<Card> cards = new List<Card>();
 
         switch (cardRarity)
         {
             case CardRarity.Normal:
                 // Normal
-                HelperFunction.Shuffle(normalCard, GameSetting.cardRewardRand);
                 for (int i = 0; i < 3; i++)
                 {
-                    cards.Add(normalCard[i]);
+                    Card card = normalCard[i];
+                    cards.Add(card);
+                    normalCard.RemoveAt(i);
+                    normalCard.Add(card);
                 }
                 break;
             case CardRarity.Rare:
-                HelperFunction.Shuffle(rareCard, GameSetting.cardRewardRand);
                 for (int i = 0; i < 3; i++)
                 {
-                    cards.Add(rareCard[i]);
+                    Card card = rareCard[i];
+                    cards.Add(card);
+                    rareCard.RemoveAt(i);
+                    rareCard.Add(card);
                 }
                 break;
             case CardRarity.Legend:
-                HelperFunction.Shuffle(legendCard, GameSetting.cardRewardRand);
                 for (int i = 0; i < 3; i++)
                 {
-                    cards.Add(legendCard[i]);
+                    Card card = legendCard[i];
+                    cards.Add(card);
+                    legendCard.RemoveAt(i);
+                    legendCard.Add(card);
                 }
                 break;
             default:
@@ -213,31 +228,48 @@ public class RewardManager : Manager<RewardManager>
         newReward.AddComponent<CardRewardBehavior>().SetUp(cards);
     }
 
-    public void GenerateDNAReward()
+    public void GenerateDNAReward(CardRarity cardRarity)
     {
-        int randNumber = GameSetting.DNARewardRand.Next(1, 101);
-
-        DNA dna = GetNextDNA();
-
-        if (dna != null)
+        rewardCanvas.SetActive(true);
+        DNA dna;
+        switch (cardRarity)
         {
-            GameObject newReward = Instantiate(Reward, rewardPanel.transform);
-            newReward.AddComponent<DNARewardBehavior>().SetUp(dna);
+            case CardRarity.Normal:
+                // Normal
+                if (normalDNA.Count == 0)
+                {
+                    dna = null;
+                }
+
+                dna = normalDNA[0];
+                normalDNA.Remove(normalDNA[0]);
+                break;
+
+            case CardRarity.Rare:
+                // Rare
+                if (rareDNA.Count == 0)
+                {
+                    dna = null;
+                }
+
+                dna = rareDNA[0];
+                rareDNA.Remove(rareDNA[0]);
+                break;
+
+            case CardRarity.Legend:
+                // Legend
+                if (legendDNA.Count == 0)
+                {
+                    dna = null;
+                }
+
+                dna = legendDNA[0];
+                legendDNA.Remove(legendDNA[0]);
+                break;
+            default:
+                dna = null;
+                break;
         }
-    }
-
-    public void GenerateLegendDNAReward()
-    {
-        DNA dna = null;
-
-        // legend
-        if (legendDNA.Count == 0)
-        {
-            return;
-        }
-
-        dna = legendDNA[0];
-        rareDNA.Remove(legendDNA[0]);
 
         if (dna != null)
         {
@@ -248,6 +280,7 @@ public class RewardManager : Manager<RewardManager>
 
     public void GenerateGoldReward(int remainningTurn)
     {
+        rewardCanvas.SetActive(true);
         if (remainningTurn == 0)
         {
             return;
@@ -259,21 +292,12 @@ public class RewardManager : Manager<RewardManager>
         newReward.AddComponent<GoldRewardBehavior>().SetUp(gold);
     }
 
-    bool randomRange(int test, int min, int max)
-    {
-        if ((test >= min) && (test <= max))
-        {
-            return true;
-        }
-
-        return false;
-    }
-
     // 种子随机数生成
     // Method to get a single card ID based on probabilities
     public int GetNextCardID()
     {
         float randomValue = (float)GameSetting.cardRewardRand.NextDouble();
+        GameSetting.cardRewardRandCalls += 1;
 
         if (randomValue < 0.5f)
         {
@@ -300,43 +324,7 @@ public class RewardManager : Manager<RewardManager>
         }
 
         int index = GameSetting.cardRewardRand.Next(cardList.Count);
+        GameSetting.cardRewardRandCalls += 1;
         return cardList[index].id;
-    }
-
-    public DNA GetNextDNA()
-    {
-        int randNumber = GameSetting.DNARewardRand.Next(1, 101);
-
-        DNA dna = null;
-
-        if (randomRange(randNumber, 1, 50))
-        {
-            if (rareDNA.Count == 0)
-            {
-                return null;
-            }
-
-            // Rare
-            dna = rareDNA[0];
-            rareDNA.Remove(rareDNA[0]);
-        }
-        else if (randomRange(randNumber, 51, 100))
-        {
-            if (normalDNA.Count == 0)
-            {
-                return null;
-            }
-
-            // Normal
-            dna = normalDNA[0];
-            normalDNA.Remove(normalDNA[0]);
-        }
-        else
-        {
-            Debug.Log("Should not get here");
-            return null;
-        }
-
-        return dna;
     }
 }

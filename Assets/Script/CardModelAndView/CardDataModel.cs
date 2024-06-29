@@ -4,32 +4,23 @@ using UnityEngine;
 using System.IO;
 using static Card;
 
-public class CardDataModel : MonoBehaviour
+public class CardDataModel : Singleton<CardDataModel>
 {
-    public static CardDataModel Instance;
-
-    public TextAsset warriorCard; // 战士的默认卡组
-
     private string textCardDataPath = "/Datas/cardsdata - AllCards.csv"; // 卡牌数据txt文件
     private string textDNADataPath = "/Datas/cardsdata - DNA.csv"; // DNA数据text文件
     private string textPlayerDataPath = "/Datas/playerdata.csv"; // 玩家的卡牌数据存储文件
 
-    public static bool NewGame = true;
-
     private List<Card> cardList = new List<Card>(); // 存储卡牌数据的链表
     private List<DNA> DNAList = new List<DNA>(); // 存储DNA数据的链表
 
-    private int[] playerExtraDeckData; // 储存玩家额外卡组数据的array
-    private List<Card> playerExtraDeckData1;
-    private int[] playerCardData; // 储存玩家卡牌数据的array
-    private List<Card> playerCardData1;
-    private int[] playerDNAData; // 储存玩家DNA数据的array
-    public int totalCoins;
+    //储存玩家卡牌数据的list
+    private List<Card> playerExtraDeckData = new List<Card>();
+    private List<Card> playerCardData = new List<Card>();
+    private List<DNA> playerDNAData = new List<DNA>(); // 储存玩家DNA数据的array
 
     // 怪兽链表
-    public TextAsset enemyTextCardData; // 地方怪兽卡牌数据txt文件
-    public List<Enemy> enemyList = new List<Enemy>(); // 所有敌人的数据
-    private List<MonsterCard> enemyCardList = new List<MonsterCard>(); // 存储地方怪兽卡牌数据的链表
+    public TextAsset enemyTextCardData; // 敌方怪兽卡牌数据txt文件
+    private List<MonsterCard> enemyCardList = new List<MonsterCard>(); // 存储敌方怪兽卡牌数据的链表
 
     // keyword
     private string keyWordsDataPath = "/Datas/cardsdata - Keyword.csv";
@@ -37,28 +28,32 @@ public class CardDataModel : MonoBehaviour
     public List<string> keyWordsDefinition = new List<string>();
 
     // Start is called before the first frame update
-    void Awake()
+    protected override void Awake()
     {
-        Instance = this;
+        base.Awake();
 
         LoadKeyWordList();
-        LoadCardList();
+        LoadCardList(textCardDataPath, cardList);
         LoadEnemyCardList();
         LoadDNAList();
+    }
 
-        if (NewGame)
+    public void LoadData(PlayerData playerData)
+    {
+        if (playerData.MainDeckMonster != null)
         {
-            File.WriteAllLines(Application.dataPath + textPlayerDataPath, warriorCard.text.Split('\n'));
-            Debug.Log("reset player deck");
-            NewGame = false;
+            playerCardData.AddRange(playerData.MainDeckMonster);
+            playerCardData.AddRange(playerData.MainDeckSpell);
+            playerCardData.AddRange(playerData.MainDeckItem);
+            playerExtraDeckData.AddRange(playerData.ExtraDeckMonster);
+            playerExtraDeckData.AddRange(playerData.ExtraDeckSpell);
+            playerExtraDeckData.AddRange(playerData.ExtraDeckItem);
+            playerDNAData = playerData.PlayerDNA;
         }
         else
         {
-            //Debug.Log("avoid reset deck");
+            Debug.Log("New game, reset player deck");
         }
-
-        // 需要在LoadCardList()之后call
-        LoadPlayerData();
     }
 
     private void LoadKeyWordList()
@@ -86,10 +81,10 @@ public class CardDataModel : MonoBehaviour
     }
 
     // 加载所有卡牌数据
-    private void LoadCardList()
+    public void LoadCardList(string dataPath, List<Card> cardList)
     {
         //Load卡片
-        string path = Application.dataPath + textCardDataPath;
+        string path = Application.dataPath + dataPath;
         string[] dataArray = File.ReadAllLines(path);
 
         foreach (var row in dataArray)
@@ -106,13 +101,9 @@ public class CardDataModel : MonoBehaviour
             else
             {
                 Card newCard = HelperFunction.LoadCard(rowArray, keyWords);
-                if (newCard != null)
-                {
-                    cardList.Add(newCard);
-                }
+                cardList.Add(newCard);
             }
         }
-
     }
 
     public void LoadDNAList()
@@ -174,14 +165,6 @@ public class CardDataModel : MonoBehaviour
 
                 //Debug.Log("Load enemy monster card: " + name);
             }
-            else if (rowArray[0] == "e")
-            {
-                string name = rowArray[2];
-                int layer = int.Parse(rowArray[3]);
-                EnemyType enemyType = HelperFunction.ConvertToEnum<EnemyType>(rowArray[4]);
-                string scriptLocation = rowArray[5];
-                enemyList.Add(new Enemy(name, layer, enemyType, scriptLocation));
-            }
             else
             {
                 Debug.Log("enemy cvs data error, the first string is : " + rowArray[0]);
@@ -190,209 +173,115 @@ public class CardDataModel : MonoBehaviour
     }
 
     // 获得卡牌
-    public void ObtainCard(int _id)
+    public void ObtainCard(Card _card)
     {
         // 玩家数据中增加该卡牌
-        playerCardData[_id] += 1;
-
-        SavePlayerData();
+        playerCardData.Add(Card.CloneCard(_card));
     }
 
     // 删除卡牌
-    public void DeleteCard(int _id)
+    public void DeleteCard(Card _card)
     {
         // 查看剩余卡牌是否大于0
-        if(playerCardData[_id] >= 1)
+        if (playerCardData.Contains(_card))
         {
-            playerCardData[_id] -= 1;
+            playerCardData.Remove(_card);
         }
-        else if(playerExtraDeckData[_id] >= 1)
+        else if (playerExtraDeckData.Contains(_card))
         {
-            playerExtraDeckData[_id] -= 1;
+            playerExtraDeckData.Remove(_card);
         }
         else
         {
             Debug.Log("Trying to delete card that do not have");
         }
-
-        SavePlayerData();
     }
 
     public void ObtainDNA(int _id)
     {
-        if (playerDNAData[_id] >= 1)
+        if (playerDNAData.Contains(DNAList[_id]))
         {
             Debug.Log("Error: acquire DNA that already have");
         }
 
         // 玩家数据中增加该DNA
-        playerDNAData[_id] += 1;
-
-        SavePlayerData();
+        playerDNAData.Add(DNAList[_id]);
     }
 
     // 加载玩家卡组数据
-    public void LoadPlayerData()
+    public void LoadDefaultCard()
     {
         string path = Application.dataPath + textPlayerDataPath;
         string[] dataArray = File.ReadAllLines(path);
 
-        playerCardData = new int[cardList.Count];
-        playerDNAData = new int[DNAList.Count];
-        playerExtraDeckData = new int[cardList.Count];
-
         foreach (var row in dataArray)
         {
             string[] rowArray = row.Split(',');
-            if (rowArray[0] == "#")
+            if (rowArray[0] == "")
             {
                 continue;
-            }
-            else if (rowArray[0] == "")
-            {
-                continue;
-            }
-            else if (rowArray[0] == "coins")
-            {
-                totalCoins = int.Parse(rowArray[1]);
             }
             else if (rowArray[0] == "card")
             {
                 int id = int.Parse(rowArray[1]);
                 int num = int.Parse(rowArray[2]);
-                playerCardData[id] = num;
-                //Debug.Log("Load card with id : " + id);
-            }
-            else if (rowArray[0] == "DNA")
-            {
-                int id = int.Parse(rowArray[1]);
-                int num = int.Parse(rowArray[2]);
-                playerDNAData[id] = num;
+                for (int i = 0; i < num; i++)
+                {
+                    playerCardData.Add(Card.CloneCard(cardList[id]));
+                }
             }
             else if (rowArray[0] == "extraDeck")
             {
                 int id = int.Parse(rowArray[1]);
                 int num = int.Parse(rowArray[2]);
-                playerExtraDeckData[id] = num;
+                for (int i = 0; i < num; i++)
+                {
+                    playerExtraDeckData.Add(Card.CloneCard(cardList[id]));
+                }
                 //Debug.Log("Load extra deck card with id : " + id + " num: " + num);
+            }
+            else if (rowArray[0] == "DNA")
+            {
+                int id = int.Parse(rowArray[1]);
+                int num = int.Parse(rowArray[2]);
+
+                if (num >= 1)
+                {
+                    playerDNAData.Add(DNAList[id]);
+                }
             }
             else
             {
                 Debug.Log("Player cvs data error, the first string is : " + rowArray[0]);
             }
         }
-        //Debug.Log("Player data loaded. Path: " + path);
-        //Debug.Log("load data: " + string.Join("\n", dataArray));
-    }
-
-    // 保存玩家钱/卡牌/DNA数据
-    public void SavePlayerData()
-    {
-        List<string> datas = new List<string>();
-        string path = Application.dataPath + textPlayerDataPath;
-        datas.Add("coins," + totalCoins.ToString());
-
-        for (int i = 0; i < playerCardData.Length; i++)
-        {
-            if (playerCardData[i] != 0)
-            {
-                datas.Add("card," + i.ToString() + "," + playerCardData[i].ToString());
-            }
-        }
-
-        for (int i = 0; i < playerExtraDeckData.Length; i++)
-        {
-            if (playerExtraDeckData[i] != 0)
-            {
-                datas.Add("extraDeck," + i.ToString() + "," + playerExtraDeckData[i].ToString());
-            }
-        }
-
-        for (int i = 0; i < playerDNAData.Length; i++)
-        {
-            if (playerDNAData[i] != 0)
-            {
-                datas.Add("NDA," + i.ToString() + "," + playerDNAData[i].ToString());
-            }
-        }
-
-        File.WriteAllLines(path, datas);
-        //Debug.Log("Player data saved. Path: " + path);
-        //Debug.Log("Saved data: " + string.Join("\n", datas));
     }
 
     // 加载局内卡组
-    public List<Card> InitializeDeck()
+    public List<Card> GetMainDeck()
     {
-        List<Card> deckCardList = new List<Card>();
-
-        for (int cardIndex = 0; cardIndex < playerCardData.Length; cardIndex++)
-        {
-            int quantity = playerCardData[cardIndex];
-
-            if (quantity >= 1)
-            {
-                for (int i = 0; i < quantity; i++)
-                {
-                    if (cardIndex < cardList.Count)  // Ensure the index is within the range of available cards
-                    {
-                        deckCardList.Add(cardList[cardIndex]);
-                    }
-                }
-            }
-        }
-
-        return deckCardList;
+        return playerCardData;
     }
 
     // 加载局内额外卡组
-    public List<Card> InitializeExtraDeck()
+    public List<Card> GetExtraDeck()
     {
-        List<Card> extraDeckCardList = new List<Card>();
+        return playerExtraDeckData;
+    }
 
-        for (int cardIndex = 0; cardIndex < playerExtraDeckData.Length; cardIndex++)
-        {
-            int quantity = playerExtraDeckData[cardIndex];
-
-            if (quantity >= 1)
-            {
-                for (int i = 0; i < quantity; i++)
-                {
-                    if (cardIndex < cardList.Count)  // Ensure the index is within the range of available cards
-                    {
-                        extraDeckCardList.Add(cardList[cardIndex]);
-                        //Debug.Log("generate extra deck card : " + newCard.id);
-                    }
-                }
-            }
-        }
-
-        return extraDeckCardList;
+    // 加载局内额外卡组
+    public List<Card> GetPlayerDeck()
+    {
+        List<Card> cardList = new List<Card>();
+        cardList.AddRange(playerCardData);
+        cardList.AddRange(playerExtraDeckData);
+        return cardList;
     }
 
     // 加载玩家DNA
     public List<DNA> GetPlayerDNA()
     {
-        List<DNA> playerDNAList = new List<DNA>();
-
-        for (int index = 0; index < playerDNAData.Length; index++)
-        {
-            int quantity = playerDNAData[index];
-
-            if (quantity >= 1)
-            {
-                playerDNAList.Add(DNAList[index]);
-            }
-        }
-
-        return playerDNAList;
-    }
-
-    // Helper，其他function会call来获取卡组数据
-    public List<MonsterCard> GetEnemyMonster()
-    {
-        // 因为monster在生成时会自动创建新的clone，所以这里不需要输出clone
-        return enemyCardList;
+        return playerDNAData;
     }
 
     // 输出所有卡牌信息
@@ -413,60 +302,37 @@ public class CardDataModel : MonoBehaviour
         return cardList[index];
     }
 
-    public void ChangeExtraDeck(Card card, bool toExtraDeck)
+    // 输出需要的卡牌信息
+    public MonsterCard GetEnemyCard(int index)
     {
-        int cardIndex = card.id;
-
-        // 如果bool为true说明是从卡组向extra deck添加卡片
-        if (toExtraDeck)
-        {
-            playerCardData[cardIndex] -= 1;
-            playerExtraDeckData[cardIndex] += 1;
-        }
-        // 反之为从extra deck向卡组添加卡片
-        else
-        {
-            playerCardData[cardIndex] += 1;
-            playerExtraDeckData[cardIndex] -= 1;
-        }
+        return enemyCardList[index];
     }
 
-    public void ChangeDeckFromMainToExtra(int cardIndex, bool fromMainToExtra)
+    public void ChangeDeckFromMainToExtra(Card card, bool fromMainToExtra)
     {
         if (fromMainToExtra)
         {
-            playerCardData[cardIndex] -= 1;
-            playerExtraDeckData[cardIndex] += 1;
-            if (playerCardData[cardIndex] < 0)
+            if (playerCardData.Contains(card))
+            {
+                playerCardData.Remove(card);
+                playerExtraDeckData.Add(card);
+            }
+            else
             {
                 Debug.Log("Bad bug");
             }
         }
         else
         {
-            playerExtraDeckData[cardIndex] -= 1;
-            playerCardData[cardIndex] += 1;
-            if (playerExtraDeckData[cardIndex] < 0)
+            if (playerExtraDeckData.Contains(card))
+            {
+                playerExtraDeckData.Remove(card);
+                playerCardData.Add(card);
+            }
+            else
             {
                 Debug.Log("Bad bug");
             }
         }
-
-        SavePlayerData();
-    }
-
-    public void LoadData()
-    {
-        string jsonString = JsonUtility.ToJson(playerExtraDeckData1);
-        playerExtraDeckData1 = JsonUtility.FromJson<List<Card>>(jsonString);
-    }
-
-    public void SaveData()
-    {
-        // Serialize the list to JSON
-        string jsonString = JsonUtility.ToJson(playerExtraDeckData1);
-
-        // Write the JSON string to a file
-        File.WriteAllText("playerCards.json", jsonString);
     }
 }

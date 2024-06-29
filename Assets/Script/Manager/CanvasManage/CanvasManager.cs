@@ -4,15 +4,12 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class CanvasManager : MonoBehaviour
+public class CanvasManager : Singleton<CanvasManager>
 {
-    public static CanvasManager Instance;
-
     // 所有canvas
     [Header("All canvas")]
     public Canvas HighPriorityCanvas;
     public Canvas MapCanvas;
-    public Canvas ShopCanvas;
 
     // 用于holding dna preview
     [Header("DNA preview")]
@@ -32,14 +29,9 @@ public class CanvasManager : MonoBehaviour
     public Transform drawPileParent;
     public Transform discardPileParent;
 
-    private void Awake()
-    {
-        Instance = this;
-    }
-
     private void Start()
     {
-        InGameStateManager.Instance.OnGameEnd += OnGameEnd;
+        InGameStateManager.Instance.OnCombatEnd += OnCombatEnd;
     }
 
     void Update()
@@ -58,7 +50,7 @@ public class CanvasManager : MonoBehaviour
             RectTransform rectTransform = DNAPreview.GetComponent<RectTransform>();
 
             Vector2 adjustedPosition = mousePosition +
-                new Vector2(rectTransform.rect.width / 2 + 20, -rectTransform.rect.height / 2 - 20);
+                new Vector2(400, -100);
 
             rectTransform.position = adjustedPosition;
         }
@@ -92,7 +84,7 @@ public class CanvasManager : MonoBehaviour
 
     private void HideAllOtherPanel()
     {
-        if (InGameStateManager.inGame)
+        if (InGameStateManager.inCombat)
         {
             if (extraDeck.gameObject.activeSelf)
             {
@@ -113,7 +105,7 @@ public class CanvasManager : MonoBehaviour
         }
     }
 
-    private void OnGameEnd()
+    private void OnCombatEnd()
     {
         SetMapCanvasActive(true);
     }
@@ -121,12 +113,6 @@ public class CanvasManager : MonoBehaviour
     public void OpenDeck()
     {
         DeckManage.Instance.OpenDeck();
-    }
-
-    public void OpenShopCanvas()
-    {
-        ShopCanvas.gameObject.SetActive(true);
-        ShopManager.Instance.GenerateShop();
     }
 
     public void GenerateDNAPreview(string Name, string description)

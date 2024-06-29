@@ -2,6 +2,7 @@
 
 using System.Collections.Generic;
 
+[System.Serializable]
 public class DNA
 {
     // 编号

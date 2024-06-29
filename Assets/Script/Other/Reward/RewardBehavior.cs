@@ -15,7 +15,7 @@ public class CardRewardBehavior : MonoBehaviour, IPointerClickHandler
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        RewardCardSelectBehavior.Instance.AddCard(cards, this.gameObject);
+        FindAnyObjectByType<RewardCardSelectBehavior>().AddCard(cards, this.gameObject);
     }
 }
 

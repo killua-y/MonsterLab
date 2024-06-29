@@ -5,7 +5,7 @@ using TMPro;
 using UnityEngine;
 using static Card;
 
-public class TurnManager : Manager<TurnManager>
+public class TurnManager : MonoBehaviour
 {
     // 卡牌管理区
     public GameObject turnParent;
@@ -15,7 +15,6 @@ public class TurnManager : Manager<TurnManager>
     public bool isFinalWaive;
     private int currentTurn;
     private int finalTurn;
-    public List<MonsterCard> monsterList = new List<MonsterCard>();
     private List<int> MonsterSummonTurn;
     private List<TurnUnitBehavior> allTurns;
 
@@ -24,17 +23,13 @@ public class TurnManager : Manager<TurnManager>
     // Start is called before the first frame update
     void Start()
     {
-        InGameStateManager.Instance.OnGameStart += OnGameStart;
+        InGameStateManager.Instance.OnCombatStart += OnCombatStart;
         InGameStateManager.Instance.OnPreparePhaseStart += OnPreparePhaseStart;
         InGameStateManager.Instance.OnBattlePhaseEnd += OnBattlePhaseEnd;
-
-        // 加载所有怪兽数据
-        monsterList = CardDataModel.Instance.GetEnemyMonster();
     }
 
-    void OnGameStart()
+    void OnCombatStart()
     {
-
         // 加载当前战斗敌人
         LoadEnemy(ActsManager.currentEnemy);
     }
@@ -51,7 +46,7 @@ public class TurnManager : Manager<TurnManager>
         int remainningTurn = finalTurn - currentTurn;
         EnemyBehavior enemy = this.GetComponent<EnemyBehavior>();
         Destroy(enemy);
-        InGameStateManager.Instance.GameEnd(remainningTurn);
+        InGameStateManager.Instance.CombatEnd(remainningTurn);
     }
 
     private void LoadEnemy(String enemyScriptLocatiom)
@@ -67,7 +62,7 @@ public class TurnManager : Manager<TurnManager>
         enemy.LoadEnemy();
 
         currentTurn = 0;
-        finalTurn = enemy.GetMaxTurn();
+        finalTurn = enemy.MaxTurn;
         MonsterSummonTurn = new List<int>();
         MonsterSummonTurn = enemy.GetTurnList();
         SetUpTurnUI();

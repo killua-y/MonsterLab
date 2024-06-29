@@ -5,7 +5,7 @@ using static Card;
 
 public class ArcherEnemy : EnemyBehavior
 {
-    protected new int MaxTurn = 4;
+    public override int MaxTurn { get; set; } = 4;
 
     // 该敌人拥有的怪兽
     private MonsterCard Archer;
@@ -13,8 +13,8 @@ public class ArcherEnemy : EnemyBehavior
 
     public override void LoadEnemy()
     {
-        Archer = TurnManager.Instance.monsterList[4];
-        BlackSlime = TurnManager.Instance.monsterList[2];
+        Archer = CardDataModel.Instance.GetEnemyCard(4);
+        BlackSlime = CardDataModel.Instance.GetEnemyCard(2);
 
         // 该在哪几个回合召唤怪兽
         MonsterSummonTurn.Add(0);
@@ -39,23 +39,22 @@ public class ArcherEnemy : EnemyBehavior
     }
 }
 
-public class BombCarrierEnemy : EnemyBehavior
+public class BombCarrierFactoryEnemy : EnemyBehavior
 {
-    protected new int MaxTurn = 4;
+    public override int MaxTurn { get; set; } = 4;
 
     // 该敌人拥有的怪兽
-    private MonsterCard BombCarrier;
-    private MonsterCard Slave;
+    private MonsterCard BombMonsterGenerator;
+    private MonsterCard Slime;
 
     public override void LoadEnemy()
     {
-        BombCarrier = TurnManager.Instance.monsterList[5];
-        Slave = TurnManager.Instance.monsterList[7];
+        BombMonsterGenerator = CardDataModel.Instance.GetEnemyCard(9);
+        Slime = CardDataModel.Instance.GetEnemyCard(0);
 
         // 该在哪几个回合召唤怪兽
         MonsterSummonTurn.Add(0);
         MonsterSummonTurn.Add(1);
-        MonsterSummonTurn.Add(2);
     }
 
     // 根据当前回合召唤怪兽
@@ -63,23 +62,16 @@ public class BombCarrierEnemy : EnemyBehavior
     {
         if (index == 0)
         {
-            SummonEnenmy(1, 4, BombCarrier);
-            SummonEnenmy(2, 5, BombCarrier);
-            SummonEnenmy(3, 4, BombCarrier);
-            SummonEnenmy(2, 4, Slave);
-            SummonEnenmy(3, 7, Slave);
+            SummonEnenmy(0, 7, BombMonsterGenerator);
+            SummonEnenmy(2, 7, BombMonsterGenerator);
+            SummonEnenmy(4, 7, BombMonsterGenerator);
+            SummonEnenmy(2, 4, Slime);
+            SummonEnenmy(2, 4, Slime);
         }
         else if (index == 1)
         {
-            SummonEnenmy(2, 5, BombCarrier);
-            SummonEnenmy(2, 5, BombCarrier);
-            SummonEnenmy(2, 5, BombCarrier);
-        }
-        else if (index == 2)
-        {
-            SummonEnenmy(2, 4, Slave);
-            SummonEnenmy(2, 5, BombCarrier);
-            SummonEnenmy(2, 5, BombCarrier);
+            SummonEnenmy(2, 4, Slime);
+            SummonEnenmy(2, 4, Slime);
         }
 
         base.SummonEnemy();

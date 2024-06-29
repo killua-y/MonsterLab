@@ -2,23 +2,21 @@ using System;
 using UnityEngine;
 using static Card;
 
-public class CardDisplayView : MonoBehaviour
+public class CardDisplayView : Singleton<CardDisplayView>
 {
-    public static CardDisplayView Instance;
-
     public GameObject MonsterCardModel;
     public GameObject SpellCardModel;
     public GameObject ItemCardModel;
-
-    private void Awake()
-    {
-        Instance = this;
-    }
 
     // 可视化单个卡牌，将卡牌的可视化后加入到parent下面
     public GameObject DisPlaySingleCard(Card _card, Transform _parent)
     {
         GameObject newCard = null;
+
+        if (_card == null)
+        {
+            Debug.Log("card is null");
+        }
 
         if (_card is MonsterCard)
         {

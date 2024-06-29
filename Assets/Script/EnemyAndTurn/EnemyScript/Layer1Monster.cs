@@ -28,10 +28,11 @@ public class BombCarrierEntity : BaseEntity
 
             float damage = ((float)cardModel.effectData / 100) * cardModel.attackPower;
             int intDamage = (int)damage;
+
             // 对每个敌人造成爆炸伤害
             foreach (BaseEntity e in entitys)
             {
-                e.TakeDamage(intDamage, this);
+                e.TakeDamage(intDamage, DamageType.MonsterSkill, this);
             }
         }
 
@@ -41,6 +42,8 @@ public class BombCarrierEntity : BaseEntity
 
 public class BombMonsterGeneratorEntity : BaseEntity
 {
+    private MonsterCard boomer;
+
     protected override void Start()
     {
         Invoke("SummonChild", 0);
@@ -50,7 +53,6 @@ public class BombMonsterGeneratorEntity : BaseEntity
 
     public override void Update()
     {
-        // 什么都不做
         // 防御塔型单位, 什么都不做
     }
 
@@ -65,13 +67,19 @@ public class BombMonsterGeneratorEntity : BaseEntity
     private void SummonChild()
     {
         // 召唤一只自爆怪兽
-        MonsterCard boomer = (MonsterCard)TurnManager.Instance.monsterList[5];
-        EnemyBehavior.SummonEnenmy(this.currentNode.rowIndex, this.currentNode.columnIndex, boomer);
+        if (boomer == null)
+        {
+            boomer = CardDataModel.Instance.GetEnemyCard(cardModel.effectData);
+        }
+
+        EnemyBehavior.SummonEnenmy(2, 4, boomer);
     }
 }
 
 public class MotherSlimeEntity: BaseEntity
 {
+    private MonsterCard acidSlime;
+
     // 战斗阶段开始
     protected override void OnPreparePhaseStart()
     {
@@ -83,7 +91,11 @@ public class MotherSlimeEntity: BaseEntity
     private void SummonChild()
     {
         // 召唤一只史莱姆
-        MonsterCard AcidSlime = (MonsterCard)TurnManager.Instance.monsterList[1];
-        EnemyBehavior.SummonEnenmy(2, 7, AcidSlime);
+        if (acidSlime == null)
+        {
+            acidSlime = CardDataModel.Instance.GetEnemyCard(cardModel.effectData);
+        }
+
+        EnemyBehavior.SummonEnenmy(2, 7, acidSlime);
     }
 }

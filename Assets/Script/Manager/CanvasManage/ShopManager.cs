@@ -4,13 +4,10 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class ShopManager : Manager<ShopManager>
+public class ShopManager : MonoBehaviour
 {
     public Transform CardHolder;
     public Transform DNAHolder;
-
-    public GameObject AllDeck;
-    public Transform AllDeckContent;
 
     public TextMeshProUGUI refreshCostText;
     public TextMeshProUGUI deleteCostText;
@@ -21,8 +18,20 @@ public class ShopManager : Manager<ShopManager>
     private List<Card> cardList;
     private List<DNA> dnaList;
 
+    private bool isOpen = false;
+
+    // 引用的script
+    private CardSelectPanelBehavior cardSelectPanelBehavior;
+
+    private void Start()
+    {
+        cardSelectPanelBehavior = FindAnyObjectByType<CardSelectPanelBehavior>();
+    }
+
     public void GenerateShop()
     {
+        ChangePosition();
+
         refreshCost = 0;
         //RefreshDNA();
         RefreshShopCard();
@@ -30,6 +39,46 @@ public class ShopManager : Manager<ShopManager>
         deleteCost = 100;
 
         UpdateShopCostView();
+    }
+
+    public void CloseShop()
+    {
+        ChangePosition();
+    }
+
+    void ChangePosition()
+    {
+        if (isOpen)
+        {
+            StartCoroutine(SmoothMoveCoroutine(0, 1080));
+            isOpen = false;
+        }
+        else
+        {
+            StartCoroutine(SmoothMoveCoroutine(1080, 0));
+            isOpen = true;
+        }
+    }
+
+    private IEnumerator SmoothMoveCoroutine(float startY, float endY)
+    {
+        float elapsedTime = 0;
+        float duration = 0.2f;
+        Vector3 startPosition = transform.localPosition;
+        Vector3 targetPosition = new Vector3(startPosition.x, endY, startPosition.z);
+
+        while (elapsedTime < duration)
+        {
+            // Calculate the current position using Lerp
+            float newY = Mathf.Lerp(startY, endY, elapsedTime / duration);
+            transform.localPosition = new Vector3(startPosition.x, newY, startPosition.z);
+
+            elapsedTime += Time.deltaTime;
+            yield return null; // Wait for the next frame
+        }
+
+        // Ensure the final position is set
+        transform.localPosition = targetPosition;
     }
 
     public void RefreshShopCard()
@@ -66,12 +115,12 @@ public class ShopManager : Manager<ShopManager>
 
     public void RefreshDNA()
     {
-        dnaList = new List<DNA>();
-        for (int i = 0; i < 3; i++)
-        {
-            DNA dna = RewardManager.Instance.GetNextDNA();
-            dnaList.Add(dna);
-        }
+        //dnaList = new List<DNA>();
+        //for (int i = 0; i < 3; i++)
+        //{
+        //    DNA dna = RewardManager.Instance.GetNextDNA();
+        //    dnaList.Add(dna);
+        //}
 
         UpdateShopDNAView();
     }
@@ -92,19 +141,19 @@ public class ShopManager : Manager<ShopManager>
             switch (card.cardRarity)
             {
                 case CardRarity.Normal:
-                    price = GameSetting.shuffleCardRand.Next(50, 101);
+                    price = GameSetting.CurrentActRand.Next(50, 101);
                     break;
                 case CardRarity.Rare:
-                    price = GameSetting.shuffleCardRand.Next(100, 151);
+                    price = GameSetting.CurrentActRand.Next(100, 151);
                     break;
                 case CardRarity.Legend:
-                    price = GameSetting.shuffleCardRand.Next(150, 201);
+                    price = GameSetting.CurrentActRand.Next(150, 201);
                     break;
                 default:
                     break;
             }
 
-            newCard.AddComponent<ShopCardBuyOnClick>().SetUp(card.id, price);
+            newCard.AddComponent<ShopCardBuyOnClick>().SetUp(card, price);
         }
 
         // 还没写
@@ -131,7 +180,7 @@ public class ShopManager : Manager<ShopManager>
         deleteCostText.text = deleteCost + "";
     }
 
-    public void DeleteCard(int cardIndex)
+    public void DeleteCard()
     {
         // 扣钱
         if (PlayerStatesManager.Gold < deleteCost)
@@ -141,17 +190,20 @@ public class ShopManager : Manager<ShopManager>
         }
         else
         {
+            CardHolder.gameObject.SetActive(false);
             PlayerStatesManager.Instance.DecreaseGold(deleteCost);
+            deleteCost += 50;
+            cardSelectPanelBehavior.SelectCardFromDeck(DeleteCardHelper);
         }
-
-        OpenPlayerDeck();
-
-        CardDataModel.Instance.DeleteCard(cardIndex);
-
-        deleteCost += 50;
     }
 
-    public void BuyCard(int cardIndex, int price, GameObject card)
+    private void DeleteCardHelper(Card card)
+    {
+        CardDataModel.Instance.DeleteCard(card);
+        CardHolder.gameObject.SetActive(true);
+    }
+
+    public void BuyCard(Card _card, int price, GameObject card)
     {
         // 扣钱
         if (PlayerStatesManager.Gold < price)
@@ -164,7 +216,7 @@ public class ShopManager : Manager<ShopManager>
             PlayerStatesManager.Instance.DecreaseGold(price);
         }
 
-        CardDataModel.Instance.ObtainCard(cardIndex);
+        CardDataModel.Instance.ObtainCard(_card);
         Destroy(card);
     }
 
@@ -184,67 +236,18 @@ public class ShopManager : Manager<ShopManager>
         CardDataModel.Instance.ObtainDNA(cardIndex);
         Destroy(dna);
     }
-
-    public void OpenPlayerDeck()
-    {
-        if (AllDeck.activeSelf)
-        {
-            foreach (Transform child in AllDeckContent)
-            {
-                Destroy(child.gameObject);
-            }
-
-            AllDeck.SetActive(false);
-        }
-        else
-        {
-            cardList = new List<Card>();
-            cardList = CardDataModel.Instance.InitializeDeck();
-            foreach (Card card in CardDataModel.Instance.InitializeExtraDeck())
-            {
-                cardList.Add(card);
-            }
-
-            foreach (Card card in cardList)
-            {
-                GameObject newCard = CardDisplayView.Instance.DisPlaySingleCard(card, AllDeckContent);
-                newCard.AddComponent<Scaling>();
-                newCard.AddComponent<ShopCardDeleteOnClick>().SetUp(card.id);
-            }
-
-            AllDeck.SetActive(true);
-        }
-    }
-}
-
-public class ShopCardDeleteOnClick : MonoBehaviour, IPointerClickHandler
-{
-    private int cardIndex;
-
-    public void SetUp(int index)
-    {
-        cardIndex = index;
-    }
-
-    public void OnPointerClick(PointerEventData eventData)
-    {
-        if (eventData.button == PointerEventData.InputButton.Left)
-        {
-            ShopManager.Instance.DeleteCard(cardIndex);
-        }
-    }
 }
 
 public class ShopCardBuyOnClick : MonoBehaviour, IPointerClickHandler
 {
-    private int cardIndex;
+    private Card card;
     private int price;
 
     public TextMeshProUGUI priceText;
 
-    public void SetUp(int index, int _price)
+    public void SetUp(Card _card, int _price)
     {
-        cardIndex = index;
+        card = _card;
         price = _price;
 
         // Check if a TextMeshProUGUI component already exists, otherwise create one
@@ -268,7 +271,7 @@ public class ShopCardBuyOnClick : MonoBehaviour, IPointerClickHandler
     {
         if (eventData.button == PointerEventData.InputButton.Left)
         {
-            ShopManager.Instance.BuyCard(cardIndex, price, this.gameObject);
+            FindAnyObjectByType<ShopManager>().BuyCard(card, price, this.gameObject);
         }
     }
 }
@@ -288,7 +291,7 @@ public class ShopDNAOnClick : MonoBehaviour, IPointerClickHandler
     {
         if (eventData.button == PointerEventData.InputButton.Left)
         {
-            ShopManager.Instance.BuyCard(index, price, this.gameObject);
+            FindAnyObjectByType<ShopManager>().BuyDNA(index, price, this.gameObject);
         }
     }
 }

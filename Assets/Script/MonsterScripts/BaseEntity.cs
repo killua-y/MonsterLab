@@ -17,7 +17,7 @@ public class BaseEntity : MonoBehaviour
     private Transform attackOragn;
     public int currentHealth;
     [Range(1.5f, 10)]
-    protected float range = 1.5f;
+    public float range = 1.5f;
     public float attackSpeed = 1f; //攻击间隔
     public float attackPreparation = 0.5f; //攻击前摇
     public float attackRecover = 0.5f; //攻击后摇
@@ -45,6 +45,8 @@ public class BaseEntity : MonoBehaviour
     protected float waitBetweenAttack;
     public Action OnDeath;
     public Action OnAttack;
+    public Action<int, DamageType, BaseEntity> OnTakingDamage;
+    public Action<int, BaseEntity> OnStrike;
 
     // 动画
     private Animator animator;
@@ -92,8 +94,10 @@ public class BaseEntity : MonoBehaviour
         // 重新施加记录下的装备
         if (monsterCard.equippedCard.Count > 0)
         {
+            List<Card> equippedCards = monsterCard.equippedCard;
+            monsterCard.equippedCard = new List<Card>();
             Debug.Log("Start recast equipedCard");
-            foreach (Card card in monsterCard.equippedCard)
+            foreach (Card card in equippedCards)
             {
                 System.Type scriptType = System.Type.GetType(card.scriptLocation);
 
@@ -108,7 +112,7 @@ public class BaseEntity : MonoBehaviour
                     // Ensure the script instance implements ICardBehavior
                     if (scriptInstance is CardBehavior cardBehavior)
                     {
-                        cardBehavior.card = card;
+                        cardBehavior.cardModel = card;
                         // Call the CastCard method
                         cardBehavior.CastCard(currentNode);
                     }
@@ -254,7 +258,7 @@ public class BaseEntity : MonoBehaviour
         currentNode.currentEntity = this;
     }
 
-    // 更新怪兽的属性，不要在战斗中call
+    // 更新怪兽的属性UI显示
     public void UpdateMonster(MonsterCard card = null)
     {
         if (card != null)
@@ -262,7 +266,6 @@ public class BaseEntity : MonoBehaviour
             cardModel = card;
         }
 
-        currentHealth = cardModel.healthPoint;
         monsterUI.UpdateUI(cardModel);
     }
 
@@ -281,13 +284,12 @@ public class BaseEntity : MonoBehaviour
         // 玩家的怪兽会回复全部生命值
         if (myTeam == Team.Player)
         {
-            currentHealth = cardModel.healthPoint;
-            monsterUI.UpdateHealth(currentHealth);
+            RestoreAllHealth();
 
             // 复活，重新把自己添加回索敌list
             if (dead)
             {
-                Debug.Log("Card " + cardModel.cardName + " respond");
+                //Debug.Log("Card " + cardModel.cardName + " respond");
                 dead = false;
                 BattleManager.Instance.AddToTeam(this);
             }
@@ -318,26 +320,27 @@ public class BaseEntity : MonoBehaviour
         }
     }
 
-    public virtual void TakeDamage(int amount, BaseEntity from = null)
+    public virtual void TakeDamage(int amount, DamageType damageType, BaseEntity from = null)
     {
-        if(dead)
+        if (dead)
         {
             Debug.Log("Should not take damage");
             return;
         }
 
         // 播放自己收到伤害的action
-        if (from != null)
+        OnTakingDamage?.Invoke(amount, damageType, from);
+        if (currentHealth < amount)
         {
-            if (currentHealth < amount)
-            {
-                BattleManager.Instance.UnitTakingDamage(from, this, currentHealth);
-            }
-            else
-            {
-                BattleManager.Instance.UnitTakingDamage(from, this, amount);
-            }
+            BattleManager.Instance.UnitTakingDamage(currentHealth, damageType, from, this);
         }
+        else
+        {
+            BattleManager.Instance.UnitTakingDamage(amount, damageType, from, this);
+        }
+
+        // 生成伤害text
+        EffectManager.Instance.GenerateDamageText(this.transform.position, amount);
 
         currentHealth -= amount;
         monsterUI.UpdateHealth(currentHealth);
@@ -445,11 +448,11 @@ public class BaseEntity : MonoBehaviour
             GameObject bulletInstance = Instantiate(bullet, transform.position, Quaternion.identity);
             if (bulletInstance.GetComponent<Bullet>() == null)
             {
-                bulletInstance.AddComponent<Bullet>().Initialize(currentTarget, cardModel.attackPower, this);
+                bulletInstance.AddComponent<Bullet>().Initialize(currentTarget, this);
             }
             else
             {
-                bulletInstance.GetComponent<Bullet>().Initialize(currentTarget, cardModel.attackPower, this);
+                bulletInstance.GetComponent<Bullet>().Initialize(currentTarget, this);
             }
 
             // 从攻击器官生成
@@ -475,12 +478,38 @@ public class BaseEntity : MonoBehaviour
         canAttack = true;
     }
 
+    public virtual void Strike(BaseEntity target)
+    {
+        OnStrike?.Invoke(cardModel.attackPower, target);
+        target.TakeDamage(cardModel.attackPower, DamageType.MonsterAttack, this);
+    }
+
     protected virtual void Consume(List<BaseEntity> sacrfices)
     {
         foreach(BaseEntity sacrfice in sacrfices)
         {
             sacrfice.UnitDie(null, true);
         }
+    }
+
+    // 回复血量
+    public virtual void RestoreHealth(int amount)
+    {
+        currentHealth += amount;
+
+        if (currentHealth > cardModel.healthPoint)
+        {
+            currentHealth = cardModel.healthPoint;
+        }
+
+        monsterUI.UpdateHealth(currentHealth);
+    }
+
+    // 回复全部血量
+    public virtual void RestoreAllHealth()
+    {
+        currentHealth = cardModel.healthPoint;
+        monsterUI.UpdateHealth(currentHealth);
     }
 
     public virtual void UponSummon()

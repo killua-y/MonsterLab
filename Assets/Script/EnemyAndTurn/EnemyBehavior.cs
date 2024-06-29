@@ -8,11 +8,19 @@ public class EnemyBehavior : MonoBehaviour
     private List<MonsterCard> monsterList = new List<MonsterCard>();
 
     // 从0开始数
-    protected virtual int MaxTurn { get; set; } = 4;
+    public virtual int MaxTurn { get; set; } = 4;
 
     // 怪兽波次记录
     protected int index = 0;
     protected List<int> MonsterSummonTurn = new List<int>();
+
+    // 引用的script
+    private TurnManager turnManager;
+
+    private void Awake()
+    {
+        turnManager = FindAnyObjectByType<TurnManager>();
+    }
 
     // 该敌人拥有的怪兽
     public virtual void LoadEnemy()
@@ -25,11 +33,6 @@ public class EnemyBehavior : MonoBehaviour
         return MonsterSummonTurn;
     }
 
-    public virtual int GetMaxTurn()
-    {
-        return MaxTurn;
-    }
-
     // 根据当前回合召唤怪兽
     public virtual void SummonEnemy()
     {
@@ -39,7 +42,7 @@ public class EnemyBehavior : MonoBehaviour
         if (MonsterSummonTurn.Count == index)
         {
             // 告诉TurnManager这是最后一波
-            TurnManager.Instance.isFinalWaive = true;
+            turnManager.isFinalWaive = true;
         }
     }
 
@@ -60,19 +63,22 @@ public class EnemyBehavior : MonoBehaviour
     }
 }
 
+[System.Serializable]
 public class Enemy
 {
     public string name;
     public int layer;
     public EnemyType enemyType;
+    public bool easy;
     public string scriptLocation;
 
-    public Enemy(string _name, int _layer, EnemyType _enemyType, string _scriptLocation)
+    public Enemy(string _name, int _layer, EnemyType _enemyType, string _scriptLocation, bool _easy)
     {
         this.name = _name;
         this.layer = _layer;
         this.enemyType = _enemyType;
         this.scriptLocation = _scriptLocation;
+        this.easy = _easy;
     }
 }
 

@@ -5,7 +5,7 @@ using TMPro;
 using UnityEngine;
 using static Card;
 
-public class BattleManager : Manager<BattleManager>
+public class BattleManager : Singleton<BattleManager>
 {
     public Transform playerParent;
     public Transform enemyParent;
@@ -15,15 +15,16 @@ public class BattleManager : Manager<BattleManager>
 
     public Action<BaseEntity> OnUnitDied;
     public Action<BaseEntity> OnUnitSummon;
-    public Action<BaseEntity, BaseEntity, int> OnUnitTakingDamage;
+    public Action<int, DamageType, BaseEntity, BaseEntity> OnUnitTakingDamage;
+    // 战斗结束前结算效果
+    public Action BeforeBattlePhase;
 
     public TextMeshProUGUI monsterSpaceText;
     // Start is called before the first frame update
     void Start()
     {
-        base.Awake();
-        InGameStateManager.Instance.OnBattlePhaseStart += OnBattleTurnStart;
-        InGameStateManager.Instance.OnGameEnd += OnGameEnd;
+        InGameStateManager.Instance.OnBattlePhaseStart += OnBattlePhaseStart;
+        InGameStateManager.Instance.OnCombatEnd += OnCombatEnd;
     }
 
     public int ConvertRowColumnToIndex(int row, int column)
@@ -59,7 +60,14 @@ public class BattleManager : Manager<BattleManager>
         }
         else
         {
-            modelPath = "MonsterPrefab/Slime";
+            if (team == Team.Player)
+            {
+                modelPath = "MonsterPrefab/NormalWolf";
+            }
+            else
+            {
+                modelPath = "MonsterPrefab/Slime";
+            }
         }
 
         GameObject monsterPrefab = Resources.Load<GameObject>(modelPath);
@@ -67,13 +75,13 @@ public class BattleManager : Manager<BattleManager>
         // 加载怪兽script
         // 如果没有script地址就默认安排
         string scriptPath = "";
-        if (monsterCard.scriptLocation != "")
+        if ((monsterCard.scriptLocation == "") || (monsterCard.scriptLocation == "none"))
         {
-            scriptPath = monsterCard.scriptLocation;
+            scriptPath = "BaseEntity";
         }
         else
         {
-            scriptPath = "BaseEntity";
+            scriptPath = monsterCard.scriptLocation;
         }
 
         GameObject newMonster;
@@ -93,6 +101,10 @@ public class BattleManager : Manager<BattleManager>
             newMonster = Instantiate(monsterPrefab, enemyParent);
             newMonster.AddComponent(Type.GetType(scriptPath));
             BaseEntity newEntity = newMonster.GetComponent<BaseEntity>();
+            if (newEntity == null)
+            {
+                Debug.Log("cannot get enemy : " + scriptPath);
+            }
             enemyEntities.Add(newEntity);
             newEntity.Setup(team, node, monsterCard, sacrifices);
             OnUnitSummon?.Invoke(newEntity);
@@ -117,6 +129,14 @@ public class BattleManager : Manager<BattleManager>
             return playerEntities;
     }
 
+    public List<BaseEntity> GetMyTeamEntities(Team myteam)
+    {
+        if (myteam == Team.Player)
+            return playerEntities;
+        else
+            return enemyEntities;
+    }
+
     public void UnitDead(BaseEntity entity)
     {
         playerEntities.Remove(entity);
@@ -124,24 +144,24 @@ public class BattleManager : Manager<BattleManager>
 
         OnUnitDied?.Invoke(entity);
 
-        if (playerEntities.Count == 0)
+        if ((playerEntities.Count == 0) || (enemyEntities.Count == 0))
         {
-            Invoke("NewTurn", 2f);
-        }
-        else if (enemyEntities.Count == 0)
-        {
-            Invoke("NewTurn", 2f);
+            StartCoroutine(NewTurn());
         }
     }
 
-    public void UnitTakingDamage(BaseEntity from, BaseEntity to, int amount)
+    public void UnitTakingDamage(int amount, DamageType damageType, BaseEntity from, BaseEntity to)
     {
-        OnUnitTakingDamage?.Invoke(from, to, amount);
+        OnUnitTakingDamage?.Invoke(amount, damageType, from, to);
     }
 
     // helper，用于延迟call一下新回合
-    public void NewTurn()
+    IEnumerator NewTurn()
     {
+        yield return new WaitForSeconds(0.5f);
+        BeforeBattlePhase?.Invoke();
+
+        yield return new WaitForSeconds(1.5f);
         if (InGameStateManager.BattelPhase)
         {
             InGameStateManager.Instance.BattlePhaseEnd();
@@ -176,19 +196,15 @@ public class BattleManager : Manager<BattleManager>
         monsterSpaceText.text = playerEntities.Count + " / " + PlayerStatesManager.maxUnit;
     }
 
-    public void OnBattleTurnStart()
+    public void OnBattlePhaseStart()
     {
-        if (playerEntities.Count == 0)
+        if ((playerEntities.Count == 0) || (enemyEntities.Count == 0))
         {
-            Invoke("NewTurn", 2f);
-        }
-        else if (enemyEntities.Count == 0)
-        {
-            Invoke("NewTurn", 2f);
+            StartCoroutine(NewTurn());
         }
     }
 
-    public void OnGameEnd()
+    public void OnCombatEnd()
     {
         foreach (Transform child in playerParent)
         {

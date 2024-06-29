@@ -1,50 +1,75 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using static Card;
 
 public class CardSelectPanelBehavior : MonoBehaviour
 {
-    public static CardSelectPanelBehavior Instance;
     public GameObject panel;
     public Transform DeckContent;
     public List<Card> resultCardList;
 
-    private void Awake()
+    // 从所有卡中选择n张卡
+    public void SelectCardFromDeck(int amount, Action<List<Card>> callback)
     {
-        Instance = this;
+        OpenPlayerDeck();
+        StartCoroutine(SelectCard(amount, callback));
     }
 
-    public List<Card> SelectCardFromDeck(int amount)
+    // 从指定的卡中选择一张卡
+    public void SelectCardFromDeck(List<Card> cards, int amount, Action<List<Card>> callback)
     {
-        StartCoroutine(SelectCard(amount));
-        return resultCardList;
+        OpenGivenDeck(cards);
+        StartCoroutine(SelectCard(amount, callback));
     }
 
-    private IEnumerator SelectCard(int amount)
+    // 从所有卡中选择一张卡
+    public void SelectCardFromDeck(Action<Card> callback)
+    {
+        OpenPlayerDeck();
+        StartCoroutine(SelectCard(1, cards => callback(cards[0])));
+    }
+
+    private IEnumerator SelectCard(int amount, Action<List<Card>> callback)
     {
         resultCardList = new List<Card>();
+
         while (resultCardList.Count < amount)
         {
             if (Input.GetMouseButtonDown(1)) // Check for mouse click
             {
                 resultCardList = new List<Card>();
             }
-
             yield return null; // Wait for the next frame
         }
 
         CloseDeck();
+        callback(resultCardList);
     }
 
+    // 打开玩家的卡组
     public void OpenPlayerDeck()
     {
-        List<Card> cardList = new List<Card>();
-        cardList = CardDataModel.Instance.InitializeDeck();
-        foreach (Card card in CardDataModel.Instance.InitializeExtraDeck())
+        List<Card> cardList;
+        cardList = CardDataModel.Instance.GetPlayerDeck();
+
+        foreach (Card card in cardList)
         {
-            cardList.Add(card);
+            GameObject newCard = CardDisplayView.Instance.DisPlaySingleCard(card, DeckContent);
+            newCard.AddComponent<Scaling>();
+            newCard.AddComponent<CardSelectOnClick>().SetUp(card);
         }
+
+        panel.SetActive(true);
+    }
+
+    // 打开pass in的卡组
+    public void OpenGivenDeck(List<Card> cards)
+    {
+        List<Card> cardList;
+        cardList = cards;
 
         foreach (Card card in cardList)
         {
@@ -72,17 +97,25 @@ public class CardSelectOnClick : MonoBehaviour, IPointerClickHandler
 {
     private Card card;
 
+    // 引用的script
+    private CardSelectPanelBehavior cardSelectPanelBehavior;
+
     public void OnPointerClick(PointerEventData eventData)
     {
         if (eventData.button == PointerEventData.InputButton.Left)
         {
-            if (CardSelectPanelBehavior.Instance.resultCardList.Contains(card))
+            if (cardSelectPanelBehavior == null)
             {
-                CardSelectPanelBehavior.Instance.resultCardList.Remove(card);
+                cardSelectPanelBehavior = FindAnyObjectByType<CardSelectPanelBehavior>();
+            }
+
+            if (cardSelectPanelBehavior.resultCardList.Contains(card))
+            {
+                cardSelectPanelBehavior.resultCardList.Remove(card);
             }
             else
             {
-                CardSelectPanelBehavior.Instance.resultCardList.Add(card);
+                cardSelectPanelBehavior.resultCardList.Add(card);
             }
         }
     }
@@ -90,5 +123,80 @@ public class CardSelectOnClick : MonoBehaviour, IPointerClickHandler
     public void SetUp(Card _card)
     {
         card = _card;
+    }
+}
+
+public class CardSelectHelper
+{
+    public static List<Card> GetBaseUnit(List<Card> cards = null)
+    {
+        if (cards == null)
+        {
+            cards = CardDataModel.Instance.GetPlayerDeck();
+        }
+
+        List<Card> result = new List<Card>();
+        foreach (Card card in cards)
+        {
+            if (card.color == CardColor.Base)
+            {
+                result.Add(card);
+            }
+        }
+        return result;
+    }
+
+    public static List<Card> GetItem(List<Card> cards = null)
+    {
+        if (cards == null)
+        {
+            cards = CardDataModel.Instance.GetPlayerDeck();
+        }
+
+        List<Card> result = new List<Card>();
+        foreach (Card card in cards)
+        {
+            if (card is ItemCard)
+            {
+                result.Add(card);
+            }
+        }
+        return result;
+    }
+
+    public static List<Card> GetMonster(List<Card> cards = null)
+    {
+        if (cards == null)
+        {
+            cards = CardDataModel.Instance.GetPlayerDeck();
+        }
+
+        List<Card> result = new List<Card>();
+        foreach (Card card in cards)
+        {
+            if (card is MonsterCard)
+            {
+                result.Add(card);
+            }
+        }
+        return result;
+    }
+
+    public static List<Card> GetSpell(List<Card> cards)
+    {
+        if (cards == null)
+        {
+            cards = CardDataModel.Instance.GetPlayerDeck();
+        }
+
+        List<Card> result = new List<Card>();
+        foreach (Card card in cards)
+        {
+            if (card is SpellCard)
+            {
+                result.Add(card);
+            }
+        }
+        return result;
     }
 }

@@ -9,5 +9,7 @@ public enum CastType
     EnemyMonster,
     PlayerMonster,
     PlayerEmptyTile,
-    AllEmptyTile
+    AllEmptyTile,
+    PlayerArea,
+    EnemyArea
 }

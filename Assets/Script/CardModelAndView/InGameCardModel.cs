@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class InGameCardModel : MonoBehaviour
 {
-    public static InGameCardModel Instance;
     // 卡牌管理区
     public GameObject cardDataManager;
 
@@ -14,29 +13,24 @@ public class InGameCardModel : MonoBehaviour
     private List<Card> discardPileList = new List<Card>(); // 局内弃牌堆数据的链表
     private List<Card> extraDeckPileList = new List<Card>(); // 局内弃牌堆数据的链表
 
-    private void Awake()
-    {
-        Instance = this;
-    }
-
     // Start is called before the first frame update
     void Start()
     {
-        InGameStateManager.Instance.OnGameEnd += OnGameEnd;
+        InGameStateManager.Instance.OnCombatEnd += OnCombatEnd;
     }
 
     // 加载局内卡牌, call CardDataModel里的InitializeDeck()，对输出的每张卡进行clone
     public void InitialzeDeck()
     {
-        foreach (Card card in CardDataModel.Instance.InitializeDeck())
+        foreach (Card card in CardDataModel.Instance.GetMainDeck())
         {
             Card newCard = Card.CloneCard(card);
             drawPileList.Add(newCard);
         }
 
-        HelperFunction.Shuffle(drawPileList, GameSetting.shuffleCardRand);
+        HelperFunction.Shuffle(drawPileList, GameSetting.CurrentActRand);
 
-        foreach (Card card in CardDataModel.Instance.InitializeExtraDeck())
+        foreach (Card card in CardDataModel.Instance.GetExtraDeck())
         {
             Card newCard = Card.CloneCard(card);
             extraDeckPileList.Add(newCard);
@@ -91,11 +85,32 @@ public class InGameCardModel : MonoBehaviour
         return cardDrawed;
     }
 
+    // 抽牌
+    public Card DrawSpecificCard(Card card)
+    {
+        Card cardDrawed = null;
+
+        // 检查抽牌堆是否存在指定卡
+        if (drawPileList.Contains(card))
+        {
+            // 如果有就抽出来
+            handList.Add(card);
+            drawPileList.Remove(card);
+            cardDrawed = card;
+        }
+        else
+        {
+            Debug.Log("Did not find the card to be drawed");
+        }
+
+        return cardDrawed;
+    }
+
     // 重新洗牌
     public void ShuffleDeck()
     {
         // Shuffle 弃牌堆
-        HelperFunction.Shuffle(discardPileList, GameSetting.shuffleCardRand);
+        HelperFunction.Shuffle(discardPileList, GameSetting.CurrentActRand);
 
         // 将卡牌加入抽牌堆，并清空弃牌堆
         drawPileList.AddRange(discardPileList);
@@ -150,7 +165,21 @@ public class InGameCardModel : MonoBehaviour
         handList.Add(card);
     }
 
-    private void OnGameEnd()
+    // 将一张卡加入抽牌堆的随机位置
+    public void AddToDrawPile(Card card)
+    {
+        // 生成随机位置
+        int randomIndex = GameSetting.CurrentActRand.Next(0, drawPileList.Count + 1);
+        drawPileList.Insert(randomIndex, card);
+    }
+
+    // 将一张卡加入弃牌堆
+    public void AddToDiscardPile(Card card)
+    {
+        discardPileList.Add(card);
+    }
+
+    private void OnCombatEnd()
     {
         //清空列表
         ClearCardList(handList);

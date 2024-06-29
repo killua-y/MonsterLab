@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using static Card;
 
@@ -13,10 +14,10 @@ public class UponSummonFunction : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        InGameStateManager.Instance.OnGameStart += OnGameStart;
+        InGameStateManager.Instance.OnCombatStart += OnCombatStart;
     }
 
-    private void OnGameStart()
+    private void OnCombatStart()
     {
         AllUponSummonFunctionsCalled = new List<System.Action<BaseEntity>>();
         AllEffectData = new List<int>();
@@ -58,7 +59,7 @@ public class UponSummonFunction : MonoBehaviour
         {
             MonsterCard newMonsterCard = (MonsterCard)Card.CloneCard(entity.cardModel);
             // 先设置为通常怪兽避免触发战吼
-            newMonsterCard.scriptLocation = "";
+            newMonsterCard.scriptLocation = "none";
             BattleManager.Instance.InstaniateMontser(node, entity.myTeam, newMonsterCard);
 
             // 再设置回去
@@ -76,10 +77,7 @@ public class UponSummonFunction : MonoBehaviour
     // 抽牌
     public static void BabyWolfUponSummon(BaseEntity entity)
     {
-        for (int i = 0; i < entity.cardModel.effectData; i++)
-        {
-            InGameStateManager.Instance.DrawOneCard();
-        }
+        InGameStateManager.Instance.DrawCards(entity.cardModel.effectData);
 
         if (recordEnabled)
         {
@@ -89,7 +87,7 @@ public class UponSummonFunction : MonoBehaviour
     }
 
 
-    // 对所有敌方造成伤害
+    // 对敌方最高血单位造成伤害,并施加流血
     public static void FireWolfUponSummon(BaseEntity entity)
     {
         List<BaseEntity> enemyList = BattleManager.Instance.GetEntitiesAgainst(entity.myTeam);
@@ -110,9 +108,16 @@ public class UponSummonFunction : MonoBehaviour
             }
 
             // 造成伤害
-            highestHealthMonster.TakeDamage(entity.cardModel.effectData, entity);
-        }
+            highestHealthMonster.TakeDamage(entity.cardModel.effectData * 10, DamageType.MonsterSkill, entity);
 
+            // 施加流血
+            BleedingStack bleedingStack = highestHealthMonster.GetComponent<BleedingStack>();
+            if (bleedingStack == null)
+            {
+                bleedingStack = highestHealthMonster.gameObject.AddComponent<BleedingStack>();
+            }
+            bleedingStack.IncreaseStack(entity.cardModel.effectData);
+        }
 
         if (recordEnabled)
         {
@@ -121,12 +126,33 @@ public class UponSummonFunction : MonoBehaviour
         }
     }
 
-    // 获得能量
-    public static void GainEnergyUponSummon(BaseEntity entity)
+    // 获得随机0费item卡
+    public static void Gain0CostItemCardUponSummon(BaseEntity entity)
     {
-        Debug.Log("get here");
-        PlayerCostManager.Instance.IncreaseCost(entity.cardModel.effectData);
+        List<Card> cards = CardDataModel.Instance.GetPlayerDeck();
+        bool containsItem = cards.Any(Card => Card is ItemCard);
+        if (containsItem == true)
+        {
+            List<Card> itemCards = new List<Card>();
+            foreach (Card card in cards)
+            {
+                if (card is ItemCard)
+                {
+                    itemCards.Add(card);
+                }
+            }
+            Card itemCard = Card.CloneCard(HelperFunction.GetRandomItem(itemCards, GameSetting.CurrentActRand));
+            InGameStateManager.Instance.AddToHand(itemCard);
+        }
+        else
+        {
+            Debug.Log("Player does not have item card");
+        }
+
+        if (recordEnabled)
+        {
+            AllUponSummonFunctionsCalled.Add(Gain0CostItemCardUponSummon);
+            AllEffectData.Add(entity.cardModel.effectData);
+        }
     }
-
-
 }

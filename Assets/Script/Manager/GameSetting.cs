@@ -5,25 +5,24 @@ using System.Linq;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.IO;
 
-public class GameSetting : Manager<GameSetting>
+public class GameSetting : MonoBehaviour
 {
-    public static System.Random cardRewardRand;
-    public static System.Random DNARewardRand;
-    public static System.Random shuffleCardRand;
-    public static System.Random BoxLayoutRand;
-    private int seed;
-
     public static float scaleFactor;
 
-    private new void Awake()
+    // 用于卡牌获取序列, 需要存储
+    public static System.Random cardRewardRand;
+    public static int cardRewardRandCalls;
+
+    // 用于战斗内随机数，以及商店随机数
+    public static System.Random CurrentActRand;
+    // 用于生成敌人顺序，事件顺序，DNA顺序
+    public static System.Random randForInitialize;
+
+    public static int seed;
+
+    protected void Awake()
     {
-        base.Awake();
-        if (cardRewardRand == null)
-        {
-            seed = 2;
-            InitializeRand();
-            AdjustForScreenResolution();
-        }
+        AdjustForScreenResolution();
     }
 
     private void AdjustForScreenResolution()
@@ -40,55 +39,81 @@ public class GameSetting : Manager<GameSetting>
         scaleFactor = (widthScale + heightScale) / 2;
     }
 
-    public void InitializeRand()
-    {
-        cardRewardRand = new System.Random(seed);
-        DNARewardRand = new System.Random(seed);
-        shuffleCardRand = new System.Random(seed);
-        BoxLayoutRand = new System.Random(seed);
-    }
-
-
-    // 暂时不用
     // Save the state of the random number generator
-    public void SaveState(string filePath)
+    public void LoadData(PlayerData playerData)
     {
-        BinaryFormatter bf = new BinaryFormatter();
-        FileStream file = File.Create(filePath);
-
-        RandomState state = new RandomState();
-        state.Seed = seed;
-        state.NextValue = cardRewardRand.Next();
-
-        bf.Serialize(file, state);
-        file.Close();
-    }
-
-    // Load the state of the random number generator
-    public void LoadState(string filePath)
-    {
-        if (File.Exists(filePath))
+        seed = playerData.Seed;
+        randForInitialize = new System.Random(seed);
+        if (playerData.randomState == null)
         {
-            BinaryFormatter bf = new BinaryFormatter();
-            FileStream file = File.Open(filePath, FileMode.Open);
-
-            RandomState state = (RandomState)bf.Deserialize(file);
-            file.Close();
-
-            seed = state.Seed;
             cardRewardRand = new System.Random(seed);
-            for (int i = 0; i < state.NextValue; i++)
-            {
-                cardRewardRand.Next();
-            }
-
-            // Re-shuffle lists using the seed
-
         }
         else
         {
-            Debug.LogError("Save file not found");
+            cardRewardRand = InitializeRandom(new System.Random(seed), playerData.randomState.cardRewardRandCalls);
         }
+    }
+
+    private System.Random InitializeRandom(System.Random rand, int calls)
+    {
+        for (int i = 0; i < calls; i++)
+        {
+            rand.Next(); // Advance the random number generator to the correct state
+        }
+        return rand;
+    }
+
+    // Load the state of the random number generator
+    public RandomState SaveData()
+    {
+        return new RandomState
+        {
+            cardRewardRandCalls = cardRewardRandCalls
+        };
+    }
+
+    public void GenerateNewStepRand()
+    {
+        int InCombatRandIndex = ActsManager.currentLayer * 6 + ActsManager.step;
+        int InCombatRandSeed = 0;
+        System.Random rand = new System.Random(seed);
+        for (int i = 0; i < InCombatRandIndex; i++)
+        {
+            InCombatRandSeed = rand.Next();
+        }
+        if (InCombatRandSeed != 0)
+        {
+            CurrentActRand = new System.Random(InCombatRandSeed);
+        }
+        else
+        {
+            Debug.Log("Did not go through loop");
+        }
+    }
+
+    public System.Random GenerateNewRand(int index)
+    {
+        // 123分别为123层的地图rand
+        System.Random rand = new System.Random(seed);
+        System.Random resultRand;
+        int randIndex = 0;
+
+        for (int i = 0; i < index; i++)
+        {
+            randIndex = rand.Next();
+        }
+
+        if (randIndex != 0)
+        {
+            resultRand = new System.Random(randIndex);
+        }
+        else
+        {
+            Debug.Log("Did not go through loop for generate rand");
+            return null;
+        }
+
+        return resultRand;
     }
 }
 
@@ -96,6 +121,5 @@ public class GameSetting : Manager<GameSetting>
 [System.Serializable]
 public class RandomState
 {
-    public int Seed;
-    public int NextValue;
+    public int cardRewardRandCalls;
 }

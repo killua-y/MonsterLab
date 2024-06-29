@@ -2,16 +2,29 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class DamageBoarderBehavior : VerticalLayoutGroup
+public class DamageBoarderBehavior : MonoBehaviour
 {
-    public override void SetLayoutVertical()
-    {
-        // Check if the base components and children are valid
-        if (this == null || transform == null)
-            return;
+    private float spacing = -10f; // Space between elements
 
-        base.SetLayoutVertical();
+    public void UpdateLayout()
+    {
         SortChildren();
+        float currentY = 0f;
+
+        for (int i = 0; i < transform.childCount; i++)
+        {
+            Transform child = transform.GetChild(i);
+
+            // Set child's position based on its sibling index and spacing
+            child.localPosition = new Vector2(0, -currentY);
+
+            // Update currentY to account for the child's height and spacing
+            RectTransform rectTransform = child.GetComponent<RectTransform>();
+            if (rectTransform != null)
+            {
+                currentY += rectTransform.rect.height + spacing;
+            }
+        }
     }
 
     private void SortChildren()

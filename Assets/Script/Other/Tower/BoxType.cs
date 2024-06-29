@@ -4,6 +4,7 @@ using UnityEngine;
 
 public enum BoxType
 {
+    Start,
     NormalFight,
     EliteFight,
     BossFight,

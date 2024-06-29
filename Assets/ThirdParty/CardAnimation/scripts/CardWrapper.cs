@@ -66,14 +66,13 @@ public class CardWrapper : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
 
     private void Update()
     {
-        if (!InGameStateManager.gamePased)
+        if (Time.timeScale != 0)
         {
             UpdateRotation();
             UpdateArrow();
             UpdatePosition();
             UpdateScale();
             UpdateUILayer();
-
         }
     }
 
@@ -87,7 +86,28 @@ public class CardWrapper : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
 
     private void UpdatePosition()
     {
+        //var target = new Vector2(targetPosition.x, targetPosition.y + targetVerticalDisplacement);
+        //if (isHovered && zoomConfig.overrideYPosition != -1)
+        //{
+        //    if (!isDragged)
+        //    {
+        //        target = new Vector2(target.x, zoomConfig.overrideYPosition);
+        //    }
+        //    else
+        //    {
+        //        target = new Vector2(target.x, zoomConfig.clickedYPosition);
+        //    }
+        //}
+
+        //var distance = Vector2.Distance(rectTransform.position, target);
+        //var repositionSpeed = rectTransform.position.y > target.y || rectTransform.position.y < 0
+        //    ? animationSpeedConfig.releasePosition
+        //    : animationSpeedConfig.position;
+        //rectTransform.position = Vector2.Lerp(rectTransform.position, target,
+        //    repositionSpeed / distance * Time.deltaTime);
+
         var target = new Vector2(targetPosition.x, targetPosition.y + targetVerticalDisplacement);
+
         if (isHovered && zoomConfig.overrideYPosition != -1)
         {
             if (!isDragged)
@@ -101,11 +121,23 @@ public class CardWrapper : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
         }
 
         var distance = Vector2.Distance(rectTransform.position, target);
-        var repositionSpeed = rectTransform.position.y > target.y || rectTransform.position.y < 0
-            ? animationSpeedConfig.releasePosition
-            : animationSpeedConfig.position;
-        rectTransform.position = Vector2.Lerp(rectTransform.position, target,
-            repositionSpeed / distance * Time.deltaTime);
+
+        // Prevent division by zero
+        if (distance > EPS)
+        {
+            var repositionSpeed = rectTransform.position.y > target.y || rectTransform.position.y < 0
+                ? animationSpeedConfig.releasePosition
+                : animationSpeedConfig.position;
+
+            rectTransform.position = Vector2.Lerp(rectTransform.position, target,
+                repositionSpeed / distance * Time.deltaTime);
+        }
+        else
+        {
+            // Directly assign the target position if the distance is too small
+            rectTransform.position = target;
+        }
+
     }
 
 
@@ -174,11 +206,24 @@ public class CardWrapper : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
 
     private void UpdateScale()
     {
+        //var targetZoom = (!isDragged) && isHovered && zoomConfig.zoomOnHover ? zoomConfig.multiplier : 1;
+        //var delta = Mathf.Abs(rectTransform.localScale.x - targetZoom);
+        //var newZoom = Mathf.Lerp(rectTransform.localScale.x, targetZoom,
+        //    animationSpeedConfig.zoom / delta * Time.deltaTime);
+        //rectTransform.localScale = new Vector3(newZoom, newZoom, 1);
+
         var targetZoom = (!isDragged) && isHovered && zoomConfig.zoomOnHover ? zoomConfig.multiplier : 1;
-        var delta = Mathf.Abs(rectTransform.localScale.x - targetZoom);
-        var newZoom = Mathf.Lerp(rectTransform.localScale.x, targetZoom,
-            animationSpeedConfig.zoom / delta * Time.deltaTime);
-        rectTransform.localScale = new Vector3(newZoom, newZoom, 1);
+        var currentScale = rectTransform.localScale.x;
+
+        // Calculate the difference in scale
+        var delta = Mathf.Abs(currentScale - targetZoom);
+
+        // Ensure delta is not zero to prevent division by zero
+        if (delta > EPS)
+        {
+            var newZoom = Mathf.Lerp(currentScale, targetZoom, animationSpeedConfig.zoom / delta * Time.deltaTime);
+            rectTransform.localScale = new Vector3(newZoom, newZoom, 1);
+        }
     }
 
     private void UpdateRotation()
