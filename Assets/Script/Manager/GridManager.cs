@@ -190,7 +190,7 @@ public class GridManager : Singleton<GridManager>
 
         foreach (Edge e in allEdges)
         {
-            Debug.DrawLine(e.from.worldPosition, e.to.worldPosition, Color.black, 100);
+            //Debug.DrawLine(e.from.worldPosition, e.to.worldPosition, Color.black, 100);
         }
 
         var allNodes = graph.Nodes;
@@ -212,7 +212,7 @@ public class GridManager : Singleton<GridManager>
         {
             for (int i = 1; i < path.Count; i++)
             {
-                Debug.DrawLine(path[i - 1].worldPosition, path[i].worldPosition, Color.red, 10);
+                Debug.DrawLine(path[i - 1].worldPosition, path[i].worldPosition, Color.red, 1);
             }
         }
     }
