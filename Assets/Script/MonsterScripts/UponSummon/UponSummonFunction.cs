@@ -126,6 +126,24 @@ public class UponSummonFunction : MonoBehaviour
         }
     }
 
+    // 增加全队攻击力
+    public static void IncreaseAllAttackUponSummon(BaseEntity entity)
+    {
+        List<BaseEntity> AllyList = BattleManager.Instance.GetMyTeamEntities(entity.myTeam);
+
+        foreach (BaseEntity baseEntity in AllyList)
+        {
+            baseEntity.cardModel.attackPower += entity.cardModel.effectData;
+            baseEntity.UpdateMonster();
+        }
+
+        if (recordEnabled)
+        {
+            AllUponSummonFunctionsCalled.Add(IncreaseAllAttackUponSummon);
+            AllEffectData.Add(entity.cardModel.effectData);
+        }
+    }
+
     // 获得随机0费item卡
     public static void Gain0CostItemCardUponSummon(BaseEntity entity)
     {
@@ -152,6 +170,54 @@ public class UponSummonFunction : MonoBehaviour
         if (recordEnabled)
         {
             AllUponSummonFunctionsCalled.Add(Gain0CostItemCardUponSummon);
+            AllEffectData.Add(entity.cardModel.effectData);
+        }
+    }
+
+    // 根据场上和卡组的base unit 增加攻击力
+    public static void KingWolfUponSummon(BaseEntity entity)
+    {
+        List<MonsterCard> BaseUnitList = new List<MonsterCard>();
+
+        // 获取场上的base unit
+        foreach (BaseEntity baseEntity in BattleManager.Instance.GetMyTeamEntities(entity.myTeam))
+        {
+            if (baseEntity.cardModel.color == CardColor.Base)
+            {
+                BaseUnitList.Add(baseEntity.cardModel);
+            }
+        }
+
+        // 获取玩家手牌，额外卡组，抽牌堆，弃牌堆里的所有base unit
+        InGameCardModel inGameCardModel = FindAnyObjectByType<InGameCardModel>();
+        List<Card> allPlayerCards = new List<Card>();
+        allPlayerCards.AddRange(inGameCardModel.GetHandCard());
+        allPlayerCards.AddRange(inGameCardModel.GetExtraDeckPileCard());
+        allPlayerCards.AddRange(inGameCardModel.GetDrawPileCard());
+        allPlayerCards.AddRange(inGameCardModel.GetDiscardPileCard());
+
+        foreach (Card card in allPlayerCards)
+        {
+            if (card.color == CardColor.Base)
+            {
+                BaseUnitList.Add((MonsterCard) card);
+            }
+        }
+
+        // 根据取得的所有BaseUnit来增加属性
+        foreach (MonsterCard baseUnit in BaseUnitList)
+        {
+            entity.cardModel.attackPower += baseUnit.attackPower;
+            entity.cardModel.healthPoint += baseUnit.healthPoint;
+        }
+
+        // 更新怪物属性
+        entity.RestoreAllHealth();
+        entity.UpdateMonster();
+
+        if (recordEnabled)
+        {
+            AllUponSummonFunctionsCalled.Add(KingWolfUponSummon);
             AllEffectData.Add(entity.cardModel.effectData);
         }
     }
