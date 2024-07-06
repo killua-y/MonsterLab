@@ -163,3 +163,4 @@ public class ScavengerWolfBaseEntity : BaseEntity
         base.Consume(sacrfices);
     }
 }
+

@@ -6,7 +6,7 @@ m,2,Silvermane,start,rare,1,PlayerEmptyTile,200,Mana 30: Next attack deal 200% a
 m,3,Rank Devourer,red,legend,1,PlayerEmptyTile,0,Its attack power is doubled for each 2-star or higher monster used as a tribute.,RankDevourerEntity,MonsterCardPicture/rankdevourer,3,None,25,200,1.5,0,,,,
 m,4,Husky,red,legend,1,PlayerEmptyTile,0,Upon Summon: Repeat all Summon effects triggered so far this battle.,HuskyEntity,MonsterCardPicture/husky,0,Wolf,5,40,3,0,,,,
 m,5,Shadow Wolf,red,rare,1,PlayerEmptyTile,0,Upon Summon: Create a copy of itself,ShadowWolfEntity,MonsterCardPicture/shadowwolf,0,Wolf,5,100,3,0,,,,
-m,6,Fire Wolf,red,normal,1,PlayerEmptyTile,10,Upon Summon: deal 100 damage to the enemy monster with highest health and apply 10 bleeding.,FireWolfEntity,MonsterCardPicture/firewolf,1,Wolf,5,100,1.5,0,,,,
+m,6,Fire Wolf,red,normal,1,PlayerEmptyTile,10,Upon Summon: deal 100 damage to the enemy monster with highest health and apply 10 bleeding.,FireWolfEntity,MonsterCardPicture/firewolf,1,Wolf,5,100,1.5,0,MonsterPrefab/FireWolf,,,
 m,7,Baby Wolf,red,normal,1,PlayerEmptyTile,3,Upon Summon: Draw 3 card,BabyWolfEntity,MonsterCardPicture/babywolf,0,Wolf,4,50,5,0,,,,
 m,8,Blacksmith,red,normal,0,PlayerEmptyTile,2,Draw 1 card after you cast one item card.,BlackSmithEntity,MonsterCardPicture/blacksmith,0,None,4,40,1.5,0,,,,
 m,9,Gray Wolf,start,normal,1,PlayerEmptyTile,10,Upon Summon: Increase the attack power of all your monster by 10 points,IncreaseAttackWolfEntity,,0,Wolf,7,50,1.5,0,,,,

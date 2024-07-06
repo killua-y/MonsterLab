@@ -318,6 +318,12 @@ public class BaseEntity : MonoBehaviour
         {
             StandUp();
         }
+
+        // 设置为idle
+        if (animator != null)
+        {
+            animator.SetInteger("AnimationInt", 0);
+        }
     }
 
     public virtual void TakeDamage(int amount, DamageType damageType, BaseEntity from = null)
