@@ -47,10 +47,12 @@ public class GameSetting : MonoBehaviour
         if (playerData.randomState == null)
         {
             cardRewardRand = new System.Random(seed);
+            cardRewardRandCalls = 0;
         }
         else
         {
-            cardRewardRand = InitializeRandom(new System.Random(seed), playerData.randomState.cardRewardRandCalls);
+            cardRewardRandCalls = playerData.randomState.cardRewardRandCalls;
+            cardRewardRand = InitializeRandom(new System.Random(seed), cardRewardRandCalls);
         }
     }
 
