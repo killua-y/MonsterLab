@@ -7,6 +7,8 @@ public class EffectManager : Singleton<EffectManager>
     public GameObject damageText;
     public Canvas canvas; // Reference to the Canvas
 
+    public GameObject BlueSummonEffect;
+    public GameObject RedSummonEffect;
     // Start is called before the first frame update
     void Start()
     {
@@ -28,5 +30,21 @@ public class EffectManager : Singleton<EffectManager>
         GameObject instance = Instantiate(damageText, canvas.transform);
         instance.GetComponent<RectTransform>().anchoredPosition = canvasPosition;
         instance.GetComponent<DamageTextBehavior>().Setup(amount);
+    }
+
+    public void GenerateSummonEffect(Vector2 position, Team team)
+    {
+        if (team == Team.Player)
+        {
+            Instantiate(BlueSummonEffect,
+                position + new Vector2(BlueSummonEffect.transform.position.x, BlueSummonEffect.transform.position.y),
+                BlueSummonEffect.transform.rotation);
+        }
+        else if (team == Team.Enemy)
+        {
+            Instantiate(RedSummonEffect,
+                position + new Vector2(RedSummonEffect.transform.position.x, RedSummonEffect.transform.position.y),
+                RedSummonEffect.transform.rotation);
+        }
     }
 }

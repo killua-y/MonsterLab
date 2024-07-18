@@ -109,6 +109,8 @@ public class BattleManager : Singleton<BattleManager>
             newEntity.Setup(team, node, monsterCard, sacrifices);
             OnUnitSummon?.Invoke(newEntity);
         }
+
+        EffectManager.Instance.GenerateSummonEffect(node.worldPosition, team);
     }
 
     public void InstaniateMontser(int index, Team team, MonsterCard monsterCard, List<BaseEntity> sacrifices = null)
