@@ -44,6 +44,7 @@ public class GameSetting : MonoBehaviour
     {
         seed = playerData.Seed;
         randForInitialize = new System.Random(seed);
+        CurrentActRand = null;
         if (playerData.randomState == null)
         {
             cardRewardRand = new System.Random(seed);
