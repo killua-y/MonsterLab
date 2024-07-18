@@ -100,7 +100,8 @@ public class MapLayout : MonoBehaviour
         if (currentLayerBox.Count > 0)
         {
             ArrangeGrid();
-            GenerateBoxType(currentLayerBox);
+            GenerateBoxType();
+            //GenerateBoxType(currentLayerBox);
         }
         else
         {
@@ -209,6 +210,76 @@ public class MapLayout : MonoBehaviour
         for (int i = 0; i < validBoxes.Count; i++)
         {
             validBoxes[i].SetupBox(boxTypes[i]);
+        }
+    }
+
+    void GenerateBoxType()
+    {
+        List<TowerBoxBehavior> FrontBox = new List<TowerBoxBehavior>();
+        List<TowerBoxBehavior> BackBox = new List<TowerBoxBehavior>();
+
+        foreach (var box in currentLayerBox)
+        {
+            if (box.row - box.column == 2)
+            {
+                FrontBox.Add(box);
+            }
+            else if (box.row - box.column == 1)
+            {
+                box.SetupBox(BoxType.NormalFight);
+            }
+            else if (box.row == box.column)
+            {
+                FrontBox.Add(box);
+            }
+            else if (box.column - box.row == 1)
+            {
+                box.SetupBox(BoxType.NormalFight);
+            }
+            else if (box.column - box.row == 2)
+            {
+                BackBox.Add(box);
+            }
+            else if (box.column - box.row == 3)
+            {
+                BackBox.Add(box);
+            }
+            else if (box.row == 0 && box.column == 4)
+            {
+                box.SetupBox(BoxType.BossFight);
+            }
+            else if (box.row == 3 && box.column == 0)
+            {
+                box.SetupBox(BoxType.Start);
+            }
+        }
+
+        // 前半地图格子随机赋值
+        List<BoxType> FrontBoxTypes = new List<BoxType>
+        {
+            BoxType.Events, BoxType.Events, BoxType.Events,
+            BoxType.Events, BoxType.Events, BoxType.Events,
+        };
+
+        HelperFunction.Shuffle(FrontBox, mapRand);
+
+        for (int i = 0; i < FrontBox.Count; i++)
+        {
+            FrontBox[i].SetupBox(FrontBoxTypes[i]);
+        }
+
+
+        // 后半地图格子随机赋值
+        List<BoxType> BackBoxTypes = new List<BoxType>
+        {
+            BoxType.EliteFight, BoxType.EliteFight, BoxType.Merchant, BoxType.Treasure, BoxType.Treasure,
+        };
+
+        HelperFunction.Shuffle(BackBox, mapRand);
+
+        for (int i = 0; i < BackBox.Count; i++)
+        {
+            BackBox[i].SetupBox(BackBoxTypes[i]);
         }
     }
 
