@@ -38,12 +38,30 @@ public class ShadowWolfEntity : BaseEntity
     }
 }
 
+// 全队加攻狼
+public class IncreaseAttackWolfEntity : BaseEntity
+{
+    public override void UponSummon()
+    {
+        UponSummonFunction.IncreaseAllAttackUponSummon(this);
+    }
+}
+
 // 获得0费装备卡狼
 public class ZeroCostItemWolfEntity : BaseEntity
 {
     public override void UponSummon()
     {
         UponSummonFunction.Gain0CostItemCardUponSummon(this);
+    }
+}
+
+// 根据所有base unit增加属性
+public class KingWolfEntity : BaseEntity
+{
+    public override void UponSummon()
+    {
+        UponSummonFunction.KingWolfUponSummon(this);
     }
 }
 

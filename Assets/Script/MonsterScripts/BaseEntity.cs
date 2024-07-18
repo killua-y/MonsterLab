@@ -232,6 +232,9 @@ public class BaseEntity : MonoBehaviour
 
             StandUp();
             SitDown(path[1]);
+
+            // 开始移动, 播放移动动画
+            animator.SetInteger("AnimationInt", 2);
         }
 
         moving = !MoveTowards(currentNode);
@@ -317,6 +320,12 @@ public class BaseEntity : MonoBehaviour
         if (currentNode != null)
         {
             StandUp();
+        }
+
+        // 设置为idle
+        if (animator != null)
+        {
+            animator.SetInteger("AnimationInt", 0);
         }
     }
 

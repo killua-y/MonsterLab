@@ -28,6 +28,7 @@ public class InGameCardModel : MonoBehaviour
             drawPileList.Add(newCard);
         }
 
+        drawPileList.Sort((card1, card2) => card1.id.CompareTo(card2.id));
         HelperFunction.Shuffle(drawPileList, GameSetting.CurrentActRand);
 
         foreach (Card card in CardDataModel.Instance.GetExtraDeck())
