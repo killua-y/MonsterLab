@@ -94,6 +94,7 @@ public class BattleManager : Singleton<BattleManager>
             BaseEntity newEntity = newMonster.GetComponent<BaseEntity>();
             playerEntities.Add(newEntity);
             newEntity.Setup(team, node, monsterCard, sacrifices);
+            EffectManager.Instance.PlayEffect("BlueSummonEffect", node.worldPosition);
             OnUnitSummon?.Invoke(newEntity);
         }
         else
@@ -107,10 +108,9 @@ public class BattleManager : Singleton<BattleManager>
             }
             enemyEntities.Add(newEntity);
             newEntity.Setup(team, node, monsterCard, sacrifices);
+            EffectManager.Instance.PlayEffect("RedSummonEffect", node.worldPosition);
             OnUnitSummon?.Invoke(newEntity);
         }
-
-        EffectManager.Instance.GenerateSummonEffect(node.worldPosition, team);
     }
 
     public void InstaniateMontser(int index, Team team, MonsterCard monsterCard, List<BaseEntity> sacrifices = null)

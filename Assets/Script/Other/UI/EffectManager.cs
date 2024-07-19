@@ -7,8 +7,17 @@ public class EffectManager : Singleton<EffectManager>
     public GameObject damageText;
     public Canvas canvas; // Reference to the Canvas
 
-    public GameObject BlueSummonEffect;
-    public GameObject RedSummonEffect;
+    [System.Serializable]
+    public class EffectPool
+    {
+        public string effectName;
+        public GameObject effectPrefab;
+        public int poolSize;
+    }
+
+    public List<EffectPool> effectPools;
+    private Dictionary<string, Queue<GameObject>> effectPoolDictionary;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -16,6 +25,8 @@ public class EffectManager : Singleton<EffectManager>
         {
             canvas = this.GetComponent<Canvas>();
         }
+
+        InitializeEffectPools();
     }
 
     public void GenerateDamageText(Vector2 position, int amount)
@@ -32,19 +43,46 @@ public class EffectManager : Singleton<EffectManager>
         instance.GetComponent<DamageTextBehavior>().Setup(amount);
     }
 
-    public void GenerateSummonEffect(Vector2 position, Team team)
+    private void InitializeEffectPools()
     {
-        if (team == Team.Player)
+        effectPoolDictionary = new Dictionary<string, Queue<GameObject>>();
+
+        foreach (EffectPool pool in effectPools)
         {
-            Instantiate(BlueSummonEffect,
-                position + new Vector2(BlueSummonEffect.transform.position.x, BlueSummonEffect.transform.position.y),
-                BlueSummonEffect.transform.rotation);
-        }
-        else if (team == Team.Enemy)
-        {
-            Instantiate(RedSummonEffect,
-                position + new Vector2(RedSummonEffect.transform.position.x, RedSummonEffect.transform.position.y),
-                RedSummonEffect.transform.rotation);
+            Queue<GameObject> effectPool = new Queue<GameObject>();
+
+            for (int i = 0; i < pool.poolSize; i++)
+            {
+                GameObject effectObject = Instantiate(pool.effectPrefab);
+                effectObject.SetActive(false);
+                effectPool.Enqueue(effectObject);
+            }
+
+            effectPoolDictionary.Add(pool.effectName, effectPool);
         }
     }
+
+    public void PlayEffect(string effectName, Vector2 position)
+    {
+        if (!effectPoolDictionary.ContainsKey(effectName))
+        {
+            Debug.LogWarning("EffectManager: Effect " + effectName + " doesn't exist in the pool.");
+            return;
+        }
+
+        GameObject effectToPlay = effectPoolDictionary[effectName].Dequeue();
+
+        effectToPlay.transform.position = position;
+        effectToPlay.SetActive(true);
+
+        StartCoroutine(ReturnEffectToPool(effectName, effectToPlay, effectToPlay.GetComponent<ParticleSystem>().main.duration));
+    }
+
+    private IEnumerator ReturnEffectToPool(string effectName, GameObject effectObject, float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        effectObject.SetActive(false);
+        effectPoolDictionary[effectName].Enqueue(effectObject);
+    }
+
 }

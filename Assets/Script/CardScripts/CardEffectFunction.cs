@@ -9,11 +9,13 @@ public class CardEffectFunction : MonoBehaviour
         target.cardModel.healthPoint += amount;
         target.RestoreHealth(amount);
         target.UpdateMonster();
+        EffectManager.Instance.PlayEffect("HealthBuffEffect", target.transform.position);
     }
 
     public static void IncreaseAttack(BaseEntity target, int amount)
     {
         target.cardModel.attackPower += amount;
         target.UpdateMonster();
+        EffectManager.Instance.PlayEffect("AttackBuffEffect", target.transform.position);
     }
 }
