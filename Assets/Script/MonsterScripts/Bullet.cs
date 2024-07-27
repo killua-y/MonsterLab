@@ -36,8 +36,6 @@ public class Bullet : MonoBehaviour
             return;
         }
 
-        this.transform.LookAt(target.transform.position);
-
         // Move towards the target
         Vector3 direction = (target.transform.position - transform.position).normalized;
         transform.position += direction * speed * Time.deltaTime;

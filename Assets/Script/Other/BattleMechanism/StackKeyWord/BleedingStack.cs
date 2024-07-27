@@ -5,6 +5,7 @@ using UnityEngine;
 public class BleedingStack : MonoBehaviour
 {
     private BaseEntity equipedMonster;
+    private StatusUnitBehavior StatesUnit;
     public int stackAmount;
 
     // Start is called before the first frame update
@@ -18,12 +19,15 @@ public class BleedingStack : MonoBehaviour
         }
 
         BattleManager.Instance.BeforeBattlePhase += BeforeBattlePhase;
+        StatesUnit = this.GetComponent<MonsterUI>().AddNewStatus();
+        //StatesUnit.Setup("");
         stackAmount = 0;
     }
 
     public void IncreaseStack(int amount)
     {
         stackAmount += amount;
+        StatesUnit.UpdateStatusNumber(stackAmount);
     }
 
     private void BeforeBattlePhase()
