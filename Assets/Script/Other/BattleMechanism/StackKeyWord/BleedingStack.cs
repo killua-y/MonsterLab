@@ -28,6 +28,19 @@ public class BleedingStack : MonoBehaviour
 
     private void BeforeBattlePhase()
     {
+        if (stackAmount * 2 >= 15)
+        {
+            EffectManager.Instance.PlayEffect("BloodEffect2", equipedMonster.transform.position);
+        }
+        else if (stackAmount * 2 >= 100)
+        {
+            EffectManager.Instance.PlayEffect("BloodEffect3", equipedMonster.transform.position);
+        }
+        else
+        {
+            EffectManager.Instance.PlayEffect("BloodEffect1", equipedMonster.transform.position);
+        }
+
         // 施加流血伤害
         equipedMonster.TakeDamage(stackAmount * 2, DamageType.Bleeding);
     }

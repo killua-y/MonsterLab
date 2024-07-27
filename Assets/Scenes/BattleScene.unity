@@ -2305,8 +2305,39 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   damageText: {fileID: 6098060002442028582, guid: 9a43a7bd8fa9748a3bd4ef48b537c7b9, type: 3}
   canvas: {fileID: 1062586477}
-  BlueSummonEffect: {fileID: 81308183512584125, guid: 0dd502b18ae67e84abfa7290e105556f, type: 3}
-  RedSummonEffect: {fileID: 2733247010544334549, guid: 367a2daf4ddf9644d9f21b1dd6943a99, type: 3}
+  effectPools:
+  - effectName: BlueSummonEffect
+    effectPrefab: {fileID: 81308183512584125, guid: 0dd502b18ae67e84abfa7290e105556f, type: 3}
+    effectOffset: {x: 0, y: 0}
+    poolSize: 5
+  - effectName: RedSummonEffect
+    effectPrefab: {fileID: 2733247010544334549, guid: 367a2daf4ddf9644d9f21b1dd6943a99, type: 3}
+    effectOffset: {x: 0, y: 0}
+    poolSize: 5
+  - effectName: HealthBuffEffect
+    effectPrefab: {fileID: 5406767978647780191, guid: bafb0a0d524b6fe498747e88b79f98c4, type: 3}
+    effectOffset: {x: 0, y: 0}
+    poolSize: 3
+  - effectName: AttackBuffEffect
+    effectPrefab: {fileID: 6785772262510733928, guid: a03152fb8266fef4bbfb38f55c3c0b0a, type: 3}
+    effectOffset: {x: 0, y: 0}
+    poolSize: 3
+  - effectName: FireBallEffect
+    effectPrefab: {fileID: 9117559191975716192, guid: c9d0caa9ef12c454faffb0f1faad920b, type: 3}
+    effectOffset: {x: 0, y: 0.4}
+    poolSize: 2
+  - effectName: BloodEffect1
+    effectPrefab: {fileID: 2184299164706336161, guid: 300344ad975c36145b0639bfe8e91055, type: 3}
+    effectOffset: {x: 0, y: 0.4}
+    poolSize: 10
+  - effectName: BloodEffect2
+    effectPrefab: {fileID: 8696772878897534742, guid: 88b0400b9b2d1c74cb67ce57f0d63005, type: 3}
+    effectOffset: {x: 0, y: 0.4}
+    poolSize: 10
+  - effectName: BloodEffect3
+    effectPrefab: {fileID: 5821549190899430897, guid: 73742e3f8ca78974ea3e286a98088d20, type: 3}
+    effectOffset: {x: 0, y: 0.4}
+    poolSize: 10
 --- !u!1 &308408992
 GameObject:
   m_ObjectHideFlags: 0
@@ -7478,37 +7509,6 @@ Transform:
   - {fileID: 1470525098}
   - {fileID: 1669820551}
   m_Father: {fileID: 1696818099}
-  m_RootOrder: 3
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1080518503
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1080518504}
-  m_Layer: 0
-  m_Name: GameObject
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1080518504
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1080518503}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -1.5124272, y: 0.031772316, z: 1.860785}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1696818099}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1099949200
@@ -10990,7 +10990,7 @@ Transform:
   - {fileID: 705795855}
   - {fileID: 845068540}
   m_Father: {fileID: 1696818099}
-  m_RootOrder: 4
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1513740597
 GameObject:
@@ -12164,7 +12164,6 @@ Transform:
   m_Children:
   - {fileID: 2078732465}
   - {fileID: 1933151621}
-  - {fileID: 1080518504}
   - {fileID: 1068505933}
   - {fileID: 1501578450}
   m_Father: {fileID: 0}

@@ -12,11 +12,13 @@ public class EffectManager : Singleton<EffectManager>
     {
         public string effectName;
         public GameObject effectPrefab;
+        public Vector2 effectOffset;
         public int poolSize;
     }
 
     public List<EffectPool> effectPools;
     private Dictionary<string, Queue<GameObject>> effectPoolDictionary;
+    private Dictionary<string, Vector2> effectPositionOffset;
 
     // Start is called before the first frame update
     void Start()
@@ -46,6 +48,7 @@ public class EffectManager : Singleton<EffectManager>
     private void InitializeEffectPools()
     {
         effectPoolDictionary = new Dictionary<string, Queue<GameObject>>();
+        effectPositionOffset = new Dictionary<string, Vector2>();
 
         foreach (EffectPool pool in effectPools)
         {
@@ -59,6 +62,11 @@ public class EffectManager : Singleton<EffectManager>
             }
 
             effectPoolDictionary.Add(pool.effectName, effectPool);
+
+            if (!effectPositionOffset.ContainsKey(pool.effectName))
+            {
+                effectPositionOffset.Add(pool.effectName, pool.effectOffset);
+            }
         }
     }
 
@@ -72,7 +80,8 @@ public class EffectManager : Singleton<EffectManager>
 
         GameObject effectToPlay = effectPoolDictionary[effectName].Dequeue();
 
-        effectToPlay.transform.position = position;
+        // 根据offse和传入位置修改位置
+        effectToPlay.transform.position = position + effectPositionOffset[effectName];
         effectToPlay.SetActive(true);
 
         StartCoroutine(ReturnEffectToPool(effectName, effectToPlay, effectToPlay.GetComponent<ParticleSystem>().main.duration));
