@@ -6,6 +6,8 @@ public class EffectManager : Singleton<EffectManager>
 {
     public GameObject damageText;
     public Canvas canvas; // Reference to the Canvas
+    private Vector2 Offset = new Vector2(0, 50);
+    private Vector2 RandomOffset = new Vector2(50, 30);
 
     [System.Serializable]
     public class EffectPool
@@ -41,6 +43,9 @@ public class EffectManager : Singleton<EffectManager>
 
         // 生成伤害
         GameObject instance = Instantiate(damageText, canvas.transform);
+        canvasPosition += Offset;
+        canvasPosition += new Vector2(Random.Range(-RandomOffset.x, RandomOffset.x), Random.Range(-RandomOffset.y, RandomOffset.y));
+
         instance.GetComponent<RectTransform>().anchoredPosition = canvasPosition;
         instance.GetComponent<DamageTextBehavior>().Setup(amount);
     }
