@@ -40,6 +40,10 @@ public class Bullet : MonoBehaviour
         Vector3 direction = (target.transform.position - transform.position).normalized;
         transform.position += direction * speed * Time.deltaTime;
 
+        // Rotate the bullet to face the target
+        float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+        transform.rotation = Quaternion.Euler(new Vector3(0, 0, angle));
+
         // Check if bullet has reached the target
         if (Vector3.Distance(transform.position, target.transform.position) < 0.1f)
         {

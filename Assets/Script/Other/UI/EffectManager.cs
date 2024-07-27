@@ -50,8 +50,38 @@ public class EffectManager : Singleton<EffectManager>
         effectPoolDictionary = new Dictionary<string, Queue<GameObject>>();
         effectPositionOffset = new Dictionary<string, Vector2>();
 
-        foreach (EffectPool pool in effectPools)
+        //foreach (EffectPool pool in effectPools)
+        //{
+        //    Queue<GameObject> effectPool = new Queue<GameObject>();
+
+        //    for (int i = 0; i < pool.poolSize; i++)
+        //    {
+        //        GameObject effectObject = Instantiate(pool.effectPrefab);
+        //        effectObject.SetActive(false);
+        //        effectPool.Enqueue(effectObject);
+        //    }
+
+        //    effectPoolDictionary.Add(pool.effectName, effectPool);
+
+        //    if (!effectPositionOffset.ContainsKey(pool.effectName))
+        //    {
+        //        effectPositionOffset.Add(pool.effectName, pool.effectOffset);
+        //    }
+        //}
+    }
+
+    public void PlayEffect(string effectName, Vector2 position)
+    {
+        if (!effectPoolDictionary.ContainsKey(effectName))
         {
+            EffectPool pool = effectPools.Find(pool => pool.effectName == effectName);
+
+            if (pool == null)
+            {
+                Debug.LogWarning("EffectManager: Effect " + effectName + " doesn't exist in the pool.");
+                return;
+            }
+
             Queue<GameObject> effectPool = new Queue<GameObject>();
 
             for (int i = 0; i < pool.poolSize; i++)
@@ -67,15 +97,6 @@ public class EffectManager : Singleton<EffectManager>
             {
                 effectPositionOffset.Add(pool.effectName, pool.effectOffset);
             }
-        }
-    }
-
-    public void PlayEffect(string effectName, Vector2 position)
-    {
-        if (!effectPoolDictionary.ContainsKey(effectName))
-        {
-            Debug.LogWarning("EffectManager: Effect " + effectName + " doesn't exist in the pool.");
-            return;
         }
 
         GameObject effectToPlay = effectPoolDictionary[effectName].Dequeue();

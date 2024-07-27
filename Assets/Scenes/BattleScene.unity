@@ -2307,37 +2307,57 @@ MonoBehaviour:
   canvas: {fileID: 1062586477}
   effectPools:
   - effectName: BlueSummonEffect
-    effectPrefab: {fileID: 81308183512584125, guid: 0dd502b18ae67e84abfa7290e105556f, type: 3}
-    effectOffset: {x: 0, y: 0}
+    effectPrefab: {fileID: 7262954323220977303, guid: 5be058401d13a43559bf5447fabb8169, type: 3}
+    effectOffset: {x: 0, y: 0.2}
     poolSize: 5
   - effectName: RedSummonEffect
-    effectPrefab: {fileID: 2733247010544334549, guid: 367a2daf4ddf9644d9f21b1dd6943a99, type: 3}
-    effectOffset: {x: 0, y: 0}
+    effectPrefab: {fileID: 3614092763505419025, guid: 379f79f2e19c447008d881cfee938b36, type: 3}
+    effectOffset: {x: 0, y: 0.2}
     poolSize: 5
   - effectName: HealthBuffEffect
-    effectPrefab: {fileID: 5406767978647780191, guid: bafb0a0d524b6fe498747e88b79f98c4, type: 3}
+    effectPrefab: {fileID: 1674961216424087398, guid: 63bc763d559e446c790c568803bc3e71, type: 3}
     effectOffset: {x: 0, y: 0}
     poolSize: 3
   - effectName: AttackBuffEffect
-    effectPrefab: {fileID: 6785772262510733928, guid: a03152fb8266fef4bbfb38f55c3c0b0a, type: 3}
+    effectPrefab: {fileID: 5741646200808359971, guid: 6f9d4c634b2954119939f76ec59d378c, type: 3}
     effectOffset: {x: 0, y: 0}
     poolSize: 3
   - effectName: FireBallEffect
-    effectPrefab: {fileID: 9117559191975716192, guid: c9d0caa9ef12c454faffb0f1faad920b, type: 3}
+    effectPrefab: {fileID: 3362272375853800422, guid: c5d0a665ce6c14fc59353e5675e71c35, type: 3}
     effectOffset: {x: 0, y: 0.4}
     poolSize: 2
   - effectName: BloodEffect1
-    effectPrefab: {fileID: 2184299164706336161, guid: 300344ad975c36145b0639bfe8e91055, type: 3}
-    effectOffset: {x: 0, y: 0.4}
+    effectPrefab: {fileID: 5518575529806666310, guid: 867bd9a3c8931472dbf518d6699af9ef, type: 3}
+    effectOffset: {x: 0, y: 0}
     poolSize: 10
   - effectName: BloodEffect2
-    effectPrefab: {fileID: 8696772878897534742, guid: 88b0400b9b2d1c74cb67ce57f0d63005, type: 3}
-    effectOffset: {x: 0, y: 0.4}
+    effectPrefab: {fileID: 2497304001639458482, guid: cb8df748ff0034c0e95ac3492d84dbac, type: 3}
+    effectOffset: {x: 0, y: 0}
     poolSize: 10
   - effectName: BloodEffect3
-    effectPrefab: {fileID: 5821549190899430897, guid: 73742e3f8ca78974ea3e286a98088d20, type: 3}
-    effectOffset: {x: 0, y: 0.4}
+    effectPrefab: {fileID: 4689055894372767570, guid: ad878a5d3e45f4860a4152ffb8f7e9ca, type: 3}
+    effectOffset: {x: 0, y: 0}
     poolSize: 10
+  - effectName: GroundHitMid
+    effectPrefab: {fileID: 3324698191117864487, guid: 2b22215a47c32446e81f69f8b0e0a7b9, type: 3}
+    effectOffset: {x: 0, y: -0.12}
+    poolSize: 6
+  - effectName: GroundHitSmall
+    effectPrefab: {fileID: 5063655489639814108, guid: bf04fd2b2460943a497d885c7be27db2, type: 3}
+    effectOffset: {x: 0, y: -0.2}
+    poolSize: 6
+  - effectName: AcidSlimeExplosion
+    effectPrefab: {fileID: 1096780308493530299, guid: 02850e26052944484a39c14c47fb811e, type: 3}
+    effectOffset: {x: 0, y: 0}
+    poolSize: 5
+  - effectName: SlashBlue
+    effectPrefab: {fileID: 900690576181173533, guid: b40d92092557c4aa694a139ce7d58f12, type: 3}
+    effectOffset: {x: 0, y: 0}
+    poolSize: 6
+  - effectName: MagicHitPurple
+    effectPrefab: {fileID: 2410790212180413244, guid: aab9a64458ca4404b982ddce28bdbf11, type: 3}
+    effectOffset: {x: 0, y: 0}
+    poolSize: 2
 --- !u!1 &308408992
 GameObject:
   m_ObjectHideFlags: 0
@@ -12876,7 +12896,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1838172072
 MonoBehaviour:
   m_ObjectHideFlags: 0

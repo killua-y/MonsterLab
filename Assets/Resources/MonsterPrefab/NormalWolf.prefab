@@ -1841,12 +1841,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f39a7e0f4eab042cd8c7c600d320af09, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  spriteRender: {fileID: 5366060459977422344}
-  healthBar: {fileID: 4675795157515462542}
-  manaBar: {fileID: 7088726775450917896}
-  healthText: {fileID: 1177822038811914411}
-  attackText: {fileID: 8973391504083243351}
-  bullet: {fileID: 0}
+  bullet: {fileID: 202593068371588416, guid: c86fa1a8a33db4eeea25913365852faa, type: 3}
+  attackOrgan: {fileID: 0}
 --- !u!114 &2097165626050679716
 MonoBehaviour:
   m_ObjectHideFlags: 0
