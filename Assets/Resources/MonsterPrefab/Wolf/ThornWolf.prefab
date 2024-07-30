@@ -523,9 +523,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f39a7e0f4eab042cd8c7c600d320af09, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bullet: {fileID: 0}
+  bullet: {fileID: 7299250868985162860, guid: e3c8c494216804c6981c4d54b0e042a0, type: 3}
   attackOrgan: {fileID: 0}
-  StatusUnit: {fileID: 0}
 --- !u!114 &7381375155596163155
 MonoBehaviour:
   m_ObjectHideFlags: 0

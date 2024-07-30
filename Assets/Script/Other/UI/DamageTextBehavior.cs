@@ -10,6 +10,16 @@ public class DamageTextBehavior : MonoBehaviour
     public void Setup(int damage)
     {
         this.gameObject.GetComponent<TextMeshProUGUI>().text = damage.ToString();
+
+        if (damage >= 20)
+        {
+            this.gameObject.GetComponent<TextMeshProUGUI>().color = Color.red;
+        }
+        else if (damage >= 100)
+        {
+            this.gameObject.GetComponent<TextMeshProUGUI>().color = Color.yellow;
+        }
+
         Destroy(this.gameObject, timer);
     }
 }

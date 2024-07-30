@@ -2358,6 +2358,26 @@ MonoBehaviour:
     effectPrefab: {fileID: 2410790212180413244, guid: aab9a64458ca4404b982ddce28bdbf11, type: 3}
     effectOffset: {x: 0, y: 0}
     poolSize: 2
+  - effectName: PawSlashRed
+    effectPrefab: {fileID: 24232550762357791, guid: 8601b0b2a6ca44045be0834e0b73e785, type: 3}
+    effectOffset: {x: 0, y: 0}
+    poolSize: 2
+  - effectName: SwordSlashRed
+    effectPrefab: {fileID: 5910661398878755946, guid: 9baf04a70303f4097ba78f8a8eba59c2, type: 3}
+    effectOffset: {x: 0, y: 0}
+    poolSize: 2
+  - effectName: BluntAttackRed
+    effectPrefab: {fileID: 7727991531165572636, guid: c849bd01e385749679dbf0be21861854, type: 3}
+    effectOffset: {x: 0, y: 0}
+    poolSize: 2
+  - effectName: ArrowSlashGreen
+    effectPrefab: {fileID: 366402201543904285, guid: 953e3382952784ab886a33953a3bcc97, type: 3}
+    effectOffset: {x: 0, y: 0}
+    poolSize: 2
+  - effectName: ArrowSlashGreen
+    effectPrefab: {fileID: 5054269476163657305, guid: d0f551d746c08471abb17a6e03eda9d1, type: 3}
+    effectOffset: {x: 0.5, y: 0}
+    poolSize: 2
 --- !u!1 &308408992
 GameObject:
   m_ObjectHideFlags: 0
@@ -12896,7 +12916,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1838172072
 MonoBehaviour:
   m_ObjectHideFlags: 0

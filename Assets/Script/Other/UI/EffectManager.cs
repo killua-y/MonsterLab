@@ -54,63 +54,75 @@ public class EffectManager : Singleton<EffectManager>
     {
         effectPoolDictionary = new Dictionary<string, Queue<GameObject>>();
         effectPositionOffset = new Dictionary<string, Vector2>();
-
-        //foreach (EffectPool pool in effectPools)
-        //{
-        //    Queue<GameObject> effectPool = new Queue<GameObject>();
-
-        //    for (int i = 0; i < pool.poolSize; i++)
-        //    {
-        //        GameObject effectObject = Instantiate(pool.effectPrefab);
-        //        effectObject.SetActive(false);
-        //        effectPool.Enqueue(effectObject);
-        //    }
-
-        //    effectPoolDictionary.Add(pool.effectName, effectPool);
-
-        //    if (!effectPositionOffset.ContainsKey(pool.effectName))
-        //    {
-        //        effectPositionOffset.Add(pool.effectName, pool.effectOffset);
-        //    }
-        //}
     }
 
     public void PlayEffect(string effectName, Vector2 position)
     {
         if (!effectPoolDictionary.ContainsKey(effectName))
         {
-            EffectPool pool = effectPools.Find(pool => pool.effectName == effectName);
-
-            if (pool == null)
-            {
-                Debug.LogWarning("EffectManager: Effect " + effectName + " doesn't exist in the pool.");
-                return;
-            }
-
-            Queue<GameObject> effectPool = new Queue<GameObject>();
-
-            for (int i = 0; i < pool.poolSize; i++)
-            {
-                GameObject effectObject = Instantiate(pool.effectPrefab);
-                effectObject.SetActive(false);
-                effectPool.Enqueue(effectObject);
-            }
-
-            effectPoolDictionary.Add(pool.effectName, effectPool);
-
-            if (!effectPositionOffset.ContainsKey(pool.effectName))
-            {
-                effectPositionOffset.Add(pool.effectName, pool.effectOffset);
-            }
+            InitializeEffectPool(effectName);
         }
 
-        GameObject effectToPlay = effectPoolDictionary[effectName].Dequeue();
+        GameObject effectToPlay;
+
+        if (effectPoolDictionary[effectName].Count > 0)
+        {
+            effectToPlay = effectPoolDictionary[effectName].Dequeue();
+        }
+        else
+        {
+            // Instantiate a new effect if the pool is empty
+            effectToPlay = InstantiateNewEffect(effectName);
+        }
 
         // 根据offse和传入位置修改位置
         effectToPlay.transform.position = position + effectPositionOffset[effectName];
         effectToPlay.SetActive(true);
 
         StartCoroutine(ReturnEffectToPool(effectName, effectToPlay, effectToPlay.GetComponent<ParticleSystem>().main.duration));
+    }
+
+    private void InitializeEffectPool(string effectName)
+    {
+        EffectPool pool = effectPools.Find(pool => pool.effectName == effectName);
+
+        if (pool == null)
+        {
+            Debug.LogWarning("EffectManager: Effect " + effectName + " doesn't exist in the pool.");
+            return;
+        }
+
+        Queue<GameObject> effectPool = new Queue<GameObject>();
+
+        //for (int i = 0; i < pool.poolSize; i++)
+        //{
+        //    GameObject effectObject = Instantiate(pool.effectPrefab);
+        //    effectObject.SetActive(false);
+        //    effectPool.Enqueue(effectObject);
+        //}
+
+        effectPoolDictionary.Add(pool.effectName, effectPool);
+
+        if (!effectPositionOffset.ContainsKey(pool.effectName))
+        {
+            effectPositionOffset.Add(pool.effectName, pool.effectOffset);
+        }
+    }
+
+    private GameObject InstantiateNewEffect(string effectName)
+    {
+        EffectPool pool = effectPools.Find(pool => pool.effectName == effectName);
+
+        if (pool == null)
+        {
+            Debug.LogWarning("EffectManager: Effect " + effectName + " doesn't exist in the pool.");
+            return null;
+        }
+
+        GameObject newEffect = Instantiate(pool.effectPrefab);
+        newEffect.SetActive(false);
+        effectPoolDictionary[effectName].Enqueue(newEffect);
+        return newEffect;
     }
 
     private IEnumerator ReturnEffectToPool(string effectName, GameObject effectObject, float delay)

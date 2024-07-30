@@ -360,9 +360,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f39a7e0f4eab042cd8c7c600d320af09, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bullet: {fileID: 0}
+  bullet: {fileID: 1228594347785052310, guid: a310034e4d85e457daef5e4f3d3955ce, type: 3}
   attackOrgan: {fileID: 0}
-  StatusUnit: {fileID: 5866751227770503715, guid: 2e8165dac6d8f4e4c9c0ce3b79b4cbdc, type: 3}
 --- !u!114 &3039799090691642235
 MonoBehaviour:
   m_ObjectHideFlags: 0

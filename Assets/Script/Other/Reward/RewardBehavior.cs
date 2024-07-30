@@ -19,7 +19,7 @@ public class CardRewardBehavior : MonoBehaviour, IPointerClickHandler
     }
 }
 
-public class DNARewardBehavior : MonoBehaviour, IPointerClickHandler
+public class DNARewardBehavior : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler
 {
     public DNA DNAModel;
     public TextMeshProUGUI nameText;
@@ -31,11 +31,22 @@ public class DNARewardBehavior : MonoBehaviour, IPointerClickHandler
         nameText.text = DNAModel.DNAName;
     }
 
-
     public void OnPointerClick(PointerEventData eventData)
     {
+        CanvasManager.Instance.HideDNAPreview();
         PlayerStatesManager.Instance.AcquireDNA(DNAModel);
         Destroy(this.gameObject);
+    }
+
+
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        CanvasManager.Instance.GenerateDNAPreview(DNAModel.DNAName, DNAModel.effectText);
+    }
+
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        CanvasManager.Instance.HideDNAPreview();
     }
 }
 
