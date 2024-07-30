@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using static Card;
 
 // 删卡事件
 public class DeleteOneCardEvent : EventBehavior
@@ -197,6 +198,114 @@ public class DecreaseCostForBase : EventBehavior
         {
             card.cost -= 1;
         }
+
+        SetUpLeaveEventScene(startSceneImageLocation, eventText2);
+    }
+}
+
+// 基础单位加攻加血事件
+public class IncreaseStatesForBase : EventBehavior
+{
+    protected override string startSceneImageLocation { get; set; } = "";
+    protected override string startSceneEventText { get; set; } = "";
+    protected override List<string> startSceneOptionsText { get; set; } = new List<string>()
+    {
+        "1 of your basic units gain 10 attack and 20 health.",
+        "40 Gold: 2 of your basic units gain 10/20.",
+        "80 Gold: 3 of your basic units gain 10/20.",
+        "Leave"
+    };
+
+    protected override void bindAction()
+    {
+        startSceneOptionsAction = new List<Action>()
+        {
+            Option1,
+            Option2,
+            Option3,
+            LeaveEvent
+        };
+    }
+
+    // LeaveSene
+    private string eventText2 = "Your units has become stronger.";
+
+    protected override bool CheckOptionValidity(string _optionText)
+    {
+        if (_optionText == startSceneOptionsText[0])
+        {
+            if (GetBaseUnitHelper().Count < 1)
+            {
+                return false;
+            }
+        }
+        else if (_optionText == startSceneOptionsText[1])
+        {
+            if ((GetBaseUnitHelper().Count < 2) ||
+                (PlayerStatesManager.Gold < 40))
+            {
+                return false;
+            }
+        }
+        else if (_optionText == startSceneOptionsText[2])
+        {
+            if ((GetBaseUnitHelper().Count < 3) ||
+                (PlayerStatesManager.Gold < 80))
+            {
+                return false;
+            }
+        }
+
+        return base.CheckOptionValidity();
+    }
+
+    private void Option1()
+    {
+        FindAnyObjectByType<CardSelectPanelBehavior>().SelectCardFromDeck(GetBaseUnitHelper(), 1, IncreaseStatesForBaseHelper);
+    }
+
+    private void Option2()
+    {
+        PlayerStatesManager.Instance.DecreaseGold(40);
+        FindAnyObjectByType<CardSelectPanelBehavior>().SelectCardFromDeck(GetBaseUnitHelper(), 2, IncreaseStatesForBaseHelper);
+    }
+
+    private void Option3()
+    {
+        PlayerStatesManager.Instance.DecreaseGold(80);
+        FindAnyObjectByType<CardSelectPanelBehavior>().SelectCardFromDeck(GetBaseUnitHelper(), 3, IncreaseStatesForBaseHelper);
+    }
+
+    private List<Card> GetBaseUnitHelper()
+    {
+        List<Card> baseUnits = new List<Card>();
+
+        foreach (Card card in CardDataModel.Instance.GetPlayerDeck())
+        {
+            if (card.color == CardColor.Base)
+            {
+                baseUnits.Add(card);
+            }
+        }
+
+        return baseUnits;
+    }
+
+    private void IncreaseStatesForBaseHelper(List<Card> cards)
+    {
+        foreach (Card card in cards)
+        {
+            MonsterCard monsterCard = (MonsterCard)card;
+            monsterCard.attackPower += 3;
+            monsterCard.healthPoint += 20;
+        }
+
+        //for (int i = 0; i < cards.Count; i++)
+        //{
+        //    MonsterCard monsterCard = (MonsterCard)cards[i];
+        //    monsterCard.attackPower += 3;
+        //    monsterCard.healthPoint += 20;
+        //}
 
         SetUpLeaveEventScene(startSceneImageLocation, eventText2);
     }
