@@ -70,7 +70,7 @@ public class Bullet : MonoBehaviour
         // 播放结束爆炸特效
         if ((ExplosionEffect != null) && (ExplosionEffect != ""))
         {
-            EffectManager.Instance.PlayEffect(ExplosionEffect, transform.position);
+            EffectManager.Instance.PlayEffect(ExplosionEffect, transform.position, transform.rotation);
         }
 
         Destroy(gameObject);

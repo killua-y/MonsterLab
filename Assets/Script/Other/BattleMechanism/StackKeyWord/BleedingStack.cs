@@ -7,6 +7,7 @@ public class BleedingStack : MonoBehaviour
     private BaseEntity equipedMonster;
     private StatusUnitBehavior StatesUnit;
     public int stackAmount;
+    public static bool triggerTwice;
 
     // Start is called before the first frame update
     void Awake()
@@ -20,7 +21,6 @@ public class BleedingStack : MonoBehaviour
 
         BattleManager.Instance.BeforeBattlePhase += BeforeBattlePhase;
         StatesUnit = this.GetComponent<MonsterUI>().AddNewStatus();
-        //StatesUnit.Setup("");
         stackAmount = 0;
     }
 
@@ -47,6 +47,8 @@ public class BleedingStack : MonoBehaviour
 
         // 施加流血伤害
         equipedMonster.TakeDamage(stackAmount * 2, DamageType.Bleeding);
+
+
     }
 
     private void OnDestroy()

@@ -42,6 +42,10 @@ public class TowerBoxBehavior : MonoBehaviour, IPointerDownHandler, IPointerExit
             case BoxType.Events:
                 imageLocation = "UI/TowerBoxIcon/event";
                 break;
+            case BoxType.BaseUnitEvents:
+                imageLocation = "UI/TowerBoxIcon/baseUnitEvent";
+                this.GetComponent<Image>().GetComponent<RectTransform>().sizeDelta = new Vector2(100, 100);
+                break;
             case BoxType.Merchant:
                 imageLocation = "UI/TowerBoxIcon/merchent";
                 break;

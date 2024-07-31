@@ -9,6 +9,8 @@ public enum BoxType
     EliteFight,
     BossFight,
     Events,
+    BaseUnitEvents,
+    Rest,
     Merchant,
     Treasure
 }

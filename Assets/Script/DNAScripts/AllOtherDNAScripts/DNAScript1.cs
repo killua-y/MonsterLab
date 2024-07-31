@@ -185,3 +185,87 @@ public class PiggyBankDNABehavior : MonoBehaviour
 {
 
 }
+
+// 每场战斗第一个回合获得两点能量
+public class CombatStartGainEnergy : DNABehavior
+{
+    private bool canActive = true;
+
+    void Start()
+    {
+        InGameStateManager.Instance.OnCombatStart += OnCombatStart;
+        InGameStateManager.Instance.OnPreparePhaseStart += OnPreparePhaseStart;
+    }
+
+    void OnCombatStart()
+    {
+        canActive = true;
+    }
+
+    void OnPreparePhaseStart()
+    {
+        Invoke("IncreaseCostHelper", 0);
+    }
+
+    void IncreaseCostHelper()
+    {
+        if (canActive)
+        {
+            FindAnyObjectByType<PlayerCostManager>().IncreaseCost(DNAModel.effectData);
+            canActive = false;
+        }
+    }
+}
+
+// 每场战斗第一个回合抽3张牌
+public class CombatStartDrawCard : DNABehavior
+{
+    private bool canActive = true;
+
+    void Start()
+    {
+        InGameStateManager.Instance.OnCombatStart += OnCombatStart;
+        InGameStateManager.Instance.OnPreparePhaseStart += OnPreparePhaseStart;
+    }
+
+    void OnCombatStart()
+    {
+        canActive = true;
+    }
+
+    void OnPreparePhaseStart()
+    {
+        if (canActive)
+        {
+            InGameStateManager.Instance.DrawCards(DNAModel.effectData);
+            canActive = false;
+        }
+    }
+}
+
+// 流血伤害触发两次
+public class BleedingTriggerTwice : DNABehavior
+{
+    private bool canActive = true;
+
+    void Start()
+    {
+        InGameStateManager.Instance.OnCombatStart += OnCombatStart;
+        InGameStateManager.Instance.OnPreparePhaseStart += OnPreparePhaseStart;
+    }
+
+    void OnCombatStart()
+    {
+        canActive = true;
+    }
+
+    void OnPreparePhaseStart()
+    {
+        if (canActive)
+        {
+            InGameStateManager.Instance.DrawCards(DNAModel.effectData);
+            canActive = false;
+        }
+    }
+}
+

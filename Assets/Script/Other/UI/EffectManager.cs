@@ -14,13 +14,11 @@ public class EffectManager : Singleton<EffectManager>
     {
         public string effectName;
         public GameObject effectPrefab;
-        public Vector2 effectOffset;
         public int poolSize;
     }
 
     public List<EffectPool> effectPools;
     private Dictionary<string, Queue<GameObject>> effectPoolDictionary;
-    private Dictionary<string, Vector2> effectPositionOffset;
 
     // Start is called before the first frame update
     void Start()
@@ -53,7 +51,6 @@ public class EffectManager : Singleton<EffectManager>
     private void InitializeEffectPools()
     {
         effectPoolDictionary = new Dictionary<string, Queue<GameObject>>();
-        effectPositionOffset = new Dictionary<string, Vector2>();
     }
 
     public void PlayEffect(string effectName, Vector2 position)
@@ -76,7 +73,34 @@ public class EffectManager : Singleton<EffectManager>
         }
 
         // 根据offse和传入位置修改位置
-        effectToPlay.transform.position = position + effectPositionOffset[effectName];
+        effectToPlay.transform.position = position;
+        effectToPlay.SetActive(true);
+
+        StartCoroutine(ReturnEffectToPool(effectName, effectToPlay, effectToPlay.GetComponent<ParticleSystem>().main.duration));
+    }
+
+    public void PlayEffect(string effectName, Vector2 position, Quaternion rotation)
+    {
+        if (!effectPoolDictionary.ContainsKey(effectName))
+        {
+            InitializeEffectPool(effectName);
+        }
+
+        GameObject effectToPlay;
+
+        if (effectPoolDictionary[effectName].Count > 0)
+        {
+            effectToPlay = effectPoolDictionary[effectName].Dequeue();
+        }
+        else
+        {
+            // Instantiate a new effect if the pool is empty
+            effectToPlay = InstantiateNewEffect(effectName);
+        }
+
+        // 根据offse和传入位置修改位置
+        effectToPlay.transform.position = position;
+        effectToPlay.transform.rotation = rotation;
         effectToPlay.SetActive(true);
 
         StartCoroutine(ReturnEffectToPool(effectName, effectToPlay, effectToPlay.GetComponent<ParticleSystem>().main.duration));
@@ -102,11 +126,6 @@ public class EffectManager : Singleton<EffectManager>
         //}
 
         effectPoolDictionary.Add(pool.effectName, effectPool);
-
-        if (!effectPositionOffset.ContainsKey(pool.effectName))
-        {
-            effectPositionOffset.Add(pool.effectName, pool.effectOffset);
-        }
     }
 
     private GameObject InstantiateNewEffect(string effectName)
@@ -129,7 +148,7 @@ public class EffectManager : Singleton<EffectManager>
     {
         yield return new WaitForSeconds(delay);
         effectObject.SetActive(false);
+        effectObject.transform.rotation = Quaternion.identity;
         effectPoolDictionary[effectName].Enqueue(effectObject);
     }
-
 }

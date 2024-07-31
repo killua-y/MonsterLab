@@ -2308,75 +2308,57 @@ MonoBehaviour:
   effectPools:
   - effectName: BlueSummonEffect
     effectPrefab: {fileID: 7262954323220977303, guid: 5be058401d13a43559bf5447fabb8169, type: 3}
-    effectOffset: {x: 0, y: 0.2}
     poolSize: 5
   - effectName: RedSummonEffect
     effectPrefab: {fileID: 3614092763505419025, guid: 379f79f2e19c447008d881cfee938b36, type: 3}
-    effectOffset: {x: 0, y: 0.2}
     poolSize: 5
   - effectName: HealthBuffEffect
     effectPrefab: {fileID: 1674961216424087398, guid: 63bc763d559e446c790c568803bc3e71, type: 3}
-    effectOffset: {x: 0, y: 0}
     poolSize: 3
   - effectName: AttackBuffEffect
     effectPrefab: {fileID: 5741646200808359971, guid: 6f9d4c634b2954119939f76ec59d378c, type: 3}
-    effectOffset: {x: 0, y: 0}
     poolSize: 3
   - effectName: FireBallEffect
     effectPrefab: {fileID: 3362272375853800422, guid: c5d0a665ce6c14fc59353e5675e71c35, type: 3}
-    effectOffset: {x: 0, y: 0.4}
     poolSize: 2
   - effectName: BloodEffect1
     effectPrefab: {fileID: 5518575529806666310, guid: 867bd9a3c8931472dbf518d6699af9ef, type: 3}
-    effectOffset: {x: 0, y: 0}
     poolSize: 10
   - effectName: BloodEffect2
     effectPrefab: {fileID: 2497304001639458482, guid: cb8df748ff0034c0e95ac3492d84dbac, type: 3}
-    effectOffset: {x: 0, y: 0}
     poolSize: 10
   - effectName: BloodEffect3
     effectPrefab: {fileID: 4689055894372767570, guid: ad878a5d3e45f4860a4152ffb8f7e9ca, type: 3}
-    effectOffset: {x: 0, y: 0}
     poolSize: 10
   - effectName: GroundHitMid
     effectPrefab: {fileID: 3324698191117864487, guid: 2b22215a47c32446e81f69f8b0e0a7b9, type: 3}
-    effectOffset: {x: 0, y: -0.12}
     poolSize: 6
   - effectName: GroundHitSmall
     effectPrefab: {fileID: 5063655489639814108, guid: bf04fd2b2460943a497d885c7be27db2, type: 3}
-    effectOffset: {x: 0, y: -0.2}
     poolSize: 6
   - effectName: AcidSlimeExplosion
     effectPrefab: {fileID: 1096780308493530299, guid: 02850e26052944484a39c14c47fb811e, type: 3}
-    effectOffset: {x: 0, y: 0}
     poolSize: 5
   - effectName: SlashBlue
     effectPrefab: {fileID: 900690576181173533, guid: b40d92092557c4aa694a139ce7d58f12, type: 3}
-    effectOffset: {x: 0, y: 0}
     poolSize: 6
   - effectName: MagicHitPurple
     effectPrefab: {fileID: 2410790212180413244, guid: aab9a64458ca4404b982ddce28bdbf11, type: 3}
-    effectOffset: {x: 0, y: 0}
     poolSize: 2
   - effectName: PawSlashRed
     effectPrefab: {fileID: 24232550762357791, guid: 8601b0b2a6ca44045be0834e0b73e785, type: 3}
-    effectOffset: {x: 0, y: 0}
     poolSize: 2
   - effectName: SwordSlashRed
     effectPrefab: {fileID: 5910661398878755946, guid: 9baf04a70303f4097ba78f8a8eba59c2, type: 3}
-    effectOffset: {x: 0, y: 0}
     poolSize: 2
   - effectName: BluntAttackRed
     effectPrefab: {fileID: 7727991531165572636, guid: c849bd01e385749679dbf0be21861854, type: 3}
-    effectOffset: {x: 0, y: 0}
     poolSize: 2
   - effectName: ArrowSlashGreen
     effectPrefab: {fileID: 366402201543904285, guid: 953e3382952784ab886a33953a3bcc97, type: 3}
-    effectOffset: {x: 0, y: 0}
     poolSize: 2
-  - effectName: ArrowSlashGreen
-    effectPrefab: {fileID: 5054269476163657305, guid: d0f551d746c08471abb17a6e03eda9d1, type: 3}
-    effectOffset: {x: 0.5, y: 0}
+  - effectName: FireBallExplosionBlue
+    effectPrefab: {fileID: 2256218324427061079, guid: d0f551d746c08471abb17a6e03eda9d1, type: 3}
     poolSize: 2
 --- !u!1 &308408992
 GameObject:

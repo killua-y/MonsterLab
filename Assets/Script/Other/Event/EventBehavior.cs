@@ -120,14 +120,22 @@ public class EventBehavior : MonoBehaviour
 [System.Serializable]
 public class QuestionMarkEvent
 {
+    public EventType eventType;
     public string name;
     public int layer;
     public string scriptLocation;
 
-    public QuestionMarkEvent(string _name, int _layer, string _scriptLocation)
+    public QuestionMarkEvent(EventType _eventType, string _name, int _layer, string _scriptLocation)
     {
+        eventType = _eventType;
         this.name = _name;
         this.layer = _layer;
         this.scriptLocation = _scriptLocation;
     }
+}
+
+public enum EventType
+{
+    Event,
+    BaseUnitEvent
 }

@@ -258,7 +258,7 @@ public class MapLayout : MonoBehaviour
         List<BoxType> FrontBoxTypes = new List<BoxType>
         {
             BoxType.Events, BoxType.Events, BoxType.Events,
-            BoxType.Events, BoxType.Events, BoxType.Events,
+            BoxType.Events, BoxType.BaseUnitEvents, BoxType.BaseUnitEvents,
         };
 
         HelperFunction.Shuffle(FrontBox, mapRand);
@@ -267,7 +267,6 @@ public class MapLayout : MonoBehaviour
         {
             FrontBox[i].SetupBox(FrontBoxTypes[i]);
         }
-
 
         // 后半地图格子随机赋值
         List<BoxType> BackBoxTypes = new List<BoxType>
