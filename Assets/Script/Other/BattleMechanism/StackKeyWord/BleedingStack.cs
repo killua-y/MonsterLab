@@ -48,7 +48,11 @@ public class BleedingStack : MonoBehaviour
         // 施加流血伤害
         equipedMonster.TakeDamage(stackAmount * 2, DamageType.Bleeding);
 
-
+        // 再次触发
+        if (BleedingTriggerTwice.canActiveTwice)
+        {
+            equipedMonster.TakeDamage(stackAmount * 2, DamageType.Bleeding);
+        }
     }
 
     private void OnDestroy()

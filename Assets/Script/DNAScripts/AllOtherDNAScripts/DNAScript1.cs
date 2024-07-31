@@ -246,26 +246,11 @@ public class CombatStartDrawCard : DNABehavior
 // 流血伤害触发两次
 public class BleedingTriggerTwice : DNABehavior
 {
-    private bool canActive = true;
+    public static bool canActiveTwice = false;
 
     void Start()
     {
-        InGameStateManager.Instance.OnCombatStart += OnCombatStart;
-        InGameStateManager.Instance.OnPreparePhaseStart += OnPreparePhaseStart;
-    }
-
-    void OnCombatStart()
-    {
-        canActive = true;
-    }
-
-    void OnPreparePhaseStart()
-    {
-        if (canActive)
-        {
-            InGameStateManager.Instance.DrawCards(DNAModel.effectData);
-            canActive = false;
-        }
+        canActiveTwice = true;
     }
 }
 
