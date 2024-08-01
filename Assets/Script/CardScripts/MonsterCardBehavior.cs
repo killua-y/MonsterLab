@@ -59,6 +59,7 @@ public class MonsterCardBehavior : CardBehavior
     {
         List<Tile> clickedTiles = new List<Tile>();
         InGameStateManager.gamePased = true;
+        CanvasManager.Instance.ShowIndicationText("Select the monster to be the tribute 0/" + n);
 
         while (clickedTiles.Count < n)
         {
@@ -72,6 +73,7 @@ public class MonsterCardBehavior : CardBehavior
                     {
                         clickedTile.SetHighlight(false, true);
                         clickedTiles.Remove(clickedTile);
+                        CanvasManager.Instance.ShowIndicationText("Select the monster to be the tribute " + clickedTiles.Count + "/" + n);
                     }
                     else
                     {
@@ -81,6 +83,7 @@ public class MonsterCardBehavior : CardBehavior
                         {
                             clickedTile.SetHighlight(true, true);
                             clickedTiles.Add(clickedTile);
+                            CanvasManager.Instance.ShowIndicationText("Select the monster to be the tribute " + clickedTiles.Count + "/" + n);
                         }
                     }
                 }
@@ -94,6 +97,7 @@ public class MonsterCardBehavior : CardBehavior
                 }
 
                 InGameStateManager.gamePased = false;
+                CanvasManager.Instance.HideIndicationText();
                 yield break;
             }
 
@@ -106,6 +110,7 @@ public class MonsterCardBehavior : CardBehavior
         }
 
         InGameStateManager.gamePased = false;
+        CanvasManager.Instance.HideIndicationText();
 
         // 召唤
         sacrfices = new List<BaseEntity>();

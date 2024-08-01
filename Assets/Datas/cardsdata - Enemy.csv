@@ -4,9 +4,19 @@ m,0,Slime,black,normal,0,PlayerEmptyTile,0,Normal Enemy,none,MonsterCardPicture/
 m,1,Acid Slime,black,normal,0,PlayerEmptyTile,0,Normal Enemy,none,MonsterCardPicture/AcidSlime,0,Slime,5,10,5,0,MonsterPrefab/Slime/AcidSlime,,,AcidSlimeEnemy + MotherSlimeEnemy
 m,2,Black Slime,black,normal,0,PlayerEmptyTile,0,Normal Enemy,none,MonsterCardPicture/BlackSlime,0,Slime,2,100,1.5,0,MonsterPrefab/Slime/StoneSlime,,,BlackSlimeEnemy+ArcherEnemy
 m,3,Fire Slime,black,normal,0,PlayerEmptyTile,0,Normal Enemy,none,,0,Slime,10,30,1.5,0,MonsterPrefab/Slime/FireSlime,,,BlackSlimeEnemy
-m,4,Archer,black,rare,0,PlayerEmptyTile,200,Mana 30: Next attack deal 200% attack damage.,none,,0,None,20,60,5,30,,SilvermaneSkill,,ArcherEnemy
+m,4,Archer,black,rare,0,PlayerEmptyTile,200,Mana 30: Next attack deal 200% attack damage.,none,,0,None,20,60,5,30,MonsterPrefab/HalfHuman/Archer,SilvermaneSkill,,ArcherEnemy
 m,5,Bomb Carrier,black,normal,0,PlayerEmptyTile,200,Upon Death: Deal 200% attack damage to opponent within 8 blocks.,BombCarrierEntity,,0,None,5,10,1.5,0,,,,BombCarrierEnemy
 m,6,Queen Slime,black,normal,0,PlayerEmptyTile,1,Round Start: Summon one 5/10 acid slime,MotherSlimeEntity,,0,Slime,5,100,1.5,0,MonsterPrefab/Slime/QueenSlime,,,MotherSlimeEnemy
 m,7,Slave,black,normal,0,PlayerEmptyTile,0,Normal Enemy,none,,0,None,10,60,1.5,0,MonsterPrefab/HalfHuman/Slave,,,BombCarrierEnemy
 m,8,Bleed Wolf,black,Legend,3,PlayerEmptyTile,47,Slay: Add One Wound Card In your draw Pile,BleedWolfEntity,,3,Wolf,30,400,1.5,0,MonsterPrefab/Wolf/FireWolf,,,BleedWolfEnemy
 m,9,Bomb Carrier Generator,black,rare,0,PlayerEmptyTile,5,Round Start: Summon one Bomb Carrier.,BombMonsterGeneratorEntity,,0,None,0,100,1.5,0,,,,BombCarrierEnemy
+m,10,Tempered Slime,black,normal,0,PlayerEmptyTile,0,Normal Enemy,none,MonsterCardPicture/slime,0,Slime,5,50,1.5,0,MonsterPrefab/Slime/GreenSlime,,,AcidSlimeEnemy
+m,11,Tempered Acid Slime,black,normal,0,PlayerEmptyTile,0,Normal Enemy,none,MonsterCardPicture/AcidSlime,0,Slime,5,10,5,0,MonsterPrefab/Slime/AcidSlime,,,AcidSlimeEnemy + MotherSlimeEnemy
+m,12,Tempered Black Slime,black,normal,0,PlayerEmptyTile,0,Normal Enemy,none,MonsterCardPicture/BlackSlime,0,Slime,2,100,1.5,0,MonsterPrefab/Slime/StoneSlime,,,BlackSlimeEnemy+ArcherEnemy
+m,13,Tempered Fire Slime,black,normal,0,PlayerEmptyTile,0,Normal Enemy,none,,0,Slime,10,30,1.5,0,MonsterPrefab/Slime/FireSlime,,,BlackSlimeEnemy
+m,14,Tempered Archer,black,rare,0,PlayerEmptyTile,200,Mana 30: Next attack deal 200% attack damage.,none,,0,None,20,60,5,30,MonsterPrefab/HalfHuman/Archer,SilvermaneSkill,,ArcherEnemy
+m,15,Tempered Bomb Carrier,black,normal,0,PlayerEmptyTile,200,Upon Death: Deal 200% attack damage to opponent within 8 blocks.,BombCarrierEntity,,0,None,5,10,1.5,0,,,,BombCarrierEnemy
+m,16,Tempered Queen Slime,black,normal,0,PlayerEmptyTile,11,Round Start: Summon one 5/10 acid slime,MotherSlimeEntity,,0,Slime,5,100,1.5,0,MonsterPrefab/Slime/QueenSlime,,,MotherSlimeEnemy
+m,17,Tempered Slave,black,normal,0,PlayerEmptyTile,0,Normal Enemy,none,,0,None,10,60,1.5,0,MonsterPrefab/HalfHuman/Slave,,,BombCarrierEnemy
+m,18,Tempered Bleed Wolf,black,Legend,3,PlayerEmptyTile,47,Slay: Add One Wound Card In your draw Pile,BleedWolfEntity,,3,Wolf,30,400,1.5,0,MonsterPrefab/Wolf/FireWolf,,,BleedWolfEnemy
+m,19,Tempered Bomb Carrier Generator,black,rare,0,PlayerEmptyTile,15,Round Start: Summon one Bomb Carrier.,BombMonsterGeneratorEntity,,0,None,0,100,1.5,0,,,,BombCarrierEnemy

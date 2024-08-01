@@ -49,7 +49,7 @@ public class BleedingStack : MonoBehaviour
         equipedMonster.TakeDamage(stackAmount * 2, DamageType.Bleeding);
 
         // 再次触发
-        if (BleedingTriggerTwice.canActiveTwice)
+        if (BleedingTriggerTwiceDNABehavior.canActiveTwice)
         {
             equipedMonster.TakeDamage(stackAmount * 2, DamageType.Bleeding);
         }

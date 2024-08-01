@@ -151,7 +151,7 @@ public class DrawCardIfCastSpellDNA : DNABehavior
 // 每回合召唤的第一只怪兽获得攻击力生命值提升
 public class FirstMonsterBuffDNA : DNABehavior
 {
-    private bool isFirst = true;
+    private bool isFirst = false;
 
     void Start()
     {
@@ -176,6 +176,11 @@ public class FirstMonsterBuffDNA : DNABehavior
 
     void OnPreparePhaseStart()
     {
+        Invoke("OnPreparePhaseStartHelper", 0);
+    }
+
+    void OnPreparePhaseStartHelper()
+    {
         isFirst = true;
     }
 }
@@ -187,7 +192,7 @@ public class PiggyBankDNABehavior : MonoBehaviour
 }
 
 // 每场战斗第一个回合获得两点能量
-public class CombatStartGainEnergy : DNABehavior
+public class CombatStartGainEnergyDNABehavior : DNABehavior
 {
     private bool canActive = true;
 
@@ -218,7 +223,7 @@ public class CombatStartGainEnergy : DNABehavior
 }
 
 // 每场战斗第一个回合抽3张牌
-public class CombatStartDrawCard : DNABehavior
+public class CombatStartDrawCardDNABehavior : DNABehavior
 {
     private bool canActive = true;
 
@@ -244,7 +249,7 @@ public class CombatStartDrawCard : DNABehavior
 }
 
 // 流血伤害触发两次
-public class BleedingTriggerTwice : DNABehavior
+public class BleedingTriggerTwiceDNABehavior : DNABehavior
 {
     public static bool canActiveTwice = false;
 
@@ -254,3 +259,38 @@ public class BleedingTriggerTwice : DNABehavior
     }
 }
 
+// 每场战斗第一个回合召唤两只史莱姆
+public class CombatStartSummonSlimeDNABehavior : DNABehavior
+{
+    private bool canActive;
+
+    void Start()
+    {
+        canActive = false;
+        InGameStateManager.Instance.OnCombatStart += OnCombatStart;
+        InGameStateManager.Instance.OnPreparePhaseStart += OnPreparePhaseStart;
+    }
+
+    void OnCombatStart()
+    {
+        canActive = true;
+    }
+
+    void OnPreparePhaseStart()
+    {
+        if (canActive)
+        {
+            for (int i = 0; i < DNAModel.effectData; i++)
+            {
+                SummonSlime();
+            }
+            canActive = false;
+        }
+    }
+
+    void SummonSlime()
+    {
+        MonsterCard Slime = (MonsterCard)Card.CloneCard(CardDataModel.Instance.GetCard(17));
+        BattleManager.Instance.InstaniateMontser(GridManager.Instance.GetFreeNode(2, 3, true), Team.Player, Slime);
+    }
+}

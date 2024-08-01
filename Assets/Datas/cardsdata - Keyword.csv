@@ -10,3 +10,4 @@
 8,Strike,Effect triggers when monster's attack deal damage.
 9,Bleeding,At the end of the battle phase. Deal damage equal to the number of stacks times 2.
 10,Unceasing,Draw one card after this card is played.
+11,Block,All incoming damage is reduced by number of stacks.

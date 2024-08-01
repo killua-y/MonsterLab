@@ -95,9 +95,7 @@ public class MonsterUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
     public void UpdateUI(MonsterCard cardModel)
     {
         healthBar.maxValue = cardModel.healthPoint;
-        healthBar.value = cardModel.healthPoint;
         attackText.text = cardModel.attackPower + "";
-        healthText.text = cardModel.healthPoint + "";
     }
 
     public void UpdateManaUI(int maxAmount, int currentAmount)

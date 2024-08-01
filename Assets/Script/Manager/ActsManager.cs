@@ -275,7 +275,6 @@ public class ActsManager : Singleton<ActsManager>
                 QuestionMarkEvent currentEvent = FindEvent(EventType.Event, currentLayer);
                 eventsEncountered.Add(currentEvent);
                 eventManager.LoadEvent(currentEvent.scriptLocation);
-                //eventManager.LoadEvent("Layer2IncreaseStatesForBase");
                 break;
 
             case BoxType.BaseUnitEvents:

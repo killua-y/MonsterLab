@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using static Card;
 using System;
+using UnityEngine;
 
 // 复制卡牌事件
 public class CopyCardEvent : EventBehavior
@@ -120,6 +121,114 @@ public class ForgeWeaponEvent : EventBehavior
         foreach (Card card in cards)
         {
             card.cost -= 1;
+        }
+
+        SetUpLeaveEventScene(startSceneImageLocation, eventText2);
+    }
+}
+
+// 增强怪兽卡事件
+public class Layer2EnhanceMonsterEvent : EventBehavior
+{
+    protected override string startSceneEventText { get; set; } = "Choose one of your monster gain one of the following effect.";
+
+    protected override List<string> startSceneOptionsText { get; set; } = new List<string>()
+    {
+        "Increase 15 attack and 120 health.",
+        "Equip one item card: Strike: Increase 2 attack damage",
+        "Equip one item card: Defend: Increase 2 attack damage",
+        "Leave"
+    };
+
+    protected override string startSceneImageLocation { get; set; } = "";
+
+    protected override void bindAction()
+    {
+        startSceneOptionsAction = new List<Action>()
+        {
+            Option1,
+            Option2,
+            Option3,
+            LeaveEvent
+        };
+    }
+
+    // LeaveSene
+    private string eventText2 = "Your unit has become stronger.";
+
+    protected override bool CheckOptionValidity(string _optionText)
+    {
+        if (_optionText == startSceneOptionsText[0])
+        {
+            if (GetMonsterCardHelper().Count < 1)
+            {
+                return false;
+            }
+        }
+        else if (_optionText == startSceneOptionsText[1])
+        {
+            if (GetMonsterCardHelper().Count < 1)
+            {
+                return false;
+            }
+        }
+        else if (_optionText == startSceneOptionsText[2])
+        {
+            return false;
+        }
+
+        return base.CheckOptionValidity();
+    }
+
+    private void Option1()
+    {
+        FindAnyObjectByType<CardSelectPanelBehavior>().SelectCardFromDeck(GetMonsterCardHelper(), 1, IncreaseAttackHelper);
+    }
+
+    private void Option2()
+    {
+        FindAnyObjectByType<CardSelectPanelBehavior>().SelectCardFromDeck(GetMonsterCardHelper(), 1, ApplyStrike2Helper);
+    }
+
+    private void Option3()
+    {
+        Debug.Log("do nothing");
+    }
+
+    private List<Card> GetMonsterCardHelper()
+    {
+        List<Card> MonsterCards = new List<Card>();
+
+        foreach (Card card in CardDataModel.Instance.GetPlayerDeck())
+        {
+            if (card is MonsterCard)
+            {
+                MonsterCards.Add(card);
+            }
+        }
+
+        return MonsterCards;
+    }
+
+    private void IncreaseAttackHelper(List<Card> cards)
+    {
+        foreach (Card card in cards)
+        {
+            MonsterCard monsterCard = (MonsterCard)card;
+            monsterCard.attackPower += 15;
+            monsterCard.healthPoint += 120;
+        }
+
+        SetUpLeaveEventScene(startSceneImageLocation, eventText2);
+    }
+
+    private void ApplyStrike2Helper(List<Card> cards)
+    {
+        foreach (Card card in cards)
+        {
+            MonsterCard monsterCard = (MonsterCard)card;
+            Card newItemCard = CardDataModel.Instance.GetCard(30);
+            monsterCard.equippedCard.Add(newItemCard);
         }
 
         SetUpLeaveEventScene(startSceneImageLocation, eventText2);
