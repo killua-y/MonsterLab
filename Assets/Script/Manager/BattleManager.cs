@@ -66,7 +66,7 @@ public class BattleManager : Singleton<BattleManager>
             }
             else
             {
-                modelPath = "MonsterPrefab/Slime";
+                modelPath = "MonsterPrefab/Slime/GreenSlime";
             }
         }
 

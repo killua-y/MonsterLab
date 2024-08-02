@@ -90,11 +90,6 @@ public class HelperFunction : MonoBehaviour
                 cost, castType, effectData, effectText, scriptLocation, imageLocation,
                 rank, type, attackPower, healthPoint, attackRange, mana, modelLocation,
                 skillScriptLocation, smallIconLocation);
-
-            if (resultCard.cardName == "Frost Fang")
-            {
-                Debug.Log("Load card :" + rowArray[17]);
-            }
         }
         else if (rowArray[0] == "s")
         {

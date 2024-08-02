@@ -11,6 +11,7 @@ public class ActsManager : Singleton<ActsManager>
     private string textEnemyAndEventDataPath = "/Datas/cardsdata - EventAndEnemy.csv";
 
     // 涉及玩家存档
+    private string playerDataLocation = "/Datas/InGameData/playerData.json";
     public static int currentLayer;
     public static int step;
     private bool startCurrentAct;
@@ -245,6 +246,7 @@ public class ActsManager : Singleton<ActsManager>
                 currentBoxType = _boxType;
                 newEnemy = FindEnemy(currentLayer, EnemyType.Normal);
                 currentEnemy = newEnemy.scriptLocation;
+                currentEnemy = "BombCarrierEnemy";
                 enemiesEncountered.Add(newEnemy);
 
                 InGameStateManager.Instance.CombatStart();
@@ -327,5 +329,20 @@ public class ActsManager : Singleton<ActsManager>
         }
 
         saveAndLoadManager.SaveData();
+    }
+
+    public void GameOver()
+    {
+        string path = Application.dataPath + playerDataLocation;
+        // Check if the file exists
+        if (File.Exists(path))
+        {
+            // Delete the file
+            File.Delete(path);
+            path = path + ".meta";
+            File.Delete(path);
+        }
+
+        SceneManager.LoadScene("MainMenu");
     }
 }

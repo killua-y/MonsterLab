@@ -29,6 +29,9 @@ public class BombCarrierEntity : BaseEntity
             float damage = ((float)cardModel.effectData / 100) * cardModel.attackPower;
             int intDamage = (int)damage;
 
+            // 爆炸特效
+            EffectManager.Instance.PlayEffect("BoomerExplosion", this.transform.position);
+
             // 对每个敌人造成爆炸伤害
             foreach (BaseEntity e in entitys)
             {

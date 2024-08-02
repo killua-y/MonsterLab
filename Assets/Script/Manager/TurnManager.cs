@@ -160,6 +160,7 @@ public class TurnManager : MonoBehaviour
             else
             {
                 Debug.Log("GameOver");
+                ActsManager.Instance.GameOver();
             }
 
             // 添加一个以玩家生命值为代价的额外回合
