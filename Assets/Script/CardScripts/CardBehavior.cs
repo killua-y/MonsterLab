@@ -125,7 +125,6 @@ public class CardBehavior : MonoBehaviour
         targetMonster = node.currentEntity;
 
         // 合法，释放卡牌效果
-        //Debug.Log("Cast Card: " + card.cardName);
         CastCard(node);
 
         // 释放结束
@@ -154,6 +153,12 @@ public class CardBehavior : MonoBehaviour
 
     public virtual void CastComplete(Node node)
     {
+        // 查看卡牌是否有附加效果
+        if (cardModel.keyWords.Contains("Unceasing"))
+        {
+            InGameStateManager.Instance.DrawOneCard();
+        }
+
         // 消耗费用
         playerCostManager.DecreaseCost(cardModel.cost);
 

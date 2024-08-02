@@ -138,6 +138,7 @@ public class BaseEntity : MonoBehaviour
         }
 
         // 最后再update一次UI
+        RestoreAllHealth();
         UpdateMonster();
     }
     
@@ -339,6 +340,7 @@ public class BaseEntity : MonoBehaviour
 
         // 播放自己收到伤害的action
         OnTakingDamage?.Invoke(amount, damageType, from);
+
         if (currentHealth < amount)
         {
             BattleManager.Instance.UnitTakingDamage(currentHealth, damageType, from, this);

@@ -29,6 +29,10 @@ public class CanvasManager : Singleton<CanvasManager>
     public Transform drawPileParent;
     public Transform discardPileParent;
 
+    // 用于展示提示
+    [Header("Other")]
+    public TextMeshProUGUI IndicationText;
+
     private void Start()
     {
         InGameStateManager.Instance.OnCombatEnd += OnCombatEnd;
@@ -215,5 +219,16 @@ public class CanvasManager : Singleton<CanvasManager>
             HideAllOtherPanel();
             InGameStateManager.Instance.ShowDiscardPile();
         }
+    }
+
+    public void ShowIndicationText(string textString)
+    {
+        IndicationText.text = textString;
+        IndicationText.gameObject.SetActive(true);
+    }
+
+    public void HideIndicationText()
+    {
+        IndicationText.gameObject.SetActive(false);
     }
 }

@@ -3,6 +3,8 @@ using UnityEngine;
 public class Bullet : MonoBehaviour
 {
     public float speed = 10f;
+    public string ShootEffect;
+    public string ExplosionEffect;
     private BaseEntity target;
     private int damage;
     private BaseEntity attacker;
@@ -12,6 +14,12 @@ public class Bullet : MonoBehaviour
         this.target = target;
         this.damage = damage;
         this.attacker = attacker;
+
+        // 播放生成特效
+        if ((ShootEffect != null) && (ShootEffect != ""))
+        {
+            EffectManager.Instance.PlayEffect(ShootEffect, transform.position);
+        }
     }
 
     public void Initialize(BaseEntity target, BaseEntity attacker)
@@ -32,6 +40,10 @@ public class Bullet : MonoBehaviour
         Vector3 direction = (target.transform.position - transform.position).normalized;
         transform.position += direction * speed * Time.deltaTime;
 
+        // Rotate the bullet to face the target
+        float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+        transform.rotation = Quaternion.Euler(new Vector3(0, 0, angle));
+
         // Check if bullet has reached the target
         if (Vector3.Distance(transform.position, target.transform.position) < 0.1f)
         {
@@ -49,7 +61,18 @@ public class Bullet : MonoBehaviour
                 }
             }
 
-            Destroy(gameObject);
+            Finish();
         }
+    }
+
+    void Finish()
+    {
+        // 播放结束爆炸特效
+        if ((ExplosionEffect != null) && (ExplosionEffect != ""))
+        {
+            EffectManager.Instance.PlayEffect(ExplosionEffect, transform.position, transform.rotation);
+        }
+
+        Destroy(gameObject);
     }
 }

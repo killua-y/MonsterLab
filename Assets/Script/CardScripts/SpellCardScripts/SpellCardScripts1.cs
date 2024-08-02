@@ -8,6 +8,7 @@ public class FireBallCardBehavior : CardBehavior
 {
     public override void CastCard(Node node)
     {
+        EffectManager.Instance.PlayEffect("FireBallEffect", targetMonster.transform.position);
         targetMonster.TakeDamage(cardModel.effectData, DamageType.Spell);
     }
 }

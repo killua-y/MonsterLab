@@ -129,7 +129,15 @@ public class ActsManager : Singleton<ActsManager>
                 int layer = int.Parse(rowArray[3]);
                 string scriptLocation = rowArray[4];
 
-                allEventList.Add(new QuestionMarkEvent(name, layer, scriptLocation));
+                allEventList.Add(new QuestionMarkEvent(EventType.Event, name, layer, scriptLocation));
+            }
+            else if (rowArray[0] == "baseUnitEvent")
+            {
+                string name = rowArray[2];
+                int layer = int.Parse(rowArray[3]);
+                string scriptLocation = rowArray[4];
+
+                allEventList.Add(new QuestionMarkEvent(EventType.BaseUnitEvent, name, layer, scriptLocation));
             }
             else
             {
@@ -204,13 +212,13 @@ public class ActsManager : Singleton<ActsManager>
     }
 
     // 寻找一个当前layer的event
-    private QuestionMarkEvent FindEvent(int _layer)
+    private QuestionMarkEvent FindEvent(EventType eventType, int _layer)
     {
         QuestionMarkEvent eventFind = null;
 
         for (int i = 0; i < allEventList.Count; i++)
         {
-            if (allEventList[i].layer == _layer)
+            if ((allEventList[i].eventType == eventType) && (allEventList[i].layer == _layer))
             {
                 eventFind = allEventList[i];
                 allEventList.RemoveAt(i);
@@ -264,9 +272,15 @@ public class ActsManager : Singleton<ActsManager>
                 break;
 
             case BoxType.Events:
-                QuestionMarkEvent currentEvent = FindEvent(currentLayer);
+                QuestionMarkEvent currentEvent = FindEvent(EventType.Event, currentLayer);
                 eventsEncountered.Add(currentEvent);
                 eventManager.LoadEvent(currentEvent.scriptLocation);
+                break;
+
+            case BoxType.BaseUnitEvents:
+                QuestionMarkEvent currentBaseUnitEvent = FindEvent(EventType.BaseUnitEvent, currentLayer);
+                eventsEncountered.Add(currentBaseUnitEvent);
+                eventManager.LoadEvent(currentBaseUnitEvent.scriptLocation);
                 break;
 
             case BoxType.Merchant:
@@ -300,9 +314,10 @@ public class ActsManager : Singleton<ActsManager>
         // 当进入下一层
         if (currentBox.boxType == BoxType.BossFight)
         {
-            if (currentLayer >= 3)
+            if (currentLayer >= 2)
             {
                 Debug.Log("GameOver, You Win");
+                CanvasManager.Instance.ShowIndicationText("GameOver, You Win");
             }
 
             currentLayer += 1;

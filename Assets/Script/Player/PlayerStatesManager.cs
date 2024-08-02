@@ -34,7 +34,7 @@ public class PlayerStatesManager : Singleton<PlayerStatesManager>
             player.row = 3;
             player.column = 0;
             Gold = 100;
-            maxCost = 10;
+            maxCost = 3;
             playerHealthPoint = 3;
             maxUnit = 5;
             extraDeckCapacity = 3;

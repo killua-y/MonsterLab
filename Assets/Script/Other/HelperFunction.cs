@@ -90,6 +90,11 @@ public class HelperFunction : MonoBehaviour
                 cost, castType, effectData, effectText, scriptLocation, imageLocation,
                 rank, type, attackPower, healthPoint, attackRange, mana, modelLocation,
                 skillScriptLocation, smallIconLocation);
+
+            if (resultCard.cardName == "Frost Fang")
+            {
+                Debug.Log("Load card :" + rowArray[17]);
+            }
         }
         else if (rowArray[0] == "s")
         {
@@ -185,5 +190,19 @@ public class HelperFunction : MonoBehaviour
             }
         }
         return input;
+    }
+
+    // Helper method 给一张卡增加关键词
+    public static Card AddKeyWordToCard(Card card, String keyWord)
+    {
+        if (card.effectText.Contains("Normal Monster"))
+        {
+            card.effectText = "";
+        }
+
+        card.effectText = $"<b><color=#FFA500>{keyWord}</color></b>" + " " + card.effectText;
+
+        card.keyWords.Add(keyWord);
+        return card;
     }
 }

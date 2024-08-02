@@ -8,14 +8,18 @@ using static Card;
 
 public class MonsterUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
-    // 怪兽UI部分
-    public Slider healthBar;
-    public Slider manaBar;
-    public TextMeshProUGUI healthText;
-    public TextMeshProUGUI attackText;
-    private Image fillImage;
+    // public 部分
     public GameObject bullet;
     public Transform attackOrgan;
+
+    // 怪兽UI部分
+    private Canvas MonsterCanvas;
+    private Slider healthBar;
+    private Slider manaBar;
+    private TextMeshProUGUI healthText;
+    private TextMeshProUGUI attackText;
+    private Transform StatusBar;
+    private GameObject StatusUnit;
 
     private void Awake()
     {
@@ -23,6 +27,39 @@ public class MonsterUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
         if (bullet == null)
         {
             bullet = Resources.Load<GameObject>("MonsterPrefab/bullet");
+        }
+
+        // Get Status bar
+        MonsterCanvas = GetComponentInChildren<Canvas>();
+        StatusBar = MonsterCanvas.transform.GetChild(0);
+
+        // Get生命值bar和mana bar
+        Slider[] childSlider = GetComponentsInChildren<Slider>();
+        foreach (Slider slider in childSlider)
+        {
+            if (slider.gameObject.name == "HealthBar")
+            {
+                healthBar = slider;
+            }
+            else if (slider.gameObject.name == "ManaBar")
+            {
+                manaBar = slider;
+                manaBar.gameObject.SetActive(false);
+            }
+        }
+
+        // Get Text
+        TextMeshProUGUI[] childText = GetComponentsInChildren<TextMeshProUGUI>();
+        foreach (TextMeshProUGUI text in childText)
+        {
+            if (text.gameObject.name == "HealthText")
+            {
+                healthText = text;
+            }
+            else if (text.gameObject.name == "AttackText")
+            {
+                attackText = text;
+            }
         }
     }
 
@@ -39,6 +76,7 @@ public class MonsterUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
         canvasScale.x = 1f / newScale.x;
         canvasTransform.localScale = canvasScale;
 
+        Image fillImage;
         fillImage = healthBar.fillRect.GetComponent<Image>();
         fillImage.color = Color.red;
         DragMonster dragComponent = this.GetComponent<DragMonster>();
@@ -57,9 +95,7 @@ public class MonsterUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
     public void UpdateUI(MonsterCard cardModel)
     {
         healthBar.maxValue = cardModel.healthPoint;
-        healthBar.value = cardModel.healthPoint;
         attackText.text = cardModel.attackPower + "";
-        healthText.text = cardModel.healthPoint + "";
     }
 
     public void UpdateManaUI(int maxAmount, int currentAmount)
@@ -88,6 +124,25 @@ public class MonsterUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
     public void OnPointerExit(PointerEventData eventData)
     {
         CanvasManager.Instance.HideCardPreview();
+    }
+
+    public StatusUnitBehavior AddNewStatus()
+    {
+        if (StatusUnit == null)
+        {
+            StatusUnit = Resources.Load<GameObject>("UI/MonsterUI/StatusUnit");
+        }
+
+        if (StatusUnit != null)
+        {
+            StatusUnitBehavior newStatusUnit = Instantiate(StatusUnit, StatusBar).GetComponent<StatusUnitBehavior>();
+            return newStatusUnit;
+        }
+        else
+        {
+            Debug.Log("StatusUnit Prefab Missing, Please add to UI/MonsterUI/StatusUnit Under Resource");
+            return null;
+        }
     }
 
     private void OnDestroy()
