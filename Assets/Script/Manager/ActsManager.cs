@@ -314,9 +314,10 @@ public class ActsManager : Singleton<ActsManager>
         // 当进入下一层
         if (currentBox.boxType == BoxType.BossFight)
         {
-            if (currentLayer >= 3)
+            if (currentLayer >= 2)
             {
                 Debug.Log("GameOver, You Win");
+                CanvasManager.Instance.ShowIndicationText("GameOver, You Win");
             }
 
             currentLayer += 1;
