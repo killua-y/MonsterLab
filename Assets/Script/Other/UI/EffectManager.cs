@@ -76,7 +76,8 @@ public class EffectManager : Singleton<EffectManager>
         effectToPlay.transform.position = position;
         effectToPlay.SetActive(true);
 
-        StartCoroutine(ReturnEffectToPool(effectName, effectToPlay, effectToPlay.GetComponent<ParticleSystem>().main.duration));
+        StartCoroutine(ReturnEffectToPool(effectName, effectToPlay,
+            effectToPlay.GetComponent<ParticleSystem>().main.duration / effectToPlay.GetComponent<ParticleSystem>().main.simulationSpeed));
     }
 
     public void PlayEffect(string effectName, Vector2 position, Quaternion rotation)
@@ -103,7 +104,8 @@ public class EffectManager : Singleton<EffectManager>
         effectToPlay.transform.rotation = rotation;
         effectToPlay.SetActive(true);
 
-        StartCoroutine(ReturnEffectToPool(effectName, effectToPlay, effectToPlay.GetComponent<ParticleSystem>().main.duration));
+        StartCoroutine(ReturnEffectToPool(effectName, effectToPlay,
+            effectToPlay.GetComponent<ParticleSystem>().main.duration / effectToPlay.GetComponent<ParticleSystem>().main.simulationSpeed));
     }
 
     private void InitializeEffectPool(string effectName)
@@ -140,7 +142,6 @@ public class EffectManager : Singleton<EffectManager>
 
         GameObject newEffect = Instantiate(pool.effectPrefab);
         newEffect.SetActive(false);
-        effectPoolDictionary[effectName].Enqueue(newEffect);
         return newEffect;
     }
 

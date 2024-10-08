@@ -28,6 +28,7 @@ public class DamageCalculate : MonoBehaviour
 
     private void Start()
     {
+        InGameStateManager.Instance.OnCombatStart += OnCombatStart;
         InGameStateManager.Instance.OnBattlePhaseStart += OnBattlePhaseStart;
         InGameStateManager.Instance.OnPreparePhaseStart += OnPreparePhaseStart;
         BattleManager.Instance.OnUnitTakingDamage += OnUnitTakingDamage;
@@ -121,6 +122,19 @@ public class DamageCalculate : MonoBehaviour
         maxDealDamage = 0;
         takeDamageSliders = new Dictionary<BaseEntity, DamageSliderBehavior>();
         maxTakeDamage = 0;
+    }
+
+    void OnCombatStart()
+    {
+        foreach (Transform child in dealDamageBoard.transform)
+        {
+            Destroy(child.gameObject);
+        }
+
+        foreach (Transform child in takeDamageBoard.transform)
+        {
+            Destroy(child.gameObject);
+        }
     }
 
     public void ChangePosition()

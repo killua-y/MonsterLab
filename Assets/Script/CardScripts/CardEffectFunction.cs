@@ -7,6 +7,7 @@ public class CardEffectFunction : MonoBehaviour
     public static void IncreaseHealth(BaseEntity target, int amount)
     {
         target.cardModel.healthPoint += amount;
+        target.UpdateMonster();
         target.RestoreHealth(amount);
         EffectManager.Instance.PlayEffect("HealthBuffEffect", target.transform.position);
     }

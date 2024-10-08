@@ -2308,7 +2308,7 @@ MonoBehaviour:
   effectPools:
   - effectName: BlueSummonEffect
     effectPrefab: {fileID: 7262954323220977303, guid: 5be058401d13a43559bf5447fabb8169, type: 3}
-    poolSize: 5
+    poolSize: 3
   - effectName: RedSummonEffect
     effectPrefab: {fileID: 3614092763505419025, guid: 379f79f2e19c447008d881cfee938b36, type: 3}
     poolSize: 5
@@ -2359,6 +2359,9 @@ MonoBehaviour:
     poolSize: 2
   - effectName: FireBallExplosionBlue
     effectPrefab: {fileID: 2256218324427061079, guid: d0f551d746c08471abb17a6e03eda9d1, type: 3}
+    poolSize: 2
+  - effectName: BoomerExplosion
+    effectPrefab: {fileID: 5986613139647341428, guid: d8267175e9462427fa8bd24c680ec2e1, type: 3}
     poolSize: 2
 --- !u!1 &308408992
 GameObject:
@@ -5955,7 +5958,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &750278124
 RectTransform:
   m_ObjectHideFlags: 0

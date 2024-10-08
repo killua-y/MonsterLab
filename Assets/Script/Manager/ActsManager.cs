@@ -11,6 +11,7 @@ public class ActsManager : Singleton<ActsManager>
     private string textEnemyAndEventDataPath = "/Datas/cardsdata - EventAndEnemy.csv";
 
     // 涉及玩家存档
+    private string playerDataLocation = "/Datas/InGameData/playerData.json";
     public static int currentLayer;
     public static int step;
     private bool startCurrentAct;
@@ -324,8 +325,24 @@ public class ActsManager : Singleton<ActsManager>
             step = 0;
 
             mapLayout.EnterNewLayer();
+            Debug.Log("CurrentLayer is " + currentLayer);
         }
 
         saveAndLoadManager.SaveData();
+    }
+
+    public void GameOver()
+    {
+        string path = Application.dataPath + playerDataLocation;
+        // Check if the file exists
+        if (File.Exists(path))
+        {
+            // Delete the file
+            File.Delete(path);
+            path = path + ".meta";
+            File.Delete(path);
+        }
+
+        SceneManager.LoadScene("MainMenu");
     }
 }

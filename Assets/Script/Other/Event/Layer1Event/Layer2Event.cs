@@ -122,7 +122,6 @@ public class ForgeWeaponEvent : EventBehavior
         {
             card.cost -= 1;
         }
-
         SetUpLeaveEventScene(startSceneImageLocation, eventText2);
     }
 }

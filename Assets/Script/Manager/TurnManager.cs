@@ -32,6 +32,7 @@ public class TurnManager : MonoBehaviour
     {
         // 加载当前战斗敌人
         LoadEnemy(ActsManager.currentEnemy);
+        Debug.Log("Combat start against enemy" + ActsManager.currentEnemy);
     }
 
     void PassTheBattle()
@@ -160,6 +161,7 @@ public class TurnManager : MonoBehaviour
             else
             {
                 Debug.Log("GameOver");
+                ActsManager.Instance.GameOver();
             }
 
             // 添加一个以玩家生命值为代价的额外回合

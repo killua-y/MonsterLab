@@ -1,10 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class PausedMenuBehavior : MonoBehaviour
 {
+
     public void OpenCanvas()
     {
         Time.timeScale = 0;
@@ -22,4 +24,6 @@ public class PausedMenuBehavior : MonoBehaviour
         this.gameObject.SetActive(false);
         Time.timeScale = 1;
     }
+
+
 }
