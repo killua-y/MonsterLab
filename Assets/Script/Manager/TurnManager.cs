@@ -32,6 +32,7 @@ public class TurnManager : MonoBehaviour
     {
         // 加载当前战斗敌人
         LoadEnemy(ActsManager.currentEnemy);
+        Debug.Log("Combat start against enemy" + ActsManager.currentEnemy);
     }
 
     void PassTheBattle()

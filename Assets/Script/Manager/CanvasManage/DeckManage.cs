@@ -77,6 +77,8 @@ public class DeckManage : Singleton<DeckManage>
             }
             else
             {
+                Debug.Log("extra deck contain: " + CardDataModel.Instance.GetExtraDeck().Count);
+                Debug.Log("capacity is: " + PlayerStatesManager.extraDeckCapacity);
                 Debug.Log("Extra Deck is full");
                 return;
             }

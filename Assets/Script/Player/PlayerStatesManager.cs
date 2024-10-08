@@ -38,6 +38,7 @@ public class PlayerStatesManager : Singleton<PlayerStatesManager>
             playerHealthPoint = 3;
             maxUnit = 5;
             extraDeckCapacity = 3;
+            Debug.Log("extraDeckCapacity is :" + extraDeckCapacity);
         }
         else
         {
@@ -74,6 +75,7 @@ public class PlayerStatesManager : Singleton<PlayerStatesManager>
             Gold = Gold,
             MaxCost = maxCost,
             MaxUnit = maxUnit,
+            ExtraDeckCapacity = extraDeckCapacity,
         };
     }
 

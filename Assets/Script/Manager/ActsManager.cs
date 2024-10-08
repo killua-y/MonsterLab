@@ -246,7 +246,6 @@ public class ActsManager : Singleton<ActsManager>
                 currentBoxType = _boxType;
                 newEnemy = FindEnemy(currentLayer, EnemyType.Normal);
                 currentEnemy = newEnemy.scriptLocation;
-                currentEnemy = "BombCarrierEnemy";
                 enemiesEncountered.Add(newEnemy);
 
                 InGameStateManager.Instance.CombatStart();
@@ -326,6 +325,7 @@ public class ActsManager : Singleton<ActsManager>
             step = 0;
 
             mapLayout.EnterNewLayer();
+            Debug.Log("CurrentLayer is " + currentLayer);
         }
 
         saveAndLoadManager.SaveData();
