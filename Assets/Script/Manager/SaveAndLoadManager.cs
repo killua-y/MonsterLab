@@ -38,7 +38,7 @@ public class SaveAndLoadManager : MonoBehaviour
     public void LoadNewGame()
     {
         PlayerData playerData = new PlayerData();
-        playerData.Seed = 2;
+        playerData.Seed = MainMenuBehavior.seed;
 
         CardDataModel.Instance.LoadDefaultCard();
         playerData.PlayerDNA = CardDataModel.Instance.GetPlayerDNA();

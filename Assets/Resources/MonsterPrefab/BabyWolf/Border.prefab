@@ -631,7 +631,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bullet: {fileID: 0}
   attackOrgan: {fileID: 0}
-  StatusUnit: {fileID: 0}
 --- !u!114 &4160733758733013920
 MonoBehaviour:
   m_ObjectHideFlags: 0
