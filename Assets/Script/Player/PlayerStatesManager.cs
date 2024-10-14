@@ -38,7 +38,6 @@ public class PlayerStatesManager : Singleton<PlayerStatesManager>
             playerHealthPoint = 3;
             maxUnit = 5;
             extraDeckCapacity = 3;
-            Debug.Log("extraDeckCapacity is :" + extraDeckCapacity);
         }
         else
         {

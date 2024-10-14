@@ -54,6 +54,8 @@ public class SaveAndLoadManager : MonoBehaviour
             string json = File.ReadAllText(path);
             playerData = JsonUtility.FromJson<PlayerData>(json);
         }
+        // 给主菜单static设置seed，从而让设置页面可以访问
+        MainMenuBehavior.seed = playerData.Seed;
 
         // 该顺序无法变化
         // 不需要其他script的loadData

@@ -4,12 +4,13 @@ using System.IO;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-using System.Text;
 using TMPro;
+using System;
 
 public class MainMenuBehavior : MonoBehaviour
 {
     public static int seed = 2;
+    public static string seedString;
     public static CardColor character = CardColor.Red;
 
     public GameObject continueButton;
@@ -32,6 +33,7 @@ public class MainMenuBehavior : MonoBehaviour
 
         usingInputSeed = false;
         seedToggle.onValueChanged.AddListener(OnToggleValueChanged);
+        seedInputField.onValueChanged.AddListener(ConvertToUppercase);
     }
 
     // 加载游戏
@@ -57,75 +59,104 @@ public class MainMenuBehavior : MonoBehaviour
         if (usingInputSeed)
         {
             seed = ConvertInputToSeed(seedInputField.text);
+            seedString = ToBase36(seed);
         }
         else
         {
-            seed = 4;
+            GenerateBase36Seed();
         }
 
         SceneManager.LoadScene("BattleScene");
     }
 
+    // 种子生成部分
     void OnToggleValueChanged(bool isOn)
     {
         if (isOn)
         {
-            Debug.Log("custom seed turned ON");
+            //Debug.Log("custom seed turned ON");
             usingInputSeed = true;
             seedInputField.gameObject.SetActive(true);
         }
         else
         {
-            Debug.Log("custom seed turned OFF");
+            //Debug.Log("custom seed turned OFF");
             usingInputSeed = false;
             seedInputField.gameObject.SetActive(false);
         }
     }
 
-    int ConvertInputToSeed(string input)
+    public int ConvertInputToSeed(string code)
     {
         int seed = 0;
+        int base36 = 36;
 
-        // Convert each character to its ASCII value or numeric value and sum them
-        foreach (char c in input)
+        // Ensure the input code is in lowercase to handle both 'a-z' uniformly
+        code = code.ToLower();
+
+        // Loop through each character in the input string
+        for (int i = 0; i < code.Length; i++)
         {
+            char c = code[i];
+
+            // Determine the numerical value of the character
+            int value;
             if (char.IsDigit(c))
             {
-                seed += c - '0';  // Convert character '0'-'9' to integer 0-9
+                value = c - '0';  // Convert '0'-'9' to 0-9
             }
             else if (char.IsLetter(c))
             {
-                seed += c;  // Use the ASCII value of the letter (both uppercase and lowercase)
+                value = c - 'a' + 10;  // Convert 'a'-'z' to 10-35
             }
+            else
+            {
+                throw new ArgumentException("Invalid character in seed code. Only 0-9 and a-z are allowed.");
+            }
+
+            // Accumulate the value by treating it as a 36-base number
+            seed = seed * base36 + value;
         }
 
         return seed;
     }
 
-    string ConvertSeedToString(int seed)
+    // Function to convert input text to uppercase
+    void ConvertToUppercase(string input)
     {
-        StringBuilder result = new StringBuilder();
-
-        // Convert the integer back to a string based on digit and ASCII values
-        while (seed > 0)
-        {
-            int value = seed % 128; // Use modulo to get a value in the ASCII range
-            seed /= 128; // Shift to the next character
-
-            if (value >= '0' && value <= '9') // Digits
-            {
-                result.Insert(0, (char)value); // Insert at the beginning of the string
-            }
-            else if ((value >= 'A' && value <= 'Z') || (value >= 'a' && value <= 'z')) // Letters
-            {
-                result.Insert(0, (char)value); // Insert at the beginning of the string
-            }
-            else
-            {
-                result.Insert(0, '_'); // Add an underscore or another symbol for invalid characters
-            }
-        }
-
-        return result.ToString();
+        seedInputField.text = input.ToUpper();  // Set text to uppercase
     }
+
+    public void GenerateBase36Seed()
+    {
+        // Generate a random integer value within the range [0, int.MaxValue]
+        int randomValue = UnityEngine.Random.Range(0, int.MaxValue);
+
+        seed = randomValue;
+
+        seedString = ToBase36(randomValue);
+        Debug.Log("Generated Base-36 Seed: " + seedString);
+    }
+
+
+    // Convert an int value to a base-36 string
+    private string ToBase36(int value)
+    {
+        int base36Length = 6;
+        const string chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
+        string result = string.Empty;
+
+        do
+        {
+            result = chars[value % 36] + result;
+            value /= 36;
+        } while (value > 0);
+
+        // Convert the random number to a base-36 string and pad with leading zeros
+        result = result.PadLeft(base36Length, '0');
+
+        return result;
+    }
+
 }
