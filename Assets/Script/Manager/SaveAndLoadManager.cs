@@ -38,7 +38,7 @@ public class SaveAndLoadManager : MonoBehaviour
     public void LoadNewGame()
     {
         PlayerData playerData = new PlayerData();
-        playerData.Seed = 2;
+        playerData.Seed = MainMenuBehavior.seed;
 
         CardDataModel.Instance.LoadDefaultCard();
         playerData.PlayerDNA = CardDataModel.Instance.GetPlayerDNA();
@@ -54,6 +54,8 @@ public class SaveAndLoadManager : MonoBehaviour
             string json = File.ReadAllText(path);
             playerData = JsonUtility.FromJson<PlayerData>(json);
         }
+        // 给主菜单static设置seed，从而让设置页面可以访问
+        MainMenuBehavior.seed = playerData.Seed;
 
         // 该顺序无法变化
         // 不需要其他script的loadData
@@ -74,7 +76,7 @@ public class SaveAndLoadManager : MonoBehaviour
         PlayerData playerData = new PlayerData();
 
         // 从各处script调用playerData里的数据
-        playerData.Seed = 2;
+        playerData.Seed = MainMenuBehavior.seed;
         playerData.randomState = gameSetting.SaveData();
         playerData.playerStates = PlayerStatesManager.Instance.SaveData();
         playerData.currentLayerBox = mapLayout.SaveData();

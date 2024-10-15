@@ -430,7 +430,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bullet: {fileID: 0}
   attackOrgan: {fileID: 0}
-  StatusUnit: {fileID: 0}
 --- !u!114 &4083443025410664840
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -479,7 +478,7 @@ Animator:
   m_GameObject: {fileID: 4083443025410664836}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: fe01c48e2820f45ef8245a60fdd8d04e, type: 2}
+  m_Controller: {fileID: 9100000, guid: 78be9952a2dbf49b4a0b2b417b73c7b0, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0

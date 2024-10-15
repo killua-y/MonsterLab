@@ -21,12 +21,15 @@ public class InGameStateManager : Singleton<InGameStateManager>
     public Transform drawPileParentContent;
     public Transform discardPileParent;
     public Transform discardPileParentContent;
+    public GameObject EndTurnButton;
 
     public Action OnCombatStart;
     public Action OnPreparePhaseStart;
     public Action OnPreparePhaseEnd;
     public Action OnBattlePhaseStart;
     public Action OnBattlePhaseEnd;
+
+    [Header("Button")]
     public Action OnCombatEnd;
 
     public Action<CardBehavior, BaseEntity> OnSpellCardPlayed;
@@ -34,6 +37,7 @@ public class InGameStateManager : Singleton<InGameStateManager>
 
     private InGameCardModel inGameCardModel;
 
+    [Header("CardHolder Text")]
     public TextMeshProUGUI DrawPileText;
     public TextMeshProUGUI DiscardPileText;
 
@@ -85,6 +89,9 @@ public class InGameStateManager : Singleton<InGameStateManager>
     {
         PreparePhase = true;
 
+        // 显示战斗开始按钮
+        EndTurnButton.SetActive(true);
+
         //5张抽牌, 将它们可视化
         DrawCards(5);
 
@@ -96,8 +103,12 @@ public class InGameStateManager : Singleton<InGameStateManager>
     {
         if (!PreparePhase)
         {
+            Debug.Log("called prepare phase end when it's not in prepare phase");
             return;
         }
+
+        // 隐藏战斗开始按钮
+        EndTurnButton.SetActive(false);
 
         PreparePhase = false;
 
@@ -110,6 +121,12 @@ public class InGameStateManager : Singleton<InGameStateManager>
 
     public void BattlePhaseStart()
     {
+        if (BattelPhase)
+        {
+            Debug.Log("called BattlePhaseStart when it already in battle phase");
+            return;
+        }
+
         BattelPhase = true;
 
         OnBattlePhaseStart();

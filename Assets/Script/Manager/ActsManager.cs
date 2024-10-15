@@ -21,6 +21,7 @@ public class ActsManager : Singleton<ActsManager>
     public Action<int, int> OnPlayerMove;
 
     public GameObject MapCanvas;
+    public GameObject WiningPanel;
 
     private List<Enemy> allEnemyList = new List<Enemy>();
     private List<Enemy> enemiesEncountered = new List<Enemy>();
@@ -318,7 +319,8 @@ public class ActsManager : Singleton<ActsManager>
             if (currentLayer >= 2)
             {
                 Debug.Log("GameOver, You Win");
-                CanvasManager.Instance.ShowIndicationText("GameOver, You Win");
+                WiningPanel.SetActive(true);
+                //CanvasManager.Instance.ShowIndicationText("GameOver, You Win");
             }
 
             currentLayer += 1;
@@ -331,9 +333,15 @@ public class ActsManager : Singleton<ActsManager>
         saveAndLoadManager.SaveData();
     }
 
-    public void GameOver()
+    private void Win()
+    {
+
+    }
+
+    public void DeletePlayerDataAndReturn()
     {
         string path = Application.dataPath + playerDataLocation;
+
         // Check if the file exists
         if (File.Exists(path))
         {
