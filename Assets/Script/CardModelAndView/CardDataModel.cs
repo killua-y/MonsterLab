@@ -58,7 +58,7 @@ public class CardDataModel : Singleton<CardDataModel>
 
     private void LoadKeyWordList()
     {
-        string path = Application.dataPath + keyWordsDataPath;
+        string path = Application.persistentDataPath + keyWordsDataPath;
         string[] keyWordArray = File.ReadAllLines(path);
 
         foreach (var row in keyWordArray)
@@ -84,7 +84,7 @@ public class CardDataModel : Singleton<CardDataModel>
     public void LoadCardList(string dataPath, List<Card> cardList)
     {
         //Load卡片
-        string path = Application.dataPath + dataPath;
+        string path = Application.persistentDataPath + dataPath;
         string[] dataArray = File.ReadAllLines(path);
 
         foreach (var row in dataArray)
@@ -109,7 +109,7 @@ public class CardDataModel : Singleton<CardDataModel>
     public void LoadDNAList()
     {
         // 加载DNA数据
-        string path = Application.dataPath + textDNADataPath;
+        string path = Application.persistentDataPath + textDNADataPath;
         string[] dataArray = File.ReadAllLines(path);
 
         foreach (var row in dataArray)
@@ -211,7 +211,7 @@ public class CardDataModel : Singleton<CardDataModel>
     // 加载玩家卡组数据
     public void LoadDefaultCard()
     {
-        string path = Application.dataPath + textPlayerDataPath;
+        string path = Application.persistentDataPath + textPlayerDataPath;
         string[] dataArray = File.ReadAllLines(path);
 
         foreach (var row in dataArray)

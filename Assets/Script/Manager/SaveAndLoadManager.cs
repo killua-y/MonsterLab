@@ -20,7 +20,7 @@ public class SaveAndLoadManager : MonoBehaviour
 
     private void Start()
     {
-        string path = Application.dataPath + playerDataLocation;
+        string path = Application.persistentDataPath + playerDataLocation;
 
         // Check if the file exists
         if (File.Exists(path))
@@ -50,7 +50,7 @@ public class SaveAndLoadManager : MonoBehaviour
     {
         if (playerData == null)
         {
-            string path = Application.dataPath + playerDataLocation;
+            string path = Application.persistentDataPath + playerDataLocation;
             string json = File.ReadAllText(path);
             playerData = JsonUtility.FromJson<PlayerData>(json);
         }
@@ -125,7 +125,7 @@ public class SaveAndLoadManager : MonoBehaviour
         playerData.PlayerDNA = CardDataModel.Instance.GetPlayerDNA();
 
         string json = JsonUtility.ToJson(playerData);
-        string path = Application.dataPath + playerDataLocation;
+        string path = Application.persistentDataPath + playerDataLocation;
         File.WriteAllText(path, json);
     }
 }

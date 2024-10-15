@@ -22,10 +22,14 @@ public class MainMenuBehavior : MonoBehaviour
     public TMP_InputField seedInputField;  // 种子输入框
 
 
+    private void Awake()
+    {
+    }
+
     private void Start()
     {
         // 检查是否需要生成继续按钮
-        string path = Application.dataPath + playerDataLocation;
+        string path = Application.persistentDataPath + playerDataLocation;
         if (File.Exists(path))
         {
             continueButton.gameObject.SetActive(true);
@@ -45,7 +49,7 @@ public class MainMenuBehavior : MonoBehaviour
     // 开始新游戏
     public void StartNewGame()
     {
-        string path = Application.dataPath + playerDataLocation;
+        string path = Application.persistentDataPath + playerDataLocation;
         // Check if the file exists
         if (File.Exists(path))
         {

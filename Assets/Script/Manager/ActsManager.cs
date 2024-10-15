@@ -40,6 +40,7 @@ public class ActsManager : Singleton<ActsManager>
     protected override void Awake()
     {
         base.Awake();
+
         shopManager = FindAnyObjectByType<ShopManager>();
         eventManager = FindAnyObjectByType<EventManager>();
         playerBehavior = FindAnyObjectByType<PlayerBehavior>();
@@ -103,7 +104,7 @@ public class ActsManager : Singleton<ActsManager>
 
     private void LoadEnermyAndEventList(PlayerData playerData)
     {
-        string path = Application.dataPath + textEnemyAndEventDataPath;
+        string path = Application.persistentDataPath + textEnemyAndEventDataPath;
         string[] dataArray = File.ReadAllLines(path);
         foreach (var row in dataArray)
         {
@@ -340,7 +341,7 @@ public class ActsManager : Singleton<ActsManager>
 
     public void DeletePlayerDataAndReturn()
     {
-        string path = Application.dataPath + playerDataLocation;
+        string path = Application.persistentDataPath + playerDataLocation;
 
         // Check if the file exists
         if (File.Exists(path))
