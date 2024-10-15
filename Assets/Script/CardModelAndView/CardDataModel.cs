@@ -6,9 +6,15 @@ using static Card;
 
 public class CardDataModel : Singleton<CardDataModel>
 {
-    private string textCardDataPath = "/Datas/cardsdata - AllCards.csv"; // 卡牌数据txt文件
-    private string textDNADataPath = "/Datas/cardsdata - DNA.csv"; // DNA数据text文件
-    private string textPlayerDataPath = "/Datas/playerdata.csv"; // 玩家的卡牌数据存储文件
+    //private string textCardDataPath = "/Datas/cardsdata - AllCards.csv"; // 卡牌数据txt文件路径
+    //private string textDNADataPath = "/Datas/cardsdata - DNA.csv"; // DNA数据text文件路径
+    //private string textPlayerDataPath = "/Datas/playerdata.csv"; // 玩家的卡牌数据存储文件路径
+
+    [Header("Text")]
+    public TextAsset textCardDataCSV; // 卡牌数据txt文件
+    public TextAsset textDNADataCSV; // DNA数据text文件
+    public TextAsset textPlayerDataCSV; // 玩家的卡牌数据text存储文件
+    public TextAsset keyWordsDataCSV; // 关键词text存储文件
 
     private List<Card> cardList = new List<Card>(); // 存储卡牌数据的链表
     private List<DNA> DNAList = new List<DNA>(); // 存储DNA数据的链表
@@ -23,7 +29,7 @@ public class CardDataModel : Singleton<CardDataModel>
     private List<MonsterCard> enemyCardList = new List<MonsterCard>(); // 存储敌方怪兽卡牌数据的链表
 
     // keyword
-    private string keyWordsDataPath = "/Datas/cardsdata - Keyword.csv";
+    //private string keyWordsDataPath = "/Datas/cardsdata - Keyword.csv";
     public List<string> keyWords = new List<string>();
     public List<string> keyWordsDefinition = new List<string>();
 
@@ -33,7 +39,7 @@ public class CardDataModel : Singleton<CardDataModel>
         base.Awake();
 
         LoadKeyWordList();
-        LoadCardList(textCardDataPath, cardList);
+        LoadCardList(cardList);
         LoadEnemyCardList();
         LoadDNAList();
     }
@@ -58,8 +64,9 @@ public class CardDataModel : Singleton<CardDataModel>
 
     private void LoadKeyWordList()
     {
-        string path = Application.persistentDataPath + keyWordsDataPath;
-        string[] keyWordArray = File.ReadAllLines(path);
+        //string path = Application.persistentDataPath + keyWordsDataPath;
+        //string[] keyWordArray = File.ReadAllLines(path);
+        string[] keyWordArray = keyWordsDataCSV.text.Split('\n');
 
         foreach (var row in keyWordArray)
         {
@@ -81,11 +88,10 @@ public class CardDataModel : Singleton<CardDataModel>
     }
 
     // 加载所有卡牌数据
-    public void LoadCardList(string dataPath, List<Card> cardList)
+    public void LoadCardList(List<Card> cardList)
     {
         //Load卡片
-        string path = Application.persistentDataPath + dataPath;
-        string[] dataArray = File.ReadAllLines(path);
+        string[] dataArray = textCardDataCSV.text.Split('\n');
 
         foreach (var row in dataArray)
         {
@@ -109,8 +115,7 @@ public class CardDataModel : Singleton<CardDataModel>
     public void LoadDNAList()
     {
         // 加载DNA数据
-        string path = Application.persistentDataPath + textDNADataPath;
-        string[] dataArray = File.ReadAllLines(path);
+        string[] dataArray = textDNADataCSV.text.Split('\n');
 
         foreach (var row in dataArray)
         {
@@ -211,8 +216,8 @@ public class CardDataModel : Singleton<CardDataModel>
     // 加载玩家卡组数据
     public void LoadDefaultCard()
     {
-        string path = Application.persistentDataPath + textPlayerDataPath;
-        string[] dataArray = File.ReadAllLines(path);
+        //string path = Application.persistentDataPath + textPlayerDataPath;
+        string[] dataArray = textPlayerDataCSV.text.Split('\n');
 
         foreach (var row in dataArray)
         {

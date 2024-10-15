@@ -6,7 +6,7 @@ using static Card;
 
 public class SaveAndLoadManager : MonoBehaviour
 {
-    private string playerDataLocation = "/Datas/InGameData/playerData.json";
+    private string playerDataLocation = "playerData.json";
 
     // 引用的script
     private GameSetting gameSetting;
@@ -20,10 +20,25 @@ public class SaveAndLoadManager : MonoBehaviour
 
     private void Start()
     {
-        string path = Application.persistentDataPath + playerDataLocation;
+        //string path = Application.persistentDataPath + playerDataLocation;
 
-        // Check if the file exists
-        if (File.Exists(path))
+        //// Check if the file exists
+        //if (File.Exists(path))
+        //{
+        //    Debug.Log("Continue Game");
+        //    LoadData();
+        //}
+        //else
+        //{
+        //    Debug.Log("New Game");
+        //    LoadNewGame();
+        //}
+
+        string directoryPath = Path.Combine(Application.persistentDataPath, "InGameData");
+        string filePath = Path.Combine(directoryPath, playerDataLocation);
+
+        // Check if the file exists before trying to read it
+        if (File.Exists(filePath))
         {
             Debug.Log("Continue Game");
             LoadData();
@@ -50,9 +65,10 @@ public class SaveAndLoadManager : MonoBehaviour
     {
         if (playerData == null)
         {
-            string path = Application.persistentDataPath + playerDataLocation;
-            string json = File.ReadAllText(path);
-            playerData = JsonUtility.FromJson<PlayerData>(json);
+            //string path = Application.persistentDataPath + playerDataLocation;
+            //string json = File.ReadAllText(path);
+            //playerData = JsonUtility.FromJson<PlayerData>(json);
+            playerData = LoadData<PlayerData>(playerDataLocation);
         }
         // 给主菜单static设置seed，从而让设置页面可以访问
         MainMenuBehavior.seed = playerData.Seed;
@@ -124,9 +140,51 @@ public class SaveAndLoadManager : MonoBehaviour
 
         playerData.PlayerDNA = CardDataModel.Instance.GetPlayerDNA();
 
-        string json = JsonUtility.ToJson(playerData);
-        string path = Application.persistentDataPath + playerDataLocation;
-        File.WriteAllText(path, json);
+        //string json = JsonUtility.ToJson(playerData);
+        //string path = Application.persistentDataPath + playerDataLocation;
+        //File.WriteAllText(path, json);
+
+        SaveData<PlayerData>(playerData, playerDataLocation);
+    }
+
+    public T LoadData<T>(string fileName)
+    {
+        // Combine the path for the file
+        string directoryPath = Path.Combine(Application.persistentDataPath, "InGameData");
+        string filePath = Path.Combine(directoryPath, fileName);
+
+        // Check if the file exists before trying to read it
+        if (File.Exists(filePath))
+        {
+            // Read the JSON data from the file
+            string jsonData = File.ReadAllText(filePath);
+
+            // Deserialize the JSON back to the object
+            T dataObject = JsonUtility.FromJson<T>(jsonData);
+
+            Debug.Log("Data loaded from: " + filePath);
+            return dataObject;
+        }
+        else
+        {
+            Debug.LogWarning("File not found: " + filePath);
+            return default(T);  // Return default if file doesn't exist
+        }
+    }
+
+    public void SaveData<T>(T dataObject, string fileName)
+    {
+        // Convert the object to JSON
+        string jsonData = JsonUtility.ToJson(dataObject, true);
+
+        // Combine the path for the file
+        string directoryPath = Path.Combine(Application.persistentDataPath, "InGameData");
+        string filePath = Path.Combine(directoryPath, fileName);
+
+        // Write the JSON data to the file
+        File.WriteAllText(filePath, jsonData);
+
+        Debug.Log("Data saved to: " + filePath);
     }
 }
 

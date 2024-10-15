@@ -15,7 +15,7 @@ public class MainMenuBehavior : MonoBehaviour
 
     public GameObject continueButton;
 
-    private string playerDataLocation = "/Datas/InGameData/playerData.json";
+    private string playerDataLocation = "/InGameData/playerData.json";
 
     public Toggle seedToggle;  // 是否开启种子按钮
     private bool usingInputSeed;
@@ -24,13 +24,41 @@ public class MainMenuBehavior : MonoBehaviour
 
     private void Awake()
     {
+        string directoryPath = System.IO.Path.Combine(Application.persistentDataPath, "InGameData");
+
+        // Check if the directory already exists
+        if (!System.IO.Directory.Exists(directoryPath))
+        {
+            // Create the directory if it does not exist
+            System.IO.Directory.CreateDirectory(directoryPath);
+            Debug.Log("Directory created: " + directoryPath);
+        }
+        else
+        {
+            Debug.Log("Directory already exists: " + directoryPath);
+        }
     }
 
     private void Start()
     {
         // 检查是否需要生成继续按钮
-        string path = Application.persistentDataPath + playerDataLocation;
-        if (File.Exists(path))
+        //string path = Application.persistentDataPath + playerDataLocation;
+
+        //if (File.Exists(path))
+        //{
+        //    continueButton.gameObject.SetActive(true);
+        //}
+
+        //usingInputSeed = false;
+        //seedToggle.onValueChanged.AddListener(OnToggleValueChanged);
+        //seedInputField.onValueChanged.AddListener(ConvertToUppercase);
+
+        // Combine the path for the file
+        string directoryPath = Path.Combine(Application.persistentDataPath, "InGameData");
+        string filePath = Path.Combine(directoryPath, "playerData.json");
+
+        // Check if the file exists before trying to read it
+        if (File.Exists(filePath))
         {
             continueButton.gameObject.SetActive(true);
         }
@@ -162,5 +190,4 @@ public class MainMenuBehavior : MonoBehaviour
 
         return result;
     }
-
 }
