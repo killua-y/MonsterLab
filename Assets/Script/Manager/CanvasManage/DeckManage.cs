@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -9,6 +10,7 @@ public class DeckManage : Singleton<DeckManage>
     public Transform Deck;
     public Transform mainDeckScrollContent;
     public Transform extraDeckScollContent;
+    public TextMeshProUGUI ExtraDeckText;
 
     private List<Card> mainDeck;
     private List<Card> extraDeck;
@@ -59,6 +61,7 @@ public class DeckManage : Singleton<DeckManage>
             cardObject.AddComponent<DeckManageCardOnClick>().SetUp(card, false);
             //Debug.Log("Get card with index : " + card.id);
         }
+        UpdateExtraDeckText();
     }
 
     public void ChangeDeckFromMainToExtra(Card card, bool fromMainToExtra, GameObject cardObject)
@@ -90,6 +93,12 @@ public class DeckManage : Singleton<DeckManage>
         }
 
         CardDataModel.Instance.ChangeDeckFromMainToExtra(card, fromMainToExtra);
+        UpdateExtraDeckText();
+    }
+
+    private void UpdateExtraDeckText()
+    {
+        ExtraDeckText.text = "Extra Deck: " + CardDataModel.Instance.GetExtraDeck().Count + "/" + PlayerStatesManager.extraDeckCapacity;
     }
 }
 
