@@ -76,7 +76,7 @@ public class SaveAndLoadManager : MonoBehaviour
         PlayerData playerData = new PlayerData();
 
         // 从各处script调用playerData里的数据
-        playerData.Seed = 2;
+        playerData.Seed = MainMenuBehavior.seed;
         playerData.randomState = gameSetting.SaveData();
         playerData.playerStates = PlayerStatesManager.Instance.SaveData();
         playerData.currentLayerBox = mapLayout.SaveData();

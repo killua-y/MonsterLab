@@ -69,6 +69,12 @@ public class MainMenuBehavior : MonoBehaviour
         SceneManager.LoadScene("BattleScene");
     }
 
+    // 转化所以输入为大写
+    void ConvertToUppercase(string input)
+    {
+        seedInputField.text = input.ToUpper();  // Set text to uppercase
+    }
+
     // 种子生成部分
     void OnToggleValueChanged(bool isOn)
     {
@@ -119,12 +125,6 @@ public class MainMenuBehavior : MonoBehaviour
         }
 
         return seed;
-    }
-
-    // Function to convert input text to uppercase
-    void ConvertToUppercase(string input)
-    {
-        seedInputField.text = input.ToUpper();  // Set text to uppercase
     }
 
     public void GenerateBase36Seed()

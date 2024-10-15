@@ -82,8 +82,7 @@ public class HealthPointDNABehavior : DNABehavior
     {
         if (baseEntity.myTeam == Team.Player)
         {
-            baseEntity.cardModel.healthPoint += DNAModel.effectData;
-            baseEntity.RestoreHealth(DNAModel.effectData);
+            CardEffectFunction.IncreaseHealth(baseEntity, DNAModel.effectData);
         }
     }
 }
@@ -165,10 +164,8 @@ public class FirstMonsterBuffDNA : DNABehavior
         {
             if (isFirst)
             {
-                baseEntity.cardModel.attackPower += DNAModel.effectData;
-                baseEntity.cardModel.healthPoint += (DNAModel.effectData * 10);
-                baseEntity.RestoreHealth((DNAModel.effectData * 10));
-                baseEntity.UpdateMonster();
+                CardEffectFunction.IncreaseHealth(baseEntity, (DNAModel.effectData * 10));
+                CardEffectFunction.IncreaseAttack(baseEntity, DNAModel.effectData);
                 isFirst = false;
             }
         }
