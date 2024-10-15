@@ -40,6 +40,10 @@ public class EventBehavior : MonoBehaviour
         int optionNumber = _optionsAction.Count;
 
         // 生成图片
+        if ((_imageLocation == null) || (_imageLocation == ""))
+        {
+            _imageLocation = "Image/EventImage/EventImage";
+        }
         eventCanvasBehavior.eventImage.sprite = Resources.Load<Sprite>(_imageLocation);
 
         // 修改text
@@ -74,6 +78,10 @@ public class EventBehavior : MonoBehaviour
     protected void SetUpLeaveEventScene(string _imageLocation, string _eventText)
     {
         // 生成图片
+        if ((_imageLocation == null) || (_imageLocation == ""))
+        {
+            _imageLocation = "Image/EventImage/EventImage";
+        }
         eventCanvasBehavior.eventImage.sprite = Resources.Load<Sprite>(_imageLocation);
 
         // 修改text
