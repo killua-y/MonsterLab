@@ -21,11 +21,13 @@ ScriptedImporter:
     convertToNormalMap: 0
     heightScale: 0.25
     normalMapFilter: 0
+    flipGreenChannel: 0
+    swizzle: 50462976
     isReadable: 0
     streamingMipmaps: 1
     streamingMipmapsPriority: 0
     vTOnly: 0
-    ignoreMasterTextureLimit: 0
+    ignoreMipmapLimit: 0
     nPOTScale: 1
     sRGBTexture: 1
     spriteMode: 2
@@ -88,7 +90,6 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    parentGroupIndex: -1
     uvTransform: {x: 0, y: 0}
     spritePosition: {x: 0, y: 0}
   mosaicSpriteImportData: []
@@ -2024,7 +2025,6 @@ ScriptedImporter:
     - {x: 160, y: 161}
     - {x: 161, y: 162}
     tessellationDetail: 0
-    parentGroupIndex: -1
     uvTransform: {x: -807, y: -880}
     spritePosition: {x: 811, y: 884}
   - name: hand1
@@ -3159,7 +3159,6 @@ ScriptedImporter:
     - {x: 83, y: 84}
     - {x: 84, y: 85}
     tessellationDetail: 0
-    parentGroupIndex: -1
     uvTransform: {x: -1297, y: 776}
     spritePosition: {x: 1301, y: 435}
   - name: leg1
@@ -4307,7 +4306,6 @@ ScriptedImporter:
     - {x: 77, y: 78}
     - {x: 78, y: 79}
     tessellationDetail: 0
-    parentGroupIndex: -1
     uvTransform: {x: 316, y: 321}
     spritePosition: {x: 1384, y: 187}
   - name: leg2
@@ -5207,7 +5205,6 @@ ScriptedImporter:
     - {x: 58, y: 59}
     - {x: 59, y: 60}
     tessellationDetail: 0
-    parentGroupIndex: -1
     uvTransform: {x: -1370, y: 1025}
     spritePosition: {x: 1699, y: 186}
   - name: body
@@ -6115,7 +6112,6 @@ ScriptedImporter:
     - {x: 58, y: 59}
     - {x: 59, y: 60}
     tessellationDetail: 0
-    parentGroupIndex: -1
     uvTransform: {x: -166, y: -470}
     spritePosition: {x: 1511, y: 474}
   - name: hand2
@@ -7235,7 +7231,6 @@ ScriptedImporter:
     - {x: 78, y: 79}
     - {x: 79, y: 80}
     tessellationDetail: 0
-    parentGroupIndex: -1
     uvTransform: {x: -465, y: 79}
     spritePosition: {x: 1810, y: 429}
   characterData:
@@ -7423,6 +7418,7 @@ ScriptedImporter:
       order: 0
     dimension: {x: 0, y: 0}
     characterGroups: []
+    pivot: {x: 0, y: 0}
     boneReadOnly: 0
   sharedRigSpriteImportData: []
   sharedRigCharacterData:
@@ -7430,6 +7426,7 @@ ScriptedImporter:
     parts: []
     dimension: {x: 0, y: 0}
     characterGroups: []
+    pivot: {x: 0, y: 0}
     boneReadOnly: 0
   platformSettings: []
   mosaicLayers: 1
@@ -7442,6 +7439,10 @@ ScriptedImporter:
   paperDollMode: 0
   keepDupilcateSpriteName: 1
   skeletonAssetReferenceID: 
+  pipeline: {instanceID: 0}
+  pipelineVersion: 
+  padding: 4
+  spriteSizeExpand: 0
   spriteCategoryList:
     categories: []
   spritePackingTag: 
@@ -7530,6 +7531,9 @@ ScriptedImporter:
     isVisible: 0
   sharedRigPSDLayers: []
   pSDLayerImportSetting: []
+  importFileNodeState: 1
+  platformSettingsDirtyTick: 0
+  spriteSizeExpandChanged: 0
   generateGOHierarchy: 0
   textureAssetName: 
   prefabAssetName: 
