@@ -180,3 +180,44 @@ public class BombCarrierEnemy : EnemyBehavior
         base.SummonEnemy();
     }
 }
+
+
+public class TestEnemy : EnemyBehavior
+{
+    public override int MaxTurn { get; set; } = 2;
+
+    // 该敌人拥有的怪兽
+    private MonsterCard Slime;
+    private MonsterCard AcidSlime;
+    private MonsterCard FireSlime;
+    private MonsterCard wolf;
+    private MonsterCard archer;
+
+    public override void LoadEnemy()
+    {
+        Slime = CardDataModel.Instance.GetEnemyCard(0);
+        AcidSlime = CardDataModel.Instance.GetEnemyCard(1);
+        FireSlime = CardDataModel.Instance.GetEnemyCard(3);
+        archer = CardDataModel.Instance.GetEnemyCard(4);
+        wolf = CardDataModel.Instance.GetEnemyCard(8);
+
+        // 该在哪几个回合召唤怪兽
+        MonsterSummonTurn.Add(0);
+    }
+
+    // 根据当前回合召唤怪兽
+    public override void SummonEnemy()
+    {
+        if (index == 0)
+        {
+            SummonEnenmy(1, 4, FireSlime);
+            SummonEnenmy(2, 4, wolf);
+            SummonEnenmy(3, 4, Slime);
+            SummonEnenmy(1, 6, AcidSlime);
+            SummonEnenmy(2, 7, archer);
+            SummonEnenmy(3, 6, AcidSlime);
+        }
+
+        base.SummonEnemy();
+    }
+}

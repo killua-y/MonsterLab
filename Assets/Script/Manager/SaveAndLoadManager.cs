@@ -65,15 +65,12 @@ public class SaveAndLoadManager : MonoBehaviour
     {
         if (playerData == null)
         {
-            //string path = Application.persistentDataPath + playerDataLocation;
-            //string json = File.ReadAllText(path);
-            //playerData = JsonUtility.FromJson<PlayerData>(json);
             playerData = LoadData<PlayerData>(playerDataLocation);
         }
-        // 给主菜单static设置seed，从而让设置页面可以访问
+        // set the seed
         MainMenuBehavior.seed = playerData.Seed;
 
-        // 该顺序无法变化
+        // the order is consist
         // 不需要其他script的loadData
         gameSetting.LoadData(playerData);
         PlayerStatesManager.Instance.LoadData(playerData);
@@ -91,7 +88,7 @@ public class SaveAndLoadManager : MonoBehaviour
     {
         PlayerData playerData = new PlayerData();
 
-        // 从各处script调用playerData里的数据
+        // get playerData from all other script
         playerData.Seed = MainMenuBehavior.seed;
         playerData.randomState = gameSetting.SaveData();
         playerData.playerStates = PlayerStatesManager.Instance.SaveData();

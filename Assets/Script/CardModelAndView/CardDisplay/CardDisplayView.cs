@@ -8,7 +8,7 @@ public class CardDisplayView : Singleton<CardDisplayView>
     public GameObject SpellCardModel;
     public GameObject ItemCardModel;
 
-    // 可视化单个卡牌，将卡牌的可视化后加入到parent下面
+    // visualize provided card
     public GameObject DisPlaySingleCard(Card _card, Transform _parent)
     {
         GameObject newCard = null;

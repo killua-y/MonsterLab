@@ -83,7 +83,7 @@ public class ShopManager : MonoBehaviour
 
     public void RefreshShopCard()
     {
-        // 扣钱
+        // decrease money
         if (PlayerStatesManager.Gold < refreshCost)
         {
             Debug.Log("Not enough gold");
@@ -111,18 +111,6 @@ public class ShopManager : MonoBehaviour
 
         UpdateShopItemView();
         UpdateShopCostView();
-    }
-
-    public void RefreshDNA()
-    {
-        //dnaList = new List<DNA>();
-        //for (int i = 0; i < 3; i++)
-        //{
-        //    DNA dna = RewardManager.Instance.GetNextDNA();
-        //    dnaList.Add(dna);
-        //}
-
-        UpdateShopDNAView();
     }
 
     public void UpdateShopItemView()
@@ -163,6 +151,18 @@ public class ShopManager : MonoBehaviour
         //}
 
         refreshCostText.text = refreshCost + "";
+    }
+
+    public void RefreshDNA()
+    {
+        //dnaList = new List<DNA>();
+        //for (int i = 0; i < 3; i++)
+        //{
+        //    DNA dna = RewardManager.Instance.GetNextDNA();
+        //    dnaList.Add(dna);
+        //}
+
+        UpdateShopDNAView();
     }
 
     public void UpdateShopDNAView()

@@ -170,7 +170,7 @@ public class BaseEntity : MonoBehaviour
                     Attack();
                 }
             }
-            // 移动
+            // moving
             else
             {
                 GetInRange();
@@ -178,7 +178,7 @@ public class BaseEntity : MonoBehaviour
         }
     }
 
-    // 寻找距离最近的敌人
+    // find cloest target
     protected void FindTarget()
     {
         var allEnemies = BattleManager.Instance.GetEntitiesAgainst(myTeam);
