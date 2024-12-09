@@ -125,7 +125,7 @@ public class Graph
         Dictionary<Node, float> cost_so_far = new Dictionary<Node, float>();
         cost_so_far[start] = 0;
 
-        // 离终点最近的点
+        // Find the point cloest to the end node
         Node closestNode = start;
         float closestDistance = Vector2.Distance(start.worldPosition, end.worldPosition);
 
@@ -138,13 +138,12 @@ public class Graph
                 break;
             }
 
-            //遍历current的邻居node
+            //loop through current's neighbot node
             List<Node> neighbours = Neighbors(current);
             foreach (Node next in neighbours)
             {
                 float new_cost = cost_so_far[current] + Distance(current, next);
 
-                // 查看next是否在cost_so_far里，或者new_cost更低
                 if (!cost_so_far.TryGetValue(next, out float currentCost) || new_cost < currentCost)
                 {
                     cost_so_far[next] = new_cost;
@@ -152,7 +151,6 @@ public class Graph
                     frontier[next] = priority;
                     came_from[next] = current;
 
-                    // 更新距离终点最近的点
                     float distanceToEnd = Vector2.Distance(next.worldPosition, end.worldPosition);
                     if (distanceToEnd < closestDistance)
                     {
@@ -163,7 +161,7 @@ public class Graph
             }
         }
 
-        // 根据结果构建找到的最短路径
+        // construct the path based on search result
         List<Node> path = new List<Node>();
         Node node = closestNode;
         while (node != null)

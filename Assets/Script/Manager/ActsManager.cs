@@ -8,7 +8,8 @@ using UnityEngine.SceneManagement;
 public class ActsManager : Singleton<ActsManager>
 {
     // enemy和event数据的存储csv
-    private string textEnemyAndEventDataPath = "/Datas/cardsdata - EventAndEnemy.csv";
+    //private string textEnemyAndEventDataPath = "/Datas/cardsdata - EventAndEnemy.csv";
+    public TextAsset textEnemyAndEventDataCSV;
 
     // 涉及玩家存档
     private string playerDataLocation = "/Datas/InGameData/playerData.json";
@@ -40,6 +41,7 @@ public class ActsManager : Singleton<ActsManager>
     protected override void Awake()
     {
         base.Awake();
+
         shopManager = FindAnyObjectByType<ShopManager>();
         eventManager = FindAnyObjectByType<EventManager>();
         playerBehavior = FindAnyObjectByType<PlayerBehavior>();
@@ -103,8 +105,11 @@ public class ActsManager : Singleton<ActsManager>
 
     private void LoadEnermyAndEventList(PlayerData playerData)
     {
-        string path = Application.dataPath + textEnemyAndEventDataPath;
-        string[] dataArray = File.ReadAllLines(path);
+        //string path = Application.persistentDataPath + textEnemyAndEventDataPath;
+        //string[] dataArray = File.ReadAllLines(path);
+
+        string[] dataArray = textEnemyAndEventDataCSV.text.Split('\n');
+
         foreach (var row in dataArray)
         {
             string[] rowArray = row.Split(',');
@@ -340,7 +345,7 @@ public class ActsManager : Singleton<ActsManager>
 
     public void DeletePlayerDataAndReturn()
     {
-        string path = Application.dataPath + playerDataLocation;
+        string path = Application.persistentDataPath + playerDataLocation;
 
         // Check if the file exists
         if (File.Exists(path))
